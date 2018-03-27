@@ -1,0 +1,24 @@
+SetStackSize 512	
+Func _Main
+{
+	Var		Counter				
+	Mov		Counter, 16			
+	LoopStart0:
+	Dec		Counter
+	JGE		Counter, 0, LoopStart0
+	Var		Dur				
+	Mov		Dur, 2000
+	Pause		Dur
+	Var		X				
+	Var		Y
+	Var		Z
+	Mov		X, 0				
+	Mov		Y, 0
+	LoopStart1:					
+		Inc		X			
+		Add		Y, X
+		Mov		Z, X
+		Div		Z, Y
+		Pause		100			
+	Jmp		LoopStart1			
+}
