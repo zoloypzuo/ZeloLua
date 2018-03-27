@@ -13,5 +13,4 @@ class TestAssembler(TestCase):
     def test_lex(self):
         pass
     def test_lexeme2token(self):
-        # self.fail()
         pass

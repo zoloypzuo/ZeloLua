@@ -1,5 +1,5 @@
 from re import match, sub, split
-
+import json
 
 class Function():
     def __init__(self, name):
@@ -57,7 +57,8 @@ class ISA():
         self.instrs['Mov']=Instr('Mov')
         self.instrs['Mov'].operand_types.append(['var'])
         self.instrs['Mov'].operand_types.append(['var','literal'])
-
+        self.instrs['Var']=Instr('Var')
+        self.instrs['Var'].operand_types.append(['var'])
 class AssembledInstr():
     def __init__(self,operator,operands):
         self.operator=operator
@@ -67,13 +68,17 @@ class AssembledInstr():
 class Assembler():
     def __init__(self, src):
         self.src = src
+        #----tables for assembled file
         self.var_table={}
         self.label_table={}
         self.func_table={}
         self.assembled_instrs=[]
+
         self.isa = ISA()
+        #----core
         self.lexemes=self.lex(src)
         self.parse(self.lexemes)
+        self.dump_json()
         pass
 
     def split_punc(self, text):
@@ -134,6 +139,7 @@ class Assembler():
                 name=remainder[0]
                 new_var=Variable(name,self.current_func)
                 self.var_table[name]=new_var
+                self.assembled_instrs.append(AssembledInstr(operator, remainder))
             elif operator == 'Func':
                 name=remainder[0]
                 new_func=Function(name)
@@ -145,13 +151,30 @@ class Assembler():
                 pass
             elif operator == '}':pass
             elif is_instr(operator):
-                self.assembled_instrs.append(AssembledInstr(operator,remainder))
+                self.assembled_instrs.append(AssembledInstr(operator,list(filter(lambda x:x not in ',:',remainder))))
             elif is_label(operator):
                 self.label_table[operator]=len(self.assembled_instrs)
 
             skip_to_next_line()
     def dump_json(self):
-        pass
+        instrs=[]
+        funcs={}
+        vars={}
+        for instr in self.assembled_instrs:
+            instrs.append({'operator':instr.operator,'operands':instr.operands})
+        for f_name,f_node in self.func_table.items():
+            funcs[f_name]={'entry':f_node.entry,'name':f_node.name}
+        #label table do not need change
+        for var_name,var_node in self.var_table.items():
+            vars[var_name]={'name':var_node.name,'func':var_node.func}
+        output={
+            'instrs':instrs,
+            'funcs':funcs,
+            'vars':vars,
+            'labels':self.label_table
+        }
+        with open('out.json','w') as f:
+            f.write(json.dumps(output))
 
 def format(path):
     '''open the src file, remove comments, skip blank lines, and return [(line,line_number),...]'''

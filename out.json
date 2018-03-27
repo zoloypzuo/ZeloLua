@@ -1,0 +1,49 @@
+{
+    "instrs": [
+        {
+            "operator": "Var",
+            "operands": [
+                "Counter"
+            ]
+        },
+        {
+            "operator": "Mov",
+            "operands": [
+                "Counter",
+                "16"
+            ]
+        },
+        {
+            "operator": "Var",
+            "operands": [
+                "Dur"
+            ]
+        },
+        {
+            "operator": "Mov",
+            "operands": [
+                "Dur",
+                "2000"
+            ]
+        }
+    ],
+    "funcs": {
+        "_Main": {
+            "entry": 1,
+            "name": "_Main"
+        }
+    },
+    "vars": {
+        "Counter": {
+            "name": "Counter",
+            "func": "_Main"
+        },
+        "Dur": {
+            "name": "Dur",
+            "func": "_Main"
+        }
+    },
+    "labels": {
+        "LoopStart0": 2
+    }
+}
