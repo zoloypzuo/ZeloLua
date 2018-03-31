@@ -2,9 +2,11 @@
   <dictionary name="91018">
     <words>
       <w>ident</w>
+      <w>instrs</w>
       <w>mssg</w>
       <w>setstacksize</w>
       <w>setstacksizes</w>
+      <w>xasm</w>
     </words>
   </dictionary>
 </component>

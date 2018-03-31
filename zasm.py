@@ -1,9 +1,10 @@
 from re import match, sub, split
 import json
 from ISA import ISA
+from z_json_serialization import serializablize
 
 
-class Function():
+class Function:
 
     def __init__(self, name, *param_names):
         self.name = name
@@ -11,46 +12,47 @@ class Function():
         self.param_names = []
 
 
-class Label():
+class Label:
 
     def __init__(self, name, func):
         self.name = name
         self.func = func
 
 
-class Variable():
+class Variable:
 
     def __init__(self, name, func):
         self.name = name
         self.func = func
 
 
-class Instr():
-
-    def __init__(self, operator):
-        self.operator = ''
-        self.operand_types = []
-
-
-class AssembledInstr():
+class AssembledInstr:
 
     def __init__(self, operator, operands):
         self.operator = operator
         self.operands = operands  # list
 
 
-class Assembler():
+class ExeFile:
+    def __init__(self, var_table, label_table, func_table, assembled_instrs):
+        self.var_table = var_table
+        self.label_table = label_table
+        self.func_table = func_table
+        self.assembled_instrs = assembled_instrs
+
+
+class Assembler:
 
     def __init__(self, src):
         self.src = src
-        #----tables for assembled file
+        # ----tables for assembled file
         self.var_table = {}
         self.label_table = {}
         self.func_table = {}
         self.assembled_instrs = []
 
         self.isa = ISA()
-        #----core
+        # ----core
         self.lexemes = self.lex(src)
         self.parse(self.lexemes)
         self.dump_json()
@@ -104,6 +106,7 @@ class Assembler():
 
         def is_label(text):
             return match(r'[_0-9a-zA-Z]\w*', text)  # 可能重复了
+
         # ----parse
         self.current_func = ''
         while True:
@@ -138,24 +141,26 @@ class Assembler():
             skip_to_next_line()
 
     def dump_json(self):
-        instrs = []
-        funcs = {}
-        vars = {}
-        for instr in self.assembled_instrs:
-            instrs.append({'operator': instr.operator, 'operands': instr.operands})
-        for f_name, f_node in self.func_table.items():
-            funcs[f_name] = {'entry': f_node.entry, 'name': f_node.name}
+        # instrs = []
+        # funcs = {}
+        # vars = {}
+        # for instr in self.assembled_instrs:
+        #     instrs.append({'operator': instr.operator, 'operands': instr.operands})
+        # for f_name, f_node in self.func_table.items():
+        #     funcs[f_name] = {'entry': f_node.entry, 'name': f_node.name}
         # label table do not need change
-        for var_name, var_node in self.var_table.items():
-            vars[var_name] = {'name': var_node.name, 'func': var_node.func}
-        output = {
-            'instrs': instrs,
-            'funcs': funcs,
-            'vars': vars,
-            'labels': self.label_table
-        }
+        # for var_name, var_node in self.var_table.items():
+        #     vars[var_name] = {'name': var_node.name, 'func': var_node.func}
+        # output = {
+        #     'instrs': instrs,
+        #     'funcs': funcs,
+        #     'vars': vars,
+        #     'labels': self.label_table
+        # }
+        exe = ExeFile(self.var_table, self.label_table, self.func_table, self.assembled_instrs)
+        exe = serializablize(exe)
         with open('out.json', 'w') as f:
-            f.write(json.dumps(output))
+            f.write(json.dumps(exe))
 
 
 def format(path):

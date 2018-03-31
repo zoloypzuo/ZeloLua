@@ -1,3 +1,8 @@
+class Instr:
+
+    def __init__(self, operator):
+        self.operator = ''
+        self.operand_types = []
 class ISA():
 
     def __init__(self):
