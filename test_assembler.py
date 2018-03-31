@@ -10,6 +10,7 @@ class TestAssembler(TestCase):
         self.assertEqual(self.a.split_punc('a,b'), ['a', ',', 'b'])
         self.assertEqual(self.a.split_punc('label:'),['label',':'])
         self.assertEqual(self.a.split_punc('a,b,c'),['a',',','b',',','c'])
+        self.assertEqual(self.a.split_punc('_Main(1,2){'),['_Main','(','1',',','2',')','{'])
 
     def test_lex(self):
         pass

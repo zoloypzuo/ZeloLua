@@ -63,19 +63,21 @@ class Assembler:
         split with punctuation such that 'a,b' => ('a',',','b'), note that there is no space between 'a' and ','"""
         lexeme = ''
         index0 = 0
-        index1=0
+        index1 = 0
         ret = []
         while True:
-            if index1>=len(text):break
-            if text[index1] not in ':,{}()':pass #text[index1] is not punc
-            else: #text[index1] is punc, lex the lexeme and punc and add to ret
+            if index1 >= len(text): break
+            if text[index1] not in ':,{}()':
+                pass  # text[index1] is not punc
+            else:  # text[index1] is punc, lex the lexeme and punc and add to ret
                 lexeme = text[index0:index1]
-                ret.append(lexeme)
+                if lexeme:  # tiny bug emerge when successive punc like '){' in 'Func _Main(1,2){', lexeme is '' which should not be added
+                    ret.append(lexeme)
                 ret.append(text[index1])
-                index0 = index1+1  # move index0 to index1
+                index0 = index1 + 1  # move index0 to index1
                 lexeme = ''  # reset lexeme
             index1 += 1
-        remainder=text[index0:]
+        remainder = text[index0:]
         if remainder:
             ret.append(remainder)  # the last lexeme may not be appended, so append it
         return ret
@@ -85,7 +87,8 @@ class Assembler:
         lines = []
         for i in src:
             y = []
-            for j in list(filter(None, split(r'\s+', i[0]))):
+            t = list(filter(None, split(r'\s+', i[0])))  # 'lexemes' split by whitespace
+            for j in t:
                 j = self.split_punc(j)
                 for k in j:
                     y.append(k)
