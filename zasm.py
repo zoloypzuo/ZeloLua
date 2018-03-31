@@ -43,8 +43,7 @@ class ExeFile:
 
 class Assembler:
 
-    def __init__(self, src):
-        self.src = src
+    def __init__(self, path):
         # ----tables for assembled file
         self.var_table = {}
         self.label_table = {}
@@ -53,8 +52,9 @@ class Assembler:
 
         self.isa = ISA()
         # ----core
-        self.lexemes = self.lex(src)
-        self.parse(self.lexemes)
+        src = self.format(path)  # [(line,line_number),...]
+        self.lexemes = self.lex(src)  # [{line}[lexeme0,...],...]
+        self.parse(self.lexemes)  # fill tables
         self.dump_json()
         pass
 
@@ -162,28 +162,27 @@ class Assembler:
         with open('out.json', 'w') as f:
             f.write(json.dumps(exe))
 
+    def format(self, path):
+        '''open the src file, remove comments, skip blank lines, and return [(line,line_number),...]'''
+        '''>>>print(format('test_0.xasm'))'''
 
-def format(path):
-    '''open the src file, remove comments, skip blank lines, and return [(line,line_number),...]'''
-    '''>>>print(format('test_0.xasm'))'''
+        def remove_comments(line):
+            """>>>print(remove_comments('Var Counter; Create a counter'))"""
+            return sub(r';.*', r'', line)
 
-    def remove_comments(line):
-        """>>>print(remove_comments('Var Counter; Create a counter'))"""
-        return sub(r';.*', r'', line)
+        def is_blank_line(line):
+            return match(r'^\s*\n', line)
 
-    def is_blank_line(line):
-        return match(r'^\s*\n', line)
-
-    i = 0
-    ret = []
-    with open(path, 'r') as f:
-        for line in f:
-            line = remove_comments(line)
-            i += 1
-            if is_blank_line(line):
-                continue
-            ret.append((line, i))
-    return ret
+        i = 0
+        ret = []
+        with open(path, 'r') as f:
+            for line in f:
+                line = remove_comments(line)
+                i += 1
+                if is_blank_line(line):
+                    continue
+                ret.append((line, i))
+        return ret
 
 
 if __name__ == '__main__':

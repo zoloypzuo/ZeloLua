@@ -1,5 +1,4 @@
-import json
-from ISA import ISA
+import ISA
 from re import match
 from zasm import *
 
@@ -18,17 +17,20 @@ class Process:
 
     def __init__(self, path):
         '''zvm use .json as .exe file format to init a process'''
+        # get tables from .json
         exe=self.load(path)
         self.instrs = exe.assembled_instrs
         self.funcs = exe.func_table
         self.vars = exe.var_table
         self.labels = exe.label_table
+
         self.pc = 0
-        self.isa = ISA()
+        self.isa = ISA.ISA()
         self.stack = []  # {list<Function>}
         self.global_data = {}  # {var_name:val,...}
         self.jump = False
         self.is_EOF = self.instrs is not []
+
         self.run()
 
     def run(self):
@@ -54,12 +56,11 @@ class Process:
 
     def execute(self, operator, *operands):
         if operator == 'Mov':
-            lhs = self.stack_top().local_data[operands[0]]  # lhs must be var ie. lvalue ie. mem ref
             rhs = operands[1]
             if match(r'\w+', rhs):  # var
-                lhs = self.stack_top().local_data[rhs]
+                self.stack_top().local_data[operands[0]] = self.stack_top().local_data[rhs]
             else:  # literal
-                lhs = rhs
+                self.stack_top().local_data[operands[0]] = rhs
         elif operator == 'Var':
             pass
         elif operator == 'Jmp':
@@ -71,7 +72,7 @@ class Process:
             params = operands[1:]
             self.Call(func_name, *params)
 
-    def Var(ident):
+    def Var(self,ident):
         self.stack_top().local_data[ident] = None
 
     def Jmp(self, label):
@@ -79,14 +80,14 @@ class Process:
 
     def Call(self, func_name, ret_addr, *params):
         func_info = self.funcs[func_name]  # func info from func table
-        func = FuncNode(func_name, self.stack_top().entry, func_info['entry'])
+        new_runtime_func = FuncNode(func_name, self.stack_top().entry, func_info.entry)
         # ----pass params: add to local_data
-        param_names = func_info['param_names']
-        for i in range(len(param_name)):
-            func.local_data[param_name[i]] = params[i]
+        param_names = func_info.param_names
+        for i in range(len(param_names)):
+            new_runtime_func.local_data[param_names[i]] = params[i]
 
-        self.pc = func_info['entry']  # set pc to the callee entry
-        self.stack.append(func)
+        self.pc = func_info.entry  # set pc to the callee entry
+        self.stack.append(new_runtime_func)
     def load(self,path):
         def deserialize(json_obj):
             if isinstance(json_obj, (int, float, str, bool)):
@@ -96,26 +97,29 @@ class Process:
             elif json_obj is None:
                 return None
             elif isinstance(json_obj, dict):
-                if False:
-                    pass  # just for foo
-                elif json_obj.keys() == Function(None).__dict__.keys():
-                    new_Function = Function(None)
+                f=Function(None)
+                l=Label(None,None)
+                v=Variable()
+                ai=AssembledInstr(None,None)
+                ef=ExeFile(None,None,None,None)
+                if json_obj.keys() == f.__dict__.keys():
+                    new_Function = f
                     new_Function.__dict__ = {deserialize(key): deserialize(val) for key, val in json_obj.items()}
                     return new_Function
-                elif json_obj.keys() == Label(None,None).__dict__.keys():
-                    new_Label = Label(None,None)
+                elif json_obj.keys() == l.__dict__.keys():
+                    new_Label = l
                     new_Label.__dict__ = {deserialize(key): deserialize(val) for key, val in json_obj.items()}
                     return new_Label
-                elif json_obj.keys() == Variable().__dict__.keys():
-                    new_Variable = Variable()
+                elif json_obj.keys() == v.__dict__.keys():
+                    new_Variable = v
                     new_Variable.__dict__ = {deserialize(key): deserialize(val) for key, val in json_obj.items()}
                     return new_Variable
-                elif json_obj.keys() == AssembledInstr(None,None).__dict__.keys():
-                    new_AssembledInstr = AssembledInstr(None,None)
+                elif json_obj.keys() == ai.__dict__.keys():
+                    new_AssembledInstr = ai
                     new_AssembledInstr.__dict__ = {deserialize(key): deserialize(val) for key, val in json_obj.items()}
                     return new_AssembledInstr
-                elif json_obj.keys() == ExeFile(None,None,None,None).__dict__.keys():
-                    new_ExeFile = ExeFile(None,None,None,None)
+                elif json_obj.keys() == ef.__dict__.keys():
+                    new_ExeFile = ef
                     new_ExeFile.__dict__ = {deserialize(key): deserialize(val) for key, val in json_obj.items()}
                     return new_ExeFile
                 else:
