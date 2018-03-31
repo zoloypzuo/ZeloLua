@@ -1,5 +1,5 @@
 SetStackSize 512	
-Func _Main
+Func _Main(1,2)
 {
 	Var		Counter				
 	Mov		Counter, 16			

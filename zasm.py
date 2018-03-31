@@ -9,7 +9,7 @@ class Function:
     def __init__(self, name, *param_names):
         self.name = name
         self.entry = 0
-        self.param_names = []
+        self.param_names = param_names
 
 
 class Label:
@@ -60,32 +60,37 @@ class Assembler:
 
     def split_punc(self, text):
         """after split src with whitespace(so {parameter}text will not contain whitespace),
-        split with punctuation such that 'a,b' => ('a',',','b')"""
-        '''这种写法是低效的，+=应该改成用index切片'''
+        split with punctuation such that 'a,b' => ('a',',','b'), note that there is no space between 'a' and ','"""
         lexeme = ''
+        index0 = 0
+        index1=0
         ret = []
-        for i in text:
-            if i not in ':,':
-                lexeme += i
-            else:
+        while True:
+            if index1>=len(text):break
+            if text[index1] not in ':,{}()':pass #text[index1] is not punc
+            else: #text[index1] is punc, lex the lexeme and punc and add to ret
+                lexeme = text[index0:index1]
                 ret.append(lexeme)
-                lexeme = ''
-                ret.append(i)
-        if lexeme:
-            ret.append(lexeme)  # the last lexeme may not be appended, so append it
+                ret.append(text[index1])
+                index0 = index1+1  # move index0 to index1
+                lexeme = ''  # reset lexeme
+            index1 += 1
+        remainder=text[index0:]
+        if remainder:
+            ret.append(remainder)  # the last lexeme may not be appended, so append it
         return ret
 
     def lex(self, src):
         '''lex src to lexemes'''
-        x = []
+        lines = []
         for i in src:
             y = []
             for j in list(filter(None, split(r'\s+', i[0]))):
                 j = self.split_punc(j)
                 for k in j:
                     y.append(k)
-            x.append(y)
-        return x
+            lines.append(y)
+        return lines
 
     def parse(self, lexemes):
         # ----line operation
@@ -113,6 +118,7 @@ class Assembler:
             if self.is_EOF:
                 break
             line = current_line()
+            assert line is not []  # just for debug
             operator = line[0]
             remainder = line[1:]
             if operator == 'SetStackSize':

@@ -1,4 +1,4 @@
-import ISA
+from ISA import ISA
 from re import match
 from zasm import *
 
@@ -25,7 +25,7 @@ class Process:
         self.labels = exe.label_table
 
         self.pc = 0
-        self.isa = ISA.ISA()
+        self.isa = ISA()
         self.stack = []  # {list<Function>}
         self.global_data = {}  # {var_name:val,...}
         self.jump = False
@@ -99,7 +99,7 @@ class Process:
             elif isinstance(json_obj, dict):
                 f=Function(None)
                 l=Label(None,None)
-                v=Variable()
+                v=Variable(None,None)
                 ai=AssembledInstr(None,None)
                 ef=ExeFile(None,None,None,None)
                 if json_obj.keys() == f.__dict__.keys():
