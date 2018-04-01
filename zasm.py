@@ -21,9 +21,9 @@ class Label:
 
 class Variable:
 
-    def __init__(self, name, func):
+    def __init__(self, name, func_name):
         self.name = name
-        self.func = func
+        self.func_name = func_name
 
 
 class AssembledInstr:

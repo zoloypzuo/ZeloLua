@@ -75,9 +75,11 @@ class Process:
             self.Call(func_name, *params)
         elif operator == 'Ret':
             self.Ret()
-        elif operator =='Print':
+        elif operator == 'Print':
             self.Print(*operands)
-        elif operator=='Nop':
+        elif operands == 'PrintVar':
+            self.PrintVar(*operands)
+        elif operator == 'Nop':
             self.Nop()
 
     def Var(self, ident):
@@ -85,10 +87,17 @@ class Process:
 
     def Jmp(self, label):
         self.pc = label
-    def Print(self,*args):
+
+    def Print(self, *args):
         print(*args)
+
+    def PrintVar(self, var_name):
+        var_val = self.vars[(var_name, self.stack_top().name)]
+        print(var_val)
+
     def Nop(self):
         pass
+
     def Call(self, func_name, *params):
         func_info = self.funcs[func_name]  # func info from func table
         new_runtime_func = FuncNode(func_name, self.stack_top().entry, func_info.entry)
