@@ -28,11 +28,10 @@ class Process:
         self.isa = ISA()
         self.stack = []  # {list<Function>}
         self.global_data = {}  # {var_name:val,...}
-        self.global_data['RetVal']=None  #init a global var named 'RetVal' for return value of function calls
+        self.global_data['RetVal'] = None  # init a global var named 'RetVal' for return value of function calls
         # ----some flags
         self.jump = False
         self.is_EOF = self.instrs is not []
-
 
         self.run()
 
@@ -43,7 +42,7 @@ class Process:
                 break
             self.jump = False  # reset the jump
             current_instr = self.instrs[self.pc]
-            self.execute(current_instr['operator'], *current_instr['operands'])
+            self.execute(current_instr.operator, *current_instr.operands)
             if not self.jump:
                 self.skip_to_next_line()
             else:
@@ -76,13 +75,16 @@ class Process:
             self.Call(func_name, *params)
         elif operator == 'Ret':
             self.Ret()
+        elif operator =='Print':
+            self.Print(*operands)
 
     def Var(self, ident):
         self.stack_top().local_data[ident] = None
 
     def Jmp(self, label):
         self.pc = label
-
+    def Print(self,*args):
+        print(*args)
     def Call(self, func_name, *params):
         func_info = self.funcs[func_name]  # func info from func table
         new_runtime_func = FuncNode(func_name, self.stack_top().entry, func_info.entry)
@@ -96,14 +98,16 @@ class Process:
 
     def call_main(self):
         try:
-            main_info=self.funcs['_Main']
-            main_func=FuncNode('_Main',None,main_info.entry)
-            self.pc=main_info.entry
+            main_info = self.funcs['_Main']
+            main_func = FuncNode('_Main', None, main_info.entry)
+            self.pc = main_info.entry
             self.stack.append(main_func)
         except KeyError:
             exit('Code has no _Main')
+
     def Ret(self):
-        self.pc=self.stack_top().ret_addr
+        self.pc = self.stack_top().ret_addr
+
     def load(self, path):
         def deserialize(json_obj):
             if isinstance(json_obj, (int, float, str, bool)):
