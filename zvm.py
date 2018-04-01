@@ -17,8 +17,8 @@ class Process:
 
     def __init__(self, path):
         '''zvm use .json as .exe file format to init a process'''
-        # get tables from .json
-        exe=self.load(path)
+        # ----get tables from .json
+        exe = self.load(path)
         self.instrs = exe.assembled_instrs
         self.funcs = exe.func_table
         self.vars = exe.var_table
@@ -28,8 +28,11 @@ class Process:
         self.isa = ISA()
         self.stack = []  # {list<Function>}
         self.global_data = {}  # {var_name:val,...}
+        self.global_data['RetVal']=None  #init a global var named 'RetVal' for return value of function calls
+        # ----some flags
         self.jump = False
         self.is_EOF = self.instrs is not []
+
 
         self.run()
 
@@ -71,14 +74,16 @@ class Process:
             func_name = operands[0]
             params = operands[1:]
             self.Call(func_name, *params)
+        elif operator == 'Ret':
+            self.Ret()
 
-    def Var(self,ident):
+    def Var(self, ident):
         self.stack_top().local_data[ident] = None
 
     def Jmp(self, label):
         self.pc = label
 
-    def Call(self, func_name, ret_addr, *params):
+    def Call(self, func_name, *params):
         func_info = self.funcs[func_name]  # func info from func table
         new_runtime_func = FuncNode(func_name, self.stack_top().entry, func_info.entry)
         # ----pass params: add to local_data
@@ -88,7 +93,18 @@ class Process:
 
         self.pc = func_info.entry  # set pc to the callee entry
         self.stack.append(new_runtime_func)
-    def load(self,path):
+
+    def call_main(self):
+        try:
+            main_info=self.funcs['_Main']
+            main_func=FuncNode('_Main',None,main_info.entry)
+            self.pc=main_info.entry
+            self.stack.append(main_func)
+        except KeyError:
+            exit('Code has no _Main')
+    def Ret(self):
+        self.pc=self.stack_top().ret_addr
+    def load(self, path):
         def deserialize(json_obj):
             if isinstance(json_obj, (int, float, str, bool)):
                 return json_obj
@@ -97,11 +113,11 @@ class Process:
             elif json_obj is None:
                 return None
             elif isinstance(json_obj, dict):
-                f=Function(None)
-                l=Label(None,None)
-                v=Variable(None,None)
-                ai=AssembledInstr(None,None)
-                ef=ExeFile(None,None,None,None)
+                f = Function(None)
+                l = Label(None, None)
+                v = Variable(None, None)
+                ai = AssembledInstr(None, None)
+                ef = ExeFile(None, None, None, None)
                 if json_obj.keys() == f.__dict__.keys():
                     new_Function = f
                     new_Function.__dict__ = {deserialize(key): deserialize(val) for key, val in json_obj.items()}
@@ -128,6 +144,7 @@ class Process:
         with open(path, 'r')as f:
             json_obj = json.load(f)
             return deserialize(json_obj)
+
 
 if __name__ == '__main__':
     Process('out.json')

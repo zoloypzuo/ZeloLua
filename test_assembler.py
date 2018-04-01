@@ -16,3 +16,7 @@ class TestAssembler(TestCase):
         pass
     def test_lexeme2token(self):
         pass
+
+    def test_handle_func(self):
+        assert list(self.a.handle_func(['(','a',',','b',',','c',')']))== ['a','b','c']
+        # self.assertEqual(list(self.a.handle_func(['(','a',',','b',',','c',')'])), ('a','b','c'))

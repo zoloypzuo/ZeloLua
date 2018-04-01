@@ -61,7 +61,6 @@ class Assembler:
     def split_punc(self, text):
         """after split src with whitespace(so {parameter}text will not contain whitespace),
         split with punctuation such that 'a,b' => ('a',',','b'), note that there is no space between 'a' and ','"""
-        lexeme = ''
         index0 = 0
         index1 = 0
         ret = []
@@ -75,7 +74,6 @@ class Assembler:
                     ret.append(lexeme)
                 ret.append(text[index1])
                 index0 = index1 + 1  # move index0 to index1
-                lexeme = ''  # reset lexeme
             index1 += 1
         remainder = text[index0:]
         if remainder:
@@ -132,16 +130,16 @@ class Assembler:
                 self.var_table[name] = new_var
                 self.assembled_instrs.append(AssembledInstr(operator, remainder))
             elif operator == 'Func':
-                name = remainder[0]
-                new_func = Function(name)
+                func_name = remainder[0]
+                param_names=self.handle_func(remainder[1:])
+                new_func = Function(func_name,*param_names)
+
                 new_func.entry = len(self.assembled_instrs) + 1  # note to skip '{' line
-                self.func_table[name] = new_func
-                self.current_func = name
+                self.func_table[func_name] = new_func
+                self.current_func = func_name
                 skip_to_next_line()  # note to skip '{' line
-            elif operator == 'Param':
-                pass
             elif operator == '}':
-                pass
+                self.assembled_instrs.append(AssembledInstr('Ret',None))  #add Ret to the end of func
             elif is_instr(operator):
                 self.assembled_instrs.append(AssembledInstr(operator, list(filter(lambda x: x not in ',:', remainder))))
             elif is_label(operator):
@@ -150,22 +148,6 @@ class Assembler:
             skip_to_next_line()
 
     def dump_json(self):
-        # instrs = []
-        # funcs = {}
-        # vars = {}
-        # for instr in self.assembled_instrs:
-        #     instrs.append({'operator': instr.operator, 'operands': instr.operands})
-        # for f_name, f_node in self.func_table.items():
-        #     funcs[f_name] = {'entry': f_node.entry, 'name': f_node.name}
-        # label table do not need change
-        # for var_name, var_node in self.var_table.items():
-        #     vars[var_name] = {'name': var_node.name, 'func': var_node.func}
-        # output = {
-        #     'instrs': instrs,
-        #     'funcs': funcs,
-        #     'vars': vars,
-        #     'labels': self.label_table
-        # }
         exe = ExeFile(self.var_table, self.label_table, self.func_table, self.assembled_instrs)
         exe = serializablize(exe)
         with open('out.json', 'w') as f:
@@ -193,6 +175,22 @@ class Assembler:
                 ret.append((line, i))
         return ret
 
+    def handle_func(self,tokens):
+        '''
+        ['(','a',',','b',',','c',')'] => {generator}['a','b','c']
+        :param tokens:
+        :return:
+        '''
+        index = 0
+        while True:
+            if index >= len(tokens) - 1: break
+            curr_token = tokens[index]
+            if curr_token in '(),':
+                pass
+            elif match('\w+', curr_token):
+                yield curr_token
+            else:
+                pass  # just for foo
 
 if __name__ == '__main__':
     src = format('test_3.txt')
