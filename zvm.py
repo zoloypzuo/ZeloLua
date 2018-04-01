@@ -77,6 +77,8 @@ class Process:
             self.Ret()
         elif operator =='Print':
             self.Print(*operands)
+        elif operator=='Nop':
+            self.Nop()
 
     def Var(self, ident):
         self.stack_top().local_data[ident] = None
@@ -85,6 +87,8 @@ class Process:
         self.pc = label
     def Print(self,*args):
         print(*args)
+    def Nop(self):
+        pass
     def Call(self, func_name, *params):
         func_info = self.funcs[func_name]  # func info from func table
         new_runtime_func = FuncNode(func_name, self.stack_top().entry, func_info.entry)

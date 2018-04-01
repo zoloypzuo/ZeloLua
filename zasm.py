@@ -143,6 +143,7 @@ class Assembler:
             elif is_instr(operator):
                 self.assembled_instrs.append(AssembledInstr(operator, list(filter(lambda x: x not in ',:', remainder))))
             elif is_label(operator):
+                self.assembled_instrs.append(AssembledInstr('Nop',None))
                 self.label_table[operator] = len(self.assembled_instrs)
 
             skip_to_next_line()
