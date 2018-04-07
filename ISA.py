@@ -7,10 +7,10 @@ class ISA():
 
     def __init__(self):
         self.grammar = {
-            'var': ['[_a-zA-Z]\\w*'],
-            'literal': ['([+-]?\\d+)', '([+-]?\\d*\\.\\d+)', '(\\".*\\")'],
-            'func': ['[_a-zA-Z]\\w*'],
-            'label': ['[_a-zA-Z]\\w*']}
+            'var': [r'[_a-zA-Z]\w*'],
+            'literal': [r'([+-]?\d+)', r'([+-]?\d*\.\d+)', r'(\".*\")'],
+            'func': [r'[_a-zA-Z]\w*'],
+            'label': [r'[_a-zA-Z]\w*']}
         self.instrs = {}
         self.build()
 

@@ -26,13 +26,14 @@ class Process:
 
         self.pc = 0
         self.isa = ISA()
-        self.stack = []  # {list<Function>}
+        self.stack = []  # {list<FuncNode>}
         self.global_data = {}  # {var_name:val,...}
         self.global_data['RetVal'] = None  # init a global var named 'RetVal' for return value of function calls
         # ----some flags
         self.jump = False
-        self.is_EOF = self.instrs is not []
+        self.is_EOF = self.instrs is []
 
+        self.call_main() # set pc to _Main(and do some other sth)
         self.run()
 
     def run(self):
@@ -57,9 +58,15 @@ class Process:
         return self.stack[-1]
 
     def execute(self, operator, *operands):
+        '''
+
+        :param operator: eg. 'Mov'
+        :param operands: eg. ('Var',16), () if no operands
+        :return:
+        '''
         if operator == 'Mov':
             rhs = operands[1]
-            if match(r'\w+', rhs):  # var
+            if match(r'[_a-zA-Z]\w*', rhs):  # var
                 self.stack_top().local_data[operands[0]] = self.stack_top().local_data[rhs]
             else:  # literal
                 self.stack_top().local_data[operands[0]] = rhs
@@ -119,6 +126,8 @@ class Process:
             exit('Code has no _Main')
 
     def Ret(self):
+        if self.stack_top().name=='_Main':
+            exit('Return from _Main, Process executed')
         self.pc = self.stack_top().ret_addr
 
     def load(self, path):
@@ -133,7 +142,7 @@ class Process:
                 f = Function(None)
                 l = Label(None, None)
                 v = Variable(None, None)
-                ai = AssembledInstr(None, None)
+                ai = AssembledInstr(None, [])
                 ef = ExeFile(None, None, None, None)
                 if json_obj.keys() == f.__dict__.keys():
                     new_Function = f

@@ -29,8 +29,9 @@ class Variable:
 class AssembledInstr:
 
     def __init__(self, operator, operands):
+        assert isinstance(operands,list)
         self.operator = operator
-        self.operands = operands  # list
+        self.operands = operands  # {list}
 
 
 class ExeFile:
@@ -134,16 +135,16 @@ class Assembler:
                 param_names=self.handle_func(remainder[1:])
                 new_func = Function(func_name,*param_names)
 
-                new_func.entry = len(self.assembled_instrs) + 1  # note to skip '{' line
+                new_func.entry = len(self.assembled_instrs)  # note to skip '{' line
                 self.func_table[func_name] = new_func
                 self.current_func = func_name
                 skip_to_next_line()  # note to skip '{' line
             elif operator == '}':
-                self.assembled_instrs.append(AssembledInstr('Ret',None))  #add Ret to the end of func
+                self.assembled_instrs.append(AssembledInstr('Ret',[]))  #add Ret to the end of func
             elif is_instr(operator):
                 self.assembled_instrs.append(AssembledInstr(operator, list(filter(lambda x: x not in ',:', remainder))))
             elif is_label(operator):
-                self.assembled_instrs.append(AssembledInstr('Nop',None))
+                self.assembled_instrs.append(AssembledInstr('Nop',[]))
                 self.label_table[operator] = len(self.assembled_instrs)
 
             skip_to_next_line()

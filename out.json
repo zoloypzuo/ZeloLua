@@ -1,1 +1,58 @@
-{"var_table": {"Dur": {"name": "Dur", "func": "_Main"}}, "label_table": {"LoopStart0": 2}, "func_table": {"_Main": {"name": "_Main", "entry": 1, "param_names": []}}, "assembled_instrs": [{"operator": "Mov", "operands": ["Counter", "16"]}, {"operator": "Nop", "operands": null}, {"operator": "Var", "operands": ["Dur"]}, {"operator": "Mov", "operands": ["Dur", "2000"]}, {"operator": "Ret", "operands": null}]}
+{
+    "var_table": {
+        "Counter": {
+            "name": "Counter",
+            "func_name": "_Main"
+        },
+        "Dur": {
+            "name": "Dur",
+            "func_name": "_Main"
+        }
+    },
+    "label_table": {
+        "LoopStart0": 3
+    },
+    "func_table": {
+        "_Main": {
+            "name": "_Main",
+            "entry": 0,
+            "param_names": []
+        }
+    },
+    "assembled_instrs": [
+        {
+            "operator": "Var",
+            "operands": [
+                "Counter"
+            ]
+        },
+        {
+            "operator": "Mov",
+            "operands": [
+                "Counter",
+                "16"
+            ]
+        },
+        {
+            "operator": "Nop",
+            "operands": []
+        },
+        {
+            "operator": "Var",
+            "operands": [
+                "Dur"
+            ]
+        },
+        {
+            "operator": "Mov",
+            "operands": [
+                "Dur",
+                "2000"
+            ]
+        },
+        {
+            "operator": "Ret",
+            "operands": []
+        }
+    ]
+}
