@@ -1,3 +1,16 @@
+"""
+zasm is .zasm assembler, it outputs xxx_exe.json which is input of zvm
+4 stages
+1. format: split file to lines and append line number
+2. lex: lex line to lexemes, without tokenization because it is simple
+3. parse: parse (lightly) lexemes, fill the 4 tables
+4. dump: save the 4 table to .json
+
+
+
+"""
+
+
 from re import match, sub, split
 from ISA import ISA
 from z_json_serialization import beautified_json

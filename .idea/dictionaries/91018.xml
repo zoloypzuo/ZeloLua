@@ -8,7 +8,9 @@
       <w>punc</w>
       <w>setstacksize</w>
       <w>setstacksizes</w>
+      <w>tokenization</w>
       <w>xasm</w>
+      <w>zasm</w>
     </words>
   </dictionary>
 </component>

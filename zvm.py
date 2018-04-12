@@ -1,3 +1,17 @@
+"""
+zvm takes _exe.json as input and execute it
+ stages:
+1. load tables to runtime table classes
+2. vm loop:
+    1. fetch a line of instruction
+    2. decode it to operator and operands
+    3. execute it
+"""
+
+
+
+
+
 from ISA import ISA
 from re import match
 from zasm import *
