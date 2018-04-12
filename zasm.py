@@ -1,7 +1,7 @@
 from re import match, sub, split
-import json
 from ISA import ISA
-from z_json_serialization import serializablize
+from z_json_serialization import beautified_json
+from os import path as _p
 
 
 class Function:
@@ -29,7 +29,7 @@ class Variable:
 class AssembledInstr:
 
     def __init__(self, operator, operands):
-        assert isinstance(operands,list)
+        assert isinstance(operands, list)
         self.operator = operator
         self.operands = operands  # {list}
 
@@ -56,7 +56,7 @@ class Assembler:
         src = self.format(path)  # [(line,line_number),...]
         self.lexemes = self.lex(src)  # [{line}[lexeme0,...],...]
         self.parse(self.lexemes)  # fill tables
-        self.dump_json()
+        self.dump_json(path)
         pass
 
     def split_punc(self, text):
@@ -132,32 +132,34 @@ class Assembler:
                 self.assembled_instrs.append(AssembledInstr(operator, remainder))
             elif operator == 'Func':
                 func_name = remainder[0]
-                param_names=self.handle_func(remainder[1:])
-                new_func = Function(func_name,*param_names)
+                param_names = self.handle_func(remainder[1:])
+                new_func = Function(func_name, *param_names)
 
                 new_func.entry = len(self.assembled_instrs)  # note to skip '{' line
                 self.func_table[func_name] = new_func
                 self.current_func = func_name
                 skip_to_next_line()  # note to skip '{' line
             elif operator == '}':
-                self.assembled_instrs.append(AssembledInstr('Ret',[]))  #add Ret to the end of func
+                self.assembled_instrs.append(AssembledInstr('Ret', []))  # add Ret to the end of func
             elif is_instr(operator):
                 self.assembled_instrs.append(AssembledInstr(operator, list(filter(lambda x: x not in ',:', remainder))))
             elif is_label(operator):
-                self.assembled_instrs.append(AssembledInstr('Nop',[]))
+                self.assembled_instrs.append(AssembledInstr('Nop', []))
                 self.label_table[operator] = len(self.assembled_instrs)
 
             skip_to_next_line()
 
-    def dump_json(self):
+    def dump_json(self, path: str):
+        '''dump exe DS to json file'''
         exe = ExeFile(self.var_table, self.label_table, self.func_table, self.assembled_instrs)
-        exe = serializablize(exe)
-        with open('out.json', 'w') as f:
-            f.write(json.dumps(exe))
+        asm_name = _p.basename(path)
+        # use original asm to create exe file name, replace whitespace with '_' and add '.json'
+        output_file_name = (sub('\..*', '', asm_name.replace('\s','_')))+'_exe.json'
+        with open(output_file_name, 'w') as f:
+            f.write(beautified_json(exe))
 
     def format(self, path):
         '''open the src file, remove comments, skip blank lines, and return [(line,line_number),...]'''
-        '''>>>print(format('test_0.xasm'))'''
 
         def remove_comments(line):
             """>>>print(remove_comments('Var Counter; Create a counter'))"""
@@ -177,7 +179,7 @@ class Assembler:
                 ret.append((line, i))
         return ret
 
-    def handle_func(self,tokens):
+    def handle_func(self, tokens):
         '''
         ['(','a',',','b',',','c',')'] => {generator}['a','b','c']
         :param tokens:
@@ -193,6 +195,7 @@ class Assembler:
                 yield curr_token
             else:
                 pass  # just for foo
+
 
 if __name__ == '__main__':
     src = format('test_3.txt')

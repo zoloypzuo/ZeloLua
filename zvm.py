@@ -131,46 +131,7 @@ class Process:
         self.pc = self.stack_top().ret_addr
 
     def load(self, path):
-        def deserialize(json_obj):
-            if isinstance(json_obj, (int, float, str, bool)):
-                return json_obj
-            elif isinstance(json_obj, list):
-                return [deserialize(i) for i in json_obj]
-            elif json_obj is None:
-                return None
-            elif isinstance(json_obj, dict):
-                f = Function(None)
-                l = Label(None, None)
-                v = Variable(None, None)
-                ai = AssembledInstr(None, [])
-                ef = ExeFile(None, None, None, None)
-                if json_obj.keys() == f.__dict__.keys():
-                    new_Function = f
-                    new_Function.__dict__ = {deserialize(key): deserialize(val) for key, val in json_obj.items()}
-                    return new_Function
-                elif json_obj.keys() == l.__dict__.keys():
-                    new_Label = l
-                    new_Label.__dict__ = {deserialize(key): deserialize(val) for key, val in json_obj.items()}
-                    return new_Label
-                elif json_obj.keys() == v.__dict__.keys():
-                    new_Variable = v
-                    new_Variable.__dict__ = {deserialize(key): deserialize(val) for key, val in json_obj.items()}
-                    return new_Variable
-                elif json_obj.keys() == ai.__dict__.keys():
-                    new_AssembledInstr = ai
-                    new_AssembledInstr.__dict__ = {deserialize(key): deserialize(val) for key, val in json_obj.items()}
-                    return new_AssembledInstr
-                elif json_obj.keys() == ef.__dict__.keys():
-                    new_ExeFile = ef
-                    new_ExeFile.__dict__ = {deserialize(key): deserialize(val) for key, val in json_obj.items()}
-                    return new_ExeFile
-                else:
-                    return {deserialize(key): deserialize(val) for key, val in json_obj.items()}
-
-        with open(path, 'r')as f:
-            json_obj = json.load(f)
-            return deserialize(json_obj)
-
-
+        import z_json
+        return z_json.decode(path)
 if __name__ == '__main__':
-    Process('out.json')
+    Process('test_3_exe.json')

@@ -1,0 +1,58 @@
+{
+    "assembled_instrs": [
+        {
+            "operands": [
+                "Counter"
+            ],
+            "operator": "Var"
+        },
+        {
+            "operands": [
+                "Counter",
+                "16"
+            ],
+            "operator": "Mov"
+        },
+        {
+            "operands": [],
+            "operator": "Nop"
+        },
+        {
+            "operands": [
+                "Dur"
+            ],
+            "operator": "Var"
+        },
+        {
+            "operands": [
+                "Dur",
+                "2000"
+            ],
+            "operator": "Mov"
+        },
+        {
+            "operands": [],
+            "operator": "Ret"
+        }
+    ],
+    "func_table": {
+        "_Main": {
+            "entry": 0,
+            "name": "_Main",
+            "param_names": []
+        }
+    },
+    "label_table": {
+        "LoopStart0": 3
+    },
+    "var_table": {
+        "Counter": {
+            "func_name": "_Main",
+            "name": "Counter"
+        },
+        "Dur": {
+            "func_name": "_Main",
+            "name": "Dur"
+        }
+    }
+}
