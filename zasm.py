@@ -13,7 +13,7 @@ zasm is .zasm assembler, it outputs xxx_exe.json which is input of zvm
 
 from re import match, sub, split
 from ISA import ISA
-from z_json_serialization import beautified_json
+from z_json import beautified_json
 from os import path as _p
 
 
@@ -169,7 +169,7 @@ class Assembler:
         # use original asm to create exe file name, replace whitespace with '_' and add '.json'
         output_file_name = (sub('\..*', '', asm_name.replace('\s','_')))+'_exe.json'
         with open(output_file_name, 'w') as f:
-            f.write(beautified_json(exe))
+            f.write(beautified_json(exe,decodable=True))
 
     def format(self, path):
         '''open the src file, remove comments, skip blank lines, and return [(line,line_number),...]'''

@@ -146,6 +146,6 @@ class Process:
 
     def load(self, path):
         import z_json
-        return z_json.decode(path)
+        return z_json.load(path)
 if __name__ == '__main__':
     Process('test_3_exe.json')
