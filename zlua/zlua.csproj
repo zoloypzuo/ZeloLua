@@ -42,8 +42,48 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Arrays.cs" />
+    <Compile Include="DefineConstants.cs" />
+    <Compile Include="GlobalMembers.cs" />
+    <Compile Include="lapi.cs" />
+    <Compile Include="lauxlib.cs" />
+    <Compile Include="lbaselib.cs" />
+    <Compile Include="lcode.cs" />
+    <Compile Include="ldblib.cs" />
+    <Compile Include="ldebug.cs" />
+    <Compile Include="ldo.cs" />
+    <Compile Include="ldump.cs" />
+    <Compile Include="lfunc.cs" />
+    <Compile Include="lgc.cs" />
+    <Compile Include="linit.cs" />
+    <Compile Include="liolib.cs" />
+    <Compile Include="llex.cs" />
+    <Compile Include="llimits.cs" />
+    <Compile Include="lmathlib.cs" />
+    <Compile Include="lmem.cs" />
+    <Compile Include="loadlib.cs" />
+    <Compile Include="lobject.cs" />
+    <Compile Include="lopcodes.cs" />
+    <Compile Include="loslib.cs" />
+    <Compile Include="lparser.cs" />
+    <Compile Include="lstate.cs" />
+    <Compile Include="lstring.cs" />
+    <Compile Include="lstrlib.cs" />
+    <Compile Include="ltable.cs" />
+    <Compile Include="ltablib.cs" />
+    <Compile Include="ltm.cs" />
+    <Compile Include="lua.cs" />
+    <Compile Include="luac.cs" />
+    <Compile Include="luaconf.cs" />
+    <Compile Include="lualib.cs" />
+    <Compile Include="lundump.cs" />
+    <Compile Include="lvm.cs" />
+    <Compile Include="lzio.cs" />
+    <Compile Include="print.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RandomNumbers.cs" />
+    <Compile Include="StringFunctions.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
