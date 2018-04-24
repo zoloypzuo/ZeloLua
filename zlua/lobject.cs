@@ -22,7 +22,7 @@ namespace zlua {
         /// <summary>
         /// (C# simulated) union of all lua values
         /// how it simulate union?: use extra fields
-        /// size: 4+8+4=16B
+        /// size: 8+8+4=20B
         /// differ from clua: light userdata is removed because C# use GC
         /// </summary>
         public class Value {

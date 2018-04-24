@@ -23,6 +23,9 @@ namespace zlua {
     /// (lua.c in lua src)
     /// </summary>
     partial class Lua {
+        /// <summary>
+        /// differ from clua: const int... => enum
+        /// </summary>
         public enum LuaType {
             LUA_TNONE = -1,
 

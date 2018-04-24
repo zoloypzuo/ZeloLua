@@ -26,12 +26,14 @@ namespace zlua {
             //public Table h { get { return (Table)this; } }
             //public Proto p { get { return (Proto)this; } }
             //public UpVal uv { get { return (UpVal)this; } }
-            public luaThread thread { get { return this as luaThread; } }
+            public lua_Thread thread { get { return this as lua_Thread; } }
         }
         /// <summary>
-        /// thread: both lua vm and lua coroutine is a "lua state"
+        /// thread
+        /// both lua vm and lua coroutine is a thread
+        /// differ from clua: "lua_State" => "lua_Thread"
         /// </summary>
-        public class luaThread:GCObject {
+        public class lua_Thread:GCObject {
             public byte status;
             public lua_TValue top; // first free slot in the stack
             public lua_TValue @base; // base of current function
@@ -94,7 +96,7 @@ namespace zlua {
             public int gcstepmul; // GC `granularity'
             //public lua_CFunction panic; // to be called in unprotected errors
             public lua_TValue l_registry = new lua_TValue();
-            public luaThread mainthread;
+            public lua_Thread mainthread;
             public UpVal uvhead = new UpVal(); // head of double-linked list of all open upvalues
             /// <summary>
             /// ... , LUA_TTHREAD+1 is number of all primitive types 
