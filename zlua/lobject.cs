@@ -8,7 +8,7 @@ namespace zlua {
     using TValue = Lua.lua_TValue;  //有些地方因为生成代码没用到
     using lua_Number = System.Double;
     /// <summary>
-    /// some generic functions over lua objects (lobject.c in lua stc)
+    /// some generic functions over lua objects (lobject.c）
     /// </summary>
     partial class Lua {
         /// <summary>
@@ -21,36 +21,25 @@ namespace zlua {
         }
         /// <summary>
         /// (C# simulated) union of all lua values
-        /// how it simulate union?:
-        /// 1. p is actual value of the type
-        /// 2. when p is used as a specific type of value, it is casted to the type, boxing and unboxing may happen 
+        /// how it simulate union?: use extra fields
+        /// size: 4+8+4=16B
+        /// differ from clua: light userdata is removed because C# use GC
         /// </summary>
         public class Value {
             /// <summary>
-            /// gc is GC collectable object...
+            /// the GC collectable object
             /// </summary>
-            public GCObject gc {
-                get { return (GCObject)this.p; }
-                set { this.p = value; }
-            }
-            /// <summary>
-            /// in clua, p is light userdata, here used both as light userdata and to simulate union
-            /// </summary>
-            public object p;
+            public GCObject gcobject { get; set; }
+
             /// <summary>
             /// the number type of lua
             /// </summary>
-            public lua_Number n {
-                get { return (lua_Number)this.p; }
-                set { this.p = (object)value; }
-            }
+            public lua_Number n { get; set; }
+
             /// <summary>
             /// the int type of lua
             /// </summary>
-            public int b {
-                get { return (int)this.p; }
-                set { this.p = (object)value; }
-            }
+            public int b { get; set; }
         }
         /// <summary>
         /// the general type of lua. T means "tagged" 
@@ -59,6 +48,7 @@ namespace zlua {
             public Value value = new Value();
             /// <summary>
             /// type tag. defined in lua.cs
+            /// TODO 替换成enum
             /// </summary>
             public int tt;
         }
@@ -108,7 +98,7 @@ namespace zlua {
         //    public int startpc;
         //    public int endpc;
         //}
-        
+
 
 
 
@@ -164,7 +154,7 @@ namespace zlua {
         /// TODO: use dictionary如果不实现的话
         /// TOUnderstand
         /// </summary>
-        public class Table:GCObject {
+        public class Table : GCObject {
             public byte flags;
             public byte lsizenode;
             public Table metatable;
@@ -206,18 +196,18 @@ namespace zlua {
             public uint hash;
             public uint len;
         };
-    public class TString : TString_tsv {
-        //public L_Umaxalign dummy;  /* ensures maximum alignment for strings */			
-        public TString_tsv tsv { get { return this; } }
+        public class TString : TString_tsv {
+            //public L_Umaxalign dummy;  /* ensures maximum alignment for strings */			
+            public TString_tsv tsv { get { return this; } }
 
-        public TString()
-        {
-        }
-        public TString(CharPtr str) { this.str = str; }
+            public TString()
+            {
+            }
+            public TString(CharPtr str) { this.str = str; }
 
-        public CharPtr str;
+            public CharPtr str;
 
-        public override string ToString() { return str.ToString(); } // for debugging
-    };
-}
+            public override string ToString() { return str.ToString(); } // for debugging
+        };
+    }
 }

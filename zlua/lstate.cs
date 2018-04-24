@@ -11,27 +11,27 @@ namespace zlua {
     partial class Lua {
         /// <summary>
         /// (C# simulated) union of GC objects
-        /// how it simulates union:
-        /// 1. inheritance graph: GCheader <- GCObject <- TString, Udata ...(all GC types of lua) 
+        /// how it simulates union: polymorphic
+        /// 1. inheritance graph: GCheader > GCObject > TString, Udata ... (all GC types of lua) 
         /// 2. GCObject use property to return specific type of value with polymorphic
         /// </summary>
         public class GCObject : GCheader {
             /// <summary>
-            /// for convenience (eg. TString is subclass of GCObject
+            /// for convenience (eg. TString is subclass of GCObject）
             /// </summary>
-            public GCheader gch { get { return (GCheader)this; } }
-            public TString ts { get { return (TString)this; } }
-            public Udata u { get { return (Udata)this; } }
-            public Closure cl { get { return (Closure)this; } }
-            public Table h { get { return (Table)this; } }
-            public Proto p { get { return (Proto)this; } }
-            public UpVal uv { get { return (UpVal)this; } }
-            public lua_State th { get { return (lua_State)this; } }
-        };
+            public GCheader gcheader { get { return this as GCheader; } }
+            public TString tstring { get { return this as TString; } }
+            //public Udata u { get { return (Udata)this; } }
+            //public Closure cl { get { return (Closure)this; } }
+            //public Table h { get { return (Table)this; } }
+            //public Proto p { get { return (Proto)this; } }
+            //public UpVal uv { get { return (UpVal)this; } }
+            public luaThread thread { get { return this as luaThread; } }
+        }
         /// <summary>
         /// thread: both lua vm and lua coroutine is a "lua state"
         /// </summary>
-        public class lua_State:GCObject {
+        public class luaThread:GCObject {
             public byte status;
             public lua_TValue top; // first free slot in the stack
             public lua_TValue @base; // base of current function
@@ -94,7 +94,7 @@ namespace zlua {
             public int gcstepmul; // GC `granularity'
             //public lua_CFunction panic; // to be called in unprotected errors
             public lua_TValue l_registry = new lua_TValue();
-            public lua_State mainthread;
+            public luaThread mainthread;
             public UpVal uvhead = new UpVal(); // head of double-linked list of all open upvalues
             /// <summary>
             /// ... , LUA_TTHREAD+1 is number of all primitive types 
