@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace zlua {
+    using TValue = Lua.lua_TValue;
+    using lua_Number = System.Double;
     /// <summary>
     /// global state machine (lstate.c in lua src)
     /// </summary>
@@ -15,16 +17,15 @@ namespace zlua {
         /// 1. inheritance graph: GCheader > GCObject > TString, Udata ... (all GC types of lua) 
         /// 2. GCObject use property to return specific type of value with polymorphic
         /// </summary>
-        public class GCObject : GCheader {
+        public class GCObject {
             /// <summary>
             /// for convenience (eg. TString is subclass of GCObject）
             /// </summary>
-            public GCheader gcheader { get { return this as GCheader; } }
             public TString tstring { get { return this as TString; } }
-            //public Udata u { get { return (Udata)this; } }
-            //public Closure cl { get { return (Closure)this; } }
+            public Userdata userdata { get { return this as Userdata; } }
+            public Closure cl { get { return (Closure)this; } }
             //public Table h { get { return (Table)this; } }
-            //public Proto p { get { return (Proto)this; } }
+            public FuncProto funcproto { get { return this as FuncProto; } }
             //public UpVal uv { get { return (UpVal)this; } }
             public lua_Thread thread { get { return this as lua_Thread; } }
         }
@@ -35,8 +36,8 @@ namespace zlua {
         /// </summary>
         public class lua_Thread:GCObject {
             public byte status;
-            public lua_TValue top; // first free slot in the stack
-            public lua_TValue @base; // base of current function
+            public TValue top; // first free slot in the stack
+            public TValue @base; // base of current function
             public global_State l_G;
             public CallInfo ci; // call info for current function
             public readonly UInt32 savedpc; // `savedpc' of current function

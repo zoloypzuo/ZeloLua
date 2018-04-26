@@ -5,25 +5,21 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace zlua {
-    using TValue = Lua.lua_TValue;  //有些地方因为生成代码没用到
+    using TValue = Lua.lua_TValue;
     using lua_Number = System.Double;
     /// <summary>
     /// some generic functions over lua objects (lobject.c）
+    /// 1. interface] TValue, and other 9 specific types  
+    /// 2. GC不实现，使用C# GC
     /// </summary>
     partial class Lua {
-        /// <summary>
-        /// info for GC
-        /// </summary>
-        public class GCheader {
-            public GCObject next;
-            public byte tt;
-            public byte marked;
-        }
+       
         /// <summary>
         /// (C# simulated) union of all lua values
         /// how it simulate union?: use extra fields
         /// size: 8+8+4=20B
         /// differ from clua: light userdata is removed because C# use GC
+        /// TODO如何访问修饰符不被外卖呢看到
         /// </summary>
         public class Value {
             /// <summary>
@@ -39,7 +35,7 @@ namespace zlua {
             /// <summary>
             /// the int type of lua
             /// </summary>
-            public int b { get; set; }
+            public int i { get; set; }
         }
         /// <summary>
         /// the general type of lua. T means "tagged" 
@@ -47,86 +43,72 @@ namespace zlua {
         public class lua_TValue {
             public Value value = new Value();
             /// <summary>
-            /// type tag. defined in lua.cs
-            /// TODO 替换成enum
+            /// type tag, defined in lua.cs
             /// </summary>
-            public int tt;
+            public LuaType type;
         }
-        //public struct Udata {
-        //    public L_Umaxalign dummy;
-        //    public class AnonymousClass2 {
-        //        public GCObject next;
-        //        public byte tt;
-        //        public byte marked;
-        //        public Table metatable;
-        //        public Table env;
-        //        public size_t len = new size_t();
-        //    }
-        //    public AnonymousClass2 uv;
-        //}
-        ///*
-        //** Function Prototypes
-        //*/
-        //public class Proto {
-        //    public GCObject next;
-        //    public byte tt;
-        //    public byte marked;
-        //    public lua_TValue[] k;
-        //    public LUAI_UINT32[] code;
-        //    public Proto[] p;
-        //    public int[] lineinfo;
-        //    public LocVar[] locvars;
-        //    public TString[] upvalues;
-        //    public TString[] source;
-        //    public int sizeupvalues;
-        //    public int sizek;
-        //    public int sizecode;
-        //    public int sizelineinfo;
-        //    public int sizep;
-        //    public int sizelocvars;
-        //    public int linedefined;
-        //    public int lastlinedefined;
-        //    public GCObject gclist;
-        //    public byte nups;
-        //    public byte numparams;
-        //    public byte is_vararg;
-        //    public byte maxstacksize;
-        //}
-        ///* masks for new-style vararg */
-        //public class LocVar {
-        //    public TString varname;
-        //    public int startpc;
-        //    public int endpc;
-        //}
+        /// <summary>
+        /// TODO:搞清楚怎么回事，既然C# lua不分GC，那么简单实现？问题在于很可能要等到你实现交互再解决
+        /// </summary>
+        public class Userdata:GCObject {
+            public Table metatable;
+            public Table env;
+        }
+        /// <summary>
+        /// the function prototype type of lua
+        /// </summary>
+        public class FuncProto:GCObject {
+            public TValue[] constants;
+            public Instruction[] codes;
+            public FuncProto[] inner_funcprotos;
+            //public int[] lineinfo; //TOUnderstand
+            public LocVar[] locvars;
+            public TString[] upvalues;
+            //public TString[] source;//TOUnderStand
+            //public int linedefined;
+            //public int lastlinedefined;
+            //public GCObject gclist;
+            //public byte nups;
+            //public byte numparams;
+            //public byte is_vararg;
+            //public byte maxstacksize;
+        }
+
+
+        public class LocVar {
+            public TString varname;
+            public int startpc; //TOUnderstancs
+            public int endpc;
+        }
 
 
 
 
-        ///*
-        //** Closures
-        //*/
-        //public class CClosure {
-        //    public GCObject next;
-        //    public byte tt;
-        //    public byte marked;
-        //    public byte isC;
-        //    public byte nupvalues;
-        //    public GCObject gclist;
-        //    public Table env;
-        //    public lua_CFunction f;
-        //    public lua_TValue[] upvalue = Arrays.InitializeWithDefaultInstances<lua_TValue>(1);
-        //}
-        //public class LClosure {
-        //    public GCObject next;
-        //    public byte tt;
-        //    public byte marked;
-        //    public byte isC;
-        //    public byte nupvalues;
-        //    public GCObject gclist;
-        //    public Table env;
-        //    public Proto[] p;
-        //    public UpVal[] upvals = Arrays.InitializeWithDefaultInstances<UpVal>(1);
-        //}
+        /*
+        ** Closures
+        */
+        public class CClosure {
+            public GCObject next;
+            public byte tt;
+            public byte marked;
+            public byte isC;
+            public byte nupvalues;
+            public GCObject gclist;
+            public Table env;
+            public lua_CFunction f;
+            public lua_TValue[] upvalue = Arrays.InitializeWithDefaultInstances<lua_TValue>(1);
+        }
+        public class LClosure {
+            public GCObject next;
+            public byte tt;
+            public byte marked;
+            public byte isC;
+            public byte nupvalues;
+            public GCObject gclist;
+            public Table env;
+            public Proto[] p;
+            public UpVal[] upvals = Arrays.InitializeWithDefaultInstances<UpVal>(1);
+        }
         //[StructLayout(LayoutKind.Explicit)]
         //public struct Closure {
         //    [FieldOffset(0)]
@@ -175,7 +157,7 @@ namespace zlua {
             /// <summary>
             /// 匿名类
             /// </summary>
-            public class _u {
+            public class _u {  //原来这里是union，TODO，TOUnderstand：自己打算怎么实现，他是怎么实现的，名字要改
                 public TValue value = new TValue();  /* the value (when closed) */
 
                 public class _l {  /* double linked list (when open) */
@@ -188,26 +170,24 @@ namespace zlua {
             public new _u u = new _u();
         }
 
+        ///// <summary>
+        ///// string header
+        ///// </summary>
+        //public class TString_tsv : GCObject {
+        //    public lu_byte reserved;
+        //    public uint hash;
+        //    public uint len;
+        //};
         /// <summary>
-        /// string header
+        /// the string type of lua, just warpper of C# string
         /// </summary>
-        public class TString_tsv : GCObject {
-            public lu_byte reserved;
-            public uint hash;
-            public uint len;
-        };
-        public class TString : TString_tsv {
+        public class TString:GCObject /*: TString_tsv*/ {
             //public L_Umaxalign dummy;  /* ensures maximum alignment for strings */			
-            public TString_tsv tsv { get { return this; } }
+            //public TString_tsv tsv { get { return this; } }
 
-            public TString()
-            {
-            }
-            public TString(CharPtr str) { this.str = str; }
-
-            public CharPtr str;
-
-            public override string ToString() { return str.ToString(); } // for debugging
+            public TString(string str) { this.str = str; }
+            public string str;
+            //public override string ToString() { return str.ToString(); } // for debugging
         };
     }
 }

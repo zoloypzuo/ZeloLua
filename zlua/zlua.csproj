@@ -47,6 +47,7 @@
     <Compile Include="lstate.cs" />
     <Compile Include="ltm.cs" />
     <Compile Include="lua.cs" />
+    <Compile Include="lvm.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
