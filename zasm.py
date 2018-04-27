@@ -10,33 +10,22 @@ zasm is .zasm assembler, it outputs xxx_exe.json which is input of zvm
 
 """
 
-
 from re import match, sub, split
 from ISA import ISA
-from z_json import beautified_json
+from z_json import beautified_json,plain_json
 from os import path as _p
+
+'''label is used for "while, if" in script, jump to label that is out of curr func is not allowed'''
 
 
 class Function:
 
-    def __init__(self, name, *param_names):
-        self.name = name
-        self.entry = 0
+    def __init__(self, *param_names):
         self.param_names = param_names
 
-
-class Label:
-
-    def __init__(self, name, func):
-        self.name = name
-        self.func = func
-
-
-class Variable:
-
-    def __init__(self, name, func_name):
-        self.name = name
-        self.func_name = func_name
+        self.instrs = []  # {list<AssembledInstr>}
+        self.inner_funcs = []  # {list<Function>}
+        self.labels = {}  # {dict<str,int>}
 
 
 class AssembledInstr:
@@ -48,26 +37,31 @@ class AssembledInstr:
 
 
 class ExeFile:
-    def __init__(self, var_table, label_table, func_table, assembled_instrs):
-        self.var_table = var_table
-        self.label_table = label_table
-        self.func_table = func_table
-        self.assembled_instrs = assembled_instrs
-
+    def __init__(self, main_func):
+        # self.var_table = var_table  # TODO
+        # self.label_table = label_table
+        # self.func_table = func_table
+        # self.assembled_instrs = assembled_instrs
+        self.main_func=main_func
 
 class Assembler:
 
     def __init__(self, path):
+        '''
+        assemble the `path to .json
+        :param path:
+        '''
         # ----tables for assembled file
-        self.var_table = {}
-        self.label_table = {}
-        self.func_table = {}
-        self.assembled_instrs = []
+        # self.global_var_table = {}
+        self.main_func = None
+        # self.label_table = {}
+        # self.func_table = {}
+        # self.assembled_instrs = []
 
         self.isa = ISA()
         # ----core
         src = self.format(path)  # [(line,line_number),...]
-        self.lexemes = self.lex(src)  # [{line}[lexeme0,...],...]
+        self.lexemes = self.lex(src)  # [[lexeme0,...],...]
         self.parse(self.lexemes)  # fill tables
         self.dump_json(path)
         pass
@@ -128,7 +122,9 @@ class Assembler:
             return match(r'[_0-9a-zA-Z]\w*', text)  # 可能重复了
 
         # ----parse
-        self.current_func = ''
+        def parse_non_keyword(lexeme):
+            if match(r'[_a-zA-Z]\w*', lexeme): return lexeme
+
         while True:
             if self.is_EOF:
                 break
@@ -136,40 +132,40 @@ class Assembler:
             assert line is not []  # just for debug
             operator = line[0]
             remainder = line[1:]
-            if operator == 'SetStackSize':
-                pass
-            elif operator == 'Var':
-                name = remainder[0]
-                new_var = Variable(name, self.current_func)
-                self.var_table[name] = new_var
-                self.assembled_instrs.append(AssembledInstr(operator, remainder))
-            elif operator == 'Func':
-                func_name = remainder[0]
-                param_names = self.handle_func(remainder[1:])
-                new_func = Function(func_name, *param_names)
+            if operator == 'Func':
+                param_names = self.handle_func(remainder)
+                new_func = Function(*param_names)
+                if self.main_func is None: self.main_func = new_func
+                self.current_func = new_func
 
-                new_func.entry = len(self.assembled_instrs)  # note to skip '{' line
-                self.func_table[func_name] = new_func
-                self.current_func = func_name
                 skip_to_next_line()  # note to skip '{' line
+
             elif operator == '}':
-                self.assembled_instrs.append(AssembledInstr('Ret', []))  # add Ret to the end of func
+                self.current_func.instrs.append(AssembledInstr('Ret', []))  # add Ret to the end of func
             elif is_instr(operator):
-                self.assembled_instrs.append(AssembledInstr(operator, list(filter(lambda x: x not in ',:', remainder))))
+                self.current_func.instrs.append(
+                    AssembledInstr(
+                        operator,
+                        [x for x in remainder if x not in ',:']))
             elif is_label(operator):
-                self.assembled_instrs.append(AssembledInstr('Nop', []))
-                self.label_table[operator] = len(self.assembled_instrs)
+                self.current_func.instrs.append(AssembledInstr('Nop', []))
+                self.current_func.labels[operator] = len(self.current_func.instrs) #TODO check
 
             skip_to_next_line()
 
     def dump_json(self, path: str):
         '''dump exe DS to json file'''
-        exe = ExeFile(self.var_table, self.label_table, self.func_table, self.assembled_instrs)
+        exe = ExeFile(self.main_func)
         asm_name = _p.basename(path)
         # use original asm to create exe file name, replace whitespace with '_' and add '.json'
-        output_file_name = (sub('\..*', '', asm_name.replace('\s','_')))+'_exe.json'
+        output_file_name = (sub('\..*', '', asm_name.replace('\s', '_'))) + '_exe.json'
         with open(output_file_name, 'w') as f:
-            f.write(beautified_json(exe,decodable=True))
+            f.write(beautified_json(exe, decodable=True))
+
+        # 方便看
+        output_plain_name='plain'+'.json'
+        with open(output_plain_name,'w') as f:
+            f.write(beautified_json(exe,decodable=False))
 
     def format(self, path):
         '''open the src file, remove comments, skip blank lines, and return [(line,line_number),...]'''
@@ -211,5 +207,4 @@ class Assembler:
 
 
 if __name__ == '__main__':
-    src = format('test_3.txt')
-    Assembler(src)
+    Assembler('_test/1-assign.txt')

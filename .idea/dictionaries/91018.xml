@@ -6,6 +6,7 @@
       <w>instrs</w>
       <w>mssg</w>
       <w>punc</w>
+      <w>setglobal</w>
       <w>setstacksize</w>
       <w>setstacksizes</w>
       <w>tokenization</w>

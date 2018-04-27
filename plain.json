@@ -1,0 +1,31 @@
+{
+    "main_func": {
+        "inner_funcs": [],
+        "instrs": [
+            {
+                "operands": [
+                    "a",
+                    "10"
+                ],
+                "operator": "setglobal"
+            },
+            {
+                "operands": [
+                    "b",
+                    "30"
+                ],
+                "operator": "setglobal"
+            },
+            {
+                "operands": [],
+                "operator": "return"
+            },
+            {
+                "operands": [],
+                "operator": "Ret"
+            }
+        ],
+        "labels": {},
+        "param_names": []
+    }
+}

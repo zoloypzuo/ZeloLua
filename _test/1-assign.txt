@@ -1,0 +1,10 @@
+;a = 10
+;b = 30
+
+Func
+{
+	setglobal a 10
+	setglobal b 30
+	return
+}
+

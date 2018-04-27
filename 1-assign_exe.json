@@ -1,0 +1,55 @@
+{
+    "__class_dict__": {
+        "main_func": {
+            "__class_dict__": {
+                "inner_funcs": [],
+                "instrs": [
+                    {
+                        "__class_dict__": {
+                            "operands": [
+                                "a",
+                                "10"
+                            ],
+                            "operator": "setglobal"
+                        },
+                        "__class_module__": "__main__",
+                        "__class_name__": "AssembledInstr"
+                    },
+                    {
+                        "__class_dict__": {
+                            "operands": [
+                                "b",
+                                "30"
+                            ],
+                            "operator": "setglobal"
+                        },
+                        "__class_module__": "__main__",
+                        "__class_name__": "AssembledInstr"
+                    },
+                    {
+                        "__class_dict__": {
+                            "operands": [],
+                            "operator": "return"
+                        },
+                        "__class_module__": "__main__",
+                        "__class_name__": "AssembledInstr"
+                    },
+                    {
+                        "__class_dict__": {
+                            "operands": [],
+                            "operator": "Ret"
+                        },
+                        "__class_module__": "__main__",
+                        "__class_name__": "AssembledInstr"
+                    }
+                ],
+                "labels": {},
+                "param_names": []
+            },
+            "__class_module__": "__main__",
+            "__class_name__": "Function"
+        }
+    },
+    "__class_module__": "__main__",
+    "__class_name__": "ExeFile"
+}

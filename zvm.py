@@ -15,16 +15,16 @@ zvm takes _exe.json as input and execute it
 from ISA import ISA
 from re import match
 from zasm import *
+from collections import namedtuple
 
+RetAddr=namedtuple('RetAddr',['func','addr'])
+# RetAddr.__doc__="..."
 
-class FuncNode:
-    '''runtime function node'''
+class RuntimeFunc:
 
-    def __init__(self, name, ret_addr, entry):
-        self.name = name  # 不需要，debug方便
-        self.ret_addr = ret_addr
-        self.entry = entry
-        self.local_data = {}  # {var_name:val,...}
+    def __init__(self, func:Function,ret_addr):
+        self.func=func
+        self.ret_addr=ret_addr # None if _Main
 
 
 class Process:
@@ -33,29 +33,30 @@ class Process:
         '''zvm use .json as .exe file format to init a process'''
         # ----get tables from .json
         exe = self.load(path)
-        self.instrs = exe.assembled_instrs
-        self.funcs = exe.func_table
-        self.vars = exe.var_table
-        self.labels = exe.label_table
+        self.main_func=exe.main_func
 
-        self.pc = 0
         self.isa = ISA()
         self.stack = []  # {list<FuncNode>}
         self.global_data = {}  # {var_name:val,...}
         self.global_data['RetVal'] = None  # init a global var named 'RetVal' for return value of function calls
+
+
+        rt_main_func = RuntimeFunc(self.main_func,None)
+        self.stack.append(rt_main_func)
+        self.curr_func=self.stack_top()
         # ----some flags
         self.jump = False
-        self.is_EOF = self.instrs is []
-        self.call_main() # set pc to _Main(and do some other sth)
-        self.run()
+        self.is_EOF = self.curr_func.func.instrs is []
 
     def run(self):
         '''run the process'''
+        self.pc=0
         while True:
+            yield None
             if self.is_EOF:
                 break
             self.jump = False  # reset the jump
-            current_instr = self.instrs[self.pc]
+            current_instr = self.curr_func.func.instrs[self.pc]
             self.execute(current_instr.operator, *current_instr.operands)
             if not self.jump:
                 self.skip_to_next_line()
@@ -63,11 +64,11 @@ class Process:
                 continue
 
     def skip_to_next_line(self):
-        if self.pc >= len(self.instrs) - 1:
+        if self.pc >= len(self.curr_func.func.instrs) - 1:
             self.is_EOF = True
         self.pc += 1
 
-    def stack_top(self):
+    def stack_top(self)->RuntimeFunc:
         return self.stack[-1]
 
     def execute(self, operator, *operands):
@@ -120,7 +121,7 @@ class Process:
 
     def Call(self, func_name, *params):
         func_info = self.funcs[func_name]  # func info from func table
-        new_runtime_func = FuncNode(func_name, self.stack_top().entry, func_info.entry)
+        new_runtime_func = RuntimeFunc(func_name, self.stack_top().entry, func_info.entry)
         # ----pass params: add to local_data
         param_names = func_info.param_names
         for i in range(len(param_names)):
@@ -132,19 +133,31 @@ class Process:
     def call_main(self):
         try:
             main_info = self.funcs['_Main']
-            main_func = FuncNode('_Main', None, main_info.entry)
+            main_func = RuntimeFunc('_Main', None, main_info.entry)
             self.pc = main_info.entry
-            self.stack.append(main_func)
+            self.stack.append(self.main_func)
         except KeyError:
             exit('Code has no _Main')
 
     def Ret(self):
-        if self.stack_top().name=='_Main':
+        if self.curr_func.ret_addr==None:
             exit('Return from _Main, Process executed')
-        self.pc = self.stack_top().ret_addr
+        self.pc= self.curr_func.ret_addr
+        self.stack.pop()
+        self.curr_func=self.stack_top()
 
     def load(self, path):
         import z_json
         return z_json.load(path)
 if __name__ == '__main__':
-    Process('test_3_exe.json')
+    p=Process('1-assign_exe.json')
+    p1 = p.run()
+    next(p1)
+
+    next(p1)
+    next(p1)
+    next(p1)
+    next(p1)
+    next(p1)
+    next(p1)
+    next(p1)
