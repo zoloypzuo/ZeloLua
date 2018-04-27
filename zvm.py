@@ -25,7 +25,7 @@ class RuntimeFunc:
     def __init__(self, func:Function,ret_addr):
         self.func=func
         self.ret_addr=ret_addr # None if _Main
-
+        self.local_data={}
 
 class Process:
 
@@ -78,28 +78,40 @@ class Process:
         :param operands: eg. ('Var',16), () if no operands
         :return:
         '''
-        if operator == 'Mov':
-            rhs = operands[1]
-            if match(r'[_a-zA-Z]\w*', rhs):  # var
-                self.stack_top().local_data[operands[0]] = self.stack_top().local_data[rhs]
+        def parse_value(lexeme:str):
+            if match(r'[_a-zA-Z]\w*', lexeme):  # var
+                return self.curr_func.local_data[lexeme]
             else:  # literal
-                self.stack_top().local_data[operands[0]] = rhs
-        elif operator == 'Var':
-            pass
-        elif operator == 'Jmp':
-            self.jump = True
-            label_addr = self.labels[operands[0]]
-            self.Jmp(label_addr)
-        elif operator == 'Call':
-            func_name = operands[0]
-            params = operands[1:]
-            self.Call(func_name, *params)
-        elif operator == 'Ret':
-            self.Ret()
-        elif operator == 'Print':
-            self.Print(*operands)
-        elif operands == 'PrintVar':
-            self.PrintVar(*operands)
+                if match(r'\".*\"',lexeme):return lexeme.strip('\"')
+                elif match(r'([+-]?\d*.\d+)',lexeme):return float(lexeme)
+                else:return int(rhs)
+
+        if operator == 'mov':
+            rhs = operands[1]
+            rhs=parse_value(rhs)
+            self.curr_func.local_data[operands[0]] = rhs
+        elif operator == 'setglobal':
+            rhs=operands[1]
+            rhs=parse_value(rhs)
+            self.global_data[operands[0]]=rhs
+        # elif operator == 'Jmp':
+        #     self.jump = True
+        #     label_addr = self.labels[operands[0]]
+        #     self.Jmp(label_addr)
+        # elif operator == 'Call':
+        #     func_name = operands[0]
+        #     params = operands[1:]
+        #     self.Call(func_name, *params)
+        elif operator == 'return':
+            if self.curr_func.ret_addr == None:
+                exit('Return from _Main, Process executed')
+            self.pc = self.curr_func.ret_addr
+            self.stack.pop()
+            self.curr_func = self.stack_top()
+        # elif operator == 'Print':
+        #     self.Print(*operands)
+        # elif operands == 'PrintVar':
+        #     self.PrintVar(*operands)
         elif operator == 'Nop':
             self.Nop()
 
@@ -139,12 +151,6 @@ class Process:
         except KeyError:
             exit('Code has no _Main')
 
-    def Ret(self):
-        if self.curr_func.ret_addr==None:
-            exit('Return from _Main, Process executed')
-        self.pc= self.curr_func.ret_addr
-        self.stack.pop()
-        self.curr_func=self.stack_top()
 
     def load(self, path):
         import z_json

@@ -19,7 +19,18 @@
                         "__class_dict__": {
                             "operands": [
                                 "b",
-                                "30"
+                                "30.0"
+                            ],
+                            "operator": "setglobal"
+                        },
+                        "__class_module__": "__main__",
+                        "__class_name__": "AssembledInstr"
+                    },
+                    {
+                        "__class_dict__": {
+                            "operands": [
+                                "c",
+                                "\"foo\""
                             ],
                             "operator": "setglobal"
                         },

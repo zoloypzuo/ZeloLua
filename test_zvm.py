@@ -2,19 +2,19 @@ from zvm import *
 from zasm import *
 def test_process():
     # ---- prepare p1
-    p1 = Process('test_3_exe.json')
+    p1 = Process('1-assign_exe.json')
     run_p1=p1.run()
     next(run_p1)
     # ---- run by step
-    # 	Var		Counter
+    # setglobal a 10
     next(run_p1)
-    # 	Mov		Counter, 16	;Counter=16
+    assert p1.global_data['a']==10
+    # setglobal b 30
     next(run_p1)
-    assert p1.stack_top().local_data['Counter']==16
-    # LoopStart0:
-    # Var		Dur
+    assert p1.global_data['b']==30.0
+    # setglobal c "foo"
     next(run_p1)
-    # Mov		Dur, 2000 ;Dur=2000
+    assert p1.global_data['c'] == "foo"
     next(run_p1)
     # Ret
     next(run_p1)

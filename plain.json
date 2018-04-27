@@ -12,7 +12,14 @@
             {
                 "operands": [
                     "b",
-                    "30"
+                    "30.0"
+                ],
+                "operator": "setglobal"
+            },
+            {
+                "operands": [
+                    "c",
+                    "\"foo\""
                 ],
                 "operator": "setglobal"
             },
