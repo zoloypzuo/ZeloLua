@@ -46,7 +46,6 @@ class Process:
         # ----some flags
         self.jump = False
         self.is_EOF = self.instrs is []
-
         self.call_main() # set pc to _Main(and do some other sth)
         self.run()
 

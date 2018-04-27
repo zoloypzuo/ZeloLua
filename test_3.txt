@@ -2,8 +2,8 @@ SetStackSize 512
 Func _Main
 {
 	Var		Counter				
-	Mov		Counter, 16			
+	Mov		Counter, 16	;Counter=16		
 	LoopStart0:
 	Var		Dur				
-	Mov		Dur, 2000
+	Mov		Dur, 2000 ;Dur=2000
 }
