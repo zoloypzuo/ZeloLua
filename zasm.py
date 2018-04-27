@@ -15,8 +15,6 @@ from ISA import ISA
 from z_json import beautified_json,plain_json
 from os import path as _p
 
-'''label is used for "while, if" in script, jump to label that is out of curr func is not allowed'''
-
 
 class Function:
 

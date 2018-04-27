@@ -1,11 +1,16 @@
 """
 zvm takes _exe.json as input and execute it
- stages:
+
+stages:
 1. load tables to runtime table classes
 2. vm loop:
     1. fetch a line of instruction
     2. decode it to operator and operands
     3. execute it
+
+label is used for "while, if" in script, jump to label that is out of curr func is not allowed
+
+
 """
 
 
