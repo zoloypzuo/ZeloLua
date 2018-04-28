@@ -214,5 +214,5 @@ class Assembler:
             index+=1
 
 if __name__ == '__main__':
-    # Assembler('_test/1-assign.txt')
+    Assembler('_test/1-assign.txt')
     Assembler('_test/2-call func.txt')

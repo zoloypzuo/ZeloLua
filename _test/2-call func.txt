@@ -10,11 +10,11 @@ Func ;_Main
 	{
 		add b a 1
 		load_ret_val b
-		return
+		ret
 	}
 	closure 0
 	setglobal f .t
 	load_arg 1
 	call f
-	return
+	ret
 }

@@ -13,7 +13,7 @@ instr format:
 
 closure A : .t = closure(inner_funcs[A]) # .t is special tmp var, the closure instr must be followed by a move or setglobal instr
 call A : A() # len(args) is strictly equal to len(callee.params); caller.args should be filled before
-return :  # only one ret val; callee.ret_vals should be filled before
+ret :  # only one ret val; callee.ret_vals should be filled before
 
 load_arg A: curr_func.args.append(A)
 load_ret_val A:curr_func.ret_vals.append(A)
@@ -48,7 +48,7 @@ class ISA():
         self.instrs={
             'mov':['var',rvalue],  # either var is local
             'setglobal':['var',rvalue], #dest var is global, source var is local
-            'return':[],
+            'ret':[],
             'closure':['index'],
             'call':['func'],
             'load_arg':rvalue,

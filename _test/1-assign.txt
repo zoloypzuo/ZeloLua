@@ -7,6 +7,6 @@ Func
 	setglobal a 10
 	setglobal b 30.0
 	setglobal c "foo"
-	return
+	ret
 }
 

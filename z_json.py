@@ -12,7 +12,6 @@ TODO 虽然支持cast，但是最好检测出tuple，之后复原;同样上面�
 TODO 支持namedtuple，namedtuple在json.dumps后返回tuple的dumps，只有值，考虑从_asdict。。。
 """
 import sys
-sys.setrecursionlimit(20000)
 from json import dumps, load as _load, loads as _loads
 
 
