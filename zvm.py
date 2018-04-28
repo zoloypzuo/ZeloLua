@@ -55,7 +55,7 @@ class Thread:
         '''run the process'''
         self.pc = 0
         while True:
-            # yield None
+            yield None
             self.current_instr = self.curr_func.func.instrs[self.pc]
             self.execute(self.current_instr.operator, *self.current_instr.operands)
             self.pc += 1
@@ -125,7 +125,11 @@ class Thread:
 
 
 if __name__ == '__main__':
-    p = Thread('1-assign_exe.json')
-    p.run()
-    p = Thread('2-call func_exe.json')
-    p.run()
+    p1 = Thread('1-assign_exe.json')
+    rtp1=p1.run()
+    p2 = Thread('2-call func_exe.json')
+    rtp2=p2.run()
+    # while True:
+    #     next(rtp1)
+    while True:
+        next(rtp2)
