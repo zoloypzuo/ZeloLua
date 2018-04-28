@@ -9,7 +9,7 @@ stages:
     3. execute it
 
 label is used for "while, if" in script, jump to label that is out of curr func is not allowed
-
+TODO 设计一个debugger，coroutine可能有用，可能累赘。总之，不允许太扰乱主体运行，最好提供一个单独的callback实现debugger
 
 """
 
@@ -102,7 +102,7 @@ class Thread:
 
     def ret(self, *operands):
         if self.curr_func.ret_addr == None:
-            exit('Return from _Main, Process executed')
+            exit ('Return from _Main, Process executed')
         self.pc = self.curr_func.ret_addr
         ret_val = self.curr_func.ret_val
         self.stack.pop()

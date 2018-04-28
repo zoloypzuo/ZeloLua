@@ -144,8 +144,8 @@ class Assembler:
                 skip_to_next_line()  # note to skip '{' line
 
             elif operator == '}':
-                if self.current_func.instrs[-1].operator!='return':
-                    self.current_func.instrs.append(AssembledInstr('return', []))  # add return to the end of func
+                if self.current_func.instrs[-1].operator!='ret':
+                    self.current_func.instrs.append(AssembledInstr('ret', []))  # add return to the end of func
                 self.current_func=self.current_func.parent
             elif is_instr(operator):
                 self.current_func.instrs.append(
