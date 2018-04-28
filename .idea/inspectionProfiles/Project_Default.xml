@@ -16,6 +16,7 @@
           <option value="xasm.ExitOnCodeError" />
           <option value="xasm.iIsFuncActive" />
           <option value="zasm.line_index" />
+          <option value="zasm.Function" />
         </list>
       </option>
     </inspection_tool>

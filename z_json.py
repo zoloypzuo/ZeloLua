@@ -6,15 +6,13 @@ requirement:
     1. use list (avoid tuple)
     2. use dict, and only use str as key (avoid tuple, int, float)
     3. use primitive type: int, float, str, bool, None
-
 interface:
 1. {func} beautified_json and {func} plain_json is simple to use, and it is as same as use {std} json with {func} encodable
-
 TODO 虽然支持cast，但是最好检测出tuple，之后复原;同样上面的2.2也是
 TODO 支持namedtuple，namedtuple在json.dumps后返回tuple的dumps，只有值，考虑从_asdict。。。
-
 """
-
+import sys
+sys.setrecursionlimit(20000)
 from json import dumps, load as _load, loads as _loads
 
 
@@ -78,7 +76,6 @@ import sys
 
 def _load_class(module, name):
     """Loads the module and returns the class.
-
     >>> _loadclass('test.classes','A')
     <class 'test.classes.A'>
     """
@@ -90,7 +87,6 @@ def _load_class(module, name):
 
 def _is_class_dict(obj):
     """Helper class that tests to see if the obj is a flattened object
-
     >>> _isclass_dict({'__class_module__':'__builtin__', '__class_name__':'int'})
     True
     >>> _isclass_dict({'key':'value'})
@@ -106,7 +102,6 @@ def _is_class_dict(obj):
 
 def decode(json_obj: object) -> object:
     '''
-
     :param json_obj: json_obj return by json.load(s)
     :return:
     '''

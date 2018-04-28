@@ -2,7 +2,7 @@ from zvm import *
 from zasm import *
 def test_process():
     # ---- prepare p1
-    p1 = Process('1-assign_exe.json')
+    p1 = Thread('1-assign_exe.json')
     run_p1=p1.run()
     next(run_p1)
     # ---- run by step

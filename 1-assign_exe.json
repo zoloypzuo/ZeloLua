@@ -44,18 +44,11 @@
                         },
                         "__class_module__": "__main__",
                         "__class_name__": "AssembledInstr"
-                    },
-                    {
-                        "__class_dict__": {
-                            "operands": [],
-                            "operator": "Ret"
-                        },
-                        "__class_module__": "__main__",
-                        "__class_name__": "AssembledInstr"
                     }
                 ],
                 "labels": {},
-                "param_names": []
+                "param_names": [],
+                "parent": null
             },
             "__class_module__": "__main__",
             "__class_name__": "Function"

@@ -26,13 +26,10 @@
             {
                 "operands": [],
                 "operator": "return"
-            },
-            {
-                "operands": [],
-                "operator": "Ret"
             }
         ],
         "labels": {},
-        "param_names": []
+        "param_names": [],
+        "parent": null
     }
 }

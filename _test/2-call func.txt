@@ -1,0 +1,20 @@
+;function f(a)
+;   b = a + 1
+;	return b
+;end
+;f(1)
+
+Func ;_Main
+{
+	Func(a);0
+	{
+		add b a 1
+		load_ret_val b
+		return
+	}
+	closure 0
+	setglobal f .t
+	load_arg 1
+	call f
+	return
+}

@@ -3,8 +3,7 @@ from zasm import *
 
 class TestAssembler(TestCase):
     def setUp(self):
-        src = format('test_0.xasm')
-        self.a=Assembler(src)
+        self.a=Assembler('_test/2-call func.txt')
 
     def test_split_punc(self):
         self.assertEqual(self.a.split_punc('a,b'), ['a', ',', 'b'])

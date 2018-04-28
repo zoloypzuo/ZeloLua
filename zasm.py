@@ -12,15 +12,16 @@ zasm is .zasm assembler, it outputs xxx_exe.json which is input of zvm
 
 from re import match, sub, split
 from ISA import ISA
-from z_json import beautified_json,plain_json
+from z_json import beautified_json, plain_json
 from os import path as _p
 
+import pickle
 
 class Function:
 
-    def __init__(self, *param_names):
+    def __init__(self,parent, *param_names ):
         self.param_names = param_names
-
+        self.parent = parent
         self.instrs = []  # {list<AssembledInstr>}
         self.inner_funcs = []  # {list<Function>}
         self.labels = {}  # {dict<str,int>}
@@ -40,7 +41,8 @@ class ExeFile:
         # self.label_table = label_table
         # self.func_table = func_table
         # self.assembled_instrs = assembled_instrs
-        self.main_func=main_func
+        self.main_func = main_func
+
 
 class Assembler:
 
@@ -117,11 +119,9 @@ class Assembler:
             return text in self.isa.instrs
 
         def is_label(text):
-            return match(r'[_0-9a-zA-Z]\w*', text)  # 可能重复了
+            return match(self.isa.grammar['label'], text)  # 可能重复了
 
         # ----parse
-        def parse_non_keyword(lexeme):
-            if match(r'[_a-zA-Z]\w*', lexeme): return lexeme
 
         while True:
             if self.is_EOF:
@@ -131,23 +131,30 @@ class Assembler:
             operator = line[0]
             remainder = line[1:]
             if operator == 'Func':
-                param_names = self.handle_func(remainder)
-                new_func = Function(*param_names)
-                if self.main_func is None: self.main_func = new_func
-                self.current_func = new_func
+                param_names = list(self.handle_func(remainder))
+
+                if self.main_func is None:
+                    self.main_func = Function(None,*param_names)
+                    self.current_func=self.main_func
+                else:
+                    new_func = Function(self.current_func,*param_names )
+                    self.current_func.inner_funcs.append(new_func)
+                    self.current_func = new_func
 
                 skip_to_next_line()  # note to skip '{' line
 
             elif operator == '}':
-                self.current_func.instrs.append(AssembledInstr('Ret', []))  # add Ret to the end of func
+                if self.current_func.instrs[-1].operator!='return':
+                    self.current_func.instrs.append(AssembledInstr('return', []))  # add return to the end of func
+                self.current_func=self.current_func.parent
             elif is_instr(operator):
                 self.current_func.instrs.append(
                     AssembledInstr(
                         operator,
                         [x for x in remainder if x not in ',:']))
             elif is_label(operator):
-                self.current_func.instrs.append(AssembledInstr('Nop', []))
-                self.current_func.labels[operator] = len(self.current_func.instrs) #TODO check
+                self.current_func.instrs.append(AssembledInstr('nop', []))
+                self.current_func.labels[operator] = len(self.current_func.instrs)  # TODO check
 
             skip_to_next_line()
 
@@ -157,13 +164,15 @@ class Assembler:
         asm_name = _p.basename(path)
         # use original asm to create exe file name, replace whitespace with '_' and add '.json'
         output_file_name = (sub('\..*', '', asm_name.replace('\s', '_'))) + '_exe.json'
-        with open(output_file_name, 'w') as f:
-            f.write(beautified_json(exe, decodable=True))
-
-        # 方便看
-        output_plain_name='plain'+'.json'
-        with open(output_plain_name,'w') as f:
-            f.write(beautified_json(exe,decodable=False))
+        # with open(output_file_name, 'w') as f:
+        #     f.write(beautified_json(exe, decodable=True))
+        #
+        # # 方便看
+        # output_plain_name = 'plain' + '.json'
+        # with open(output_plain_name, 'w') as f:
+        #     f.write(beautified_json(exe, decodable=False))
+        with open(output_file_name, 'wb') as f:
+            pickle.dump(exe,f)
 
     def format(self, path):
         '''open the src file, remove comments, skip blank lines, and return [(line,line_number),...]'''
@@ -202,7 +211,8 @@ class Assembler:
                 yield curr_token
             else:
                 pass  # just for foo
-
+            index+=1
 
 if __name__ == '__main__':
-    Assembler('_test/1-assign.txt')
+    # Assembler('_test/1-assign.txt')
+    Assembler('_test/2-call func.txt')
