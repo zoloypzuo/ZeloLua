@@ -20,7 +20,6 @@ from collections import namedtuple
 
 import pickle
 
-
 class RuntimeFunc:
 
     def __init__(self, func: Function):
