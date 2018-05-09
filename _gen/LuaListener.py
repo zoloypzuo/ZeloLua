@@ -42,11 +42,12 @@ class LuaListener(ParseTreeListener):
     # Enter a parse tree produced by LuaParser#assign_stat.
     def enterAssign_stat(self, ctx: LuaParser.Assign_statContext):
         pass
-
+    def append_instr(self,op,*operands):
+        ai=AssembledInstr(op,operands or [])
+        self.current_func.instrs.append(ai)
     # Exit a parse tree produced by LuaParser#assign_stat.
     def exitAssign_stat(self, ctx: LuaParser.Assign_statContext):
-        ai = AssembledInstr('mov', [ctx.var().getText(), ctx.exp().getText()])
-        self.current_func.instrs.append(ai)
+        self.append_instr('mov', ctx.var().getText())
         pass
 
     # Enter a parse tree produced by LuaParser#func_call_stat.
@@ -91,11 +92,18 @@ class LuaListener(ParseTreeListener):
 
     # Enter a parse tree produced by LuaParser#func_def_stat.
     def enterFunc_def_stat(self, ctx: LuaParser.Func_def_statContext):
-        pass
+        '''enter a new func def'''
+        para_list=ctx.funcbody().parlist().getText()
+        para_list=para_list.split(',')
+        new_func=Function(self.current_func,*para_list)
+        self.current_func.inner_funcs.append(new_func)
+        self.current_func=new_func
 
     # Exit a parse tree produced by LuaParser#func_def_stat.
     def exitFunc_def_stat(self, ctx: LuaParser.Func_def_statContext):
-        pass
+        ''' 'function' funcname funcbody  #func_def_stat'''
+        self.append_instr('ret') #???需要吗
+        self.current_func=self.current_func.parent
 
     # Enter a parse tree produced by LuaParser#global_func_def_stat.
     def enterGlobal_func_def_stat(self, ctx: LuaParser.Global_func_def_statContext):
@@ -159,7 +167,7 @@ class LuaListener(ParseTreeListener):
 
     # Exit a parse tree produced by LuaParser#op_and_exp.
     def exitOp_and_exp(self, ctx: LuaParser.Op_and_expContext):
-        pass
+        self.append_instr('_and')
 
     # Enter a parse tree produced by LuaParser#op_or_exp.
     def enterOp_or_exp(self, ctx: LuaParser.Op_or_expContext):
@@ -175,7 +183,10 @@ class LuaListener(ParseTreeListener):
 
     # Exit a parse tree produced by LuaParser#num_exp.
     def exitNum_exp(self, ctx: LuaParser.Num_expContext):
-        self.push(ctx.number().getText())
+        num=eval(ctx.number().getText())
+        #ast.eval or eval is more pythonic?
+        self.append_instr('push',num)
+
 
     # Enter a parse tree produced by LuaParser#prefix_exp_exp.
     def enterPrefix_exp_exp(self, ctx: LuaParser.Prefix_exp_expContext):
@@ -191,7 +202,12 @@ class LuaListener(ParseTreeListener):
 
     # Exit a parse tree produced by LuaParser#op_mul_div_exp.
     def exitOp_mul_div_exp(self, ctx: LuaParser.Op_mul_div_expContext):
-        pass
+        punc2op={
+            '*':'mul',
+            '/':'div',
+        }
+        punc=ctx.operatorMulDivMod().getText()
+        self.append_instr(punc2op[punc])
 
     # Enter a parse tree produced by LuaParser#table_ctor_exp.
     def enterTable_ctor_exp(self, ctx: LuaParser.Table_ctor_expContext):
@@ -215,7 +231,9 @@ class LuaListener(ParseTreeListener):
 
     # Exit a parse tree produced by LuaParser#string_exp.
     def exitString_exp(self, ctx: LuaParser.String_expContext):
-        self.push()
+        s=ctx.string().getText()
+        s=s.strip('"')
+        self.append_instr('push',s)
 
     # Enter a parse tree produced by LuaParser#false_exp.
     def enterFalse_exp(self, ctx: LuaParser.False_expContext):
@@ -223,14 +241,20 @@ class LuaListener(ParseTreeListener):
 
     # Exit a parse tree produced by LuaParser#false_exp.
     def exitFalse_exp(self, ctx: LuaParser.False_expContext):
-        self.push(False)
+        self.append_instr('push',False)
+
     # Enter a parse tree produced by LuaParser#op_add_sub_exp.
     def enterOp_add_sub_exp(self, ctx: LuaParser.Op_add_sub_expContext):
         pass
 
     # Exit a parse tree produced by LuaParser#op_add_sub_exp.
     def exitOp_add_sub_exp(self, ctx: LuaParser.Op_add_sub_expContext):
-        pass
+        punc2op={
+            '+':'add',
+            '-':'sub',
+        }
+        punc=ctx.operatorAddSub().getText()
+        self.append_instr(punc2op[punc])
 
     # Enter a parse tree produced by LuaParser#nil_exp.
     def enterNil_exp(self, ctx: LuaParser.Nil_expContext):
@@ -238,7 +262,8 @@ class LuaListener(ParseTreeListener):
 
     # Exit a parse tree produced by LuaParser#nil_exp.
     def exitNil_exp(self, ctx: LuaParser.Nil_expContext):
-        self.push(None)
+        self.append_instr('push',None)
+
     # Enter a parse tree produced by LuaParser#op_unary_exp.
     def enterOp_unary_exp(self, ctx: LuaParser.Op_unary_expContext):
         pass
@@ -253,7 +278,13 @@ class LuaListener(ParseTreeListener):
 
     # Exit a parse tree produced by LuaParser#op_caompare_exp.
     def exitOp_caompare_exp(self, ctx: LuaParser.Op_caompare_expContext):
-        pass
+        punc2op={
+            '==':'eq',
+
+        # '<':,'>' | '<=' | '>=' | '~=' ;
+        }
+        punc=ctx.operatorComparison().getText()
+        self.append_instr(punc2op[punc])
 
     # Enter a parse tree produced by LuaParser#true_exp.
     def enterTrue_exp(self, ctx: LuaParser.True_expContext):
@@ -261,12 +292,11 @@ class LuaListener(ParseTreeListener):
 
     # Exit a parse tree produced by LuaParser#true_exp.
     def exitTrue_exp(self, ctx: LuaParser.True_expContext):
-        self.push(True)
+        self.append_instr('push',True)
 
     def push(self,item):
         self.current_func.stack.append(item)
-    def pop(self):
-        return self.current_func.stack.pop()
+
 
     # Enter a parse tree produced by LuaParser#func_def_exp.
     def enterFunc_def_exp(self, ctx: LuaParser.Func_def_expContext):
@@ -403,7 +433,6 @@ class LuaListener(ParseTreeListener):
     # Exit a parse tree produced by LuaParser#operatorAnd.
     def exitOperatorAnd(self, ctx: LuaParser.OperatorAndContext):
         pass
-
     # Enter a parse tree produced by LuaParser#operatorComparison.
     def enterOperatorComparison(self, ctx: LuaParser.OperatorComparisonContext):
         pass

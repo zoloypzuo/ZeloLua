@@ -25,16 +25,16 @@ class Function:
         self.instrs = []  # {list<AssembledInstr>}
         self.inner_funcs = []  # {list<Function>}
         self.labels = {}  # {dict<str,int>}
-        self.stack=[] #"stack-based vm"
 
 
 class AssembledInstr:
 
     def __init__(self, operator, operands):
-        assert isinstance(operands, list)
+        assert isinstance(operands, (list,tuple))
         self.operator = operator
         self.operands = operands  # {list}
-
+    def __str__(self):
+        return self.operator+' '+','.join(map(repr,self.operands))
 
 class ExeFile:
     def __init__(self, main_func):

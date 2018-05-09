@@ -24,7 +24,7 @@
     l=true and false
 
 -- func def, call
-    function add(a,b)
+    function add(a, b)
         return a+b
     end
     p=add(1,2)
@@ -34,18 +34,18 @@
         q=1
     end
 
-    while a==1 do
-        q=1
-
-    end
-
-    while a<1 do
-        q=1
-    end
-
-    while a>1 do
-        q=1
-    end
+    --while a==1 do
+    --    q=1
+    --
+    --end
+    --
+    --while a<1 do
+    --    q=1
+    --end
+    --
+    --while a>1 do
+    --    q=1
+    --end
 
 
 --break

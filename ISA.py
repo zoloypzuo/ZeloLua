@@ -56,16 +56,22 @@ class ISA():
         }
         rvalue = ['var', 'literal']
         self.instrs = {
-            'mov': ['var', rvalue],  # either var is local
-            'setglobal': ['var', rvalue],  # dest var is global, source var is local
+            'mov': ['var'],# rvalue],  # either var is local
+            # 'setglobal': ['var', rvalue],  # dest var is global, source var is local
             'ret': [],
             'closure': ['index'],
             'call': ['func'],
             'load_arg': rvalue,
             'load_ret_val': rvalue,
-            'add': ['var', rvalue, rvalue],
+            'add': [],#['var',rvalue, rvalue],
             'nop': [],
-            'mul':['var',rvalue,rvalue],
+            'mul':[],#['var',rvalue,rvalue],
+            'push':[rvalue],
+            'sub':[],
+            'div':[],
+            #no pop
+            #no concat
+            '_and':[],
         }
 
     def verify(self, operator: str, operands: list):

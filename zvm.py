@@ -20,6 +20,7 @@ from collections import namedtuple
 
 import pickle
 
+
 class RuntimeFunc:
 
     def __init__(self, func: Function):
@@ -28,6 +29,7 @@ class RuntimeFunc:
         self.local_data = {}  # _Main's local_data is global data
         self.args = []  # args for call another func
         self.ret_val = None
+        self.stack = []  # "stack-based vm"
 
 
 class Thread:
@@ -40,11 +42,11 @@ class Thread:
         self.global_data = {}  # {var_name:val,...}
 
         rt_main_func = RuntimeFunc(self.main_func)
-        self.global_data=rt_main_func.local_data
+        self.global_data = rt_main_func.local_data
         self.stack.append(rt_main_func)
 
     @property
-    def curr_func(self):
+    def curr_func(self) -> RuntimeFunc:
         return self.stack[-1]
 
     def run(self):
@@ -55,21 +57,25 @@ class Thread:
             self.execute(self.current_instr.operator, *self.current_instr.operands)
             self.pc += 1
 
-    def parse_value(self, lexeme: str):
-        '''parse lexeme to rvalue'''
-        if False:pass
-        elif lexeme=='nil':return None  #map lua nil to py None
-        elif lexeme=='true':return True
-        elif lexeme=='false':return False
-        elif match(self.isa.lex_grammar['var'], lexeme):
-            return self.curr_func.local_data[lexeme]
-        elif match(self.isa.lex_grammar['str'], lexeme):
-            return lexeme.strip('\"')
-        elif match(self.isa.lex_grammar['float'], lexeme):
-            return float(lexeme)
-
-        else:
-            return int(lexeme)
+    # def parse_value(self, lexeme: str):
+    #     '''parse lexeme to rvalue'''
+    #     if False:
+    #         pass
+    #     elif lexeme == 'nil':
+    #         return None  # map lua nil to py None
+    #     elif lexeme == 'true':
+    #         return True
+    #     elif lexeme == 'false':
+    #         return False
+    #     elif match(self.isa.lex_grammar['var'], lexeme):
+    #         return self.curr_func.local_data[lexeme]
+    #     elif match(self.isa.lex_grammar['str'], lexeme):
+    #         return lexeme.strip('\"')
+    #     elif match(self.isa.lex_grammar['float'], lexeme):
+    #         return float(lexeme)
+    #
+    #     else:
+    #         return int(lexeme)
 
     def execute(self, operator, *operands):
         '''
@@ -81,14 +87,17 @@ class Thread:
         getattr(self, operator)(*operands)
 
     def mov(self, *operands):
-        self.curr_func.local_data[operands[0]] = self.parse_value(operands[1])
+        # self.curr_func.local_data[operands[0]] = self.parse_value(operands[1])
+        var=operands[0]
+        self.curr_func.local_data[var]=self.pop()
 
-    def setglobal(self, *operands):
-        self.global_data[operands[0]] = self.parse_value(operands[1])
+    # def setglobal(self, *operands):
+    #     self.global_data[operands[0]] = self.parse_value(operands[1])
 
     def closure(self, *operands):
         rt_func = RuntimeFunc(self.curr_func.func.inner_funcs[int(operands[0])])
-        self.curr_func.local_data['.t'] = rt_func
+        # self.curr_func.local_data['.t'] = rt_func
+        self.push(rt_func)
 
     def call(self, *operands):
         callee = self.curr_func.local_data[operands[0]]
@@ -101,7 +110,7 @@ class Thread:
 
     def ret(self, *operands):
         if self.curr_func.ret_addr == None:
-            exit ('Return from _Main, Process executed')
+            exit('Return from _Main, Process executed')
         self.pc = self.curr_func.ret_addr
         ret_val = self.curr_func.ret_val
         self.stack.pop()
@@ -114,21 +123,43 @@ class Thread:
         self.curr_func.ret_val = self.parse_value(operands[0])
 
     def add(self, *operands):
-        self.curr_func.local_data[operands[0]] = sum(
-            map(self.parse_value, operands[1:]))  # tricky, add C A B: C=A+B, ...
+        # self.curr_func.local_data[operands[0]] = sum(
+        #     map(self.parse_value, operands[1:]))  # tricky, add C A B: C=A+B, ...
+        a0 = self.curr_func.stack.pop()
+        a1 = self.curr_func.stack.pop()
+        self.push(a0 + a1)
 
     def load(self, path):
         '''load exe from path'''
         with open(path, 'rb') as f:
             return pickle.load(f)
 
+    def push(self, *operands):
+        self.curr_func.stack.append(operands[0])
 
-if __name__ == '__main__':pass
-    # p1 = Thread('1-assign_exe.json')
-    # rtp1=p1.run()
-    # p2 = Thread('2-call func_exe.json')
-    # rtp2=p2.run()
-    # # while True:
-    # #     next(rtp1)
-    # while True:
-    #     next(rtp2)
+    def pop(self):
+        return self.curr_func.stack.pop()
+
+    def mul(self, *operands):
+        a0 = self.curr_func.stack.pop()
+        a1 = self.curr_func.stack.pop()
+        self.push(a0 * a1)
+
+    def eq(self,*operands):
+        a0=self.curr_func.stack.pop()
+        a1=self.curr_func.stack.pop()
+        self.push(a0==a1)
+    def _and(self,*operands):
+        a0=self.curr_func.stack.pop()
+        a1=self.curr_func.stack.pop()
+        self.push(a0 and a1)
+
+if __name__ == '__main__': pass
+# p1 = Thread('1-assign_exe.json')
+# rtp1=p1.run()
+# p2 = Thread('2-call func_exe.json')
+# rtp2=p2.run()
+# # while True:
+# #     next(rtp1)
+# while True:
+#     next(rtp2)
