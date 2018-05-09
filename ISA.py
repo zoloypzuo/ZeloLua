@@ -64,7 +64,8 @@ class ISA():
             'load_arg': rvalue,
             'load_ret_val': rvalue,
             'add': ['var', rvalue, rvalue],
-            'nop': []
+            'nop': [],
+            'mul':['var',rvalue,rvalue],
         }
 
     def verify(self, operator: str, operands: list):

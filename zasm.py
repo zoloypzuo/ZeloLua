@@ -25,6 +25,7 @@ class Function:
         self.instrs = []  # {list<AssembledInstr>}
         self.inner_funcs = []  # {list<Function>}
         self.labels = {}  # {dict<str,int>}
+        self.stack=[] #"stack-based vm"
 
 
 class AssembledInstr:
