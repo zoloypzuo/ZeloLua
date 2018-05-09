@@ -40,7 +40,7 @@ class Thread:
         self.global_data = {}  # {var_name:val,...}
 
         rt_main_func = RuntimeFunc(self.main_func)
-        rt_main_func.local_data = self.global_data
+        self.global_data=rt_main_func.local_data
         self.stack.append(rt_main_func)
 
     @property
@@ -57,12 +57,17 @@ class Thread:
 
     def parse_value(self, lexeme: str):
         '''parse lexeme to rvalue'''
-        if match(self.isa.lex_grammar['var'], lexeme):
+        if False:pass
+        elif lexeme=='nil':return None  #map lua nil to py None
+        elif lexeme=='true':return True
+        elif lexeme=='false':return False
+        elif match(self.isa.lex_grammar['var'], lexeme):
             return self.curr_func.local_data[lexeme]
         elif match(self.isa.lex_grammar['str'], lexeme):
             return lexeme.strip('\"')
         elif match(self.isa.lex_grammar['float'], lexeme):
             return float(lexeme)
+
         else:
             return int(lexeme)
 
@@ -75,7 +80,7 @@ class Thread:
         '''
         getattr(self, operator)(*operands)
 
-    def move(self, *operands):
+    def mov(self, *operands):
         self.curr_func.local_data[operands[0]] = self.parse_value(operands[1])
 
     def setglobal(self, *operands):

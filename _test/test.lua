@@ -10,13 +10,13 @@
 
     c="lalala"
 
-    d=function (a)return a end
-    e=d(1)
+    --d=function (a)return a end
+    --e=d(1)
 
-    f={1,2}
+    --f={1,2}
     --f1={1,2,{3},4}
 
-    g=#{1,2}
+    --g=#{1,2}
     h=1*2
     i=1+2
     j="1"+"2"

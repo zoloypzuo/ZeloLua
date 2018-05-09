@@ -14,7 +14,7 @@ def dofile(path):
     walker=ParseTreeWalker()
     listener=LuaListener()
     walker.walk(listener,tree)
-    Thread(listener.main_func)
+    Thread(listener.main_func).run()
 
 
 if __name__ == '__main__':

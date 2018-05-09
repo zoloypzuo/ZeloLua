@@ -2,18 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="3cd1adb7-fda5-4b8e-8462-9bcc5578c8c3" name="Default" comment="">
-      <change beforePath="" afterPath="$PROJECT_DIR$/main.py" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change beforePath="$PROJECT_DIR$/ISA.py" afterPath="$PROJECT_DIR$/ISA.py" />
-      <change beforePath="$PROJECT_DIR$/_gen/Lua.g4" afterPath="$PROJECT_DIR$/_gen/Lua.g4" />
-      <change beforePath="$PROJECT_DIR$/_gen/Lua.tokens" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/_gen/LuaLexer.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/_gen/LuaLexer.tokens" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/_gen/LuaListener.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/_gen/LuaParser.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/_gen/LuaVisitor.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/test.lua" afterPath="$PROJECT_DIR$/_test/test.lua" />
-      <change beforePath="$PROJECT_DIR$/zasm.py" afterPath="$PROJECT_DIR$/zasm.py" />
+      <change beforePath="$PROJECT_DIR$/_gen/LuaListener.py" afterPath="$PROJECT_DIR$/_gen/LuaListener.py" />
+      <change beforePath="$PROJECT_DIR$/_test/test.lua" afterPath="$PROJECT_DIR$/_test/test.lua" />
+      <change beforePath="$PROJECT_DIR$/main.py" afterPath="$PROJECT_DIR$/main.py" />
       <change beforePath="$PROJECT_DIR$/zvm.py" afterPath="$PROJECT_DIR$/zvm.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -27,14 +19,14 @@
     <SUITE FILE_PATH="coverage/XASM_Assembler$Unittests_in_test_py.coverage" NAME="Unittests in test.py Coverage Results" MODIFIED="1521445978577" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/XASM_Assembler$Unittests_in_test_assembler_py.coverage" NAME="Unittests in test_assembler.py Coverage Results" MODIFIED="1522471939429" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/XASM_Assembler$xasm.coverage" NAME="xasm Coverage Results" MODIFIED="1521643190950" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/XASM_Assembler$zasm.coverage" NAME="zasm Coverage Results" MODIFIED="1525834178826" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/XASM_Assembler$zasm.coverage" NAME="zasm Coverage Results" MODIFIED="1525837227005" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/XASM_Assembler$Unittests_for_test_process_TestProcess.coverage" NAME="Unittests for test_process.TestProcess Coverage Results" MODIFIED="1524796425548" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/XASM_Assembler$Unittests_for_test_zvm_TestVM_test_process.coverage" NAME="Unittests for test_zvm.TestVM.test_process Coverage Results" MODIFIED="1524797463297" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/XASM_Assembler$Unittests_for_test_assembler_TestAssembler_test_lex.coverage" NAME="Unittests for test_assembler.TestAssembler.test_lex Coverage Results" MODIFIED="1522472107030" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/XASM_Assembler$Unittests_for_test_assembler_TestAssembler_test_split_punc.coverage" NAME="Unittests for test_assembler.TestAssembler.test_split_punc Coverage Results" MODIFIED="1522549214329" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/XASM_Assembler$test_zvm.coverage" NAME="test_zvm Coverage Results" MODIFIED="1524909190732" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/XASM_Assembler$Unittests_for_test_process_TestProcess_test_run.coverage" NAME="Unittests for test_process.TestProcess.test_run Coverage Results" MODIFIED="1524796347745" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/XASM_Assembler$main.coverage" NAME="main Coverage Results" MODIFIED="1525835305435" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/XASM_Assembler$main.coverage" NAME="main Coverage Results" MODIFIED="1525838288152" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/XASM_Assembler$ISA.coverage" NAME="ISA Coverage Results" MODIFIED="1524881772352" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/XASM_Assembler$Unittests_for_test_assembler_TestAssembler_test_handle_func.coverage" NAME="Unittests for test_assembler.TestAssembler.test_handle_func Coverage Results" MODIFIED="1522549236171" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/XASM_Assembler$zvm.coverage" NAME="zvm Coverage Results" MODIFIED="1524909424285" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
@@ -46,110 +38,14 @@
     <SUITE FILE_PATH="coverage/XASM_Assembler$Unittests_for_test_assembler_TestAssembler.coverage" NAME="Unittests for test_assembler.TestAssembler Coverage Results" MODIFIED="1524906938452" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
   <component name="FileEditorManager">
-    <splitter split-orientation="horizontal" split-proportion="0.75700575">
+    <splitter split-orientation="horizontal" split-proportion="0.40336537">
       <split-first>
-        <leaf SIDE_TABS_SIZE_LIMIT_KEY="600">
-          <file leaf-file-name="zvm.py" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/zvm.py">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="2042">
-                  <caret line="71" column="10" lean-forward="true" selection-start-line="71" selection-start-column="10" selection-end-line="71" selection-end-column="10" />
-                  <folding>
-                    <element signature="e#426#445#0" expanded="true" />
-                  </folding>
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="Lua.g4" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/_gen/Lua.g4">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="1526">
-                  <caret line="99" column="24" lean-forward="false" selection-start-line="99" selection-start-column="24" selection-end-line="99" selection-end-column="24" />
-                  <folding>
-                    <element signature="e#0#6910#0" expanded="true" />
-                  </folding>
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="zasm.py" pinned="false" current-in-tab="false">
+        <leaf>
+          <file leaf-file-name="zasm.py" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/zasm.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="4872">
-                  <caret line="160" column="8" lean-forward="false" selection-start-line="160" selection-start-column="8" selection-end-line="160" selection-end-column="8" />
-                  <folding />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="main.py" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/main.py">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="495">
-                  <caret line="15" column="24" lean-forward="false" selection-start-line="15" selection-start-column="16" selection-end-line="15" selection-end-column="24" />
-                  <folding>
-                    <element signature="e#0#20#0" expanded="true" />
-                  </folding>
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="FileStream.py" pinned="false" current-in-tab="false">
-            <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python36/Lib/antlr4/FileStream.py">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="333">
-                  <caret line="16" column="6" lean-forward="false" selection-start-line="16" selection-start-column="6" selection-end-line="16" selection-end-column="6" />
-                  <folding />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="LuaListener.py" pinned="false" current-in-tab="true">
-            <entry file="file://$PROJECT_DIR$/_gen/LuaListener.py">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="693">
-                  <caret line="30" column="0" lean-forward="true" selection-start-line="30" selection-start-column="0" selection-end-line="30" selection-end-column="0" />
-                  <folding />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="LuaParser.py" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/_gen/LuaParser.py">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="1224">
-                  <caret line="354" column="0" lean-forward="false" selection-start-line="354" selection-start-column="0" selection-end-line="354" selection-end-column="0" />
-                  <folding />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="Lexer.py" pinned="false" current-in-tab="false">
-            <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python36/Lib/antlr4/Lexer.py">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="333">
-                  <caret line="110" column="0" lean-forward="false" selection-start-line="110" selection-start-column="0" selection-end-line="110" selection-end-column="0" />
-                  <folding />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="ISA.py" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/ISA.py">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="529">
-                  <caret line="48" column="36" lean-forward="false" selection-start-line="48" selection-start-column="36" selection-end-line="48" selection-end-column="36" />
-                  <folding />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="test.lua" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/_test/test.lua">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="-1158">
-                  <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+                <state relative-caret-position="2211">
+                  <caret line="84" column="0" lean-forward="false" selection-start-line="82" selection-start-column="0" selection-end-line="84" selection-end-column="0" />
                   <folding />
                 </state>
               </provider>
@@ -159,14 +55,74 @@
       </split-first>
       <split-second>
         <leaf>
-          <file leaf-file-name="Lua.g4" pinned="false" current-in-tab="true">
+          <file leaf-file-name="zvm.py" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/zvm.py">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="450">
+                  <caret line="64" column="0" lean-forward="false" selection-start-line="64" selection-start-column="0" selection-end-line="64" selection-end-column="0" />
+                  <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="ISA.py" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/ISA.py">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="330">
+                  <caret line="10" column="6" lean-forward="true" selection-start-line="10" selection-start-column="6" selection-end-line="10" selection-end-column="6" />
+                  <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="LuaListener.py" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/_gen/LuaListener.py">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="582">
+                  <caret line="53" column="0" lean-forward="false" selection-start-line="53" selection-start-column="0" selection-end-line="53" selection-end-column="0" />
+                  <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="main.py" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/main.py">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="396">
+                  <caret line="16" column="0" lean-forward="false" selection-start-line="16" selection-start-column="0" selection-end-line="16" selection-end-column="0" />
+                  <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="LuaVisitor.py" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/_gen/LuaVisitor.py">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="0">
+                  <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+                  <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="Lua.g4" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/_gen/Lua.g4">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="410">
-                  <caret line="61" column="17" lean-forward="false" selection-start-line="61" selection-start-column="14" selection-end-line="61" selection-end-column="17" />
+                <state relative-caret-position="773">
+                  <caret line="45" column="2" lean-forward="true" selection-start-line="45" selection-start-column="2" selection-end-line="45" selection-end-column="2" />
                   <folding>
                     <element signature="e#0#6910#0" expanded="true" />
                   </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="test.lua" pinned="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/_test/test.lua">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="495">
+                  <caret line="15" column="13" lean-forward="true" selection-start-line="15" selection-start-column="13" selection-end-line="15" selection-end-column="13" />
+                  <folding />
                 </state>
               </provider>
             </entry>
@@ -219,12 +175,12 @@
         <option value="$PROJECT_DIR$/tree.py" />
         <option value="$PROJECT_DIR$/_5_grammar.py" />
         <option value="$PROJECT_DIR$/test.lua" />
-        <option value="$PROJECT_DIR$/zvm.py" />
         <option value="$PROJECT_DIR$/_gen/Lua.g4" />
-        <option value="$PROJECT_DIR$/ISA.py" />
-        <option value="$PROJECT_DIR$/_test/test.lua" />
-        <option value="$PROJECT_DIR$/main.py" />
         <option value="$PROJECT_DIR$/_gen/LuaListener.py" />
+        <option value="$PROJECT_DIR$/main.py" />
+        <option value="$PROJECT_DIR$/ISA.py" />
+        <option value="$PROJECT_DIR$/zvm.py" />
+        <option value="$PROJECT_DIR$/_test/test.lua" />
       </list>
     </option>
   </component>
@@ -287,7 +243,7 @@
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/_test/test.lua" />
     <property name="last.edited.regexp" value=" :   " />
     <property name="SearchEverywhereHistoryKey" value="namedtu&#9;null&#9;null&#10;jsonpickle&#9;FILE&#9;file://C:/Users/91018/AppData/Local/Programs/Python/Python36/Lib/jsonpickle" />
     <property name="$PROJECT_DIR$/_gen/Lua.g4::/auto-gen" value="false" />
@@ -486,7 +442,7 @@
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2767912" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.20153551" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.20153551" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Docker" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="ANTLR Preview" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.329455" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -557,6 +513,11 @@
           <line>16</line>
           <option name="timeStamp" value="109" />
         </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/zvm.py</url>
+          <line>54</line>
+          <option name="timeStamp" value="112" />
+        </line-breakpoint>
       </breakpoints>
       <breakpoints-dialog>
         <breakpoints-dialog />
@@ -569,7 +530,7 @@
           </properties>
         </breakpoint>
       </default-breakpoints>
-      <option name="time" value="110" />
+      <option name="time" value="113" />
     </breakpoint-manager>
     <watches-manager>
       <configuration name="PythonConfigurationType">
@@ -580,6 +541,20 @@
         <watch expression="self.main_func.inner_funcs" />
       </configuration>
     </watches-manager>
+  </component>
+  <component name="debuggerHistoryManager">
+    <expressions id="evaluateExpression">
+      <expression>
+        <expression-string>ctx.var().getText()</expression-string>
+        <language-id>Python</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>ctx.var()</expression-string>
+        <language-id>Python</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+    </expressions>
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/xasm.py" />
@@ -784,14 +759,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/_gen/LuaVisitor.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/_test/2-call func.txt">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -808,62 +775,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/zvm.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2042">
-          <caret line="71" column="10" lean-forward="true" selection-start-line="71" selection-start-column="10" selection-end-line="71" selection-end-column="10" />
-          <folding>
-            <element signature="e#426#445#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/_gen/Lua.g4">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1526">
-          <caret line="99" column="24" lean-forward="false" selection-start-line="99" selection-start-column="24" selection-end-line="99" selection-end-column="24" />
-          <folding>
-            <element signature="e#0#6910#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ISA.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="529">
-          <caret line="48" column="36" lean-forward="false" selection-start-line="48" selection-start-column="36" selection-end-line="48" selection-end-column="36" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/zasm.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="4872">
-          <caret line="160" column="8" lean-forward="false" selection-start-line="160" selection-start-column="8" selection-end-line="160" selection-end-column="8" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python36/Lib/antlr4/Lexer.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="333">
           <caret line="110" column="0" lean-forward="false" selection-start-line="110" selection-start-column="0" selection-end-line="110" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/_test/test.lua">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1158">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/_gen/LuaParser.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1224">
-          <caret line="354" column="0" lean-forward="false" selection-start-line="354" selection-start-column="0" selection-end-line="354" selection-end-column="0" />
           <folding />
         </state>
       </provider>
@@ -876,20 +791,76 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/main.py">
+    <entry file="file://$PROJECT_DIR$/_gen/Lua.g4">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="495">
-          <caret line="15" column="24" lean-forward="false" selection-start-line="15" selection-start-column="16" selection-end-line="15" selection-end-column="24" />
+        <state relative-caret-position="773">
+          <caret line="45" column="2" lean-forward="true" selection-start-line="45" selection-start-column="2" selection-end-line="45" selection-end-column="2" />
           <folding>
-            <element signature="e#0#20#0" expanded="true" />
+            <element signature="e#0#6910#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/_gen/LuaVisitor.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/_gen/LuaParser.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="318">
+          <caret line="486" column="12" lean-forward="false" selection-start-line="486" selection-start-column="12" selection-end-line="486" selection-end-column="12" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/zasm.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2211">
+          <caret line="84" column="0" lean-forward="false" selection-start-line="82" selection-start-column="0" selection-end-line="84" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ISA.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="330">
+          <caret line="10" column="6" lean-forward="true" selection-start-line="10" selection-start-column="6" selection-end-line="10" selection-end-column="6" />
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/_gen/LuaListener.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="693">
-          <caret line="30" column="0" lean-forward="true" selection-start-line="30" selection-start-column="0" selection-end-line="30" selection-end-column="0" />
+        <state relative-caret-position="582">
+          <caret line="53" column="0" lean-forward="false" selection-start-line="53" selection-start-column="0" selection-end-line="53" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/main.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="396">
+          <caret line="16" column="0" lean-forward="false" selection-start-line="16" selection-start-column="0" selection-end-line="16" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/zvm.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="450">
+          <caret line="64" column="0" lean-forward="false" selection-start-line="64" selection-start-column="0" selection-end-line="64" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/_test/test.lua">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="495">
+          <caret line="15" column="13" lean-forward="true" selection-start-line="15" selection-start-column="13" selection-end-line="15" selection-end-column="13" />
           <folding />
         </state>
       </provider>

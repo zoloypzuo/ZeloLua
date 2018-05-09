@@ -12,8 +12,10 @@ class LuaListener(ParseTreeListener):
 
     # Enter a parse tree produced by LuaParser#chunk.
     def enterChunk(self, ctx:LuaParser.ChunkContext):
-        self.main_func = None
-        pass
+        self.main_func = Function(None)
+        self.current_func = self.main_func
+
+        self.exp_stakc=[]
 
     # Exit a parse tree produced by LuaParser#chunk.
     def exitChunk(self, ctx:LuaParser.ChunkContext):
@@ -23,6 +25,9 @@ class LuaListener(ParseTreeListener):
     # Enter a parse tree produced by LuaParser#block.
     def enterBlock(self, ctx:LuaParser.BlockContext):
         pass
+
+
+
 
     # Exit a parse tree produced by LuaParser#block.
     def exitBlock(self, ctx:LuaParser.BlockContext):
@@ -44,8 +49,9 @@ class LuaListener(ParseTreeListener):
 
     # Exit a parse tree produced by LuaParser#assign_stat.
     def exitAssign_stat(self, ctx:LuaParser.Assign_statContext):
+        ai=AssembledInstr('mov',[ctx.var().getText(),ctx.exp().getText()])
+        self.current_func.instrs.append(ai)
         pass
-
 
     # Enter a parse tree produced by LuaParser#func_call_stat.
     def enterFunc_call_stat(self, ctx:LuaParser.Func_call_statContext):

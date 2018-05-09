@@ -8,7 +8,7 @@ primitive type:
 4. {str} id: var and func
 
 instr format:
-1. move A B   : A=B
+1. mov A B   : A=B
 2. setglobal A B : A=B
 
 closure A : .t = closure(inner_funcs[A]) # .t is special tmp var, the closure instr must be followed by a move or setglobal instr
