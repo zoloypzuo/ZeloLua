@@ -27,7 +27,7 @@ class RuntimeFunc:
         self.func = func
         self.ret_addr = None  # None if _Main
         self.local_data = {}  # _Main's local_data is global data
-        self.args = []  # args for call another func
+        # self.args = []  # args for call another func
         self.ret_val = None
         self.stack = []  # "stack-based vm"
 
@@ -100,11 +100,11 @@ class Thread:
         self.push(rt_func)
 
     def call(self, *operands):
-        callee = self.curr_func.local_data[operands[0]]
+        callee:RuntimeFunc = self.curr_func.local_data[operands[0]]
         callee.ret_addr = self.pc
         # pass params
-        for i in range(len(self.curr_func.args)):
-            callee.local_data[callee.func.param_names[i]] = self.curr_func.args[i]
+        for i in range(len(callee.func.param_names)):
+            callee.local_data[callee.func.param_names[i]] = self.curr_func.stack.pop()
         self.stack.append(callee)
         self.pc = -1  # -1 is tricky, pc will increment after execute
 
@@ -112,9 +112,9 @@ class Thread:
         if self.curr_func.ret_addr == None:
             exit('Return from _Main, Process executed')
         self.pc = self.curr_func.ret_addr
-        ret_val = self.curr_func.ret_val
+        ret_val = self.curr_func.stack.pop()
         self.stack.pop()
-        self.curr_func.local_data['.ret_val'] = ret_val
+        self.curr_func.stack.append(ret_val)
 
     def load_arg(self, *operands):
         self.curr_func.args.append(self.parse_value(operands[0]))
@@ -153,6 +153,10 @@ class Thread:
         a0=self.curr_func.stack.pop()
         a1=self.curr_func.stack.pop()
         self.push(a0 and a1)
+    def push_var(self,*operands):
+        var=operands[0]
+        value=self.curr_func.local_data[var]
+        self.push(value)
 
 if __name__ == '__main__': pass
 # p1 = Thread('1-assign_exe.json')

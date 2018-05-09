@@ -96,6 +96,8 @@ class LuaListener(ParseTreeListener):
         para_list=ctx.funcbody().parlist().getText()
         para_list=para_list.split(',')
         new_func=Function(self.current_func,*para_list)
+        self.append_instr('closure',len(self.current_func.inner_funcs))
+        self.append_instr('mov',ctx.funcname().getText())
         self.current_func.inner_funcs.append(new_func)
         self.current_func=new_func
 
@@ -312,7 +314,12 @@ class LuaListener(ParseTreeListener):
 
     # Exit a parse tree produced by LuaParser#prefixexp.
     def exitPrefixexp(self, ctx: LuaParser.PrefixexpContext):
-        pass
+        a=ctx.nameAndArgs()
+        if a ==[]:
+            self.append_instr('push_var',ctx.varOrExp(). var().NAME().getText())
+        else:
+            self.append_instr('call',ctx.varOrExp().var(). NAME().getText())
+
 
     # Enter a parse tree produced by LuaParser#functioncall.
     def enterFunctioncall(self, ctx: LuaParser.FunctioncallContext):
@@ -320,7 +327,7 @@ class LuaListener(ParseTreeListener):
 
     # Exit a parse tree produced by LuaParser#functioncall.
     def exitFunctioncall(self, ctx: LuaParser.FunctioncallContext):
-        pass
+        self.append_instr('call',ctx.varOrExp().var().NAME().getText()) #这是函数调用语句，最好能和表达式分开，否则返回值压栈
 
     # Enter a parse tree produced by LuaParser#varOrExp.
     def enterVarOrExp(self, ctx: LuaParser.VarOrExpContext):
@@ -337,7 +344,6 @@ class LuaListener(ParseTreeListener):
     # Exit a parse tree produced by LuaParser#var.
     def exitVar(self, ctx: LuaParser.VarContext):
         pass
-
     # Enter a parse tree produced by LuaParser#varSuffix.
     def enterVarSuffix(self, ctx: LuaParser.VarSuffixContext):
         pass

@@ -72,6 +72,7 @@ class ISA():
             #no pop
             #no concat
             '_and':[],
+            'push_var':['var'], #push var as rvalue（妥协增加的指令）
         }
 
     def verify(self, operator: str, operands: list):
