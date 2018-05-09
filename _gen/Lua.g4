@@ -65,6 +65,8 @@ stat
 //    | 'for' NAME '=' exp ',' exp (',' exp)? 'do' block 'end'
 //    | 'for' namelist 'in' explist 'do' block 'end'
     | 'function' funcname funcbody  #func_def_stat
+    | 'global' 'function' NAME funcbody #global_func_def_stat
+    | 'global' var ('=' exp)? #global_var_stat
 //    | 'local' 'function' NAME funcbody
 //    | 'local' namelist ('=' explist)?
     ;

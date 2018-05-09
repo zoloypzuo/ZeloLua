@@ -10,7 +10,7 @@ stages:
 
 label is used for "while, if" in script, jump to label that is out of curr func is not allowed
 TODO 设计一个debugger，coroutine可能有用，可能累赘。总之，不允许太扰乱主体运行，最好提供一个单独的callback实现debugger
-
+TODO vm detach asm，asm停止开发，vm直接接受数据结构进行执行
 """
 
 from ISA import ISA
@@ -32,11 +32,8 @@ class RuntimeFunc:
 
 class Thread:
 
-    def __init__(self, path):
-        '''zvm use .json as .exe file format to init a thread'''
-        # ----get tables from .json
-        exe = self.load(path)
-        self.main_func = exe.main_func  # TODO，exe可以重新设计一下
+    def __init__(self, main_func):
+        self.main_func = main_func
 
         self.isa = ISA()
         self.stack = []  # {list<FuncNode>}
@@ -51,25 +48,23 @@ class Thread:
         return self.stack[-1]
 
     def run(self):
-        '''run the process'''
         self.pc = 0
         while True:
-            yield None
+            # yield None
             self.current_instr = self.curr_func.func.instrs[self.pc]
             self.execute(self.current_instr.operator, *self.current_instr.operands)
             self.pc += 1
 
     def parse_value(self, lexeme: str):
         '''parse lexeme to rvalue'''
-        if match(r'[\.?_a-zA-Z]\w*', lexeme):  # var
+        if match(self.isa.lex_grammar['var'], lexeme):
             return self.curr_func.local_data[lexeme]
-        else:  # literal
-            if match(r'\".*\"', lexeme):
-                return lexeme.strip('\"')
-            elif match(r'([+-]?\d*.\d+)', lexeme):
-                return float(lexeme)
-            else:
-                return int(lexeme)
+        elif match(self.isa.lex_grammar['str'], lexeme):
+            return lexeme.strip('\"')
+        elif match(self.isa.lex_grammar['float'], lexeme):
+            return float(lexeme)
+        else:
+            return int(lexeme)
 
     def execute(self, operator, *operands):
         '''
@@ -123,12 +118,12 @@ class Thread:
             return pickle.load(f)
 
 
-if __name__ == '__main__':
-    p1 = Thread('1-assign_exe.json')
-    rtp1=p1.run()
-    p2 = Thread('2-call func_exe.json')
-    rtp2=p2.run()
+if __name__ == '__main__':pass
+    # p1 = Thread('1-assign_exe.json')
+    # rtp1=p1.run()
+    # p2 = Thread('2-call func_exe.json')
+    # rtp2=p2.run()
+    # # while True:
+    # #     next(rtp1)
     # while True:
-    #     next(rtp1)
-    while True:
-        next(rtp2)
+    #     next(rtp2)

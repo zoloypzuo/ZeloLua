@@ -59,6 +59,16 @@ class LuaVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
+    # Visit a parse tree produced by LuaParser#global_func_def_stat.
+    def visitGlobal_func_def_stat(self, ctx:LuaParser.Global_func_def_statContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by LuaParser#global_var_stat.
+    def visitGlobal_var_stat(self, ctx:LuaParser.Global_var_statContext):
+        return self.visitChildren(ctx)
+
+
     # Visit a parse tree produced by LuaParser#retstat.
     def visitRetstat(self, ctx:LuaParser.RetstatContext):
         return self.visitChildren(ctx)

@@ -119,7 +119,7 @@ class Assembler:
             return text in self.isa.instrs
 
         def is_label(text):
-            return match(self.isa.grammar['label'], text)  # 可能重复了
+            return match(self.isa.lex_grammar['label'], text)  # 可能重复了
 
         # ----parse
 

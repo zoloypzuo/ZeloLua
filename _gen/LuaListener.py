@@ -5,11 +5,14 @@ if __name__ is not None and "." in __name__:
 else:
     from LuaParser import LuaParser
 
+from zasm import *
+
 # This class defines a complete listener for a parse tree produced by LuaParser.
 class LuaListener(ParseTreeListener):
 
     # Enter a parse tree produced by LuaParser#chunk.
     def enterChunk(self, ctx:LuaParser.ChunkContext):
+        self.main_func = None
         pass
 
     # Exit a parse tree produced by LuaParser#chunk.
@@ -95,6 +98,24 @@ class LuaListener(ParseTreeListener):
 
     # Exit a parse tree produced by LuaParser#func_def_stat.
     def exitFunc_def_stat(self, ctx:LuaParser.Func_def_statContext):
+        pass
+
+
+    # Enter a parse tree produced by LuaParser#global_func_def_stat.
+    def enterGlobal_func_def_stat(self, ctx:LuaParser.Global_func_def_statContext):
+        pass
+
+    # Exit a parse tree produced by LuaParser#global_func_def_stat.
+    def exitGlobal_func_def_stat(self, ctx:LuaParser.Global_func_def_statContext):
+        pass
+
+
+    # Enter a parse tree produced by LuaParser#global_var_stat.
+    def enterGlobal_var_stat(self, ctx:LuaParser.Global_var_statContext):
+        pass
+
+    # Exit a parse tree produced by LuaParser#global_var_stat.
+    def exitGlobal_var_stat(self, ctx:LuaParser.Global_var_statContext):
         pass
 
 
