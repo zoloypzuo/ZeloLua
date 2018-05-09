@@ -4,7 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace zlua {
+namespace zlua
+{
     using TValue = Lua.lua_TValue;
     using lua_Number = System.Double;
     /// <summary>
@@ -12,8 +13,9 @@ namespace zlua {
     /// 1. interface] TValue, and other 9 specific types  
     /// 2. GC不实现，使用C# GC
     /// </summary>
-    partial class Lua {
-       
+    partial class Lua
+    {
+
         /// <summary>
         /// (C# simulated) union of all lua values
         /// how it simulate union?: use extra fields
@@ -21,7 +23,8 @@ namespace zlua {
         /// differ from clua: light userdata is removed because C# use GC
         /// TODO如何访问修饰符不被外卖呢看到
         /// </summary>
-        public class Value {
+        public class Value
+        {
             /// <summary>
             /// the GC collectable object
             /// </summary>
@@ -40,7 +43,8 @@ namespace zlua {
         /// <summary>
         /// the general type of lua. T means "tagged" 
         /// </summary>
-        public class lua_TValue {
+        public class lua_TValue
+        {
             public Value value = new Value();
             /// <summary>
             /// type tag, defined in lua.cs
@@ -50,14 +54,16 @@ namespace zlua {
         /// <summary>
         /// TODO:搞清楚怎么回事，既然C# lua不分GC，那么简单实现？问题在于很可能要等到你实现交互再解决
         /// </summary>
-        public class Userdata:GCObject {
+        public class Userdata : GCObject
+        {
             public Table metatable;
             public Table env;
         }
         /// <summary>
         /// the function prototype type of lua
         /// </summary>
-        public class FuncProto:GCObject {
+        public class FuncProto : GCObject
+        {
             public TValue[] constants;
             public Instruction[] codes;
             public FuncProto[] inner_funcprotos;
@@ -75,7 +81,8 @@ namespace zlua {
         }
 
 
-        public class LocVar {
+        public class LocVar
+        {
             public TString varname;
             public int startpc; //TOUnderstancs
             public int endpc;
@@ -87,7 +94,8 @@ namespace zlua {
         /*
         ** Closures
         */
-        public class CClosure {
+        public class CClosure
+        {
             public GCObject next;
             public byte tt;
             public byte marked;
@@ -98,7 +106,8 @@ namespace zlua {
             public lua_CFunction f;
             public lua_TValue[] upvalue = Arrays.InitializeWithDefaultInstances<lua_TValue>(1);
         }
-        public class LClosure {
+        public class LClosure
+        {
             public GCObject next;
             public byte tt;
             public byte marked;
@@ -136,7 +145,8 @@ namespace zlua {
         /// TODO: use dictionary如果不实现的话
         /// TOUnderstand
         /// </summary>
-        public class Table : GCObject {
+        public class Table : GCObject
+        {
             public byte flags;
             public byte lsizenode;
             public Table metatable;
@@ -152,15 +162,18 @@ namespace zlua {
         /// <summary>
         /// upvalue type
         /// </summary>
-        public class UpVal : GCObject {
+        public class UpVal : GCObject
+        {
             public lua_TValue v; //points to stack or to its own value
             /// <summary>
             /// 匿名类
             /// </summary>
-            public class _u {  //原来这里是union，TODO，TOUnderstand：自己打算怎么实现，他是怎么实现的，名字要改
+            public class _u
+            {  //原来这里是union，TODO，TOUnderstand：自己打算怎么实现，他是怎么实现的，名字要改
                 public TValue value = new TValue();  /* the value (when closed) */
 
-                public class _l {  /* double linked list (when open) */
+                public class _l
+                {  /* double linked list (when open) */
                     public UpVal prev;
                     public UpVal next;
                 };
@@ -181,7 +194,8 @@ namespace zlua {
         /// <summary>
         /// the string type of lua, just warpper of C# string
         /// </summary>
-        public class TString:GCObject /*: TString_tsv*/ {
+        public class TString : GCObject /*: TString_tsv*/
+        {
             //public L_Umaxalign dummy;  /* ensures maximum alignment for strings */			
             //public TString_tsv tsv { get { return this; } }
 
@@ -189,5 +203,24 @@ namespace zlua {
             public string str;
             //public override string ToString() { return str.ToString(); } // for debugging
         };
+        /// <summary>
+        /// (C# simulated) union of GC objects
+        /// how it simulates union: polymorphic
+        /// 1. inheritance graph: GCheader > GCObject > TString, Udata ... (all GC types of lua) 
+        /// 2. GCObject use property to return specific type of value with polymorphic
+        /// </summary>
+        public class GCObject
+        {
+            /// <summary>
+            /// for convenience (eg. TString is subclass of GCObject）
+            /// </summary>
+            public TString tstring { get { return this as TString; } }
+            public Userdata userdata { get { return this as Userdata; } }
+            public Closure cl { get { return (Closure)this; } }
+            //public Table h { get { return (Table)this; } }
+            public FuncProto funcproto { get { return this as FuncProto; } }
+            //public UpVal uv { get { return (UpVal)this; } }
+            public lua_Thread thread { get { return this as lua_Thread; } }
+        }
     }
 }

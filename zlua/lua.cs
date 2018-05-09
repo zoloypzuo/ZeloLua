@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Antlr4.Runtime;
+using Antlr4.Runtime.Tree;
 /// <summary>
 /// 目标：实现90%的lua
 /// 目的：
@@ -20,7 +22,7 @@ using System.Threading.Tasks;
 /// </summary>
 namespace zlua {
     /// <summary>
-    /// (lua.c in lua src)
+    /// lua对外接口，类型和dofile等等(lua.c in lua src)
     /// </summary>
     partial class Lua {
         /// <summary>
@@ -39,6 +41,9 @@ namespace zlua {
             USERDATA = 7,
             THREAD = 8,
         }
+        public void dofile(string path)
+        {
 
+        }
     }
 }

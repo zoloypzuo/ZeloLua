@@ -11,11 +11,56 @@ namespace zlua {
     using lu_byte = System.Byte;
     using ptrdiff_t = System.Int32;
     using Instruction = System.UInt32;
-
+    /// <summary>
+    /// vm
+    /// </summary>
     public partial class Lua {
-        public static void luaV_execute(lua_Thread thread, int nexeccalls)
+        class RuntimeFunc
         {
+            public RuntimeFunc()
+            {
 
+            }
         }
+        class Thread
+        {
+            public Thread()
+            {
+
+            }
+            public void run()
+            {
+
+            }
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        //public static void luaV_execute(lua_Thread thread, int nexeccalls)
+        //{
+
+        //}
+
     }
 }
