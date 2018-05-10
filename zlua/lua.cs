@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -43,6 +44,16 @@ namespace zlua {
         }
         public void dofile(string path)
         {
+            FileStream F = new FileStream(@"..\..\"+path,FileMode.Open, FileAccess.Read);
+            AntlrInputStream inputStream = new AntlrInputStream(F);
+            LuaLexer lexer = new LuaLexer(inputStream);
+            CommonTokenStream tokens = new CommonTokenStream(lexer);
+            LuaParser parser = new LuaParser(tokens);
+            var tree = parser.chunk();
+            var walker =new ParseTreeWalker();
+            var compiler = new Compiler();
+            walker.Walk(compiler, tree);
+            new Thread(compiler.main_func).run();
 
         }
     }
