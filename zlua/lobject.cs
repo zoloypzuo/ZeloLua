@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace zlua
 {
@@ -9,7 +10,7 @@ namespace zlua
     /// 1. interface] TValue, and other 9 specific types  
     /// 2. GC不实现，使用C# GC
     /// </summary>
-    partial class Lua
+    public partial class Lua
     {
 
         /// <summary>
@@ -34,34 +35,98 @@ namespace zlua
             /// <summary>
             /// the int type of lua
             /// </summary>
-            public int i { get; set; }
+            //public int i { get; set; }  ???怎么区别？？？
+
+            public bool b { get; set; }
+
         }
         /// <summary>
         /// the general type of lua. T means "tagged" 
         /// </summary>
         public class lua_TValue
         {
-            public Value value = new Value();
+            public Value value;
             /// <summary>
             /// type tag, defined in lua.cs
             /// </summary>
             public LuaType type;
+            public override string ToString()
+            {
+                if (type == LuaType.NIL) return "nil";
+                else if (type == LuaType.NUMBER) return value.n.ToString();
+                else if (type == LuaType.BOOLEAN) return value.b.ToString();
+                else if (type == LuaType.STRING) return value.gcobject.tstring.ToString();
+                else return "看watch下拉去吧";
+            }
+            /// <summary>
+            /// ctor is private ie. must use following factorys
+            /// </summary>
+            private lua_TValue()
+            {
+
+            }
+            public static lua_TValue NIL() => new lua_TValue();
+            public static lua_TValue TString(string s)
+            {
+                var _ret = new lua_TValue()
+                {
+                    type = LuaType.STRING,
+                    value = new Value
+                    {
+                        gcobject = new TString(s)
+                    }
+                };
+                return _ret;
+            }
+            public static lua_TValue RuntimeFunc(CompiledFunction func)
+            {
+                var _ret = new lua_TValue()
+                {
+                    type = LuaType.FUNCTION,
+                    value = new Value
+                    {
+                        gcobject = new RuntimeFunc(func)
+                    }
+                };
+                return _ret;
+            }
+            public static lua_TValue Bool(bool b)
+            {
+                var _ret = new lua_TValue()
+                {
+                    type = LuaType.BOOLEAN,
+                    value = new Value
+                    {
+                        b = b  //注意 C# 能区分这两个b
+                    }
+                };
+                return _ret;
+            }
         }
         /// <summary>
         /// "Proto in lua.c"
+        /// proto is gcobject, but is not a primitive type
         /// </summary>
         public class CompiledFunction : GCObject
         {
-
+            public List<string> param_names;
+            public CompiledFunction parent;
+            public List<AssembledInstr> instrs;
+            public List<CompiledFunction> inner_funcs;
+            public Dictionary<string, int> label2pc; //label table
         }
         /// <summary>
-        /// "Clousure in lua.c"
+        /// "Clousure" in lua.c
         /// </summary>
-        public class RuntimeFunc:GCObject
+        public class RuntimeFunc : GCObject
         {
-            public RuntimeFunc()
+            public CompiledFunction func;
+            public int ret_addr;
+            public Dictionary<string, lua_TValue> local_data;
+            public List<lua_TValue> stack;
+            public RuntimeFunc(CompiledFunction func)
             {
-
+                this.func = func;
             }
         }
         /// <summary>
@@ -88,155 +153,17 @@ namespace zlua
             /// for convenience (eg. TString is subclass of GCObject）
             /// </summary>
             public TString tstring { get { return this as TString; } }
-            //public Userdata userdata { get { return this as Userdata; } }
-            //public Closure cl { get { return (Closure)this; } }
             //public Table h { get { return (Table)this; } }
-            //public FuncProto funcproto { get { return this as FuncProto; } }
             //public UpVal uv { get { return (UpVal)this; } }
             //public lua_Thread thread { get { return this as lua_Thread; } }
             public CompiledFunction compiled_func { get { return this as CompiledFunction; } }
             public RuntimeFunc runtime_func { get { return this as RuntimeFunc; } }
         }
-        ///// <summary>
-        ///// TODO:搞清楚怎么回事，既然C# lua不分GC，那么简单实现？问题在于很可能要等到你实现交互再解决
-        ///// </summary>
-        //public class Userdata : GCObject
-        //{
-        //    public Table metatable;
-        //    public Table env;
-        //}
-        ///// <summary>
-        ///// the function prototype type of lua
-        ///// </summary>
-        //public class FuncProto : GCObject
-        //{
-        //    public TValue[] constants;
-        //    public Instruction[] codes;
-        //    public FuncProto[] inner_funcprotos;
-        //    //public int[] lineinfo; //TOUnderstand
-        //    public LocVar[] locvars;
-        //    public TString[] upvalues;
-        //    //public TString[] source;//TOUnderStand
-        //    //public int linedefined;
-        //    //public int lastlinedefined;
-        //    //public GCObject gclist;
-        //    //public byte nups;
-        //    //public byte numparams;
-        //    //public byte is_vararg;
-        //    //public byte maxstacksize;
-        //}
-
-
-        //public class LocVar
-        //{
-        //    public TString varname;
-        //    public int startpc; //TOUnderstancs
-        //    public int endpc;
-        //}
-
-
-
-
-        ///*
-        //** Closures
-        //*/
-        //public class CClosure
-        //{
-        //    public GCObject next;
-        //    public byte tt;
-        //    public byte marked;
-        //    public byte isC;
-        //    public byte nupvalues;
-        //    public GCObject gclist;
-        //    public Table env;
-        //    public lua_CFunction f;
-        //    public lua_TValue[] upvalue = Arrays.InitializeWithDefaultInstances<lua_TValue>(1);
-        //}
-        //public class LClosure
-        //{
-        //    public GCObject next;
-        //    public byte tt;
-        //    public byte marked;
-        //    public byte isC;
-        //    public byte nupvalues;
-        //    public GCObject gclist;
-        //    public Table env;
-        //    public Proto[] p;
-        //    public UpVal[] upvals = Arrays.InitializeWithDefaultInstances<UpVal>(1);
-        //}
-        //[StructLayout(LayoutKind.Explicit)]
-        //public struct Closure {
-        //    [FieldOffset(0)]
-        //    public CClosure c;
-        //    [FieldOffset(0)]
-        //    public LClosure l;
-        //}
-        ///*
-        //** Tables
-        //*/
-        //public struct TKey {
-        //    public class AnonymousClass4 {
-        //        public Value value = new Value();
-        //        public int tt;
-        //        public Node next;
-        //    }
-        //    public AnonymousClass4 nk;
-        //    public lua_TValue tvk;
-        //}
-        //public class Node {
-        //    public lua_TValue i_val = new lua_TValue();
-        //    public TKey i_key = new TKey();
-        //}
-        ///// <summary>
-        ///// TODO: use dictionary如果不实现的话
-        ///// TOUnderstand
-        ///// </summary>
-        //public class Table : GCObject
-        //{
-        //    public byte flags;
-        //    public byte lsizenode;
-        //    public Table metatable;
-        //    public lua_TValue[] array;
-        //    /// <summary>
-        //    /// TOUnderstand 没什么软用的类
-        //    /// </summary>
-        //    public Node[] node;
-        //    public Node lastfree; //int in Kopi,why?
-        //    public GCObject gclist;
-        //    public int sizearray;
-        //}
-        ///// <summary>
-        ///// upvalue type
-        ///// </summary>
-        //public class UpVal : GCObject
-        //{
-        //    public lua_TValue v; //points to stack or to its own value
-        //    /// <summary>
-        //    /// 匿名类
-        //    /// </summary>
-        //    public class _u
-        //    {  //原来这里是union，TODO，TOUnderstand：自己打算怎么实现，他是怎么实现的，名字要改
-        //        public TValue value = new TValue();  /* the value (when closed) */
-
-        //        public class _l
-        //        {  /* double linked list (when open) */
-        //            public UpVal prev;
-        //            public UpVal next;
-        //        };
-
-        //        public _l l = new _l();
-        //    }
-        //    public new _u u = new _u();
-        //}
-
-        ///// <summary>
-        ///// string header
-        ///// </summary>
-        //public class TString_tsv : GCObject {
-        //    public lu_byte reserved;
-        //    public uint hash;
-        //    public uint len;
-        //};
-
+        public class AssembledInstr
+        {
+            string opcode;
+            List<lua_TValue> operands;
+            public override string ToString() => opcode + " " + string.Join(",", operands);
+        }
     }
 }

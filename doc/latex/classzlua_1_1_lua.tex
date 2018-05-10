@@ -1,0 +1,80 @@
+\hypertarget{classzlua_1_1_lua}{}\section{zlua.\+Lua Class Reference}
+\label{classzlua_1_1_lua}\index{zlua.\+Lua@{zlua.\+Lua}}
+
+
+some generic functions over lua objects (lobject.\+c）  
+
+
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \mbox{\hyperlink{classzlua_1_1_lua_1_1_assembled_instr}{Assembled\+Instr}}
+\item 
+class \mbox{\hyperlink{classzlua_1_1_lua_1_1_compiled_function}{Compiled\+Function}}
+\begin{DoxyCompactList}\small\item\em \char`\"{}\+Proto in lua.\+c\char`\"{} proto is gcobject, but is not a primitive type \end{DoxyCompactList}\item 
+class \mbox{\hyperlink{classzlua_1_1_lua_1_1_g_c_object}{G\+C\+Object}}
+\begin{DoxyCompactList}\small\item\em (C\# simulated) union of GC objects how it simulates union\+: polymorphic \end{DoxyCompactList}\item 
+class \mbox{\hyperlink{classzlua_1_1_lua_1_1lua___t_value}{lua\+\_\+\+T\+Value}}
+\begin{DoxyCompactList}\small\item\em the general type of lua. T means \char`\"{}tagged\char`\"{} \end{DoxyCompactList}\item 
+class \mbox{\hyperlink{classzlua_1_1_lua_1_1_runtime_func}{Runtime\+Func}}
+\begin{DoxyCompactList}\small\item\em \char`\"{}\+Clousure\char`\"{} in lua.\+c \end{DoxyCompactList}\item 
+class \mbox{\hyperlink{classzlua_1_1_lua_1_1_t_string}{T\+String}}
+\begin{DoxyCompactList}\small\item\em the string type of lua, just warpper of C\# string \end{DoxyCompactList}\item 
+class \mbox{\hyperlink{classzlua_1_1_lua_1_1_value}{Value}}
+\begin{DoxyCompactList}\small\item\em (C\# simulated) union of all lua values how it simulate union?\+: use extra fields size\+: 8+8+4=20B differ from clua\+: light userdata is removed because C\# use GC T\+O\+D\+O如何访问修饰符不被外卖呢看到 \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+enum \mbox{\hyperlink{classzlua_1_1_lua_a3bea46ecc2aabf23ac160bd7e7172e70}{Lua\+Type}} \{ \newline
+{\bfseries N\+O\+NE} = -\/1, 
+{\bfseries N\+IL} = 0, 
+{\bfseries B\+O\+O\+L\+E\+AN} = 1, 
+{\bfseries L\+I\+G\+H\+T\+U\+S\+E\+R\+D\+A\+TA} = 2, 
+\newline
+{\bfseries N\+U\+M\+B\+ER} = 3, 
+{\bfseries S\+T\+R\+I\+NG} = 4, 
+{\bfseries T\+A\+B\+LE} = 5, 
+{\bfseries F\+U\+N\+C\+T\+I\+ON} = 6, 
+\newline
+{\bfseries U\+S\+E\+R\+D\+A\+TA} = 7, 
+{\bfseries T\+H\+R\+E\+AD} = 8
+ \}
+\begin{DoxyCompactList}\small\item\em differ from clua\+: const int... =$>$ enum \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classzlua_1_1_lua_a8d69f72236b14935e2f4da7360dfc00f}\label{classzlua_1_1_lua_a8d69f72236b14935e2f4da7360dfc00f}} 
+void {\bfseries dofile} (string path)
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+some generic functions over lua objects (lobject.\+c） 
+
+vm 
+
+lua对外接口，类型和dofile等等(lua.\+c in lua src) 
+
+
+\begin{DoxyEnumerate}
+\item interface\mbox{]} T\+Value, and other 9 specific types ~\newline
+2. G\+C不实现，使用C\# GC 
+\end{DoxyEnumerate}
+
+\subsection{Member Enumeration Documentation}
+\mbox{\Hypertarget{classzlua_1_1_lua_a3bea46ecc2aabf23ac160bd7e7172e70}\label{classzlua_1_1_lua_a3bea46ecc2aabf23ac160bd7e7172e70}} 
+\index{zlua\+::\+Lua@{zlua\+::\+Lua}!Lua\+Type@{Lua\+Type}}
+\index{Lua\+Type@{Lua\+Type}!zlua\+::\+Lua@{zlua\+::\+Lua}}
+\subsubsection{\texorpdfstring{Lua\+Type}{LuaType}}
+{\footnotesize\ttfamily enum \mbox{\hyperlink{classzlua_1_1_lua_a3bea46ecc2aabf23ac160bd7e7172e70}{zlua.\+Lua.\+Lua\+Type}}\hspace{0.3cm}{\ttfamily [strong]}}
+
+
+
+differ from clua\+: const int... =$>$ enum 
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+zlua/lobject.\+cs\item 
+zlua/lua.\+cs\end{DoxyCompactItemize}

@@ -1,0 +1,66 @@
+\hypertarget{namespacezlua}{}\section{zlua Namespace Reference}
+\label{namespacezlua}\index{zlua@{zlua}}
+
+
+目标：实现90的lua 目的： 1.了解lua作为最简单的解释器的实现 2.自己实现一个可以用于辅助unity的脚本语言 要求： 1.以可读性为最优先 2.修改lua特性，让它足够简单，unity够用即可 代码规范： 1.\+python风格 2.命名规范：重新自己命名 3.保留： 1.文件命名 2.\+lua\+\_\+, lua\+X\+\_\+ 前缀命名  
+
+
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \mbox{\hyperlink{classzlua_1_1_compiler}{Compiler}}
+\item 
+interface \mbox{\hyperlink{interfacezlua_1_1_i_lua_listener}{I\+Lua\+Listener}}
+\begin{DoxyCompactList}\small\item\em This interface defines a complete listener for a parse tree produced by \mbox{\hyperlink{classzlua_1_1_lua_parser}{Lua\+Parser}}. \end{DoxyCompactList}\item 
+interface \mbox{\hyperlink{interfacezlua_1_1_i_lua_visitor}{I\+Lua\+Visitor}}
+\begin{DoxyCompactList}\small\item\em This interface defines a complete generic visitor for a parse tree produced by \mbox{\hyperlink{classzlua_1_1_lua_parser}{Lua\+Parser}}. \end{DoxyCompactList}\item 
+class \mbox{\hyperlink{classzlua_1_1_lua}{Lua}}
+\begin{DoxyCompactList}\small\item\em some generic functions over lua objects (lobject.\+c） \end{DoxyCompactList}\item 
+class \mbox{\hyperlink{classzlua_1_1_lua_base_listener}{Lua\+Base\+Listener}}
+\begin{DoxyCompactList}\small\item\em This class provides an empty implementation of \mbox{\hyperlink{interfacezlua_1_1_i_lua_listener}{I\+Lua\+Listener}}, which can be extended to create a listener which only needs to handle a subset of the available methods. \end{DoxyCompactList}\item 
+class \mbox{\hyperlink{classzlua_1_1_lua_base_visitor}{Lua\+Base\+Visitor}}
+\begin{DoxyCompactList}\small\item\em This class provides an empty implementation of I\+Lua\+Visitor$<$\+Result$>$, which can be extended to create a visitor which only needs to handle a subset of the available methods. \end{DoxyCompactList}\item 
+class \mbox{\hyperlink{classzlua_1_1_lua_lexer}{Lua\+Lexer}}
+\item 
+class \mbox{\hyperlink{classzlua_1_1_lua_parser}{Lua\+Parser}}
+\item 
+class \mbox{\hyperlink{classzlua_1_1_program}{Program}}
+\end{DoxyCompactItemize}
+\subsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{namespacezlua_a366bdbff38407c9efbf04054127ed3cc}\label{namespacezlua_a366bdbff38407c9efbf04054127ed3cc}} 
+using {\bfseries lua\+\_\+\+Number} = System.\+Double
+\item 
+\mbox{\Hypertarget{namespacezlua_aaa93e7c8244f49c8ea4a06de6632b905}\label{namespacezlua_aaa93e7c8244f49c8ea4a06de6632b905}} 
+using {\bfseries I\+Error\+Node} = Antlr4.\+Runtime.\+Tree.\+I\+Error\+Node
+\item 
+\mbox{\Hypertarget{namespacezlua_a2a234ddba24aacdde8d3d6027feca6f9}\label{namespacezlua_a2a234ddba24aacdde8d3d6027feca6f9}} 
+using {\bfseries I\+Terminal\+Node} = Antlr4.\+Runtime.\+Tree.\+I\+Terminal\+Node
+\item 
+\mbox{\Hypertarget{namespacezlua_a21f4f40ba2a397ae3f94bee5cb5c5538}\label{namespacezlua_a21f4f40ba2a397ae3f94bee5cb5c5538}} 
+using {\bfseries I\+Token} = Antlr4.\+Runtime.\+I\+Token
+\item 
+\mbox{\Hypertarget{namespacezlua_afdb9d11994c29edae3688ab893c6daba}\label{namespacezlua_afdb9d11994c29edae3688ab893c6daba}} 
+using {\bfseries Parser\+Rule\+Context} = Antlr4.\+Runtime.\+Parser\+Rule\+Context
+\item 
+\mbox{\Hypertarget{namespacezlua_a2786e51a9dbfe724b881a447b7a8aeb8}\label{namespacezlua_a2786e51a9dbfe724b881a447b7a8aeb8}} 
+using {\bfseries D\+FA} = Antlr4.\+Runtime.\+Dfa.\+D\+FA
+\item 
+\mbox{\Hypertarget{namespacezlua_a3556e4be3adbc82eeee921e503860d87}\label{namespacezlua_a3556e4be3adbc82eeee921e503860d87}} 
+using {\bfseries I\+Parse\+Tree\+Listener} = Antlr4.\+Runtime.\+Tree.\+I\+Parse\+Tree\+Listener
+\item 
+\mbox{\Hypertarget{namespacezlua_a594fa70411ab513608e3570dd6a525bd}\label{namespacezlua_a594fa70411ab513608e3570dd6a525bd}} 
+using {\bfseries lu\+\_\+byte} = System.\+Byte
+\item 
+\mbox{\Hypertarget{namespacezlua_a3299a6560fca65b6b35ad9a9dc102b82}\label{namespacezlua_a3299a6560fca65b6b35ad9a9dc102b82}} 
+using {\bfseries ptrdiff\+\_\+t} = System.\+Int32
+\item 
+\mbox{\Hypertarget{namespacezlua_a7137c618516f8b04a8a1a0cd15d977a4}\label{namespacezlua_a7137c618516f8b04a8a1a0cd15d977a4}} 
+using {\bfseries Instruction} = System.\+U\+Int32
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+目标：实现90的lua 目的： 1.了解lua作为最简单的解释器的实现 2.自己实现一个可以用于辅助unity的脚本语言 要求： 1.以可读性为最优先 2.修改lua特性，让它足够简单，unity够用即可 代码规范： 1.\+python风格 2.命名规范：重新自己命名 3.保留： 1.文件命名 2.\+lua\+\_\+, lua\+X\+\_\+ 前缀命名 
+

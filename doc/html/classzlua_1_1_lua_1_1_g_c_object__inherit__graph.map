@@ -1,0 +1,5 @@
+<map id="zlua.Lua.GCObject" name="zlua.Lua.GCObject">
+<area shape="rect" id="node2" href="$classzlua_1_1_lua_1_1_compiled_function.html" title="&quot;Proto in lua.c&quot; proto is gcobject, but is not a primitive type " alt="" coords="5,80,184,107"/>
+<area shape="rect" id="node3" href="$classzlua_1_1_lua_1_1_runtime_func.html" title="&quot;Clousure&quot; in lua.c " alt="" coords="208,80,360,107"/>
+<area shape="rect" id="node4" href="$classzlua_1_1_lua_1_1_t_string.html" title="the string type of lua, just warpper of C# string " alt="" coords="385,80,501,107"/>
+</map>

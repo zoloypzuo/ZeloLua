@@ -1,0 +1,2789 @@
+\hypertarget{classzlua_1_1_lua_base_listener}{}\section{zlua.\+Lua\+Base\+Listener Class Reference}
+\label{classzlua_1_1_lua_base_listener}\index{zlua.\+Lua\+Base\+Listener@{zlua.\+Lua\+Base\+Listener}}
+
+
+This class provides an empty implementation of \mbox{\hyperlink{interfacezlua_1_1_i_lua_listener}{I\+Lua\+Listener}}, which can be extended to create a listener which only needs to handle a subset of the available methods.  
+
+
+
+
+Inheritance diagram for zlua.\+Lua\+Base\+Listener\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=190pt]{classzlua_1_1_lua_base_listener__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for zlua.\+Lua\+Base\+Listener\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=190pt]{classzlua_1_1_lua_base_listener__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+virtual void \mbox{\hyperlink{classzlua_1_1_lua_base_listener_a5521468da5fe9ed0eb95ada9c64c801f}{Enter\+Empty\+\_\+stat}} (\mbox{[}Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_empty__stat_context}{Lua\+Parser.\+Empty\+\_\+stat\+Context}} context)
+\begin{DoxyCompactList}\small\item\em Enter a parse tree produced by the {\ttfamily empty\+\_\+stat} labeled alternative in Lua\+Parser.\+stat. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classzlua_1_1_lua_base_listener_aa5d977c15c8fc410aa01cbff4372b873}{Exit\+Empty\+\_\+stat}} (\mbox{[}Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_empty__stat_context}{Lua\+Parser.\+Empty\+\_\+stat\+Context}} context)
+\begin{DoxyCompactList}\small\item\em Exit a parse tree produced by the {\ttfamily empty\+\_\+stat} labeled alternative in Lua\+Parser.\+stat. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classzlua_1_1_lua_base_listener_aec93807e61e1511e344e419191e80d43}{Enter\+Assign\+\_\+stat}} (\mbox{[}Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_assign__stat_context}{Lua\+Parser.\+Assign\+\_\+stat\+Context}} context)
+\begin{DoxyCompactList}\small\item\em Enter a parse tree produced by the {\ttfamily assign\+\_\+stat} labeled alternative in Lua\+Parser.\+stat. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classzlua_1_1_lua_base_listener_a84ee6c5b5c661dee72a99902d27ee46e}{Exit\+Assign\+\_\+stat}} (\mbox{[}Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_assign__stat_context}{Lua\+Parser.\+Assign\+\_\+stat\+Context}} context)
+\begin{DoxyCompactList}\small\item\em Exit a parse tree produced by the {\ttfamily assign\+\_\+stat} labeled alternative in Lua\+Parser.\+stat. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classzlua_1_1_lua_base_listener_aeae8e0a0ca7fe9c5a24cb372585b81b7}{Enter\+Func\+\_\+call\+\_\+stat}} (\mbox{[}Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_func__call__stat_context}{Lua\+Parser.\+Func\+\_\+call\+\_\+stat\+Context}} context)
+\begin{DoxyCompactList}\small\item\em Enter a parse tree produced by the {\ttfamily func\+\_\+call\+\_\+stat} labeled alternative in Lua\+Parser.\+stat. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classzlua_1_1_lua_base_listener_a89ec0f76f1e78b15a72de26783bc6694}{Exit\+Func\+\_\+call\+\_\+stat}} (\mbox{[}Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_func__call__stat_context}{Lua\+Parser.\+Func\+\_\+call\+\_\+stat\+Context}} context)
+\begin{DoxyCompactList}\small\item\em Exit a parse tree produced by the {\ttfamily func\+\_\+call\+\_\+stat} labeled alternative in Lua\+Parser.\+stat. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classzlua_1_1_lua_base_listener_a6adb675854ff8e7a3a92ca58e5f198b2}{Enter\+Break\+\_\+stat}} (\mbox{[}Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_break__stat_context}{Lua\+Parser.\+Break\+\_\+stat\+Context}} context)
+\begin{DoxyCompactList}\small\item\em Enter a parse tree produced by the {\ttfamily break\+\_\+stat} labeled alternative in Lua\+Parser.\+stat. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classzlua_1_1_lua_base_listener_ac0f699c3a181d8236218792a69955d0d}{Exit\+Break\+\_\+stat}} (\mbox{[}Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_break__stat_context}{Lua\+Parser.\+Break\+\_\+stat\+Context}} context)
+\begin{DoxyCompactList}\small\item\em Exit a parse tree produced by the {\ttfamily break\+\_\+stat} labeled alternative in Lua\+Parser.\+stat. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classzlua_1_1_lua_base_listener_aea9c92211c8619f5d2cf426ee5380be4}{Enter\+Do\+\_\+end\+\_\+stat}} (\mbox{[}Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_do__end__stat_context}{Lua\+Parser.\+Do\+\_\+end\+\_\+stat\+Context}} context)
+\begin{DoxyCompactList}\small\item\em Enter a parse tree produced by the {\ttfamily do\+\_\+end\+\_\+stat} labeled alternative in Lua\+Parser.\+stat. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classzlua_1_1_lua_base_listener_acc7bef5cd55b204e258816f477397304}{Exit\+Do\+\_\+end\+\_\+stat}} (\mbox{[}Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_do__end__stat_context}{Lua\+Parser.\+Do\+\_\+end\+\_\+stat\+Context}} context)
+\begin{DoxyCompactList}\small\item\em Exit a parse tree produced by the {\ttfamily do\+\_\+end\+\_\+stat} labeled alternative in Lua\+Parser.\+stat. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classzlua_1_1_lua_base_listener_a9b8d8a799001a9167716f892e540ba76}{Enter\+While\+\_\+stat}} (\mbox{[}Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_while__stat_context}{Lua\+Parser.\+While\+\_\+stat\+Context}} context)
+\begin{DoxyCompactList}\small\item\em Enter a parse tree produced by the {\ttfamily while\+\_\+stat} labeled alternative in Lua\+Parser.\+stat. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classzlua_1_1_lua_base_listener_a35e673f6a18bfef7e92e04ef244093fc}{Exit\+While\+\_\+stat}} (\mbox{[}Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_while__stat_context}{Lua\+Parser.\+While\+\_\+stat\+Context}} context)
+\begin{DoxyCompactList}\small\item\em Exit a parse tree produced by the {\ttfamily while\+\_\+stat} labeled alternative in Lua\+Parser.\+stat. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classzlua_1_1_lua_base_listener_a6c6b8d7541116a14fcaf314180435d4b}{Enter\+If\+\_\+stat}} (\mbox{[}Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_if__stat_context}{Lua\+Parser.\+If\+\_\+stat\+Context}} context)
+\begin{DoxyCompactList}\small\item\em Enter a parse tree produced by the {\ttfamily if\+\_\+stat} labeled alternative in Lua\+Parser.\+stat. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classzlua_1_1_lua_base_listener_aadcd2b60bcec7dda7b397a674e1d6082}{Exit\+If\+\_\+stat}} (\mbox{[}Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_if__stat_context}{Lua\+Parser.\+If\+\_\+stat\+Context}} context)
+\begin{DoxyCompactList}\small\item\em Exit a parse tree produced by the {\ttfamily if\+\_\+stat} labeled alternative in Lua\+Parser.\+stat. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classzlua_1_1_lua_base_listener_ae342d4559800c58b6cfc9e42d5ba2837}{Enter\+Func\+\_\+def\+\_\+stat}} (\mbox{[}Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_func__def__stat_context}{Lua\+Parser.\+Func\+\_\+def\+\_\+stat\+Context}} context)
+\begin{DoxyCompactList}\small\item\em Enter a parse tree produced by the {\ttfamily func\+\_\+def\+\_\+stat} labeled alternative in Lua\+Parser.\+stat. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classzlua_1_1_lua_base_listener_a49406b24e09c5b7866b11d4554ca1531}{Exit\+Func\+\_\+def\+\_\+stat}} (\mbox{[}Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_func__def__stat_context}{Lua\+Parser.\+Func\+\_\+def\+\_\+stat\+Context}} context)
+\begin{DoxyCompactList}\small\item\em Exit a parse tree produced by the {\ttfamily func\+\_\+def\+\_\+stat} labeled alternative in Lua\+Parser.\+stat. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classzlua_1_1_lua_base_listener_a26ccde71c2f917da169f16fa1dea9ecc}{Enter\+Global\+\_\+func\+\_\+def\+\_\+stat}} (\mbox{[}Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_global__func__def__stat_context}{Lua\+Parser.\+Global\+\_\+func\+\_\+def\+\_\+stat\+Context}} context)
+\begin{DoxyCompactList}\small\item\em Enter a parse tree produced by the {\ttfamily global\+\_\+func\+\_\+def\+\_\+stat} labeled alternative in Lua\+Parser.\+stat. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classzlua_1_1_lua_base_listener_afc42dc32e923011884d110d92eb7024b}{Exit\+Global\+\_\+func\+\_\+def\+\_\+stat}} (\mbox{[}Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_global__func__def__stat_context}{Lua\+Parser.\+Global\+\_\+func\+\_\+def\+\_\+stat\+Context}} context)
+\begin{DoxyCompactList}\small\item\em Exit a parse tree produced by the {\ttfamily global\+\_\+func\+\_\+def\+\_\+stat} labeled alternative in Lua\+Parser.\+stat. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classzlua_1_1_lua_base_listener_a67f5bfdbc89b494e4e8474ba4d019326}{Enter\+Global\+\_\+var\+\_\+stat}} (\mbox{[}Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_global__var__stat_context}{Lua\+Parser.\+Global\+\_\+var\+\_\+stat\+Context}} context)
+\begin{DoxyCompactList}\small\item\em Enter a parse tree produced by the {\ttfamily global\+\_\+var\+\_\+stat} labeled alternative in Lua\+Parser.\+stat. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classzlua_1_1_lua_base_listener_a918c1a931ec0803f8ce782d404d9e2c4}{Exit\+Global\+\_\+var\+\_\+stat}} (\mbox{[}Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_global__var__stat_context}{Lua\+Parser.\+Global\+\_\+var\+\_\+stat\+Context}} context)
+\begin{DoxyCompactList}\small\item\em Exit a parse tree produced by the {\ttfamily global\+\_\+var\+\_\+stat} labeled alternative in Lua\+Parser.\+stat. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classzlua_1_1_lua_base_listener_acf401fd123113e2bfdaf5c5390d81871}{Enter\+Nil\+\_\+exp}} (\mbox{[}Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_nil__exp_context}{Lua\+Parser.\+Nil\+\_\+exp\+Context}} context)
+\begin{DoxyCompactList}\small\item\em Enter a parse tree produced by the {\ttfamily nil\+\_\+exp} labeled alternative in Lua\+Parser.\+exp. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classzlua_1_1_lua_base_listener_a997d90f5a6a982d2bf09d4d2f249908f}{Exit\+Nil\+\_\+exp}} (\mbox{[}Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_nil__exp_context}{Lua\+Parser.\+Nil\+\_\+exp\+Context}} context)
+\begin{DoxyCompactList}\small\item\em Exit a parse tree produced by the {\ttfamily nil\+\_\+exp} labeled alternative in Lua\+Parser.\+exp. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classzlua_1_1_lua_base_listener_a5025dfe7f75ae2d9db0e58eadba0bba0}{Enter\+False\+\_\+exp}} (\mbox{[}Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_false__exp_context}{Lua\+Parser.\+False\+\_\+exp\+Context}} context)
+\begin{DoxyCompactList}\small\item\em Enter a parse tree produced by the {\ttfamily false\+\_\+exp} labeled alternative in Lua\+Parser.\+exp. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classzlua_1_1_lua_base_listener_a6094ac0c604fce8ffab9ccfcf3023c52}{Exit\+False\+\_\+exp}} (\mbox{[}Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_false__exp_context}{Lua\+Parser.\+False\+\_\+exp\+Context}} context)
+\begin{DoxyCompactList}\small\item\em Exit a parse tree produced by the {\ttfamily false\+\_\+exp} labeled alternative in Lua\+Parser.\+exp. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classzlua_1_1_lua_base_listener_a1c2fbf0cc7a011728a19e25d1cc6f967}{Enter\+True\+\_\+exp}} (\mbox{[}Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_true__exp_context}{Lua\+Parser.\+True\+\_\+exp\+Context}} context)
+\begin{DoxyCompactList}\small\item\em Enter a parse tree produced by the {\ttfamily true\+\_\+exp} labeled alternative in Lua\+Parser.\+exp. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classzlua_1_1_lua_base_listener_a1f4f2a7162ad93c54ae0c86a15233bac}{Exit\+True\+\_\+exp}} (\mbox{[}Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_true__exp_context}{Lua\+Parser.\+True\+\_\+exp\+Context}} context)
+\begin{DoxyCompactList}\small\item\em Exit a parse tree produced by the {\ttfamily true\+\_\+exp} labeled alternative in Lua\+Parser.\+exp. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classzlua_1_1_lua_base_listener_a76fcc42fe090e80443a7f08477fbf19f}{Enter\+Num\+\_\+exp}} (\mbox{[}Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_num__exp_context}{Lua\+Parser.\+Num\+\_\+exp\+Context}} context)
+\begin{DoxyCompactList}\small\item\em Enter a parse tree produced by the {\ttfamily num\+\_\+exp} labeled alternative in Lua\+Parser.\+exp. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classzlua_1_1_lua_base_listener_a450c13a6c541dd5eed0c0713fdf81343}{Exit\+Num\+\_\+exp}} (\mbox{[}Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_num__exp_context}{Lua\+Parser.\+Num\+\_\+exp\+Context}} context)
+\begin{DoxyCompactList}\small\item\em Exit a parse tree produced by the {\ttfamily num\+\_\+exp} labeled alternative in Lua\+Parser.\+exp. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classzlua_1_1_lua_base_listener_aba9f9054eb0fce5f9e2108c03098b28a}{Enter\+String\+\_\+exp}} (\mbox{[}Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_string__exp_context}{Lua\+Parser.\+String\+\_\+exp\+Context}} context)
+\begin{DoxyCompactList}\small\item\em Enter a parse tree produced by the {\ttfamily string\+\_\+exp} labeled alternative in Lua\+Parser.\+exp. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classzlua_1_1_lua_base_listener_ac4f5a6a5139a8c670bb8f075a8fc3782}{Exit\+String\+\_\+exp}} (\mbox{[}Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_string__exp_context}{Lua\+Parser.\+String\+\_\+exp\+Context}} context)
+\begin{DoxyCompactList}\small\item\em Exit a parse tree produced by the {\ttfamily string\+\_\+exp} labeled alternative in Lua\+Parser.\+exp. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classzlua_1_1_lua_base_listener_ace1992dcf21cf3eff2428f67de5f3595}{Enter\+Func\+\_\+def\+\_\+exp}} (\mbox{[}Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_func__def__exp_context}{Lua\+Parser.\+Func\+\_\+def\+\_\+exp\+Context}} context)
+\begin{DoxyCompactList}\small\item\em Enter a parse tree produced by the {\ttfamily func\+\_\+def\+\_\+exp} labeled alternative in Lua\+Parser.\+exp. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classzlua_1_1_lua_base_listener_a7826a6c13bab904e4525274152d85550}{Exit\+Func\+\_\+def\+\_\+exp}} (\mbox{[}Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_func__def__exp_context}{Lua\+Parser.\+Func\+\_\+def\+\_\+exp\+Context}} context)
+\begin{DoxyCompactList}\small\item\em Exit a parse tree produced by the {\ttfamily func\+\_\+def\+\_\+exp} labeled alternative in Lua\+Parser.\+exp. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classzlua_1_1_lua_base_listener_aa1c31e6fda9d54bd984d3d5d5c0ff8ed}{Enter\+Prefix\+\_\+exp\+\_\+exp}} (\mbox{[}Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_prefix__exp__exp_context}{Lua\+Parser.\+Prefix\+\_\+exp\+\_\+exp\+Context}} context)
+\begin{DoxyCompactList}\small\item\em Enter a parse tree produced by the {\ttfamily prefix\+\_\+exp\+\_\+exp} labeled alternative in Lua\+Parser.\+exp. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classzlua_1_1_lua_base_listener_a7127f827c3355d3bac100faa365ffa5b}{Exit\+Prefix\+\_\+exp\+\_\+exp}} (\mbox{[}Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_prefix__exp__exp_context}{Lua\+Parser.\+Prefix\+\_\+exp\+\_\+exp\+Context}} context)
+\begin{DoxyCompactList}\small\item\em Exit a parse tree produced by the {\ttfamily prefix\+\_\+exp\+\_\+exp} labeled alternative in Lua\+Parser.\+exp. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classzlua_1_1_lua_base_listener_ae6df0ff428e128a61cef144061a8747b}{Enter\+Table\+\_\+ctor\+\_\+exp}} (\mbox{[}Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_table__ctor__exp_context}{Lua\+Parser.\+Table\+\_\+ctor\+\_\+exp\+Context}} context)
+\begin{DoxyCompactList}\small\item\em Enter a parse tree produced by the {\ttfamily table\+\_\+ctor\+\_\+exp} labeled alternative in Lua\+Parser.\+exp. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classzlua_1_1_lua_base_listener_ac8f2cae2546480b3e82b85cd55a7258e}{Exit\+Table\+\_\+ctor\+\_\+exp}} (\mbox{[}Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_table__ctor__exp_context}{Lua\+Parser.\+Table\+\_\+ctor\+\_\+exp\+Context}} context)
+\begin{DoxyCompactList}\small\item\em Exit a parse tree produced by the {\ttfamily table\+\_\+ctor\+\_\+exp} labeled alternative in Lua\+Parser.\+exp. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classzlua_1_1_lua_base_listener_ad4db24437ff42fb074c69313ec11818d}{Enter\+Op\+\_\+unary\+\_\+exp}} (\mbox{[}Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_op__unary__exp_context}{Lua\+Parser.\+Op\+\_\+unary\+\_\+exp\+Context}} context)
+\begin{DoxyCompactList}\small\item\em Enter a parse tree produced by the {\ttfamily op\+\_\+unary\+\_\+exp} labeled alternative in Lua\+Parser.\+exp. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classzlua_1_1_lua_base_listener_abf62739a5cda90c32f65e7a81c3e72a2}{Exit\+Op\+\_\+unary\+\_\+exp}} (\mbox{[}Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_op__unary__exp_context}{Lua\+Parser.\+Op\+\_\+unary\+\_\+exp\+Context}} context)
+\begin{DoxyCompactList}\small\item\em Exit a parse tree produced by the {\ttfamily op\+\_\+unary\+\_\+exp} labeled alternative in Lua\+Parser.\+exp. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classzlua_1_1_lua_base_listener_a6c6043921201d7aad886fc07f059c3e8}{Enter\+Op\+\_\+mul\+\_\+div\+\_\+exp}} (\mbox{[}Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_op__mul__div__exp_context}{Lua\+Parser.\+Op\+\_\+mul\+\_\+div\+\_\+exp\+Context}} context)
+\begin{DoxyCompactList}\small\item\em Enter a parse tree produced by the {\ttfamily op\+\_\+mul\+\_\+div\+\_\+exp} labeled alternative in Lua\+Parser.\+exp. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classzlua_1_1_lua_base_listener_ab89797d488c6f1700d00a8a609baf9f5}{Exit\+Op\+\_\+mul\+\_\+div\+\_\+exp}} (\mbox{[}Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_op__mul__div__exp_context}{Lua\+Parser.\+Op\+\_\+mul\+\_\+div\+\_\+exp\+Context}} context)
+\begin{DoxyCompactList}\small\item\em Exit a parse tree produced by the {\ttfamily op\+\_\+mul\+\_\+div\+\_\+exp} labeled alternative in Lua\+Parser.\+exp. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classzlua_1_1_lua_base_listener_a8c58530fc93d6206a2308109ae86410e}{Enter\+Op\+\_\+add\+\_\+sub\+\_\+exp}} (\mbox{[}Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_op__add__sub__exp_context}{Lua\+Parser.\+Op\+\_\+add\+\_\+sub\+\_\+exp\+Context}} context)
+\begin{DoxyCompactList}\small\item\em Enter a parse tree produced by the {\ttfamily op\+\_\+add\+\_\+sub\+\_\+exp} labeled alternative in Lua\+Parser.\+exp. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classzlua_1_1_lua_base_listener_a01605f22d70f39a286e5c768e347e788}{Exit\+Op\+\_\+add\+\_\+sub\+\_\+exp}} (\mbox{[}Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_op__add__sub__exp_context}{Lua\+Parser.\+Op\+\_\+add\+\_\+sub\+\_\+exp\+Context}} context)
+\begin{DoxyCompactList}\small\item\em Exit a parse tree produced by the {\ttfamily op\+\_\+add\+\_\+sub\+\_\+exp} labeled alternative in Lua\+Parser.\+exp. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classzlua_1_1_lua_base_listener_afa38e97552715d422e07b0de65ea18b1}{Enter\+Op\+\_\+concat\+\_\+exp}} (\mbox{[}Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_op__concat__exp_context}{Lua\+Parser.\+Op\+\_\+concat\+\_\+exp\+Context}} context)
+\begin{DoxyCompactList}\small\item\em Enter a parse tree produced by the {\ttfamily op\+\_\+concat\+\_\+exp} labeled alternative in Lua\+Parser.\+exp. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classzlua_1_1_lua_base_listener_a5daf4d3857a7580b51667c00c5395db1}{Exit\+Op\+\_\+concat\+\_\+exp}} (\mbox{[}Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_op__concat__exp_context}{Lua\+Parser.\+Op\+\_\+concat\+\_\+exp\+Context}} context)
+\begin{DoxyCompactList}\small\item\em Exit a parse tree produced by the {\ttfamily op\+\_\+concat\+\_\+exp} labeled alternative in Lua\+Parser.\+exp. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classzlua_1_1_lua_base_listener_a9882ebd74c5ae33d72487bddb4f960ec}{Enter\+Op\+\_\+caompare\+\_\+exp}} (\mbox{[}Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_op__caompare__exp_context}{Lua\+Parser.\+Op\+\_\+caompare\+\_\+exp\+Context}} context)
+\begin{DoxyCompactList}\small\item\em Enter a parse tree produced by the {\ttfamily op\+\_\+caompare\+\_\+exp} labeled alternative in Lua\+Parser.\+exp. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classzlua_1_1_lua_base_listener_a0969ff285a2df8e85f1c63245d167077}{Exit\+Op\+\_\+caompare\+\_\+exp}} (\mbox{[}Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_op__caompare__exp_context}{Lua\+Parser.\+Op\+\_\+caompare\+\_\+exp\+Context}} context)
+\begin{DoxyCompactList}\small\item\em Exit a parse tree produced by the {\ttfamily op\+\_\+caompare\+\_\+exp} labeled alternative in Lua\+Parser.\+exp. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classzlua_1_1_lua_base_listener_ace41c3066a31697b1bda64251528030b}{Enter\+Op\+\_\+and\+\_\+exp}} (\mbox{[}Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_op__and__exp_context}{Lua\+Parser.\+Op\+\_\+and\+\_\+exp\+Context}} context)
+\begin{DoxyCompactList}\small\item\em Enter a parse tree produced by the {\ttfamily op\+\_\+and\+\_\+exp} labeled alternative in Lua\+Parser.\+exp. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classzlua_1_1_lua_base_listener_aceb367c135e67ca2d8c8372e57a4a2cb}{Exit\+Op\+\_\+and\+\_\+exp}} (\mbox{[}Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_op__and__exp_context}{Lua\+Parser.\+Op\+\_\+and\+\_\+exp\+Context}} context)
+\begin{DoxyCompactList}\small\item\em Exit a parse tree produced by the {\ttfamily op\+\_\+and\+\_\+exp} labeled alternative in Lua\+Parser.\+exp. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classzlua_1_1_lua_base_listener_ad05798f5b17c22a225fe160a5230d82c}{Enter\+Op\+\_\+or\+\_\+exp}} (\mbox{[}Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_op__or__exp_context}{Lua\+Parser.\+Op\+\_\+or\+\_\+exp\+Context}} context)
+\begin{DoxyCompactList}\small\item\em Enter a parse tree produced by the {\ttfamily op\+\_\+or\+\_\+exp} labeled alternative in Lua\+Parser.\+exp. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classzlua_1_1_lua_base_listener_a2f3d1101cea30188e37757f54eeb45ad}{Exit\+Op\+\_\+or\+\_\+exp}} (\mbox{[}Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_op__or__exp_context}{Lua\+Parser.\+Op\+\_\+or\+\_\+exp\+Context}} context)
+\begin{DoxyCompactList}\small\item\em Exit a parse tree produced by the {\ttfamily op\+\_\+or\+\_\+exp} labeled alternative in Lua\+Parser.\+exp. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classzlua_1_1_lua_base_listener_a441cbddff1cc031c9eec17003ddff72f}{Enter\+Chunk}} (\mbox{[}Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_chunk_context}{Lua\+Parser.\+Chunk\+Context}} context)
+\begin{DoxyCompactList}\small\item\em Enter a parse tree produced by Lua\+Parser.\+chunk. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classzlua_1_1_lua_base_listener_aef4ea05d4f1cf0a5c223da23a2b8a312}{Exit\+Chunk}} (\mbox{[}Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_chunk_context}{Lua\+Parser.\+Chunk\+Context}} context)
+\begin{DoxyCompactList}\small\item\em Exit a parse tree produced by Lua\+Parser.\+chunk. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classzlua_1_1_lua_base_listener_af7d5b6a200e1b7efe6886c7fdad9a0f3}{Enter\+Block}} (\mbox{[}Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_block_context}{Lua\+Parser.\+Block\+Context}} context)
+\begin{DoxyCompactList}\small\item\em Enter a parse tree produced by Lua\+Parser.\+block. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classzlua_1_1_lua_base_listener_a8d6e54dc1618ec3c8fdcc8ccea015a4f}{Exit\+Block}} (\mbox{[}Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_block_context}{Lua\+Parser.\+Block\+Context}} context)
+\begin{DoxyCompactList}\small\item\em Exit a parse tree produced by Lua\+Parser.\+block. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classzlua_1_1_lua_base_listener_a863cb95dc744fd28f9194958e1d42341}{Enter\+Stat}} (\mbox{[}Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_stat_context}{Lua\+Parser.\+Stat\+Context}} context)
+\begin{DoxyCompactList}\small\item\em Enter a parse tree produced by Lua\+Parser.\+stat. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classzlua_1_1_lua_base_listener_abf60a39c358a7aafc2ddaa2fbb05d49d}{Exit\+Stat}} (\mbox{[}Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_stat_context}{Lua\+Parser.\+Stat\+Context}} context)
+\begin{DoxyCompactList}\small\item\em Exit a parse tree produced by Lua\+Parser.\+stat. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classzlua_1_1_lua_base_listener_a48c1d90a5dbcce92c8f3f30e7a413f25}{Enter\+Retstat}} (\mbox{[}Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_retstat_context}{Lua\+Parser.\+Retstat\+Context}} context)
+\begin{DoxyCompactList}\small\item\em Enter a parse tree produced by Lua\+Parser.\+retstat. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classzlua_1_1_lua_base_listener_a8b590e84f7634f57b233bc7df33591e6}{Exit\+Retstat}} (\mbox{[}Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_retstat_context}{Lua\+Parser.\+Retstat\+Context}} context)
+\begin{DoxyCompactList}\small\item\em Exit a parse tree produced by Lua\+Parser.\+retstat. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classzlua_1_1_lua_base_listener_adae5a9d925d77bceb832b62f7ce47766}{Enter\+Funcname}} (\mbox{[}Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_funcname_context}{Lua\+Parser.\+Funcname\+Context}} context)
+\begin{DoxyCompactList}\small\item\em Enter a parse tree produced by Lua\+Parser.\+funcname. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classzlua_1_1_lua_base_listener_a843fca537940a8a34507118ef087212b}{Exit\+Funcname}} (\mbox{[}Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_funcname_context}{Lua\+Parser.\+Funcname\+Context}} context)
+\begin{DoxyCompactList}\small\item\em Exit a parse tree produced by Lua\+Parser.\+funcname. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classzlua_1_1_lua_base_listener_a1b27cf500dda1c0eab2cbb8c747dddba}{Enter\+Varlist}} (\mbox{[}Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_varlist_context}{Lua\+Parser.\+Varlist\+Context}} context)
+\begin{DoxyCompactList}\small\item\em Enter a parse tree produced by Lua\+Parser.\+varlist. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classzlua_1_1_lua_base_listener_ad18289513e8ed51c9505bf21aa5c7523}{Exit\+Varlist}} (\mbox{[}Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_varlist_context}{Lua\+Parser.\+Varlist\+Context}} context)
+\begin{DoxyCompactList}\small\item\em Exit a parse tree produced by Lua\+Parser.\+varlist. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classzlua_1_1_lua_base_listener_a7e9f223eea630cb4d7deac2257225a75}{Enter\+Namelist}} (\mbox{[}Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_namelist_context}{Lua\+Parser.\+Namelist\+Context}} context)
+\begin{DoxyCompactList}\small\item\em Enter a parse tree produced by Lua\+Parser.\+namelist. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classzlua_1_1_lua_base_listener_aa501c2703fd2c5279c7cd6748aebd84b}{Exit\+Namelist}} (\mbox{[}Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_namelist_context}{Lua\+Parser.\+Namelist\+Context}} context)
+\begin{DoxyCompactList}\small\item\em Exit a parse tree produced by Lua\+Parser.\+namelist. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classzlua_1_1_lua_base_listener_a831fc10bcf2d08ebad6ac9768deb4230}{Enter\+Explist}} (\mbox{[}Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_explist_context}{Lua\+Parser.\+Explist\+Context}} context)
+\begin{DoxyCompactList}\small\item\em Enter a parse tree produced by Lua\+Parser.\+explist. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classzlua_1_1_lua_base_listener_a35af8fb9b7bc09c657281846943392a8}{Exit\+Explist}} (\mbox{[}Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_explist_context}{Lua\+Parser.\+Explist\+Context}} context)
+\begin{DoxyCompactList}\small\item\em Exit a parse tree produced by Lua\+Parser.\+explist. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classzlua_1_1_lua_base_listener_a7a7e4ba1a91e217503b568da1213eaf4}{Enter\+Exp}} (\mbox{[}Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_exp_context}{Lua\+Parser.\+Exp\+Context}} context)
+\begin{DoxyCompactList}\small\item\em Enter a parse tree produced by Lua\+Parser.\+exp. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classzlua_1_1_lua_base_listener_aa397d17db00c6af6db3c06a7a35da3c8}{Exit\+Exp}} (\mbox{[}Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_exp_context}{Lua\+Parser.\+Exp\+Context}} context)
+\begin{DoxyCompactList}\small\item\em Exit a parse tree produced by Lua\+Parser.\+exp. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classzlua_1_1_lua_base_listener_ac17b7407bccd562c7786ef788558e767}{Enter\+Prefixexp}} (\mbox{[}Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_prefixexp_context}{Lua\+Parser.\+Prefixexp\+Context}} context)
+\begin{DoxyCompactList}\small\item\em Enter a parse tree produced by Lua\+Parser.\+prefixexp. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classzlua_1_1_lua_base_listener_a2d2173a2484aac9cb7e09010ca3170e9}{Exit\+Prefixexp}} (\mbox{[}Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_prefixexp_context}{Lua\+Parser.\+Prefixexp\+Context}} context)
+\begin{DoxyCompactList}\small\item\em Exit a parse tree produced by Lua\+Parser.\+prefixexp. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classzlua_1_1_lua_base_listener_a5a20690d44ed7bea5265200a10bd3ade}{Enter\+Functioncall}} (\mbox{[}Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_functioncall_context}{Lua\+Parser.\+Functioncall\+Context}} context)
+\begin{DoxyCompactList}\small\item\em Enter a parse tree produced by Lua\+Parser.\+functioncall. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classzlua_1_1_lua_base_listener_ac08101b052d2965f37939320ba03e792}{Exit\+Functioncall}} (\mbox{[}Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_functioncall_context}{Lua\+Parser.\+Functioncall\+Context}} context)
+\begin{DoxyCompactList}\small\item\em Exit a parse tree produced by Lua\+Parser.\+functioncall. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classzlua_1_1_lua_base_listener_a0af6c7cb47cd8734025f965a6817bf12}{Enter\+Var\+Or\+Exp}} (\mbox{[}Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_var_or_exp_context}{Lua\+Parser.\+Var\+Or\+Exp\+Context}} context)
+\begin{DoxyCompactList}\small\item\em Enter a parse tree produced by Lua\+Parser.\+var\+Or\+Exp. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classzlua_1_1_lua_base_listener_a741486bd709e9d345238f2f706e4e44b}{Exit\+Var\+Or\+Exp}} (\mbox{[}Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_var_or_exp_context}{Lua\+Parser.\+Var\+Or\+Exp\+Context}} context)
+\begin{DoxyCompactList}\small\item\em Exit a parse tree produced by Lua\+Parser.\+var\+Or\+Exp. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classzlua_1_1_lua_base_listener_a45218c758db2cd6275fe4e000ae9a77e}{Enter\+Var}} (\mbox{[}Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_var_context}{Lua\+Parser.\+Var\+Context}} context)
+\begin{DoxyCompactList}\small\item\em Enter a parse tree produced by Lua\+Parser.\+var. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classzlua_1_1_lua_base_listener_a37244bd0d8813ac29d8b841496ff4a75}{Exit\+Var}} (\mbox{[}Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_var_context}{Lua\+Parser.\+Var\+Context}} context)
+\begin{DoxyCompactList}\small\item\em Exit a parse tree produced by Lua\+Parser.\+var. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classzlua_1_1_lua_base_listener_a743b7d8c5cc407d89b015a99597e711b}{Enter\+Var\+Suffix}} (\mbox{[}Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_var_suffix_context}{Lua\+Parser.\+Var\+Suffix\+Context}} context)
+\begin{DoxyCompactList}\small\item\em Enter a parse tree produced by Lua\+Parser.\+var\+Suffix. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classzlua_1_1_lua_base_listener_af8716e19b6123340f1a13c0ecf019d06}{Exit\+Var\+Suffix}} (\mbox{[}Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_var_suffix_context}{Lua\+Parser.\+Var\+Suffix\+Context}} context)
+\begin{DoxyCompactList}\small\item\em Exit a parse tree produced by Lua\+Parser.\+var\+Suffix. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classzlua_1_1_lua_base_listener_a118e7bc8edc07875df5c564171a36084}{Enter\+Name\+And\+Args}} (\mbox{[}Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_name_and_args_context}{Lua\+Parser.\+Name\+And\+Args\+Context}} context)
+\begin{DoxyCompactList}\small\item\em Enter a parse tree produced by Lua\+Parser.\+name\+And\+Args. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classzlua_1_1_lua_base_listener_ae26d62193f8285daad3361d083e45c58}{Exit\+Name\+And\+Args}} (\mbox{[}Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_name_and_args_context}{Lua\+Parser.\+Name\+And\+Args\+Context}} context)
+\begin{DoxyCompactList}\small\item\em Exit a parse tree produced by Lua\+Parser.\+name\+And\+Args. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classzlua_1_1_lua_base_listener_a86f29737c93fb7e2b6026209916ca3ff}{Enter\+Args}} (\mbox{[}Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_args_context}{Lua\+Parser.\+Args\+Context}} context)
+\begin{DoxyCompactList}\small\item\em Enter a parse tree produced by Lua\+Parser.\+args. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classzlua_1_1_lua_base_listener_aee2d21cae37901e87685fc50c87f8f1f}{Exit\+Args}} (\mbox{[}Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_args_context}{Lua\+Parser.\+Args\+Context}} context)
+\begin{DoxyCompactList}\small\item\em Exit a parse tree produced by Lua\+Parser.\+args. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classzlua_1_1_lua_base_listener_a3882098639066deade08be5eb8d94f70}{Enter\+Functiondef}} (\mbox{[}Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_functiondef_context}{Lua\+Parser.\+Functiondef\+Context}} context)
+\begin{DoxyCompactList}\small\item\em Enter a parse tree produced by Lua\+Parser.\+functiondef. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classzlua_1_1_lua_base_listener_adb6913ed219a112505cb4ba783485c2e}{Exit\+Functiondef}} (\mbox{[}Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_functiondef_context}{Lua\+Parser.\+Functiondef\+Context}} context)
+\begin{DoxyCompactList}\small\item\em Exit a parse tree produced by Lua\+Parser.\+functiondef. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classzlua_1_1_lua_base_listener_a3e3c9ea85f3429d18fb56ed19476c5d3}{Enter\+Funcbody}} (\mbox{[}Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_funcbody_context}{Lua\+Parser.\+Funcbody\+Context}} context)
+\begin{DoxyCompactList}\small\item\em Enter a parse tree produced by Lua\+Parser.\+funcbody. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classzlua_1_1_lua_base_listener_add219d0a2aad2403b075bb1eb2550383}{Exit\+Funcbody}} (\mbox{[}Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_funcbody_context}{Lua\+Parser.\+Funcbody\+Context}} context)
+\begin{DoxyCompactList}\small\item\em Exit a parse tree produced by Lua\+Parser.\+funcbody. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classzlua_1_1_lua_base_listener_a731d7b4d2ae1ef89c04c01da08cddbc7}{Enter\+Parlist}} (\mbox{[}Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_parlist_context}{Lua\+Parser.\+Parlist\+Context}} context)
+\begin{DoxyCompactList}\small\item\em Enter a parse tree produced by Lua\+Parser.\+parlist. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classzlua_1_1_lua_base_listener_af7c71a424a8f8682ecd95c95cff6e64b}{Exit\+Parlist}} (\mbox{[}Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_parlist_context}{Lua\+Parser.\+Parlist\+Context}} context)
+\begin{DoxyCompactList}\small\item\em Exit a parse tree produced by Lua\+Parser.\+parlist. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classzlua_1_1_lua_base_listener_a1aff2c410cda086c68c4dd53123c8082}{Enter\+Tableconstructor}} (\mbox{[}Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_tableconstructor_context}{Lua\+Parser.\+Tableconstructor\+Context}} context)
+\begin{DoxyCompactList}\small\item\em Enter a parse tree produced by Lua\+Parser.\+tableconstructor. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classzlua_1_1_lua_base_listener_aa0a2a4e40e4246abaddc0bbe731748c6}{Exit\+Tableconstructor}} (\mbox{[}Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_tableconstructor_context}{Lua\+Parser.\+Tableconstructor\+Context}} context)
+\begin{DoxyCompactList}\small\item\em Exit a parse tree produced by Lua\+Parser.\+tableconstructor. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classzlua_1_1_lua_base_listener_a099787479e7da4a336dce23de123fa0a}{Enter\+Fieldlist}} (\mbox{[}Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_fieldlist_context}{Lua\+Parser.\+Fieldlist\+Context}} context)
+\begin{DoxyCompactList}\small\item\em Enter a parse tree produced by Lua\+Parser.\+fieldlist. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classzlua_1_1_lua_base_listener_a44a0860d791e1bf2b19f911adf58ff72}{Exit\+Fieldlist}} (\mbox{[}Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_fieldlist_context}{Lua\+Parser.\+Fieldlist\+Context}} context)
+\begin{DoxyCompactList}\small\item\em Exit a parse tree produced by Lua\+Parser.\+fieldlist. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classzlua_1_1_lua_base_listener_a6bfe7b609f8393a7987e3746efa50769}{Enter\+Field}} (\mbox{[}Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_field_context}{Lua\+Parser.\+Field\+Context}} context)
+\begin{DoxyCompactList}\small\item\em Enter a parse tree produced by Lua\+Parser.\+field. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classzlua_1_1_lua_base_listener_a2c3ed58a89aca0feaf4e6fc1a74f5f2b}{Exit\+Field}} (\mbox{[}Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_field_context}{Lua\+Parser.\+Field\+Context}} context)
+\begin{DoxyCompactList}\small\item\em Exit a parse tree produced by Lua\+Parser.\+field. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classzlua_1_1_lua_base_listener_a2f94f0a470d5c71b06cb6daa8873e069}{Enter\+Fieldsep}} (\mbox{[}Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_fieldsep_context}{Lua\+Parser.\+Fieldsep\+Context}} context)
+\begin{DoxyCompactList}\small\item\em Enter a parse tree produced by Lua\+Parser.\+fieldsep. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classzlua_1_1_lua_base_listener_aa7266127d89148ed4d6a559e5b59525e}{Exit\+Fieldsep}} (\mbox{[}Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_fieldsep_context}{Lua\+Parser.\+Fieldsep\+Context}} context)
+\begin{DoxyCompactList}\small\item\em Exit a parse tree produced by Lua\+Parser.\+fieldsep. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classzlua_1_1_lua_base_listener_afc55e8820e1e62e135f4c2fd0d69825d}{Enter\+Operator\+Or}} (\mbox{[}Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_operator_or_context}{Lua\+Parser.\+Operator\+Or\+Context}} context)
+\begin{DoxyCompactList}\small\item\em Enter a parse tree produced by Lua\+Parser.\+operator\+Or. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classzlua_1_1_lua_base_listener_ab2ff587916dcc9fe3b47ee7b560db090}{Exit\+Operator\+Or}} (\mbox{[}Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_operator_or_context}{Lua\+Parser.\+Operator\+Or\+Context}} context)
+\begin{DoxyCompactList}\small\item\em Exit a parse tree produced by Lua\+Parser.\+operator\+Or. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classzlua_1_1_lua_base_listener_a78b389b5400066d8a9171b86b1529cf7}{Enter\+Operator\+And}} (\mbox{[}Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_operator_and_context}{Lua\+Parser.\+Operator\+And\+Context}} context)
+\begin{DoxyCompactList}\small\item\em Enter a parse tree produced by Lua\+Parser.\+operator\+And. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classzlua_1_1_lua_base_listener_ad0372c70a4c0b53a69f958e1d8c16065}{Exit\+Operator\+And}} (\mbox{[}Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_operator_and_context}{Lua\+Parser.\+Operator\+And\+Context}} context)
+\begin{DoxyCompactList}\small\item\em Exit a parse tree produced by Lua\+Parser.\+operator\+And. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classzlua_1_1_lua_base_listener_a27a11e4053e2a7c40f464e0a893bbf70}{Enter\+Operator\+Comparison}} (\mbox{[}Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_operator_comparison_context}{Lua\+Parser.\+Operator\+Comparison\+Context}} context)
+\begin{DoxyCompactList}\small\item\em Enter a parse tree produced by Lua\+Parser.\+operator\+Comparison. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classzlua_1_1_lua_base_listener_a650d952f0fddbd4ddb499a7074528e60}{Exit\+Operator\+Comparison}} (\mbox{[}Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_operator_comparison_context}{Lua\+Parser.\+Operator\+Comparison\+Context}} context)
+\begin{DoxyCompactList}\small\item\em Exit a parse tree produced by Lua\+Parser.\+operator\+Comparison. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classzlua_1_1_lua_base_listener_a3bcff2132c345b7cc97fd7782d4f6463}{Enter\+Operator\+Strcat}} (\mbox{[}Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_operator_strcat_context}{Lua\+Parser.\+Operator\+Strcat\+Context}} context)
+\begin{DoxyCompactList}\small\item\em Enter a parse tree produced by Lua\+Parser.\+operator\+Strcat. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classzlua_1_1_lua_base_listener_a120cd0798009d1b1574ac0ec556482a7}{Exit\+Operator\+Strcat}} (\mbox{[}Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_operator_strcat_context}{Lua\+Parser.\+Operator\+Strcat\+Context}} context)
+\begin{DoxyCompactList}\small\item\em Exit a parse tree produced by Lua\+Parser.\+operator\+Strcat. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classzlua_1_1_lua_base_listener_ac3bb5e4809651278e44d46bc5ca3c7b1}{Enter\+Operator\+Add\+Sub}} (\mbox{[}Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_operator_add_sub_context}{Lua\+Parser.\+Operator\+Add\+Sub\+Context}} context)
+\begin{DoxyCompactList}\small\item\em Enter a parse tree produced by Lua\+Parser.\+operator\+Add\+Sub. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classzlua_1_1_lua_base_listener_aa8686e94c0d6dbf3292a7ed77baa54b5}{Exit\+Operator\+Add\+Sub}} (\mbox{[}Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_operator_add_sub_context}{Lua\+Parser.\+Operator\+Add\+Sub\+Context}} context)
+\begin{DoxyCompactList}\small\item\em Exit a parse tree produced by Lua\+Parser.\+operator\+Add\+Sub. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classzlua_1_1_lua_base_listener_a4a1422260529c79e0e43d89652182159}{Enter\+Operator\+Mul\+Div\+Mod}} (\mbox{[}Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_operator_mul_div_mod_context}{Lua\+Parser.\+Operator\+Mul\+Div\+Mod\+Context}} context)
+\begin{DoxyCompactList}\small\item\em Enter a parse tree produced by Lua\+Parser.\+operator\+Mul\+Div\+Mod. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classzlua_1_1_lua_base_listener_a686c3f75fd31a0b4c7cae3f3b99cd2aa}{Exit\+Operator\+Mul\+Div\+Mod}} (\mbox{[}Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_operator_mul_div_mod_context}{Lua\+Parser.\+Operator\+Mul\+Div\+Mod\+Context}} context)
+\begin{DoxyCompactList}\small\item\em Exit a parse tree produced by Lua\+Parser.\+operator\+Mul\+Div\+Mod. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classzlua_1_1_lua_base_listener_af4009c58d1272593e9d8a18b8e306591}{Enter\+Operator\+Bitwise}} (\mbox{[}Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_operator_bitwise_context}{Lua\+Parser.\+Operator\+Bitwise\+Context}} context)
+\begin{DoxyCompactList}\small\item\em Enter a parse tree produced by Lua\+Parser.\+operator\+Bitwise. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classzlua_1_1_lua_base_listener_ac5e1c31e302e8eeae5a2bb9c585b40a2}{Exit\+Operator\+Bitwise}} (\mbox{[}Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_operator_bitwise_context}{Lua\+Parser.\+Operator\+Bitwise\+Context}} context)
+\begin{DoxyCompactList}\small\item\em Exit a parse tree produced by Lua\+Parser.\+operator\+Bitwise. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classzlua_1_1_lua_base_listener_ac5f8a27439dcc1dbabbc0a23508f7013}{Enter\+Operator\+Unary}} (\mbox{[}Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_operator_unary_context}{Lua\+Parser.\+Operator\+Unary\+Context}} context)
+\begin{DoxyCompactList}\small\item\em Enter a parse tree produced by Lua\+Parser.\+operator\+Unary. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classzlua_1_1_lua_base_listener_a7c6d18b5d844f0af74c1123b245bc373}{Exit\+Operator\+Unary}} (\mbox{[}Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_operator_unary_context}{Lua\+Parser.\+Operator\+Unary\+Context}} context)
+\begin{DoxyCompactList}\small\item\em Exit a parse tree produced by Lua\+Parser.\+operator\+Unary. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classzlua_1_1_lua_base_listener_ad21692d9754c71a80f6c0378e0697f02}{Enter\+Operator\+Power}} (\mbox{[}Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_operator_power_context}{Lua\+Parser.\+Operator\+Power\+Context}} context)
+\begin{DoxyCompactList}\small\item\em Enter a parse tree produced by Lua\+Parser.\+operator\+Power. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classzlua_1_1_lua_base_listener_aed60ef8f2e3a221a83c9b5be20dcc8c0}{Exit\+Operator\+Power}} (\mbox{[}Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_operator_power_context}{Lua\+Parser.\+Operator\+Power\+Context}} context)
+\begin{DoxyCompactList}\small\item\em Exit a parse tree produced by Lua\+Parser.\+operator\+Power. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classzlua_1_1_lua_base_listener_a7a5db34cbf48dd81e72604d07e0e0038}{Enter\+Number}} (\mbox{[}Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_number_context}{Lua\+Parser.\+Number\+Context}} context)
+\begin{DoxyCompactList}\small\item\em Enter a parse tree produced by Lua\+Parser.\+number. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classzlua_1_1_lua_base_listener_a64548a4ec69a61b39e8a7c6d2f022e83}{Exit\+Number}} (\mbox{[}Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_number_context}{Lua\+Parser.\+Number\+Context}} context)
+\begin{DoxyCompactList}\small\item\em Exit a parse tree produced by Lua\+Parser.\+number. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classzlua_1_1_lua_base_listener_a98b2e77fa39477251ef47c023d51d559}{Enter\+String}} (\mbox{[}Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_string_context}{Lua\+Parser.\+String\+Context}} context)
+\begin{DoxyCompactList}\small\item\em Enter a parse tree produced by Lua\+Parser.\+string. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classzlua_1_1_lua_base_listener_ac80dc12b34aee654e56ecc7e37a77ac7}{Exit\+String}} (\mbox{[}Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_string_context}{Lua\+Parser.\+String\+Context}} context)
+\begin{DoxyCompactList}\small\item\em Exit a parse tree produced by Lua\+Parser.\+string. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classzlua_1_1_lua_base_listener_aa20d29905862d24106bf15e909816993}{Enter\+Every\+Rule}} (\mbox{[}Not\+Null\mbox{]} Parser\+Rule\+Context context)
+\item 
+virtual void \mbox{\hyperlink{classzlua_1_1_lua_base_listener_a06107a9f8d26fc9fdc1f7364074d8d05}{Exit\+Every\+Rule}} (\mbox{[}Not\+Null\mbox{]} Parser\+Rule\+Context context)
+\item 
+virtual void \mbox{\hyperlink{classzlua_1_1_lua_base_listener_a8cb7657e2ecbfc55be50ecb82ad121aa}{Visit\+Terminal}} (\mbox{[}Not\+Null\mbox{]} I\+Terminal\+Node node)
+\item 
+virtual void \mbox{\hyperlink{classzlua_1_1_lua_base_listener_abd2e864ac32107d653a410868637a8f7}{Visit\+Error\+Node}} (\mbox{[}Not\+Null\mbox{]} I\+Error\+Node node)
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+This class provides an empty implementation of \mbox{\hyperlink{interfacezlua_1_1_i_lua_listener}{I\+Lua\+Listener}}, which can be extended to create a listener which only needs to handle a subset of the available methods. 
+
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{classzlua_1_1_lua_base_listener_a86f29737c93fb7e2b6026209916ca3ff}\label{classzlua_1_1_lua_base_listener_a86f29737c93fb7e2b6026209916ca3ff}} 
+\index{zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}!Enter\+Args@{Enter\+Args}}
+\index{Enter\+Args@{Enter\+Args}!zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}}
+\subsubsection{\texorpdfstring{Enter\+Args()}{EnterArgs()}}
+{\footnotesize\ttfamily virtual void zlua.\+Lua\+Base\+Listener.\+Enter\+Args (\begin{DoxyParamCaption}\item[{\mbox{[}\+Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_args_context}{Lua\+Parser.\+Args\+Context}}}]{context }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Enter a parse tree produced by Lua\+Parser.\+args. 
+
+The default implementation does nothing.
+
+
+\begin{DoxyParams}{Parameters}
+{\em context} & The parse tree.\\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{interfacezlua_1_1_i_lua_listener_a77a4130828fbc6f3827ea87c567e84ac}{zlua.\+I\+Lua\+Listener}}.
+
+\mbox{\Hypertarget{classzlua_1_1_lua_base_listener_aec93807e61e1511e344e419191e80d43}\label{classzlua_1_1_lua_base_listener_aec93807e61e1511e344e419191e80d43}} 
+\index{zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}!Enter\+Assign\+\_\+stat@{Enter\+Assign\+\_\+stat}}
+\index{Enter\+Assign\+\_\+stat@{Enter\+Assign\+\_\+stat}!zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}}
+\subsubsection{\texorpdfstring{Enter\+Assign\+\_\+stat()}{EnterAssign\_stat()}}
+{\footnotesize\ttfamily virtual void zlua.\+Lua\+Base\+Listener.\+Enter\+Assign\+\_\+stat (\begin{DoxyParamCaption}\item[{\mbox{[}\+Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_assign__stat_context}{Lua\+Parser.\+Assign\+\_\+stat\+Context}}}]{context }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Enter a parse tree produced by the {\ttfamily assign\+\_\+stat} labeled alternative in Lua\+Parser.\+stat. 
+
+The default implementation does nothing.
+
+
+\begin{DoxyParams}{Parameters}
+{\em context} & The parse tree.\\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{interfacezlua_1_1_i_lua_listener_a6c89bd1b72debe5db0a3bd633af3c6c9}{zlua.\+I\+Lua\+Listener}}.
+
+\mbox{\Hypertarget{classzlua_1_1_lua_base_listener_af7d5b6a200e1b7efe6886c7fdad9a0f3}\label{classzlua_1_1_lua_base_listener_af7d5b6a200e1b7efe6886c7fdad9a0f3}} 
+\index{zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}!Enter\+Block@{Enter\+Block}}
+\index{Enter\+Block@{Enter\+Block}!zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}}
+\subsubsection{\texorpdfstring{Enter\+Block()}{EnterBlock()}}
+{\footnotesize\ttfamily virtual void zlua.\+Lua\+Base\+Listener.\+Enter\+Block (\begin{DoxyParamCaption}\item[{\mbox{[}\+Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_block_context}{Lua\+Parser.\+Block\+Context}}}]{context }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Enter a parse tree produced by Lua\+Parser.\+block. 
+
+The default implementation does nothing.
+
+
+\begin{DoxyParams}{Parameters}
+{\em context} & The parse tree.\\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{interfacezlua_1_1_i_lua_listener_a490f8ae28bd42601f32bd54fc9058e24}{zlua.\+I\+Lua\+Listener}}.
+
+\mbox{\Hypertarget{classzlua_1_1_lua_base_listener_a6adb675854ff8e7a3a92ca58e5f198b2}\label{classzlua_1_1_lua_base_listener_a6adb675854ff8e7a3a92ca58e5f198b2}} 
+\index{zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}!Enter\+Break\+\_\+stat@{Enter\+Break\+\_\+stat}}
+\index{Enter\+Break\+\_\+stat@{Enter\+Break\+\_\+stat}!zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}}
+\subsubsection{\texorpdfstring{Enter\+Break\+\_\+stat()}{EnterBreak\_stat()}}
+{\footnotesize\ttfamily virtual void zlua.\+Lua\+Base\+Listener.\+Enter\+Break\+\_\+stat (\begin{DoxyParamCaption}\item[{\mbox{[}\+Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_break__stat_context}{Lua\+Parser.\+Break\+\_\+stat\+Context}}}]{context }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Enter a parse tree produced by the {\ttfamily break\+\_\+stat} labeled alternative in Lua\+Parser.\+stat. 
+
+The default implementation does nothing.
+
+
+\begin{DoxyParams}{Parameters}
+{\em context} & The parse tree.\\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{interfacezlua_1_1_i_lua_listener_aa77c8634ee96ca2069ceb9e93b2bae57}{zlua.\+I\+Lua\+Listener}}.
+
+\mbox{\Hypertarget{classzlua_1_1_lua_base_listener_a441cbddff1cc031c9eec17003ddff72f}\label{classzlua_1_1_lua_base_listener_a441cbddff1cc031c9eec17003ddff72f}} 
+\index{zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}!Enter\+Chunk@{Enter\+Chunk}}
+\index{Enter\+Chunk@{Enter\+Chunk}!zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}}
+\subsubsection{\texorpdfstring{Enter\+Chunk()}{EnterChunk()}}
+{\footnotesize\ttfamily virtual void zlua.\+Lua\+Base\+Listener.\+Enter\+Chunk (\begin{DoxyParamCaption}\item[{\mbox{[}\+Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_chunk_context}{Lua\+Parser.\+Chunk\+Context}}}]{context }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Enter a parse tree produced by Lua\+Parser.\+chunk. 
+
+The default implementation does nothing.
+
+
+\begin{DoxyParams}{Parameters}
+{\em context} & The parse tree.\\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{interfacezlua_1_1_i_lua_listener_ade4db31c82992f111a3093cde12fd632}{zlua.\+I\+Lua\+Listener}}.
+
+\mbox{\Hypertarget{classzlua_1_1_lua_base_listener_aea9c92211c8619f5d2cf426ee5380be4}\label{classzlua_1_1_lua_base_listener_aea9c92211c8619f5d2cf426ee5380be4}} 
+\index{zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}!Enter\+Do\+\_\+end\+\_\+stat@{Enter\+Do\+\_\+end\+\_\+stat}}
+\index{Enter\+Do\+\_\+end\+\_\+stat@{Enter\+Do\+\_\+end\+\_\+stat}!zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}}
+\subsubsection{\texorpdfstring{Enter\+Do\+\_\+end\+\_\+stat()}{EnterDo\_end\_stat()}}
+{\footnotesize\ttfamily virtual void zlua.\+Lua\+Base\+Listener.\+Enter\+Do\+\_\+end\+\_\+stat (\begin{DoxyParamCaption}\item[{\mbox{[}\+Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_do__end__stat_context}{Lua\+Parser.\+Do\+\_\+end\+\_\+stat\+Context}}}]{context }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Enter a parse tree produced by the {\ttfamily do\+\_\+end\+\_\+stat} labeled alternative in Lua\+Parser.\+stat. 
+
+The default implementation does nothing.
+
+
+\begin{DoxyParams}{Parameters}
+{\em context} & The parse tree.\\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{interfacezlua_1_1_i_lua_listener_ad561e0f5feb33ca80ba5202ab0511bab}{zlua.\+I\+Lua\+Listener}}.
+
+\mbox{\Hypertarget{classzlua_1_1_lua_base_listener_a5521468da5fe9ed0eb95ada9c64c801f}\label{classzlua_1_1_lua_base_listener_a5521468da5fe9ed0eb95ada9c64c801f}} 
+\index{zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}!Enter\+Empty\+\_\+stat@{Enter\+Empty\+\_\+stat}}
+\index{Enter\+Empty\+\_\+stat@{Enter\+Empty\+\_\+stat}!zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}}
+\subsubsection{\texorpdfstring{Enter\+Empty\+\_\+stat()}{EnterEmpty\_stat()}}
+{\footnotesize\ttfamily virtual void zlua.\+Lua\+Base\+Listener.\+Enter\+Empty\+\_\+stat (\begin{DoxyParamCaption}\item[{\mbox{[}\+Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_empty__stat_context}{Lua\+Parser.\+Empty\+\_\+stat\+Context}}}]{context }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Enter a parse tree produced by the {\ttfamily empty\+\_\+stat} labeled alternative in Lua\+Parser.\+stat. 
+
+The default implementation does nothing.
+
+
+\begin{DoxyParams}{Parameters}
+{\em context} & The parse tree.\\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{interfacezlua_1_1_i_lua_listener_aaa6652e41dd59516afb02cde17c6a347}{zlua.\+I\+Lua\+Listener}}.
+
+\mbox{\Hypertarget{classzlua_1_1_lua_base_listener_aa20d29905862d24106bf15e909816993}\label{classzlua_1_1_lua_base_listener_aa20d29905862d24106bf15e909816993}} 
+\index{zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}!Enter\+Every\+Rule@{Enter\+Every\+Rule}}
+\index{Enter\+Every\+Rule@{Enter\+Every\+Rule}!zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}}
+\subsubsection{\texorpdfstring{Enter\+Every\+Rule()}{EnterEveryRule()}}
+{\footnotesize\ttfamily virtual void zlua.\+Lua\+Base\+Listener.\+Enter\+Every\+Rule (\begin{DoxyParamCaption}\item[{\mbox{[}\+Not\+Null\mbox{]} Parser\+Rule\+Context}]{context }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+The default implementation does nothing.\mbox{\Hypertarget{classzlua_1_1_lua_base_listener_a7a7e4ba1a91e217503b568da1213eaf4}\label{classzlua_1_1_lua_base_listener_a7a7e4ba1a91e217503b568da1213eaf4}} 
+\index{zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}!Enter\+Exp@{Enter\+Exp}}
+\index{Enter\+Exp@{Enter\+Exp}!zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}}
+\subsubsection{\texorpdfstring{Enter\+Exp()}{EnterExp()}}
+{\footnotesize\ttfamily virtual void zlua.\+Lua\+Base\+Listener.\+Enter\+Exp (\begin{DoxyParamCaption}\item[{\mbox{[}\+Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_exp_context}{Lua\+Parser.\+Exp\+Context}}}]{context }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Enter a parse tree produced by Lua\+Parser.\+exp. 
+
+The default implementation does nothing.
+
+
+\begin{DoxyParams}{Parameters}
+{\em context} & The parse tree.\\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{interfacezlua_1_1_i_lua_listener_ac285772a04450f04a0552656841f1207}{zlua.\+I\+Lua\+Listener}}.
+
+\mbox{\Hypertarget{classzlua_1_1_lua_base_listener_a831fc10bcf2d08ebad6ac9768deb4230}\label{classzlua_1_1_lua_base_listener_a831fc10bcf2d08ebad6ac9768deb4230}} 
+\index{zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}!Enter\+Explist@{Enter\+Explist}}
+\index{Enter\+Explist@{Enter\+Explist}!zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}}
+\subsubsection{\texorpdfstring{Enter\+Explist()}{EnterExplist()}}
+{\footnotesize\ttfamily virtual void zlua.\+Lua\+Base\+Listener.\+Enter\+Explist (\begin{DoxyParamCaption}\item[{\mbox{[}\+Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_explist_context}{Lua\+Parser.\+Explist\+Context}}}]{context }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Enter a parse tree produced by Lua\+Parser.\+explist. 
+
+The default implementation does nothing.
+
+
+\begin{DoxyParams}{Parameters}
+{\em context} & The parse tree.\\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{interfacezlua_1_1_i_lua_listener_a9e310e407a85f410ec1e17d632778708}{zlua.\+I\+Lua\+Listener}}.
+
+\mbox{\Hypertarget{classzlua_1_1_lua_base_listener_a5025dfe7f75ae2d9db0e58eadba0bba0}\label{classzlua_1_1_lua_base_listener_a5025dfe7f75ae2d9db0e58eadba0bba0}} 
+\index{zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}!Enter\+False\+\_\+exp@{Enter\+False\+\_\+exp}}
+\index{Enter\+False\+\_\+exp@{Enter\+False\+\_\+exp}!zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}}
+\subsubsection{\texorpdfstring{Enter\+False\+\_\+exp()}{EnterFalse\_exp()}}
+{\footnotesize\ttfamily virtual void zlua.\+Lua\+Base\+Listener.\+Enter\+False\+\_\+exp (\begin{DoxyParamCaption}\item[{\mbox{[}\+Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_false__exp_context}{Lua\+Parser.\+False\+\_\+exp\+Context}}}]{context }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Enter a parse tree produced by the {\ttfamily false\+\_\+exp} labeled alternative in Lua\+Parser.\+exp. 
+
+The default implementation does nothing.
+
+
+\begin{DoxyParams}{Parameters}
+{\em context} & The parse tree.\\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{interfacezlua_1_1_i_lua_listener_acaeea04a84e6859bedcaa48c486cb640}{zlua.\+I\+Lua\+Listener}}.
+
+\mbox{\Hypertarget{classzlua_1_1_lua_base_listener_a6bfe7b609f8393a7987e3746efa50769}\label{classzlua_1_1_lua_base_listener_a6bfe7b609f8393a7987e3746efa50769}} 
+\index{zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}!Enter\+Field@{Enter\+Field}}
+\index{Enter\+Field@{Enter\+Field}!zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}}
+\subsubsection{\texorpdfstring{Enter\+Field()}{EnterField()}}
+{\footnotesize\ttfamily virtual void zlua.\+Lua\+Base\+Listener.\+Enter\+Field (\begin{DoxyParamCaption}\item[{\mbox{[}\+Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_field_context}{Lua\+Parser.\+Field\+Context}}}]{context }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Enter a parse tree produced by Lua\+Parser.\+field. 
+
+The default implementation does nothing.
+
+
+\begin{DoxyParams}{Parameters}
+{\em context} & The parse tree.\\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{interfacezlua_1_1_i_lua_listener_abd670dc230362e0d50ad8dfffd50eb61}{zlua.\+I\+Lua\+Listener}}.
+
+\mbox{\Hypertarget{classzlua_1_1_lua_base_listener_a099787479e7da4a336dce23de123fa0a}\label{classzlua_1_1_lua_base_listener_a099787479e7da4a336dce23de123fa0a}} 
+\index{zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}!Enter\+Fieldlist@{Enter\+Fieldlist}}
+\index{Enter\+Fieldlist@{Enter\+Fieldlist}!zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}}
+\subsubsection{\texorpdfstring{Enter\+Fieldlist()}{EnterFieldlist()}}
+{\footnotesize\ttfamily virtual void zlua.\+Lua\+Base\+Listener.\+Enter\+Fieldlist (\begin{DoxyParamCaption}\item[{\mbox{[}\+Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_fieldlist_context}{Lua\+Parser.\+Fieldlist\+Context}}}]{context }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Enter a parse tree produced by Lua\+Parser.\+fieldlist. 
+
+The default implementation does nothing.
+
+
+\begin{DoxyParams}{Parameters}
+{\em context} & The parse tree.\\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{interfacezlua_1_1_i_lua_listener_a52d5768d4a26b0d78da5e039713269cc}{zlua.\+I\+Lua\+Listener}}.
+
+\mbox{\Hypertarget{classzlua_1_1_lua_base_listener_a2f94f0a470d5c71b06cb6daa8873e069}\label{classzlua_1_1_lua_base_listener_a2f94f0a470d5c71b06cb6daa8873e069}} 
+\index{zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}!Enter\+Fieldsep@{Enter\+Fieldsep}}
+\index{Enter\+Fieldsep@{Enter\+Fieldsep}!zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}}
+\subsubsection{\texorpdfstring{Enter\+Fieldsep()}{EnterFieldsep()}}
+{\footnotesize\ttfamily virtual void zlua.\+Lua\+Base\+Listener.\+Enter\+Fieldsep (\begin{DoxyParamCaption}\item[{\mbox{[}\+Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_fieldsep_context}{Lua\+Parser.\+Fieldsep\+Context}}}]{context }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Enter a parse tree produced by Lua\+Parser.\+fieldsep. 
+
+The default implementation does nothing.
+
+
+\begin{DoxyParams}{Parameters}
+{\em context} & The parse tree.\\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{interfacezlua_1_1_i_lua_listener_a9ee512ebb70fc9f3fe8bcc35b0e6efe4}{zlua.\+I\+Lua\+Listener}}.
+
+\mbox{\Hypertarget{classzlua_1_1_lua_base_listener_aeae8e0a0ca7fe9c5a24cb372585b81b7}\label{classzlua_1_1_lua_base_listener_aeae8e0a0ca7fe9c5a24cb372585b81b7}} 
+\index{zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}!Enter\+Func\+\_\+call\+\_\+stat@{Enter\+Func\+\_\+call\+\_\+stat}}
+\index{Enter\+Func\+\_\+call\+\_\+stat@{Enter\+Func\+\_\+call\+\_\+stat}!zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}}
+\subsubsection{\texorpdfstring{Enter\+Func\+\_\+call\+\_\+stat()}{EnterFunc\_call\_stat()}}
+{\footnotesize\ttfamily virtual void zlua.\+Lua\+Base\+Listener.\+Enter\+Func\+\_\+call\+\_\+stat (\begin{DoxyParamCaption}\item[{\mbox{[}\+Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_func__call__stat_context}{Lua\+Parser.\+Func\+\_\+call\+\_\+stat\+Context}}}]{context }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Enter a parse tree produced by the {\ttfamily func\+\_\+call\+\_\+stat} labeled alternative in Lua\+Parser.\+stat. 
+
+The default implementation does nothing.
+
+
+\begin{DoxyParams}{Parameters}
+{\em context} & The parse tree.\\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{interfacezlua_1_1_i_lua_listener_a082ec71bf7dc3bee6dd365c9a56ee59c}{zlua.\+I\+Lua\+Listener}}.
+
+\mbox{\Hypertarget{classzlua_1_1_lua_base_listener_ace1992dcf21cf3eff2428f67de5f3595}\label{classzlua_1_1_lua_base_listener_ace1992dcf21cf3eff2428f67de5f3595}} 
+\index{zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}!Enter\+Func\+\_\+def\+\_\+exp@{Enter\+Func\+\_\+def\+\_\+exp}}
+\index{Enter\+Func\+\_\+def\+\_\+exp@{Enter\+Func\+\_\+def\+\_\+exp}!zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}}
+\subsubsection{\texorpdfstring{Enter\+Func\+\_\+def\+\_\+exp()}{EnterFunc\_def\_exp()}}
+{\footnotesize\ttfamily virtual void zlua.\+Lua\+Base\+Listener.\+Enter\+Func\+\_\+def\+\_\+exp (\begin{DoxyParamCaption}\item[{\mbox{[}\+Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_func__def__exp_context}{Lua\+Parser.\+Func\+\_\+def\+\_\+exp\+Context}}}]{context }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Enter a parse tree produced by the {\ttfamily func\+\_\+def\+\_\+exp} labeled alternative in Lua\+Parser.\+exp. 
+
+The default implementation does nothing.
+
+
+\begin{DoxyParams}{Parameters}
+{\em context} & The parse tree.\\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{interfacezlua_1_1_i_lua_listener_a4f05c6d0e5bd9d2515029fd34d8f5402}{zlua.\+I\+Lua\+Listener}}.
+
+\mbox{\Hypertarget{classzlua_1_1_lua_base_listener_ae342d4559800c58b6cfc9e42d5ba2837}\label{classzlua_1_1_lua_base_listener_ae342d4559800c58b6cfc9e42d5ba2837}} 
+\index{zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}!Enter\+Func\+\_\+def\+\_\+stat@{Enter\+Func\+\_\+def\+\_\+stat}}
+\index{Enter\+Func\+\_\+def\+\_\+stat@{Enter\+Func\+\_\+def\+\_\+stat}!zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}}
+\subsubsection{\texorpdfstring{Enter\+Func\+\_\+def\+\_\+stat()}{EnterFunc\_def\_stat()}}
+{\footnotesize\ttfamily virtual void zlua.\+Lua\+Base\+Listener.\+Enter\+Func\+\_\+def\+\_\+stat (\begin{DoxyParamCaption}\item[{\mbox{[}\+Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_func__def__stat_context}{Lua\+Parser.\+Func\+\_\+def\+\_\+stat\+Context}}}]{context }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Enter a parse tree produced by the {\ttfamily func\+\_\+def\+\_\+stat} labeled alternative in Lua\+Parser.\+stat. 
+
+The default implementation does nothing.
+
+
+\begin{DoxyParams}{Parameters}
+{\em context} & The parse tree.\\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{interfacezlua_1_1_i_lua_listener_a2f03132612731ef3355f1453b3cb4686}{zlua.\+I\+Lua\+Listener}}.
+
+\mbox{\Hypertarget{classzlua_1_1_lua_base_listener_a3e3c9ea85f3429d18fb56ed19476c5d3}\label{classzlua_1_1_lua_base_listener_a3e3c9ea85f3429d18fb56ed19476c5d3}} 
+\index{zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}!Enter\+Funcbody@{Enter\+Funcbody}}
+\index{Enter\+Funcbody@{Enter\+Funcbody}!zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}}
+\subsubsection{\texorpdfstring{Enter\+Funcbody()}{EnterFuncbody()}}
+{\footnotesize\ttfamily virtual void zlua.\+Lua\+Base\+Listener.\+Enter\+Funcbody (\begin{DoxyParamCaption}\item[{\mbox{[}\+Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_funcbody_context}{Lua\+Parser.\+Funcbody\+Context}}}]{context }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Enter a parse tree produced by Lua\+Parser.\+funcbody. 
+
+The default implementation does nothing.
+
+
+\begin{DoxyParams}{Parameters}
+{\em context} & The parse tree.\\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{interfacezlua_1_1_i_lua_listener_afb6c93f652b5230dbe2972642281f66b}{zlua.\+I\+Lua\+Listener}}.
+
+\mbox{\Hypertarget{classzlua_1_1_lua_base_listener_adae5a9d925d77bceb832b62f7ce47766}\label{classzlua_1_1_lua_base_listener_adae5a9d925d77bceb832b62f7ce47766}} 
+\index{zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}!Enter\+Funcname@{Enter\+Funcname}}
+\index{Enter\+Funcname@{Enter\+Funcname}!zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}}
+\subsubsection{\texorpdfstring{Enter\+Funcname()}{EnterFuncname()}}
+{\footnotesize\ttfamily virtual void zlua.\+Lua\+Base\+Listener.\+Enter\+Funcname (\begin{DoxyParamCaption}\item[{\mbox{[}\+Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_funcname_context}{Lua\+Parser.\+Funcname\+Context}}}]{context }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Enter a parse tree produced by Lua\+Parser.\+funcname. 
+
+The default implementation does nothing.
+
+
+\begin{DoxyParams}{Parameters}
+{\em context} & The parse tree.\\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{interfacezlua_1_1_i_lua_listener_a17d342070a88fadc98dec2456e2ba0dc}{zlua.\+I\+Lua\+Listener}}.
+
+\mbox{\Hypertarget{classzlua_1_1_lua_base_listener_a5a20690d44ed7bea5265200a10bd3ade}\label{classzlua_1_1_lua_base_listener_a5a20690d44ed7bea5265200a10bd3ade}} 
+\index{zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}!Enter\+Functioncall@{Enter\+Functioncall}}
+\index{Enter\+Functioncall@{Enter\+Functioncall}!zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}}
+\subsubsection{\texorpdfstring{Enter\+Functioncall()}{EnterFunctioncall()}}
+{\footnotesize\ttfamily virtual void zlua.\+Lua\+Base\+Listener.\+Enter\+Functioncall (\begin{DoxyParamCaption}\item[{\mbox{[}\+Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_functioncall_context}{Lua\+Parser.\+Functioncall\+Context}}}]{context }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Enter a parse tree produced by Lua\+Parser.\+functioncall. 
+
+The default implementation does nothing.
+
+
+\begin{DoxyParams}{Parameters}
+{\em context} & The parse tree.\\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{interfacezlua_1_1_i_lua_listener_aed7b99a3790f95b4b5e3d7cac6d3361d}{zlua.\+I\+Lua\+Listener}}.
+
+\mbox{\Hypertarget{classzlua_1_1_lua_base_listener_a3882098639066deade08be5eb8d94f70}\label{classzlua_1_1_lua_base_listener_a3882098639066deade08be5eb8d94f70}} 
+\index{zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}!Enter\+Functiondef@{Enter\+Functiondef}}
+\index{Enter\+Functiondef@{Enter\+Functiondef}!zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}}
+\subsubsection{\texorpdfstring{Enter\+Functiondef()}{EnterFunctiondef()}}
+{\footnotesize\ttfamily virtual void zlua.\+Lua\+Base\+Listener.\+Enter\+Functiondef (\begin{DoxyParamCaption}\item[{\mbox{[}\+Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_functiondef_context}{Lua\+Parser.\+Functiondef\+Context}}}]{context }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Enter a parse tree produced by Lua\+Parser.\+functiondef. 
+
+The default implementation does nothing.
+
+
+\begin{DoxyParams}{Parameters}
+{\em context} & The parse tree.\\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{interfacezlua_1_1_i_lua_listener_af2184c75516162b18685ef6dce9e9047}{zlua.\+I\+Lua\+Listener}}.
+
+\mbox{\Hypertarget{classzlua_1_1_lua_base_listener_a26ccde71c2f917da169f16fa1dea9ecc}\label{classzlua_1_1_lua_base_listener_a26ccde71c2f917da169f16fa1dea9ecc}} 
+\index{zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}!Enter\+Global\+\_\+func\+\_\+def\+\_\+stat@{Enter\+Global\+\_\+func\+\_\+def\+\_\+stat}}
+\index{Enter\+Global\+\_\+func\+\_\+def\+\_\+stat@{Enter\+Global\+\_\+func\+\_\+def\+\_\+stat}!zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}}
+\subsubsection{\texorpdfstring{Enter\+Global\+\_\+func\+\_\+def\+\_\+stat()}{EnterGlobal\_func\_def\_stat()}}
+{\footnotesize\ttfamily virtual void zlua.\+Lua\+Base\+Listener.\+Enter\+Global\+\_\+func\+\_\+def\+\_\+stat (\begin{DoxyParamCaption}\item[{\mbox{[}\+Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_global__func__def__stat_context}{Lua\+Parser.\+Global\+\_\+func\+\_\+def\+\_\+stat\+Context}}}]{context }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Enter a parse tree produced by the {\ttfamily global\+\_\+func\+\_\+def\+\_\+stat} labeled alternative in Lua\+Parser.\+stat. 
+
+The default implementation does nothing.
+
+
+\begin{DoxyParams}{Parameters}
+{\em context} & The parse tree.\\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{interfacezlua_1_1_i_lua_listener_add4d956e68d0679849896d682e181800}{zlua.\+I\+Lua\+Listener}}.
+
+\mbox{\Hypertarget{classzlua_1_1_lua_base_listener_a67f5bfdbc89b494e4e8474ba4d019326}\label{classzlua_1_1_lua_base_listener_a67f5bfdbc89b494e4e8474ba4d019326}} 
+\index{zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}!Enter\+Global\+\_\+var\+\_\+stat@{Enter\+Global\+\_\+var\+\_\+stat}}
+\index{Enter\+Global\+\_\+var\+\_\+stat@{Enter\+Global\+\_\+var\+\_\+stat}!zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}}
+\subsubsection{\texorpdfstring{Enter\+Global\+\_\+var\+\_\+stat()}{EnterGlobal\_var\_stat()}}
+{\footnotesize\ttfamily virtual void zlua.\+Lua\+Base\+Listener.\+Enter\+Global\+\_\+var\+\_\+stat (\begin{DoxyParamCaption}\item[{\mbox{[}\+Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_global__var__stat_context}{Lua\+Parser.\+Global\+\_\+var\+\_\+stat\+Context}}}]{context }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Enter a parse tree produced by the {\ttfamily global\+\_\+var\+\_\+stat} labeled alternative in Lua\+Parser.\+stat. 
+
+The default implementation does nothing.
+
+
+\begin{DoxyParams}{Parameters}
+{\em context} & The parse tree.\\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{interfacezlua_1_1_i_lua_listener_a7a5992193e5625f3c6d07fcc05f3ce4c}{zlua.\+I\+Lua\+Listener}}.
+
+\mbox{\Hypertarget{classzlua_1_1_lua_base_listener_a6c6b8d7541116a14fcaf314180435d4b}\label{classzlua_1_1_lua_base_listener_a6c6b8d7541116a14fcaf314180435d4b}} 
+\index{zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}!Enter\+If\+\_\+stat@{Enter\+If\+\_\+stat}}
+\index{Enter\+If\+\_\+stat@{Enter\+If\+\_\+stat}!zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}}
+\subsubsection{\texorpdfstring{Enter\+If\+\_\+stat()}{EnterIf\_stat()}}
+{\footnotesize\ttfamily virtual void zlua.\+Lua\+Base\+Listener.\+Enter\+If\+\_\+stat (\begin{DoxyParamCaption}\item[{\mbox{[}\+Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_if__stat_context}{Lua\+Parser.\+If\+\_\+stat\+Context}}}]{context }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Enter a parse tree produced by the {\ttfamily if\+\_\+stat} labeled alternative in Lua\+Parser.\+stat. 
+
+The default implementation does nothing.
+
+
+\begin{DoxyParams}{Parameters}
+{\em context} & The parse tree.\\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{interfacezlua_1_1_i_lua_listener_ae4466707d78b9bb5f5836ed8710e4ef1}{zlua.\+I\+Lua\+Listener}}.
+
+\mbox{\Hypertarget{classzlua_1_1_lua_base_listener_a118e7bc8edc07875df5c564171a36084}\label{classzlua_1_1_lua_base_listener_a118e7bc8edc07875df5c564171a36084}} 
+\index{zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}!Enter\+Name\+And\+Args@{Enter\+Name\+And\+Args}}
+\index{Enter\+Name\+And\+Args@{Enter\+Name\+And\+Args}!zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}}
+\subsubsection{\texorpdfstring{Enter\+Name\+And\+Args()}{EnterNameAndArgs()}}
+{\footnotesize\ttfamily virtual void zlua.\+Lua\+Base\+Listener.\+Enter\+Name\+And\+Args (\begin{DoxyParamCaption}\item[{\mbox{[}\+Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_name_and_args_context}{Lua\+Parser.\+Name\+And\+Args\+Context}}}]{context }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Enter a parse tree produced by Lua\+Parser.\+name\+And\+Args. 
+
+The default implementation does nothing.
+
+
+\begin{DoxyParams}{Parameters}
+{\em context} & The parse tree.\\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{interfacezlua_1_1_i_lua_listener_a55b4f82ec10a24203046b5f3e9cadfe6}{zlua.\+I\+Lua\+Listener}}.
+
+\mbox{\Hypertarget{classzlua_1_1_lua_base_listener_a7e9f223eea630cb4d7deac2257225a75}\label{classzlua_1_1_lua_base_listener_a7e9f223eea630cb4d7deac2257225a75}} 
+\index{zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}!Enter\+Namelist@{Enter\+Namelist}}
+\index{Enter\+Namelist@{Enter\+Namelist}!zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}}
+\subsubsection{\texorpdfstring{Enter\+Namelist()}{EnterNamelist()}}
+{\footnotesize\ttfamily virtual void zlua.\+Lua\+Base\+Listener.\+Enter\+Namelist (\begin{DoxyParamCaption}\item[{\mbox{[}\+Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_namelist_context}{Lua\+Parser.\+Namelist\+Context}}}]{context }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Enter a parse tree produced by Lua\+Parser.\+namelist. 
+
+The default implementation does nothing.
+
+
+\begin{DoxyParams}{Parameters}
+{\em context} & The parse tree.\\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{interfacezlua_1_1_i_lua_listener_ad550fd673f32ad3d88572e1781551e41}{zlua.\+I\+Lua\+Listener}}.
+
+\mbox{\Hypertarget{classzlua_1_1_lua_base_listener_acf401fd123113e2bfdaf5c5390d81871}\label{classzlua_1_1_lua_base_listener_acf401fd123113e2bfdaf5c5390d81871}} 
+\index{zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}!Enter\+Nil\+\_\+exp@{Enter\+Nil\+\_\+exp}}
+\index{Enter\+Nil\+\_\+exp@{Enter\+Nil\+\_\+exp}!zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}}
+\subsubsection{\texorpdfstring{Enter\+Nil\+\_\+exp()}{EnterNil\_exp()}}
+{\footnotesize\ttfamily virtual void zlua.\+Lua\+Base\+Listener.\+Enter\+Nil\+\_\+exp (\begin{DoxyParamCaption}\item[{\mbox{[}\+Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_nil__exp_context}{Lua\+Parser.\+Nil\+\_\+exp\+Context}}}]{context }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Enter a parse tree produced by the {\ttfamily nil\+\_\+exp} labeled alternative in Lua\+Parser.\+exp. 
+
+The default implementation does nothing.
+
+
+\begin{DoxyParams}{Parameters}
+{\em context} & The parse tree.\\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{interfacezlua_1_1_i_lua_listener_aafcaca4386184948c08ead3b5dbba3be}{zlua.\+I\+Lua\+Listener}}.
+
+\mbox{\Hypertarget{classzlua_1_1_lua_base_listener_a76fcc42fe090e80443a7f08477fbf19f}\label{classzlua_1_1_lua_base_listener_a76fcc42fe090e80443a7f08477fbf19f}} 
+\index{zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}!Enter\+Num\+\_\+exp@{Enter\+Num\+\_\+exp}}
+\index{Enter\+Num\+\_\+exp@{Enter\+Num\+\_\+exp}!zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}}
+\subsubsection{\texorpdfstring{Enter\+Num\+\_\+exp()}{EnterNum\_exp()}}
+{\footnotesize\ttfamily virtual void zlua.\+Lua\+Base\+Listener.\+Enter\+Num\+\_\+exp (\begin{DoxyParamCaption}\item[{\mbox{[}\+Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_num__exp_context}{Lua\+Parser.\+Num\+\_\+exp\+Context}}}]{context }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Enter a parse tree produced by the {\ttfamily num\+\_\+exp} labeled alternative in Lua\+Parser.\+exp. 
+
+The default implementation does nothing.
+
+
+\begin{DoxyParams}{Parameters}
+{\em context} & The parse tree.\\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{interfacezlua_1_1_i_lua_listener_aaa1853b8a53c94c2e6a7ee14bc38a698}{zlua.\+I\+Lua\+Listener}}.
+
+\mbox{\Hypertarget{classzlua_1_1_lua_base_listener_a7a5db34cbf48dd81e72604d07e0e0038}\label{classzlua_1_1_lua_base_listener_a7a5db34cbf48dd81e72604d07e0e0038}} 
+\index{zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}!Enter\+Number@{Enter\+Number}}
+\index{Enter\+Number@{Enter\+Number}!zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}}
+\subsubsection{\texorpdfstring{Enter\+Number()}{EnterNumber()}}
+{\footnotesize\ttfamily virtual void zlua.\+Lua\+Base\+Listener.\+Enter\+Number (\begin{DoxyParamCaption}\item[{\mbox{[}\+Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_number_context}{Lua\+Parser.\+Number\+Context}}}]{context }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Enter a parse tree produced by Lua\+Parser.\+number. 
+
+The default implementation does nothing.
+
+
+\begin{DoxyParams}{Parameters}
+{\em context} & The parse tree.\\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{interfacezlua_1_1_i_lua_listener_a2668a5683590d30b5a267950efa4e247}{zlua.\+I\+Lua\+Listener}}.
+
+\mbox{\Hypertarget{classzlua_1_1_lua_base_listener_a8c58530fc93d6206a2308109ae86410e}\label{classzlua_1_1_lua_base_listener_a8c58530fc93d6206a2308109ae86410e}} 
+\index{zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}!Enter\+Op\+\_\+add\+\_\+sub\+\_\+exp@{Enter\+Op\+\_\+add\+\_\+sub\+\_\+exp}}
+\index{Enter\+Op\+\_\+add\+\_\+sub\+\_\+exp@{Enter\+Op\+\_\+add\+\_\+sub\+\_\+exp}!zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}}
+\subsubsection{\texorpdfstring{Enter\+Op\+\_\+add\+\_\+sub\+\_\+exp()}{EnterOp\_add\_sub\_exp()}}
+{\footnotesize\ttfamily virtual void zlua.\+Lua\+Base\+Listener.\+Enter\+Op\+\_\+add\+\_\+sub\+\_\+exp (\begin{DoxyParamCaption}\item[{\mbox{[}\+Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_op__add__sub__exp_context}{Lua\+Parser.\+Op\+\_\+add\+\_\+sub\+\_\+exp\+Context}}}]{context }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Enter a parse tree produced by the {\ttfamily op\+\_\+add\+\_\+sub\+\_\+exp} labeled alternative in Lua\+Parser.\+exp. 
+
+The default implementation does nothing.
+
+
+\begin{DoxyParams}{Parameters}
+{\em context} & The parse tree.\\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{interfacezlua_1_1_i_lua_listener_a1633c1d8de4e31ea48b020df3c5dba75}{zlua.\+I\+Lua\+Listener}}.
+
+\mbox{\Hypertarget{classzlua_1_1_lua_base_listener_ace41c3066a31697b1bda64251528030b}\label{classzlua_1_1_lua_base_listener_ace41c3066a31697b1bda64251528030b}} 
+\index{zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}!Enter\+Op\+\_\+and\+\_\+exp@{Enter\+Op\+\_\+and\+\_\+exp}}
+\index{Enter\+Op\+\_\+and\+\_\+exp@{Enter\+Op\+\_\+and\+\_\+exp}!zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}}
+\subsubsection{\texorpdfstring{Enter\+Op\+\_\+and\+\_\+exp()}{EnterOp\_and\_exp()}}
+{\footnotesize\ttfamily virtual void zlua.\+Lua\+Base\+Listener.\+Enter\+Op\+\_\+and\+\_\+exp (\begin{DoxyParamCaption}\item[{\mbox{[}\+Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_op__and__exp_context}{Lua\+Parser.\+Op\+\_\+and\+\_\+exp\+Context}}}]{context }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Enter a parse tree produced by the {\ttfamily op\+\_\+and\+\_\+exp} labeled alternative in Lua\+Parser.\+exp. 
+
+The default implementation does nothing.
+
+
+\begin{DoxyParams}{Parameters}
+{\em context} & The parse tree.\\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{interfacezlua_1_1_i_lua_listener_a12bd95b1347e95dcdcdc7d2fdc22558b}{zlua.\+I\+Lua\+Listener}}.
+
+\mbox{\Hypertarget{classzlua_1_1_lua_base_listener_a9882ebd74c5ae33d72487bddb4f960ec}\label{classzlua_1_1_lua_base_listener_a9882ebd74c5ae33d72487bddb4f960ec}} 
+\index{zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}!Enter\+Op\+\_\+caompare\+\_\+exp@{Enter\+Op\+\_\+caompare\+\_\+exp}}
+\index{Enter\+Op\+\_\+caompare\+\_\+exp@{Enter\+Op\+\_\+caompare\+\_\+exp}!zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}}
+\subsubsection{\texorpdfstring{Enter\+Op\+\_\+caompare\+\_\+exp()}{EnterOp\_caompare\_exp()}}
+{\footnotesize\ttfamily virtual void zlua.\+Lua\+Base\+Listener.\+Enter\+Op\+\_\+caompare\+\_\+exp (\begin{DoxyParamCaption}\item[{\mbox{[}\+Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_op__caompare__exp_context}{Lua\+Parser.\+Op\+\_\+caompare\+\_\+exp\+Context}}}]{context }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Enter a parse tree produced by the {\ttfamily op\+\_\+caompare\+\_\+exp} labeled alternative in Lua\+Parser.\+exp. 
+
+The default implementation does nothing.
+
+
+\begin{DoxyParams}{Parameters}
+{\em context} & The parse tree.\\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{interfacezlua_1_1_i_lua_listener_a15745713dc5965a0337698761f16947d}{zlua.\+I\+Lua\+Listener}}.
+
+\mbox{\Hypertarget{classzlua_1_1_lua_base_listener_afa38e97552715d422e07b0de65ea18b1}\label{classzlua_1_1_lua_base_listener_afa38e97552715d422e07b0de65ea18b1}} 
+\index{zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}!Enter\+Op\+\_\+concat\+\_\+exp@{Enter\+Op\+\_\+concat\+\_\+exp}}
+\index{Enter\+Op\+\_\+concat\+\_\+exp@{Enter\+Op\+\_\+concat\+\_\+exp}!zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}}
+\subsubsection{\texorpdfstring{Enter\+Op\+\_\+concat\+\_\+exp()}{EnterOp\_concat\_exp()}}
+{\footnotesize\ttfamily virtual void zlua.\+Lua\+Base\+Listener.\+Enter\+Op\+\_\+concat\+\_\+exp (\begin{DoxyParamCaption}\item[{\mbox{[}\+Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_op__concat__exp_context}{Lua\+Parser.\+Op\+\_\+concat\+\_\+exp\+Context}}}]{context }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Enter a parse tree produced by the {\ttfamily op\+\_\+concat\+\_\+exp} labeled alternative in Lua\+Parser.\+exp. 
+
+The default implementation does nothing.
+
+
+\begin{DoxyParams}{Parameters}
+{\em context} & The parse tree.\\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{interfacezlua_1_1_i_lua_listener_acbbb173b8111f78841067f364c764c2c}{zlua.\+I\+Lua\+Listener}}.
+
+\mbox{\Hypertarget{classzlua_1_1_lua_base_listener_a6c6043921201d7aad886fc07f059c3e8}\label{classzlua_1_1_lua_base_listener_a6c6043921201d7aad886fc07f059c3e8}} 
+\index{zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}!Enter\+Op\+\_\+mul\+\_\+div\+\_\+exp@{Enter\+Op\+\_\+mul\+\_\+div\+\_\+exp}}
+\index{Enter\+Op\+\_\+mul\+\_\+div\+\_\+exp@{Enter\+Op\+\_\+mul\+\_\+div\+\_\+exp}!zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}}
+\subsubsection{\texorpdfstring{Enter\+Op\+\_\+mul\+\_\+div\+\_\+exp()}{EnterOp\_mul\_div\_exp()}}
+{\footnotesize\ttfamily virtual void zlua.\+Lua\+Base\+Listener.\+Enter\+Op\+\_\+mul\+\_\+div\+\_\+exp (\begin{DoxyParamCaption}\item[{\mbox{[}\+Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_op__mul__div__exp_context}{Lua\+Parser.\+Op\+\_\+mul\+\_\+div\+\_\+exp\+Context}}}]{context }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Enter a parse tree produced by the {\ttfamily op\+\_\+mul\+\_\+div\+\_\+exp} labeled alternative in Lua\+Parser.\+exp. 
+
+The default implementation does nothing.
+
+
+\begin{DoxyParams}{Parameters}
+{\em context} & The parse tree.\\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{interfacezlua_1_1_i_lua_listener_adceb73b6f7d7f84737f72b1a5c5fe4d6}{zlua.\+I\+Lua\+Listener}}.
+
+\mbox{\Hypertarget{classzlua_1_1_lua_base_listener_ad05798f5b17c22a225fe160a5230d82c}\label{classzlua_1_1_lua_base_listener_ad05798f5b17c22a225fe160a5230d82c}} 
+\index{zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}!Enter\+Op\+\_\+or\+\_\+exp@{Enter\+Op\+\_\+or\+\_\+exp}}
+\index{Enter\+Op\+\_\+or\+\_\+exp@{Enter\+Op\+\_\+or\+\_\+exp}!zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}}
+\subsubsection{\texorpdfstring{Enter\+Op\+\_\+or\+\_\+exp()}{EnterOp\_or\_exp()}}
+{\footnotesize\ttfamily virtual void zlua.\+Lua\+Base\+Listener.\+Enter\+Op\+\_\+or\+\_\+exp (\begin{DoxyParamCaption}\item[{\mbox{[}\+Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_op__or__exp_context}{Lua\+Parser.\+Op\+\_\+or\+\_\+exp\+Context}}}]{context }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Enter a parse tree produced by the {\ttfamily op\+\_\+or\+\_\+exp} labeled alternative in Lua\+Parser.\+exp. 
+
+The default implementation does nothing.
+
+
+\begin{DoxyParams}{Parameters}
+{\em context} & The parse tree.\\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{interfacezlua_1_1_i_lua_listener_a51c92b24a1ae3217599c08d098f351e8}{zlua.\+I\+Lua\+Listener}}.
+
+\mbox{\Hypertarget{classzlua_1_1_lua_base_listener_ad4db24437ff42fb074c69313ec11818d}\label{classzlua_1_1_lua_base_listener_ad4db24437ff42fb074c69313ec11818d}} 
+\index{zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}!Enter\+Op\+\_\+unary\+\_\+exp@{Enter\+Op\+\_\+unary\+\_\+exp}}
+\index{Enter\+Op\+\_\+unary\+\_\+exp@{Enter\+Op\+\_\+unary\+\_\+exp}!zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}}
+\subsubsection{\texorpdfstring{Enter\+Op\+\_\+unary\+\_\+exp()}{EnterOp\_unary\_exp()}}
+{\footnotesize\ttfamily virtual void zlua.\+Lua\+Base\+Listener.\+Enter\+Op\+\_\+unary\+\_\+exp (\begin{DoxyParamCaption}\item[{\mbox{[}\+Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_op__unary__exp_context}{Lua\+Parser.\+Op\+\_\+unary\+\_\+exp\+Context}}}]{context }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Enter a parse tree produced by the {\ttfamily op\+\_\+unary\+\_\+exp} labeled alternative in Lua\+Parser.\+exp. 
+
+The default implementation does nothing.
+
+
+\begin{DoxyParams}{Parameters}
+{\em context} & The parse tree.\\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{interfacezlua_1_1_i_lua_listener_ab264dde9b798933c740a470090b2db94}{zlua.\+I\+Lua\+Listener}}.
+
+\mbox{\Hypertarget{classzlua_1_1_lua_base_listener_ac3bb5e4809651278e44d46bc5ca3c7b1}\label{classzlua_1_1_lua_base_listener_ac3bb5e4809651278e44d46bc5ca3c7b1}} 
+\index{zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}!Enter\+Operator\+Add\+Sub@{Enter\+Operator\+Add\+Sub}}
+\index{Enter\+Operator\+Add\+Sub@{Enter\+Operator\+Add\+Sub}!zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}}
+\subsubsection{\texorpdfstring{Enter\+Operator\+Add\+Sub()}{EnterOperatorAddSub()}}
+{\footnotesize\ttfamily virtual void zlua.\+Lua\+Base\+Listener.\+Enter\+Operator\+Add\+Sub (\begin{DoxyParamCaption}\item[{\mbox{[}\+Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_operator_add_sub_context}{Lua\+Parser.\+Operator\+Add\+Sub\+Context}}}]{context }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Enter a parse tree produced by Lua\+Parser.\+operator\+Add\+Sub. 
+
+The default implementation does nothing.
+
+
+\begin{DoxyParams}{Parameters}
+{\em context} & The parse tree.\\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{interfacezlua_1_1_i_lua_listener_a145cf8b9fa700148a09b9d68624640f8}{zlua.\+I\+Lua\+Listener}}.
+
+\mbox{\Hypertarget{classzlua_1_1_lua_base_listener_a78b389b5400066d8a9171b86b1529cf7}\label{classzlua_1_1_lua_base_listener_a78b389b5400066d8a9171b86b1529cf7}} 
+\index{zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}!Enter\+Operator\+And@{Enter\+Operator\+And}}
+\index{Enter\+Operator\+And@{Enter\+Operator\+And}!zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}}
+\subsubsection{\texorpdfstring{Enter\+Operator\+And()}{EnterOperatorAnd()}}
+{\footnotesize\ttfamily virtual void zlua.\+Lua\+Base\+Listener.\+Enter\+Operator\+And (\begin{DoxyParamCaption}\item[{\mbox{[}\+Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_operator_and_context}{Lua\+Parser.\+Operator\+And\+Context}}}]{context }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Enter a parse tree produced by Lua\+Parser.\+operator\+And. 
+
+The default implementation does nothing.
+
+
+\begin{DoxyParams}{Parameters}
+{\em context} & The parse tree.\\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{interfacezlua_1_1_i_lua_listener_aa0c0270aabb19cc89bce3c5823a2f012}{zlua.\+I\+Lua\+Listener}}.
+
+\mbox{\Hypertarget{classzlua_1_1_lua_base_listener_af4009c58d1272593e9d8a18b8e306591}\label{classzlua_1_1_lua_base_listener_af4009c58d1272593e9d8a18b8e306591}} 
+\index{zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}!Enter\+Operator\+Bitwise@{Enter\+Operator\+Bitwise}}
+\index{Enter\+Operator\+Bitwise@{Enter\+Operator\+Bitwise}!zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}}
+\subsubsection{\texorpdfstring{Enter\+Operator\+Bitwise()}{EnterOperatorBitwise()}}
+{\footnotesize\ttfamily virtual void zlua.\+Lua\+Base\+Listener.\+Enter\+Operator\+Bitwise (\begin{DoxyParamCaption}\item[{\mbox{[}\+Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_operator_bitwise_context}{Lua\+Parser.\+Operator\+Bitwise\+Context}}}]{context }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Enter a parse tree produced by Lua\+Parser.\+operator\+Bitwise. 
+
+The default implementation does nothing.
+
+
+\begin{DoxyParams}{Parameters}
+{\em context} & The parse tree.\\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{interfacezlua_1_1_i_lua_listener_a0117059ce449d21ba61dc80748edaa15}{zlua.\+I\+Lua\+Listener}}.
+
+\mbox{\Hypertarget{classzlua_1_1_lua_base_listener_a27a11e4053e2a7c40f464e0a893bbf70}\label{classzlua_1_1_lua_base_listener_a27a11e4053e2a7c40f464e0a893bbf70}} 
+\index{zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}!Enter\+Operator\+Comparison@{Enter\+Operator\+Comparison}}
+\index{Enter\+Operator\+Comparison@{Enter\+Operator\+Comparison}!zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}}
+\subsubsection{\texorpdfstring{Enter\+Operator\+Comparison()}{EnterOperatorComparison()}}
+{\footnotesize\ttfamily virtual void zlua.\+Lua\+Base\+Listener.\+Enter\+Operator\+Comparison (\begin{DoxyParamCaption}\item[{\mbox{[}\+Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_operator_comparison_context}{Lua\+Parser.\+Operator\+Comparison\+Context}}}]{context }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Enter a parse tree produced by Lua\+Parser.\+operator\+Comparison. 
+
+The default implementation does nothing.
+
+
+\begin{DoxyParams}{Parameters}
+{\em context} & The parse tree.\\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{interfacezlua_1_1_i_lua_listener_a5af42c94cc987459977c34f85b037120}{zlua.\+I\+Lua\+Listener}}.
+
+\mbox{\Hypertarget{classzlua_1_1_lua_base_listener_a4a1422260529c79e0e43d89652182159}\label{classzlua_1_1_lua_base_listener_a4a1422260529c79e0e43d89652182159}} 
+\index{zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}!Enter\+Operator\+Mul\+Div\+Mod@{Enter\+Operator\+Mul\+Div\+Mod}}
+\index{Enter\+Operator\+Mul\+Div\+Mod@{Enter\+Operator\+Mul\+Div\+Mod}!zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}}
+\subsubsection{\texorpdfstring{Enter\+Operator\+Mul\+Div\+Mod()}{EnterOperatorMulDivMod()}}
+{\footnotesize\ttfamily virtual void zlua.\+Lua\+Base\+Listener.\+Enter\+Operator\+Mul\+Div\+Mod (\begin{DoxyParamCaption}\item[{\mbox{[}\+Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_operator_mul_div_mod_context}{Lua\+Parser.\+Operator\+Mul\+Div\+Mod\+Context}}}]{context }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Enter a parse tree produced by Lua\+Parser.\+operator\+Mul\+Div\+Mod. 
+
+The default implementation does nothing.
+
+
+\begin{DoxyParams}{Parameters}
+{\em context} & The parse tree.\\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{interfacezlua_1_1_i_lua_listener_ab6bb494a78b26f8483ef9d872c82c8d6}{zlua.\+I\+Lua\+Listener}}.
+
+\mbox{\Hypertarget{classzlua_1_1_lua_base_listener_afc55e8820e1e62e135f4c2fd0d69825d}\label{classzlua_1_1_lua_base_listener_afc55e8820e1e62e135f4c2fd0d69825d}} 
+\index{zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}!Enter\+Operator\+Or@{Enter\+Operator\+Or}}
+\index{Enter\+Operator\+Or@{Enter\+Operator\+Or}!zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}}
+\subsubsection{\texorpdfstring{Enter\+Operator\+Or()}{EnterOperatorOr()}}
+{\footnotesize\ttfamily virtual void zlua.\+Lua\+Base\+Listener.\+Enter\+Operator\+Or (\begin{DoxyParamCaption}\item[{\mbox{[}\+Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_operator_or_context}{Lua\+Parser.\+Operator\+Or\+Context}}}]{context }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Enter a parse tree produced by Lua\+Parser.\+operator\+Or. 
+
+The default implementation does nothing.
+
+
+\begin{DoxyParams}{Parameters}
+{\em context} & The parse tree.\\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{interfacezlua_1_1_i_lua_listener_a9e722ddbc7e68d0fc367518365257711}{zlua.\+I\+Lua\+Listener}}.
+
+\mbox{\Hypertarget{classzlua_1_1_lua_base_listener_ad21692d9754c71a80f6c0378e0697f02}\label{classzlua_1_1_lua_base_listener_ad21692d9754c71a80f6c0378e0697f02}} 
+\index{zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}!Enter\+Operator\+Power@{Enter\+Operator\+Power}}
+\index{Enter\+Operator\+Power@{Enter\+Operator\+Power}!zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}}
+\subsubsection{\texorpdfstring{Enter\+Operator\+Power()}{EnterOperatorPower()}}
+{\footnotesize\ttfamily virtual void zlua.\+Lua\+Base\+Listener.\+Enter\+Operator\+Power (\begin{DoxyParamCaption}\item[{\mbox{[}\+Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_operator_power_context}{Lua\+Parser.\+Operator\+Power\+Context}}}]{context }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Enter a parse tree produced by Lua\+Parser.\+operator\+Power. 
+
+The default implementation does nothing.
+
+
+\begin{DoxyParams}{Parameters}
+{\em context} & The parse tree.\\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{interfacezlua_1_1_i_lua_listener_ac3dc9682198e2059e103552b21ef1a9c}{zlua.\+I\+Lua\+Listener}}.
+
+\mbox{\Hypertarget{classzlua_1_1_lua_base_listener_a3bcff2132c345b7cc97fd7782d4f6463}\label{classzlua_1_1_lua_base_listener_a3bcff2132c345b7cc97fd7782d4f6463}} 
+\index{zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}!Enter\+Operator\+Strcat@{Enter\+Operator\+Strcat}}
+\index{Enter\+Operator\+Strcat@{Enter\+Operator\+Strcat}!zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}}
+\subsubsection{\texorpdfstring{Enter\+Operator\+Strcat()}{EnterOperatorStrcat()}}
+{\footnotesize\ttfamily virtual void zlua.\+Lua\+Base\+Listener.\+Enter\+Operator\+Strcat (\begin{DoxyParamCaption}\item[{\mbox{[}\+Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_operator_strcat_context}{Lua\+Parser.\+Operator\+Strcat\+Context}}}]{context }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Enter a parse tree produced by Lua\+Parser.\+operator\+Strcat. 
+
+The default implementation does nothing.
+
+
+\begin{DoxyParams}{Parameters}
+{\em context} & The parse tree.\\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{interfacezlua_1_1_i_lua_listener_a9fbd70b572afa004220c8cdcaceb641a}{zlua.\+I\+Lua\+Listener}}.
+
+\mbox{\Hypertarget{classzlua_1_1_lua_base_listener_ac5f8a27439dcc1dbabbc0a23508f7013}\label{classzlua_1_1_lua_base_listener_ac5f8a27439dcc1dbabbc0a23508f7013}} 
+\index{zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}!Enter\+Operator\+Unary@{Enter\+Operator\+Unary}}
+\index{Enter\+Operator\+Unary@{Enter\+Operator\+Unary}!zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}}
+\subsubsection{\texorpdfstring{Enter\+Operator\+Unary()}{EnterOperatorUnary()}}
+{\footnotesize\ttfamily virtual void zlua.\+Lua\+Base\+Listener.\+Enter\+Operator\+Unary (\begin{DoxyParamCaption}\item[{\mbox{[}\+Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_operator_unary_context}{Lua\+Parser.\+Operator\+Unary\+Context}}}]{context }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Enter a parse tree produced by Lua\+Parser.\+operator\+Unary. 
+
+The default implementation does nothing.
+
+
+\begin{DoxyParams}{Parameters}
+{\em context} & The parse tree.\\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{interfacezlua_1_1_i_lua_listener_a7b7f6eceb594a19cd7ee783bdb209c8e}{zlua.\+I\+Lua\+Listener}}.
+
+\mbox{\Hypertarget{classzlua_1_1_lua_base_listener_a731d7b4d2ae1ef89c04c01da08cddbc7}\label{classzlua_1_1_lua_base_listener_a731d7b4d2ae1ef89c04c01da08cddbc7}} 
+\index{zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}!Enter\+Parlist@{Enter\+Parlist}}
+\index{Enter\+Parlist@{Enter\+Parlist}!zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}}
+\subsubsection{\texorpdfstring{Enter\+Parlist()}{EnterParlist()}}
+{\footnotesize\ttfamily virtual void zlua.\+Lua\+Base\+Listener.\+Enter\+Parlist (\begin{DoxyParamCaption}\item[{\mbox{[}\+Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_parlist_context}{Lua\+Parser.\+Parlist\+Context}}}]{context }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Enter a parse tree produced by Lua\+Parser.\+parlist. 
+
+The default implementation does nothing.
+
+
+\begin{DoxyParams}{Parameters}
+{\em context} & The parse tree.\\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{interfacezlua_1_1_i_lua_listener_a406fd2bdc9cefe77567f3012bed007e9}{zlua.\+I\+Lua\+Listener}}.
+
+\mbox{\Hypertarget{classzlua_1_1_lua_base_listener_aa1c31e6fda9d54bd984d3d5d5c0ff8ed}\label{classzlua_1_1_lua_base_listener_aa1c31e6fda9d54bd984d3d5d5c0ff8ed}} 
+\index{zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}!Enter\+Prefix\+\_\+exp\+\_\+exp@{Enter\+Prefix\+\_\+exp\+\_\+exp}}
+\index{Enter\+Prefix\+\_\+exp\+\_\+exp@{Enter\+Prefix\+\_\+exp\+\_\+exp}!zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}}
+\subsubsection{\texorpdfstring{Enter\+Prefix\+\_\+exp\+\_\+exp()}{EnterPrefix\_exp\_exp()}}
+{\footnotesize\ttfamily virtual void zlua.\+Lua\+Base\+Listener.\+Enter\+Prefix\+\_\+exp\+\_\+exp (\begin{DoxyParamCaption}\item[{\mbox{[}\+Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_prefix__exp__exp_context}{Lua\+Parser.\+Prefix\+\_\+exp\+\_\+exp\+Context}}}]{context }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Enter a parse tree produced by the {\ttfamily prefix\+\_\+exp\+\_\+exp} labeled alternative in Lua\+Parser.\+exp. 
+
+The default implementation does nothing.
+
+
+\begin{DoxyParams}{Parameters}
+{\em context} & The parse tree.\\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{interfacezlua_1_1_i_lua_listener_a4b07c7ca53f3650fc8b83891467f7a66}{zlua.\+I\+Lua\+Listener}}.
+
+\mbox{\Hypertarget{classzlua_1_1_lua_base_listener_ac17b7407bccd562c7786ef788558e767}\label{classzlua_1_1_lua_base_listener_ac17b7407bccd562c7786ef788558e767}} 
+\index{zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}!Enter\+Prefixexp@{Enter\+Prefixexp}}
+\index{Enter\+Prefixexp@{Enter\+Prefixexp}!zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}}
+\subsubsection{\texorpdfstring{Enter\+Prefixexp()}{EnterPrefixexp()}}
+{\footnotesize\ttfamily virtual void zlua.\+Lua\+Base\+Listener.\+Enter\+Prefixexp (\begin{DoxyParamCaption}\item[{\mbox{[}\+Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_prefixexp_context}{Lua\+Parser.\+Prefixexp\+Context}}}]{context }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Enter a parse tree produced by Lua\+Parser.\+prefixexp. 
+
+The default implementation does nothing.
+
+
+\begin{DoxyParams}{Parameters}
+{\em context} & The parse tree.\\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{interfacezlua_1_1_i_lua_listener_a77ffdad769c7c8266a678e93c529cdf6}{zlua.\+I\+Lua\+Listener}}.
+
+\mbox{\Hypertarget{classzlua_1_1_lua_base_listener_a48c1d90a5dbcce92c8f3f30e7a413f25}\label{classzlua_1_1_lua_base_listener_a48c1d90a5dbcce92c8f3f30e7a413f25}} 
+\index{zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}!Enter\+Retstat@{Enter\+Retstat}}
+\index{Enter\+Retstat@{Enter\+Retstat}!zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}}
+\subsubsection{\texorpdfstring{Enter\+Retstat()}{EnterRetstat()}}
+{\footnotesize\ttfamily virtual void zlua.\+Lua\+Base\+Listener.\+Enter\+Retstat (\begin{DoxyParamCaption}\item[{\mbox{[}\+Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_retstat_context}{Lua\+Parser.\+Retstat\+Context}}}]{context }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Enter a parse tree produced by Lua\+Parser.\+retstat. 
+
+The default implementation does nothing.
+
+
+\begin{DoxyParams}{Parameters}
+{\em context} & The parse tree.\\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{interfacezlua_1_1_i_lua_listener_a0035b00baa60225e9b546903bf41835e}{zlua.\+I\+Lua\+Listener}}.
+
+\mbox{\Hypertarget{classzlua_1_1_lua_base_listener_a863cb95dc744fd28f9194958e1d42341}\label{classzlua_1_1_lua_base_listener_a863cb95dc744fd28f9194958e1d42341}} 
+\index{zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}!Enter\+Stat@{Enter\+Stat}}
+\index{Enter\+Stat@{Enter\+Stat}!zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}}
+\subsubsection{\texorpdfstring{Enter\+Stat()}{EnterStat()}}
+{\footnotesize\ttfamily virtual void zlua.\+Lua\+Base\+Listener.\+Enter\+Stat (\begin{DoxyParamCaption}\item[{\mbox{[}\+Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_stat_context}{Lua\+Parser.\+Stat\+Context}}}]{context }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Enter a parse tree produced by Lua\+Parser.\+stat. 
+
+The default implementation does nothing.
+
+
+\begin{DoxyParams}{Parameters}
+{\em context} & The parse tree.\\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{interfacezlua_1_1_i_lua_listener_a4d0313123030b6de6c2e4b63a00bb66f}{zlua.\+I\+Lua\+Listener}}.
+
+\mbox{\Hypertarget{classzlua_1_1_lua_base_listener_a98b2e77fa39477251ef47c023d51d559}\label{classzlua_1_1_lua_base_listener_a98b2e77fa39477251ef47c023d51d559}} 
+\index{zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}!Enter\+String@{Enter\+String}}
+\index{Enter\+String@{Enter\+String}!zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}}
+\subsubsection{\texorpdfstring{Enter\+String()}{EnterString()}}
+{\footnotesize\ttfamily virtual void zlua.\+Lua\+Base\+Listener.\+Enter\+String (\begin{DoxyParamCaption}\item[{\mbox{[}\+Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_string_context}{Lua\+Parser.\+String\+Context}}}]{context }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Enter a parse tree produced by Lua\+Parser.\+string. 
+
+The default implementation does nothing.
+
+
+\begin{DoxyParams}{Parameters}
+{\em context} & The parse tree.\\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{interfacezlua_1_1_i_lua_listener_a47729a5ed96c8b8310250fae283584ec}{zlua.\+I\+Lua\+Listener}}.
+
+\mbox{\Hypertarget{classzlua_1_1_lua_base_listener_aba9f9054eb0fce5f9e2108c03098b28a}\label{classzlua_1_1_lua_base_listener_aba9f9054eb0fce5f9e2108c03098b28a}} 
+\index{zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}!Enter\+String\+\_\+exp@{Enter\+String\+\_\+exp}}
+\index{Enter\+String\+\_\+exp@{Enter\+String\+\_\+exp}!zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}}
+\subsubsection{\texorpdfstring{Enter\+String\+\_\+exp()}{EnterString\_exp()}}
+{\footnotesize\ttfamily virtual void zlua.\+Lua\+Base\+Listener.\+Enter\+String\+\_\+exp (\begin{DoxyParamCaption}\item[{\mbox{[}\+Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_string__exp_context}{Lua\+Parser.\+String\+\_\+exp\+Context}}}]{context }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Enter a parse tree produced by the {\ttfamily string\+\_\+exp} labeled alternative in Lua\+Parser.\+exp. 
+
+The default implementation does nothing.
+
+
+\begin{DoxyParams}{Parameters}
+{\em context} & The parse tree.\\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{interfacezlua_1_1_i_lua_listener_a8e9361d3a88bf9fe02b6be1b7aa3f066}{zlua.\+I\+Lua\+Listener}}.
+
+\mbox{\Hypertarget{classzlua_1_1_lua_base_listener_ae6df0ff428e128a61cef144061a8747b}\label{classzlua_1_1_lua_base_listener_ae6df0ff428e128a61cef144061a8747b}} 
+\index{zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}!Enter\+Table\+\_\+ctor\+\_\+exp@{Enter\+Table\+\_\+ctor\+\_\+exp}}
+\index{Enter\+Table\+\_\+ctor\+\_\+exp@{Enter\+Table\+\_\+ctor\+\_\+exp}!zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}}
+\subsubsection{\texorpdfstring{Enter\+Table\+\_\+ctor\+\_\+exp()}{EnterTable\_ctor\_exp()}}
+{\footnotesize\ttfamily virtual void zlua.\+Lua\+Base\+Listener.\+Enter\+Table\+\_\+ctor\+\_\+exp (\begin{DoxyParamCaption}\item[{\mbox{[}\+Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_table__ctor__exp_context}{Lua\+Parser.\+Table\+\_\+ctor\+\_\+exp\+Context}}}]{context }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Enter a parse tree produced by the {\ttfamily table\+\_\+ctor\+\_\+exp} labeled alternative in Lua\+Parser.\+exp. 
+
+The default implementation does nothing.
+
+
+\begin{DoxyParams}{Parameters}
+{\em context} & The parse tree.\\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{interfacezlua_1_1_i_lua_listener_a8f36bb02f3d3923600ba29606adf1db4}{zlua.\+I\+Lua\+Listener}}.
+
+\mbox{\Hypertarget{classzlua_1_1_lua_base_listener_a1aff2c410cda086c68c4dd53123c8082}\label{classzlua_1_1_lua_base_listener_a1aff2c410cda086c68c4dd53123c8082}} 
+\index{zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}!Enter\+Tableconstructor@{Enter\+Tableconstructor}}
+\index{Enter\+Tableconstructor@{Enter\+Tableconstructor}!zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}}
+\subsubsection{\texorpdfstring{Enter\+Tableconstructor()}{EnterTableconstructor()}}
+{\footnotesize\ttfamily virtual void zlua.\+Lua\+Base\+Listener.\+Enter\+Tableconstructor (\begin{DoxyParamCaption}\item[{\mbox{[}\+Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_tableconstructor_context}{Lua\+Parser.\+Tableconstructor\+Context}}}]{context }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Enter a parse tree produced by Lua\+Parser.\+tableconstructor. 
+
+The default implementation does nothing.
+
+
+\begin{DoxyParams}{Parameters}
+{\em context} & The parse tree.\\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{interfacezlua_1_1_i_lua_listener_a76ec51ed7a280ef9f86058371d6fbebc}{zlua.\+I\+Lua\+Listener}}.
+
+\mbox{\Hypertarget{classzlua_1_1_lua_base_listener_a1c2fbf0cc7a011728a19e25d1cc6f967}\label{classzlua_1_1_lua_base_listener_a1c2fbf0cc7a011728a19e25d1cc6f967}} 
+\index{zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}!Enter\+True\+\_\+exp@{Enter\+True\+\_\+exp}}
+\index{Enter\+True\+\_\+exp@{Enter\+True\+\_\+exp}!zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}}
+\subsubsection{\texorpdfstring{Enter\+True\+\_\+exp()}{EnterTrue\_exp()}}
+{\footnotesize\ttfamily virtual void zlua.\+Lua\+Base\+Listener.\+Enter\+True\+\_\+exp (\begin{DoxyParamCaption}\item[{\mbox{[}\+Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_true__exp_context}{Lua\+Parser.\+True\+\_\+exp\+Context}}}]{context }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Enter a parse tree produced by the {\ttfamily true\+\_\+exp} labeled alternative in Lua\+Parser.\+exp. 
+
+The default implementation does nothing.
+
+
+\begin{DoxyParams}{Parameters}
+{\em context} & The parse tree.\\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{interfacezlua_1_1_i_lua_listener_af32ce4f4ae58233d0a29cf03e5183347}{zlua.\+I\+Lua\+Listener}}.
+
+\mbox{\Hypertarget{classzlua_1_1_lua_base_listener_a45218c758db2cd6275fe4e000ae9a77e}\label{classzlua_1_1_lua_base_listener_a45218c758db2cd6275fe4e000ae9a77e}} 
+\index{zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}!Enter\+Var@{Enter\+Var}}
+\index{Enter\+Var@{Enter\+Var}!zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}}
+\subsubsection{\texorpdfstring{Enter\+Var()}{EnterVar()}}
+{\footnotesize\ttfamily virtual void zlua.\+Lua\+Base\+Listener.\+Enter\+Var (\begin{DoxyParamCaption}\item[{\mbox{[}\+Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_var_context}{Lua\+Parser.\+Var\+Context}}}]{context }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Enter a parse tree produced by Lua\+Parser.\+var. 
+
+The default implementation does nothing.
+
+
+\begin{DoxyParams}{Parameters}
+{\em context} & The parse tree.\\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{interfacezlua_1_1_i_lua_listener_a1feba01e341c07825901bf0a1cd723e3}{zlua.\+I\+Lua\+Listener}}.
+
+\mbox{\Hypertarget{classzlua_1_1_lua_base_listener_a1b27cf500dda1c0eab2cbb8c747dddba}\label{classzlua_1_1_lua_base_listener_a1b27cf500dda1c0eab2cbb8c747dddba}} 
+\index{zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}!Enter\+Varlist@{Enter\+Varlist}}
+\index{Enter\+Varlist@{Enter\+Varlist}!zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}}
+\subsubsection{\texorpdfstring{Enter\+Varlist()}{EnterVarlist()}}
+{\footnotesize\ttfamily virtual void zlua.\+Lua\+Base\+Listener.\+Enter\+Varlist (\begin{DoxyParamCaption}\item[{\mbox{[}\+Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_varlist_context}{Lua\+Parser.\+Varlist\+Context}}}]{context }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Enter a parse tree produced by Lua\+Parser.\+varlist. 
+
+The default implementation does nothing.
+
+
+\begin{DoxyParams}{Parameters}
+{\em context} & The parse tree.\\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{interfacezlua_1_1_i_lua_listener_a6803c862c7298f17d74bfcda8f6f159e}{zlua.\+I\+Lua\+Listener}}.
+
+\mbox{\Hypertarget{classzlua_1_1_lua_base_listener_a0af6c7cb47cd8734025f965a6817bf12}\label{classzlua_1_1_lua_base_listener_a0af6c7cb47cd8734025f965a6817bf12}} 
+\index{zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}!Enter\+Var\+Or\+Exp@{Enter\+Var\+Or\+Exp}}
+\index{Enter\+Var\+Or\+Exp@{Enter\+Var\+Or\+Exp}!zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}}
+\subsubsection{\texorpdfstring{Enter\+Var\+Or\+Exp()}{EnterVarOrExp()}}
+{\footnotesize\ttfamily virtual void zlua.\+Lua\+Base\+Listener.\+Enter\+Var\+Or\+Exp (\begin{DoxyParamCaption}\item[{\mbox{[}\+Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_var_or_exp_context}{Lua\+Parser.\+Var\+Or\+Exp\+Context}}}]{context }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Enter a parse tree produced by Lua\+Parser.\+var\+Or\+Exp. 
+
+The default implementation does nothing.
+
+
+\begin{DoxyParams}{Parameters}
+{\em context} & The parse tree.\\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{interfacezlua_1_1_i_lua_listener_aece0cb0bc8e75c07d7bf71375714a6e7}{zlua.\+I\+Lua\+Listener}}.
+
+\mbox{\Hypertarget{classzlua_1_1_lua_base_listener_a743b7d8c5cc407d89b015a99597e711b}\label{classzlua_1_1_lua_base_listener_a743b7d8c5cc407d89b015a99597e711b}} 
+\index{zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}!Enter\+Var\+Suffix@{Enter\+Var\+Suffix}}
+\index{Enter\+Var\+Suffix@{Enter\+Var\+Suffix}!zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}}
+\subsubsection{\texorpdfstring{Enter\+Var\+Suffix()}{EnterVarSuffix()}}
+{\footnotesize\ttfamily virtual void zlua.\+Lua\+Base\+Listener.\+Enter\+Var\+Suffix (\begin{DoxyParamCaption}\item[{\mbox{[}\+Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_var_suffix_context}{Lua\+Parser.\+Var\+Suffix\+Context}}}]{context }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Enter a parse tree produced by Lua\+Parser.\+var\+Suffix. 
+
+The default implementation does nothing.
+
+
+\begin{DoxyParams}{Parameters}
+{\em context} & The parse tree.\\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{interfacezlua_1_1_i_lua_listener_ad0b34682777b85c6d6fef1d0488b32a4}{zlua.\+I\+Lua\+Listener}}.
+
+\mbox{\Hypertarget{classzlua_1_1_lua_base_listener_a9b8d8a799001a9167716f892e540ba76}\label{classzlua_1_1_lua_base_listener_a9b8d8a799001a9167716f892e540ba76}} 
+\index{zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}!Enter\+While\+\_\+stat@{Enter\+While\+\_\+stat}}
+\index{Enter\+While\+\_\+stat@{Enter\+While\+\_\+stat}!zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}}
+\subsubsection{\texorpdfstring{Enter\+While\+\_\+stat()}{EnterWhile\_stat()}}
+{\footnotesize\ttfamily virtual void zlua.\+Lua\+Base\+Listener.\+Enter\+While\+\_\+stat (\begin{DoxyParamCaption}\item[{\mbox{[}\+Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_while__stat_context}{Lua\+Parser.\+While\+\_\+stat\+Context}}}]{context }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Enter a parse tree produced by the {\ttfamily while\+\_\+stat} labeled alternative in Lua\+Parser.\+stat. 
+
+The default implementation does nothing.
+
+
+\begin{DoxyParams}{Parameters}
+{\em context} & The parse tree.\\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{interfacezlua_1_1_i_lua_listener_abc1fb6386fa985aa88c2813bc1040876}{zlua.\+I\+Lua\+Listener}}.
+
+\mbox{\Hypertarget{classzlua_1_1_lua_base_listener_aee2d21cae37901e87685fc50c87f8f1f}\label{classzlua_1_1_lua_base_listener_aee2d21cae37901e87685fc50c87f8f1f}} 
+\index{zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}!Exit\+Args@{Exit\+Args}}
+\index{Exit\+Args@{Exit\+Args}!zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}}
+\subsubsection{\texorpdfstring{Exit\+Args()}{ExitArgs()}}
+{\footnotesize\ttfamily virtual void zlua.\+Lua\+Base\+Listener.\+Exit\+Args (\begin{DoxyParamCaption}\item[{\mbox{[}\+Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_args_context}{Lua\+Parser.\+Args\+Context}}}]{context }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Exit a parse tree produced by Lua\+Parser.\+args. 
+
+The default implementation does nothing.
+
+
+\begin{DoxyParams}{Parameters}
+{\em context} & The parse tree.\\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{interfacezlua_1_1_i_lua_listener_ad480b971cdba492e0fb0221dc80bb690}{zlua.\+I\+Lua\+Listener}}.
+
+\mbox{\Hypertarget{classzlua_1_1_lua_base_listener_a84ee6c5b5c661dee72a99902d27ee46e}\label{classzlua_1_1_lua_base_listener_a84ee6c5b5c661dee72a99902d27ee46e}} 
+\index{zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}!Exit\+Assign\+\_\+stat@{Exit\+Assign\+\_\+stat}}
+\index{Exit\+Assign\+\_\+stat@{Exit\+Assign\+\_\+stat}!zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}}
+\subsubsection{\texorpdfstring{Exit\+Assign\+\_\+stat()}{ExitAssign\_stat()}}
+{\footnotesize\ttfamily virtual void zlua.\+Lua\+Base\+Listener.\+Exit\+Assign\+\_\+stat (\begin{DoxyParamCaption}\item[{\mbox{[}\+Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_assign__stat_context}{Lua\+Parser.\+Assign\+\_\+stat\+Context}}}]{context }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Exit a parse tree produced by the {\ttfamily assign\+\_\+stat} labeled alternative in Lua\+Parser.\+stat. 
+
+The default implementation does nothing.
+
+
+\begin{DoxyParams}{Parameters}
+{\em context} & The parse tree.\\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{interfacezlua_1_1_i_lua_listener_ad3a0df056fe6b0c23d11cad89f6091c7}{zlua.\+I\+Lua\+Listener}}.
+
+\mbox{\Hypertarget{classzlua_1_1_lua_base_listener_a8d6e54dc1618ec3c8fdcc8ccea015a4f}\label{classzlua_1_1_lua_base_listener_a8d6e54dc1618ec3c8fdcc8ccea015a4f}} 
+\index{zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}!Exit\+Block@{Exit\+Block}}
+\index{Exit\+Block@{Exit\+Block}!zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}}
+\subsubsection{\texorpdfstring{Exit\+Block()}{ExitBlock()}}
+{\footnotesize\ttfamily virtual void zlua.\+Lua\+Base\+Listener.\+Exit\+Block (\begin{DoxyParamCaption}\item[{\mbox{[}\+Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_block_context}{Lua\+Parser.\+Block\+Context}}}]{context }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Exit a parse tree produced by Lua\+Parser.\+block. 
+
+The default implementation does nothing.
+
+
+\begin{DoxyParams}{Parameters}
+{\em context} & The parse tree.\\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{interfacezlua_1_1_i_lua_listener_aa934019f5871ef882e345518906753b7}{zlua.\+I\+Lua\+Listener}}.
+
+\mbox{\Hypertarget{classzlua_1_1_lua_base_listener_ac0f699c3a181d8236218792a69955d0d}\label{classzlua_1_1_lua_base_listener_ac0f699c3a181d8236218792a69955d0d}} 
+\index{zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}!Exit\+Break\+\_\+stat@{Exit\+Break\+\_\+stat}}
+\index{Exit\+Break\+\_\+stat@{Exit\+Break\+\_\+stat}!zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}}
+\subsubsection{\texorpdfstring{Exit\+Break\+\_\+stat()}{ExitBreak\_stat()}}
+{\footnotesize\ttfamily virtual void zlua.\+Lua\+Base\+Listener.\+Exit\+Break\+\_\+stat (\begin{DoxyParamCaption}\item[{\mbox{[}\+Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_break__stat_context}{Lua\+Parser.\+Break\+\_\+stat\+Context}}}]{context }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Exit a parse tree produced by the {\ttfamily break\+\_\+stat} labeled alternative in Lua\+Parser.\+stat. 
+
+The default implementation does nothing.
+
+
+\begin{DoxyParams}{Parameters}
+{\em context} & The parse tree.\\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{interfacezlua_1_1_i_lua_listener_a869e5a8abc4ddac071073a74bf09b6c5}{zlua.\+I\+Lua\+Listener}}.
+
+\mbox{\Hypertarget{classzlua_1_1_lua_base_listener_aef4ea05d4f1cf0a5c223da23a2b8a312}\label{classzlua_1_1_lua_base_listener_aef4ea05d4f1cf0a5c223da23a2b8a312}} 
+\index{zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}!Exit\+Chunk@{Exit\+Chunk}}
+\index{Exit\+Chunk@{Exit\+Chunk}!zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}}
+\subsubsection{\texorpdfstring{Exit\+Chunk()}{ExitChunk()}}
+{\footnotesize\ttfamily virtual void zlua.\+Lua\+Base\+Listener.\+Exit\+Chunk (\begin{DoxyParamCaption}\item[{\mbox{[}\+Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_chunk_context}{Lua\+Parser.\+Chunk\+Context}}}]{context }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Exit a parse tree produced by Lua\+Parser.\+chunk. 
+
+The default implementation does nothing.
+
+
+\begin{DoxyParams}{Parameters}
+{\em context} & The parse tree.\\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{interfacezlua_1_1_i_lua_listener_ae7d177d2d81dce7f3eca3f59aeef7732}{zlua.\+I\+Lua\+Listener}}.
+
+\mbox{\Hypertarget{classzlua_1_1_lua_base_listener_acc7bef5cd55b204e258816f477397304}\label{classzlua_1_1_lua_base_listener_acc7bef5cd55b204e258816f477397304}} 
+\index{zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}!Exit\+Do\+\_\+end\+\_\+stat@{Exit\+Do\+\_\+end\+\_\+stat}}
+\index{Exit\+Do\+\_\+end\+\_\+stat@{Exit\+Do\+\_\+end\+\_\+stat}!zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}}
+\subsubsection{\texorpdfstring{Exit\+Do\+\_\+end\+\_\+stat()}{ExitDo\_end\_stat()}}
+{\footnotesize\ttfamily virtual void zlua.\+Lua\+Base\+Listener.\+Exit\+Do\+\_\+end\+\_\+stat (\begin{DoxyParamCaption}\item[{\mbox{[}\+Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_do__end__stat_context}{Lua\+Parser.\+Do\+\_\+end\+\_\+stat\+Context}}}]{context }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Exit a parse tree produced by the {\ttfamily do\+\_\+end\+\_\+stat} labeled alternative in Lua\+Parser.\+stat. 
+
+The default implementation does nothing.
+
+
+\begin{DoxyParams}{Parameters}
+{\em context} & The parse tree.\\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{interfacezlua_1_1_i_lua_listener_a21222197a86ad5c425dcab38204a7840}{zlua.\+I\+Lua\+Listener}}.
+
+\mbox{\Hypertarget{classzlua_1_1_lua_base_listener_aa5d977c15c8fc410aa01cbff4372b873}\label{classzlua_1_1_lua_base_listener_aa5d977c15c8fc410aa01cbff4372b873}} 
+\index{zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}!Exit\+Empty\+\_\+stat@{Exit\+Empty\+\_\+stat}}
+\index{Exit\+Empty\+\_\+stat@{Exit\+Empty\+\_\+stat}!zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}}
+\subsubsection{\texorpdfstring{Exit\+Empty\+\_\+stat()}{ExitEmpty\_stat()}}
+{\footnotesize\ttfamily virtual void zlua.\+Lua\+Base\+Listener.\+Exit\+Empty\+\_\+stat (\begin{DoxyParamCaption}\item[{\mbox{[}\+Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_empty__stat_context}{Lua\+Parser.\+Empty\+\_\+stat\+Context}}}]{context }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Exit a parse tree produced by the {\ttfamily empty\+\_\+stat} labeled alternative in Lua\+Parser.\+stat. 
+
+The default implementation does nothing.
+
+
+\begin{DoxyParams}{Parameters}
+{\em context} & The parse tree.\\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{interfacezlua_1_1_i_lua_listener_a5d6586f89158ceb4a9e683bbc2463ef3}{zlua.\+I\+Lua\+Listener}}.
+
+\mbox{\Hypertarget{classzlua_1_1_lua_base_listener_a06107a9f8d26fc9fdc1f7364074d8d05}\label{classzlua_1_1_lua_base_listener_a06107a9f8d26fc9fdc1f7364074d8d05}} 
+\index{zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}!Exit\+Every\+Rule@{Exit\+Every\+Rule}}
+\index{Exit\+Every\+Rule@{Exit\+Every\+Rule}!zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}}
+\subsubsection{\texorpdfstring{Exit\+Every\+Rule()}{ExitEveryRule()}}
+{\footnotesize\ttfamily virtual void zlua.\+Lua\+Base\+Listener.\+Exit\+Every\+Rule (\begin{DoxyParamCaption}\item[{\mbox{[}\+Not\+Null\mbox{]} Parser\+Rule\+Context}]{context }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+The default implementation does nothing.\mbox{\Hypertarget{classzlua_1_1_lua_base_listener_aa397d17db00c6af6db3c06a7a35da3c8}\label{classzlua_1_1_lua_base_listener_aa397d17db00c6af6db3c06a7a35da3c8}} 
+\index{zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}!Exit\+Exp@{Exit\+Exp}}
+\index{Exit\+Exp@{Exit\+Exp}!zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}}
+\subsubsection{\texorpdfstring{Exit\+Exp()}{ExitExp()}}
+{\footnotesize\ttfamily virtual void zlua.\+Lua\+Base\+Listener.\+Exit\+Exp (\begin{DoxyParamCaption}\item[{\mbox{[}\+Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_exp_context}{Lua\+Parser.\+Exp\+Context}}}]{context }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Exit a parse tree produced by Lua\+Parser.\+exp. 
+
+The default implementation does nothing.
+
+
+\begin{DoxyParams}{Parameters}
+{\em context} & The parse tree.\\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{interfacezlua_1_1_i_lua_listener_adb4a861f691615f081c5910a78e507bd}{zlua.\+I\+Lua\+Listener}}.
+
+\mbox{\Hypertarget{classzlua_1_1_lua_base_listener_a35af8fb9b7bc09c657281846943392a8}\label{classzlua_1_1_lua_base_listener_a35af8fb9b7bc09c657281846943392a8}} 
+\index{zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}!Exit\+Explist@{Exit\+Explist}}
+\index{Exit\+Explist@{Exit\+Explist}!zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}}
+\subsubsection{\texorpdfstring{Exit\+Explist()}{ExitExplist()}}
+{\footnotesize\ttfamily virtual void zlua.\+Lua\+Base\+Listener.\+Exit\+Explist (\begin{DoxyParamCaption}\item[{\mbox{[}\+Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_explist_context}{Lua\+Parser.\+Explist\+Context}}}]{context }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Exit a parse tree produced by Lua\+Parser.\+explist. 
+
+The default implementation does nothing.
+
+
+\begin{DoxyParams}{Parameters}
+{\em context} & The parse tree.\\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{interfacezlua_1_1_i_lua_listener_ad4f41520ee19a409350ab83e01086217}{zlua.\+I\+Lua\+Listener}}.
+
+\mbox{\Hypertarget{classzlua_1_1_lua_base_listener_a6094ac0c604fce8ffab9ccfcf3023c52}\label{classzlua_1_1_lua_base_listener_a6094ac0c604fce8ffab9ccfcf3023c52}} 
+\index{zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}!Exit\+False\+\_\+exp@{Exit\+False\+\_\+exp}}
+\index{Exit\+False\+\_\+exp@{Exit\+False\+\_\+exp}!zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}}
+\subsubsection{\texorpdfstring{Exit\+False\+\_\+exp()}{ExitFalse\_exp()}}
+{\footnotesize\ttfamily virtual void zlua.\+Lua\+Base\+Listener.\+Exit\+False\+\_\+exp (\begin{DoxyParamCaption}\item[{\mbox{[}\+Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_false__exp_context}{Lua\+Parser.\+False\+\_\+exp\+Context}}}]{context }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Exit a parse tree produced by the {\ttfamily false\+\_\+exp} labeled alternative in Lua\+Parser.\+exp. 
+
+The default implementation does nothing.
+
+
+\begin{DoxyParams}{Parameters}
+{\em context} & The parse tree.\\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{interfacezlua_1_1_i_lua_listener_a78a5b4e244b54f1233447bc8da8f1ac2}{zlua.\+I\+Lua\+Listener}}.
+
+\mbox{\Hypertarget{classzlua_1_1_lua_base_listener_a2c3ed58a89aca0feaf4e6fc1a74f5f2b}\label{classzlua_1_1_lua_base_listener_a2c3ed58a89aca0feaf4e6fc1a74f5f2b}} 
+\index{zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}!Exit\+Field@{Exit\+Field}}
+\index{Exit\+Field@{Exit\+Field}!zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}}
+\subsubsection{\texorpdfstring{Exit\+Field()}{ExitField()}}
+{\footnotesize\ttfamily virtual void zlua.\+Lua\+Base\+Listener.\+Exit\+Field (\begin{DoxyParamCaption}\item[{\mbox{[}\+Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_field_context}{Lua\+Parser.\+Field\+Context}}}]{context }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Exit a parse tree produced by Lua\+Parser.\+field. 
+
+The default implementation does nothing.
+
+
+\begin{DoxyParams}{Parameters}
+{\em context} & The parse tree.\\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{interfacezlua_1_1_i_lua_listener_aa5a80474f82e45908ec603e36a505f84}{zlua.\+I\+Lua\+Listener}}.
+
+\mbox{\Hypertarget{classzlua_1_1_lua_base_listener_a44a0860d791e1bf2b19f911adf58ff72}\label{classzlua_1_1_lua_base_listener_a44a0860d791e1bf2b19f911adf58ff72}} 
+\index{zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}!Exit\+Fieldlist@{Exit\+Fieldlist}}
+\index{Exit\+Fieldlist@{Exit\+Fieldlist}!zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}}
+\subsubsection{\texorpdfstring{Exit\+Fieldlist()}{ExitFieldlist()}}
+{\footnotesize\ttfamily virtual void zlua.\+Lua\+Base\+Listener.\+Exit\+Fieldlist (\begin{DoxyParamCaption}\item[{\mbox{[}\+Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_fieldlist_context}{Lua\+Parser.\+Fieldlist\+Context}}}]{context }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Exit a parse tree produced by Lua\+Parser.\+fieldlist. 
+
+The default implementation does nothing.
+
+
+\begin{DoxyParams}{Parameters}
+{\em context} & The parse tree.\\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{interfacezlua_1_1_i_lua_listener_a8fbc0020ba9e41655757791877b61985}{zlua.\+I\+Lua\+Listener}}.
+
+\mbox{\Hypertarget{classzlua_1_1_lua_base_listener_aa7266127d89148ed4d6a559e5b59525e}\label{classzlua_1_1_lua_base_listener_aa7266127d89148ed4d6a559e5b59525e}} 
+\index{zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}!Exit\+Fieldsep@{Exit\+Fieldsep}}
+\index{Exit\+Fieldsep@{Exit\+Fieldsep}!zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}}
+\subsubsection{\texorpdfstring{Exit\+Fieldsep()}{ExitFieldsep()}}
+{\footnotesize\ttfamily virtual void zlua.\+Lua\+Base\+Listener.\+Exit\+Fieldsep (\begin{DoxyParamCaption}\item[{\mbox{[}\+Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_fieldsep_context}{Lua\+Parser.\+Fieldsep\+Context}}}]{context }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Exit a parse tree produced by Lua\+Parser.\+fieldsep. 
+
+The default implementation does nothing.
+
+
+\begin{DoxyParams}{Parameters}
+{\em context} & The parse tree.\\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{interfacezlua_1_1_i_lua_listener_a3b2a4e6980def8cb07c26f52be3c22de}{zlua.\+I\+Lua\+Listener}}.
+
+\mbox{\Hypertarget{classzlua_1_1_lua_base_listener_a89ec0f76f1e78b15a72de26783bc6694}\label{classzlua_1_1_lua_base_listener_a89ec0f76f1e78b15a72de26783bc6694}} 
+\index{zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}!Exit\+Func\+\_\+call\+\_\+stat@{Exit\+Func\+\_\+call\+\_\+stat}}
+\index{Exit\+Func\+\_\+call\+\_\+stat@{Exit\+Func\+\_\+call\+\_\+stat}!zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}}
+\subsubsection{\texorpdfstring{Exit\+Func\+\_\+call\+\_\+stat()}{ExitFunc\_call\_stat()}}
+{\footnotesize\ttfamily virtual void zlua.\+Lua\+Base\+Listener.\+Exit\+Func\+\_\+call\+\_\+stat (\begin{DoxyParamCaption}\item[{\mbox{[}\+Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_func__call__stat_context}{Lua\+Parser.\+Func\+\_\+call\+\_\+stat\+Context}}}]{context }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Exit a parse tree produced by the {\ttfamily func\+\_\+call\+\_\+stat} labeled alternative in Lua\+Parser.\+stat. 
+
+The default implementation does nothing.
+
+
+\begin{DoxyParams}{Parameters}
+{\em context} & The parse tree.\\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{interfacezlua_1_1_i_lua_listener_ab9aba8c96896e86ec76ca5a87c5d2f25}{zlua.\+I\+Lua\+Listener}}.
+
+\mbox{\Hypertarget{classzlua_1_1_lua_base_listener_a7826a6c13bab904e4525274152d85550}\label{classzlua_1_1_lua_base_listener_a7826a6c13bab904e4525274152d85550}} 
+\index{zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}!Exit\+Func\+\_\+def\+\_\+exp@{Exit\+Func\+\_\+def\+\_\+exp}}
+\index{Exit\+Func\+\_\+def\+\_\+exp@{Exit\+Func\+\_\+def\+\_\+exp}!zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}}
+\subsubsection{\texorpdfstring{Exit\+Func\+\_\+def\+\_\+exp()}{ExitFunc\_def\_exp()}}
+{\footnotesize\ttfamily virtual void zlua.\+Lua\+Base\+Listener.\+Exit\+Func\+\_\+def\+\_\+exp (\begin{DoxyParamCaption}\item[{\mbox{[}\+Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_func__def__exp_context}{Lua\+Parser.\+Func\+\_\+def\+\_\+exp\+Context}}}]{context }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Exit a parse tree produced by the {\ttfamily func\+\_\+def\+\_\+exp} labeled alternative in Lua\+Parser.\+exp. 
+
+The default implementation does nothing.
+
+
+\begin{DoxyParams}{Parameters}
+{\em context} & The parse tree.\\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{interfacezlua_1_1_i_lua_listener_aa77991290b4d2ef6e498e68343ad8b28}{zlua.\+I\+Lua\+Listener}}.
+
+\mbox{\Hypertarget{classzlua_1_1_lua_base_listener_a49406b24e09c5b7866b11d4554ca1531}\label{classzlua_1_1_lua_base_listener_a49406b24e09c5b7866b11d4554ca1531}} 
+\index{zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}!Exit\+Func\+\_\+def\+\_\+stat@{Exit\+Func\+\_\+def\+\_\+stat}}
+\index{Exit\+Func\+\_\+def\+\_\+stat@{Exit\+Func\+\_\+def\+\_\+stat}!zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}}
+\subsubsection{\texorpdfstring{Exit\+Func\+\_\+def\+\_\+stat()}{ExitFunc\_def\_stat()}}
+{\footnotesize\ttfamily virtual void zlua.\+Lua\+Base\+Listener.\+Exit\+Func\+\_\+def\+\_\+stat (\begin{DoxyParamCaption}\item[{\mbox{[}\+Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_func__def__stat_context}{Lua\+Parser.\+Func\+\_\+def\+\_\+stat\+Context}}}]{context }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Exit a parse tree produced by the {\ttfamily func\+\_\+def\+\_\+stat} labeled alternative in Lua\+Parser.\+stat. 
+
+The default implementation does nothing.
+
+
+\begin{DoxyParams}{Parameters}
+{\em context} & The parse tree.\\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{interfacezlua_1_1_i_lua_listener_a223ff1fef03cefaf9758254c32011257}{zlua.\+I\+Lua\+Listener}}.
+
+\mbox{\Hypertarget{classzlua_1_1_lua_base_listener_add219d0a2aad2403b075bb1eb2550383}\label{classzlua_1_1_lua_base_listener_add219d0a2aad2403b075bb1eb2550383}} 
+\index{zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}!Exit\+Funcbody@{Exit\+Funcbody}}
+\index{Exit\+Funcbody@{Exit\+Funcbody}!zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}}
+\subsubsection{\texorpdfstring{Exit\+Funcbody()}{ExitFuncbody()}}
+{\footnotesize\ttfamily virtual void zlua.\+Lua\+Base\+Listener.\+Exit\+Funcbody (\begin{DoxyParamCaption}\item[{\mbox{[}\+Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_funcbody_context}{Lua\+Parser.\+Funcbody\+Context}}}]{context }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Exit a parse tree produced by Lua\+Parser.\+funcbody. 
+
+The default implementation does nothing.
+
+
+\begin{DoxyParams}{Parameters}
+{\em context} & The parse tree.\\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{interfacezlua_1_1_i_lua_listener_aecf5d1d01d7cf2dbe880d431e6f5f66f}{zlua.\+I\+Lua\+Listener}}.
+
+\mbox{\Hypertarget{classzlua_1_1_lua_base_listener_a843fca537940a8a34507118ef087212b}\label{classzlua_1_1_lua_base_listener_a843fca537940a8a34507118ef087212b}} 
+\index{zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}!Exit\+Funcname@{Exit\+Funcname}}
+\index{Exit\+Funcname@{Exit\+Funcname}!zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}}
+\subsubsection{\texorpdfstring{Exit\+Funcname()}{ExitFuncname()}}
+{\footnotesize\ttfamily virtual void zlua.\+Lua\+Base\+Listener.\+Exit\+Funcname (\begin{DoxyParamCaption}\item[{\mbox{[}\+Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_funcname_context}{Lua\+Parser.\+Funcname\+Context}}}]{context }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Exit a parse tree produced by Lua\+Parser.\+funcname. 
+
+The default implementation does nothing.
+
+
+\begin{DoxyParams}{Parameters}
+{\em context} & The parse tree.\\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{interfacezlua_1_1_i_lua_listener_aeae3611ef79ccd5c902a1016ebc2f6e4}{zlua.\+I\+Lua\+Listener}}.
+
+\mbox{\Hypertarget{classzlua_1_1_lua_base_listener_ac08101b052d2965f37939320ba03e792}\label{classzlua_1_1_lua_base_listener_ac08101b052d2965f37939320ba03e792}} 
+\index{zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}!Exit\+Functioncall@{Exit\+Functioncall}}
+\index{Exit\+Functioncall@{Exit\+Functioncall}!zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}}
+\subsubsection{\texorpdfstring{Exit\+Functioncall()}{ExitFunctioncall()}}
+{\footnotesize\ttfamily virtual void zlua.\+Lua\+Base\+Listener.\+Exit\+Functioncall (\begin{DoxyParamCaption}\item[{\mbox{[}\+Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_functioncall_context}{Lua\+Parser.\+Functioncall\+Context}}}]{context }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Exit a parse tree produced by Lua\+Parser.\+functioncall. 
+
+The default implementation does nothing.
+
+
+\begin{DoxyParams}{Parameters}
+{\em context} & The parse tree.\\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{interfacezlua_1_1_i_lua_listener_acd0b2537f173e36443c60445ef23eeb6}{zlua.\+I\+Lua\+Listener}}.
+
+\mbox{\Hypertarget{classzlua_1_1_lua_base_listener_adb6913ed219a112505cb4ba783485c2e}\label{classzlua_1_1_lua_base_listener_adb6913ed219a112505cb4ba783485c2e}} 
+\index{zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}!Exit\+Functiondef@{Exit\+Functiondef}}
+\index{Exit\+Functiondef@{Exit\+Functiondef}!zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}}
+\subsubsection{\texorpdfstring{Exit\+Functiondef()}{ExitFunctiondef()}}
+{\footnotesize\ttfamily virtual void zlua.\+Lua\+Base\+Listener.\+Exit\+Functiondef (\begin{DoxyParamCaption}\item[{\mbox{[}\+Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_functiondef_context}{Lua\+Parser.\+Functiondef\+Context}}}]{context }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Exit a parse tree produced by Lua\+Parser.\+functiondef. 
+
+The default implementation does nothing.
+
+
+\begin{DoxyParams}{Parameters}
+{\em context} & The parse tree.\\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{interfacezlua_1_1_i_lua_listener_a61203f381bc56ad4df13efd83138aeec}{zlua.\+I\+Lua\+Listener}}.
+
+\mbox{\Hypertarget{classzlua_1_1_lua_base_listener_afc42dc32e923011884d110d92eb7024b}\label{classzlua_1_1_lua_base_listener_afc42dc32e923011884d110d92eb7024b}} 
+\index{zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}!Exit\+Global\+\_\+func\+\_\+def\+\_\+stat@{Exit\+Global\+\_\+func\+\_\+def\+\_\+stat}}
+\index{Exit\+Global\+\_\+func\+\_\+def\+\_\+stat@{Exit\+Global\+\_\+func\+\_\+def\+\_\+stat}!zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}}
+\subsubsection{\texorpdfstring{Exit\+Global\+\_\+func\+\_\+def\+\_\+stat()}{ExitGlobal\_func\_def\_stat()}}
+{\footnotesize\ttfamily virtual void zlua.\+Lua\+Base\+Listener.\+Exit\+Global\+\_\+func\+\_\+def\+\_\+stat (\begin{DoxyParamCaption}\item[{\mbox{[}\+Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_global__func__def__stat_context}{Lua\+Parser.\+Global\+\_\+func\+\_\+def\+\_\+stat\+Context}}}]{context }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Exit a parse tree produced by the {\ttfamily global\+\_\+func\+\_\+def\+\_\+stat} labeled alternative in Lua\+Parser.\+stat. 
+
+The default implementation does nothing.
+
+
+\begin{DoxyParams}{Parameters}
+{\em context} & The parse tree.\\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{interfacezlua_1_1_i_lua_listener_a13e62813408bab9b10861e768a3c5ca1}{zlua.\+I\+Lua\+Listener}}.
+
+\mbox{\Hypertarget{classzlua_1_1_lua_base_listener_a918c1a931ec0803f8ce782d404d9e2c4}\label{classzlua_1_1_lua_base_listener_a918c1a931ec0803f8ce782d404d9e2c4}} 
+\index{zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}!Exit\+Global\+\_\+var\+\_\+stat@{Exit\+Global\+\_\+var\+\_\+stat}}
+\index{Exit\+Global\+\_\+var\+\_\+stat@{Exit\+Global\+\_\+var\+\_\+stat}!zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}}
+\subsubsection{\texorpdfstring{Exit\+Global\+\_\+var\+\_\+stat()}{ExitGlobal\_var\_stat()}}
+{\footnotesize\ttfamily virtual void zlua.\+Lua\+Base\+Listener.\+Exit\+Global\+\_\+var\+\_\+stat (\begin{DoxyParamCaption}\item[{\mbox{[}\+Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_global__var__stat_context}{Lua\+Parser.\+Global\+\_\+var\+\_\+stat\+Context}}}]{context }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Exit a parse tree produced by the {\ttfamily global\+\_\+var\+\_\+stat} labeled alternative in Lua\+Parser.\+stat. 
+
+The default implementation does nothing.
+
+
+\begin{DoxyParams}{Parameters}
+{\em context} & The parse tree.\\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{interfacezlua_1_1_i_lua_listener_a4e14ac8afc7b39056fc78c89ac3ba8fa}{zlua.\+I\+Lua\+Listener}}.
+
+\mbox{\Hypertarget{classzlua_1_1_lua_base_listener_aadcd2b60bcec7dda7b397a674e1d6082}\label{classzlua_1_1_lua_base_listener_aadcd2b60bcec7dda7b397a674e1d6082}} 
+\index{zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}!Exit\+If\+\_\+stat@{Exit\+If\+\_\+stat}}
+\index{Exit\+If\+\_\+stat@{Exit\+If\+\_\+stat}!zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}}
+\subsubsection{\texorpdfstring{Exit\+If\+\_\+stat()}{ExitIf\_stat()}}
+{\footnotesize\ttfamily virtual void zlua.\+Lua\+Base\+Listener.\+Exit\+If\+\_\+stat (\begin{DoxyParamCaption}\item[{\mbox{[}\+Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_if__stat_context}{Lua\+Parser.\+If\+\_\+stat\+Context}}}]{context }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Exit a parse tree produced by the {\ttfamily if\+\_\+stat} labeled alternative in Lua\+Parser.\+stat. 
+
+The default implementation does nothing.
+
+
+\begin{DoxyParams}{Parameters}
+{\em context} & The parse tree.\\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{interfacezlua_1_1_i_lua_listener_a2f0389129d1846cafed21b068ecdb15d}{zlua.\+I\+Lua\+Listener}}.
+
+\mbox{\Hypertarget{classzlua_1_1_lua_base_listener_ae26d62193f8285daad3361d083e45c58}\label{classzlua_1_1_lua_base_listener_ae26d62193f8285daad3361d083e45c58}} 
+\index{zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}!Exit\+Name\+And\+Args@{Exit\+Name\+And\+Args}}
+\index{Exit\+Name\+And\+Args@{Exit\+Name\+And\+Args}!zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}}
+\subsubsection{\texorpdfstring{Exit\+Name\+And\+Args()}{ExitNameAndArgs()}}
+{\footnotesize\ttfamily virtual void zlua.\+Lua\+Base\+Listener.\+Exit\+Name\+And\+Args (\begin{DoxyParamCaption}\item[{\mbox{[}\+Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_name_and_args_context}{Lua\+Parser.\+Name\+And\+Args\+Context}}}]{context }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Exit a parse tree produced by Lua\+Parser.\+name\+And\+Args. 
+
+The default implementation does nothing.
+
+
+\begin{DoxyParams}{Parameters}
+{\em context} & The parse tree.\\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{interfacezlua_1_1_i_lua_listener_a1f6a7b27829eca2db7ed31a06cc3ae38}{zlua.\+I\+Lua\+Listener}}.
+
+\mbox{\Hypertarget{classzlua_1_1_lua_base_listener_aa501c2703fd2c5279c7cd6748aebd84b}\label{classzlua_1_1_lua_base_listener_aa501c2703fd2c5279c7cd6748aebd84b}} 
+\index{zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}!Exit\+Namelist@{Exit\+Namelist}}
+\index{Exit\+Namelist@{Exit\+Namelist}!zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}}
+\subsubsection{\texorpdfstring{Exit\+Namelist()}{ExitNamelist()}}
+{\footnotesize\ttfamily virtual void zlua.\+Lua\+Base\+Listener.\+Exit\+Namelist (\begin{DoxyParamCaption}\item[{\mbox{[}\+Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_namelist_context}{Lua\+Parser.\+Namelist\+Context}}}]{context }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Exit a parse tree produced by Lua\+Parser.\+namelist. 
+
+The default implementation does nothing.
+
+
+\begin{DoxyParams}{Parameters}
+{\em context} & The parse tree.\\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{interfacezlua_1_1_i_lua_listener_acd614a0aa9df1e1ead1690e7598414df}{zlua.\+I\+Lua\+Listener}}.
+
+\mbox{\Hypertarget{classzlua_1_1_lua_base_listener_a997d90f5a6a982d2bf09d4d2f249908f}\label{classzlua_1_1_lua_base_listener_a997d90f5a6a982d2bf09d4d2f249908f}} 
+\index{zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}!Exit\+Nil\+\_\+exp@{Exit\+Nil\+\_\+exp}}
+\index{Exit\+Nil\+\_\+exp@{Exit\+Nil\+\_\+exp}!zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}}
+\subsubsection{\texorpdfstring{Exit\+Nil\+\_\+exp()}{ExitNil\_exp()}}
+{\footnotesize\ttfamily virtual void zlua.\+Lua\+Base\+Listener.\+Exit\+Nil\+\_\+exp (\begin{DoxyParamCaption}\item[{\mbox{[}\+Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_nil__exp_context}{Lua\+Parser.\+Nil\+\_\+exp\+Context}}}]{context }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Exit a parse tree produced by the {\ttfamily nil\+\_\+exp} labeled alternative in Lua\+Parser.\+exp. 
+
+The default implementation does nothing.
+
+
+\begin{DoxyParams}{Parameters}
+{\em context} & The parse tree.\\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{interfacezlua_1_1_i_lua_listener_a7b5aa1a0b4e1441c884028a324f69439}{zlua.\+I\+Lua\+Listener}}.
+
+\mbox{\Hypertarget{classzlua_1_1_lua_base_listener_a450c13a6c541dd5eed0c0713fdf81343}\label{classzlua_1_1_lua_base_listener_a450c13a6c541dd5eed0c0713fdf81343}} 
+\index{zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}!Exit\+Num\+\_\+exp@{Exit\+Num\+\_\+exp}}
+\index{Exit\+Num\+\_\+exp@{Exit\+Num\+\_\+exp}!zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}}
+\subsubsection{\texorpdfstring{Exit\+Num\+\_\+exp()}{ExitNum\_exp()}}
+{\footnotesize\ttfamily virtual void zlua.\+Lua\+Base\+Listener.\+Exit\+Num\+\_\+exp (\begin{DoxyParamCaption}\item[{\mbox{[}\+Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_num__exp_context}{Lua\+Parser.\+Num\+\_\+exp\+Context}}}]{context }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Exit a parse tree produced by the {\ttfamily num\+\_\+exp} labeled alternative in Lua\+Parser.\+exp. 
+
+The default implementation does nothing.
+
+
+\begin{DoxyParams}{Parameters}
+{\em context} & The parse tree.\\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{interfacezlua_1_1_i_lua_listener_ae345a5af97b04861ba3ce16cf1e33808}{zlua.\+I\+Lua\+Listener}}.
+
+\mbox{\Hypertarget{classzlua_1_1_lua_base_listener_a64548a4ec69a61b39e8a7c6d2f022e83}\label{classzlua_1_1_lua_base_listener_a64548a4ec69a61b39e8a7c6d2f022e83}} 
+\index{zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}!Exit\+Number@{Exit\+Number}}
+\index{Exit\+Number@{Exit\+Number}!zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}}
+\subsubsection{\texorpdfstring{Exit\+Number()}{ExitNumber()}}
+{\footnotesize\ttfamily virtual void zlua.\+Lua\+Base\+Listener.\+Exit\+Number (\begin{DoxyParamCaption}\item[{\mbox{[}\+Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_number_context}{Lua\+Parser.\+Number\+Context}}}]{context }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Exit a parse tree produced by Lua\+Parser.\+number. 
+
+The default implementation does nothing.
+
+
+\begin{DoxyParams}{Parameters}
+{\em context} & The parse tree.\\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{interfacezlua_1_1_i_lua_listener_a3c6fb2edc82e8e12e51ea539d512762b}{zlua.\+I\+Lua\+Listener}}.
+
+\mbox{\Hypertarget{classzlua_1_1_lua_base_listener_a01605f22d70f39a286e5c768e347e788}\label{classzlua_1_1_lua_base_listener_a01605f22d70f39a286e5c768e347e788}} 
+\index{zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}!Exit\+Op\+\_\+add\+\_\+sub\+\_\+exp@{Exit\+Op\+\_\+add\+\_\+sub\+\_\+exp}}
+\index{Exit\+Op\+\_\+add\+\_\+sub\+\_\+exp@{Exit\+Op\+\_\+add\+\_\+sub\+\_\+exp}!zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}}
+\subsubsection{\texorpdfstring{Exit\+Op\+\_\+add\+\_\+sub\+\_\+exp()}{ExitOp\_add\_sub\_exp()}}
+{\footnotesize\ttfamily virtual void zlua.\+Lua\+Base\+Listener.\+Exit\+Op\+\_\+add\+\_\+sub\+\_\+exp (\begin{DoxyParamCaption}\item[{\mbox{[}\+Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_op__add__sub__exp_context}{Lua\+Parser.\+Op\+\_\+add\+\_\+sub\+\_\+exp\+Context}}}]{context }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Exit a parse tree produced by the {\ttfamily op\+\_\+add\+\_\+sub\+\_\+exp} labeled alternative in Lua\+Parser.\+exp. 
+
+The default implementation does nothing.
+
+
+\begin{DoxyParams}{Parameters}
+{\em context} & The parse tree.\\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{interfacezlua_1_1_i_lua_listener_a51e9a33e0c604e3a6151becd926a5852}{zlua.\+I\+Lua\+Listener}}.
+
+\mbox{\Hypertarget{classzlua_1_1_lua_base_listener_aceb367c135e67ca2d8c8372e57a4a2cb}\label{classzlua_1_1_lua_base_listener_aceb367c135e67ca2d8c8372e57a4a2cb}} 
+\index{zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}!Exit\+Op\+\_\+and\+\_\+exp@{Exit\+Op\+\_\+and\+\_\+exp}}
+\index{Exit\+Op\+\_\+and\+\_\+exp@{Exit\+Op\+\_\+and\+\_\+exp}!zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}}
+\subsubsection{\texorpdfstring{Exit\+Op\+\_\+and\+\_\+exp()}{ExitOp\_and\_exp()}}
+{\footnotesize\ttfamily virtual void zlua.\+Lua\+Base\+Listener.\+Exit\+Op\+\_\+and\+\_\+exp (\begin{DoxyParamCaption}\item[{\mbox{[}\+Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_op__and__exp_context}{Lua\+Parser.\+Op\+\_\+and\+\_\+exp\+Context}}}]{context }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Exit a parse tree produced by the {\ttfamily op\+\_\+and\+\_\+exp} labeled alternative in Lua\+Parser.\+exp. 
+
+The default implementation does nothing.
+
+
+\begin{DoxyParams}{Parameters}
+{\em context} & The parse tree.\\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{interfacezlua_1_1_i_lua_listener_a87ea223ce3d022a98247e31bcdd4490d}{zlua.\+I\+Lua\+Listener}}.
+
+\mbox{\Hypertarget{classzlua_1_1_lua_base_listener_a0969ff285a2df8e85f1c63245d167077}\label{classzlua_1_1_lua_base_listener_a0969ff285a2df8e85f1c63245d167077}} 
+\index{zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}!Exit\+Op\+\_\+caompare\+\_\+exp@{Exit\+Op\+\_\+caompare\+\_\+exp}}
+\index{Exit\+Op\+\_\+caompare\+\_\+exp@{Exit\+Op\+\_\+caompare\+\_\+exp}!zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}}
+\subsubsection{\texorpdfstring{Exit\+Op\+\_\+caompare\+\_\+exp()}{ExitOp\_caompare\_exp()}}
+{\footnotesize\ttfamily virtual void zlua.\+Lua\+Base\+Listener.\+Exit\+Op\+\_\+caompare\+\_\+exp (\begin{DoxyParamCaption}\item[{\mbox{[}\+Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_op__caompare__exp_context}{Lua\+Parser.\+Op\+\_\+caompare\+\_\+exp\+Context}}}]{context }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Exit a parse tree produced by the {\ttfamily op\+\_\+caompare\+\_\+exp} labeled alternative in Lua\+Parser.\+exp. 
+
+The default implementation does nothing.
+
+
+\begin{DoxyParams}{Parameters}
+{\em context} & The parse tree.\\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{interfacezlua_1_1_i_lua_listener_a9ad347c8ee340aeff0c0f8bb311cae0a}{zlua.\+I\+Lua\+Listener}}.
+
+\mbox{\Hypertarget{classzlua_1_1_lua_base_listener_a5daf4d3857a7580b51667c00c5395db1}\label{classzlua_1_1_lua_base_listener_a5daf4d3857a7580b51667c00c5395db1}} 
+\index{zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}!Exit\+Op\+\_\+concat\+\_\+exp@{Exit\+Op\+\_\+concat\+\_\+exp}}
+\index{Exit\+Op\+\_\+concat\+\_\+exp@{Exit\+Op\+\_\+concat\+\_\+exp}!zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}}
+\subsubsection{\texorpdfstring{Exit\+Op\+\_\+concat\+\_\+exp()}{ExitOp\_concat\_exp()}}
+{\footnotesize\ttfamily virtual void zlua.\+Lua\+Base\+Listener.\+Exit\+Op\+\_\+concat\+\_\+exp (\begin{DoxyParamCaption}\item[{\mbox{[}\+Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_op__concat__exp_context}{Lua\+Parser.\+Op\+\_\+concat\+\_\+exp\+Context}}}]{context }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Exit a parse tree produced by the {\ttfamily op\+\_\+concat\+\_\+exp} labeled alternative in Lua\+Parser.\+exp. 
+
+The default implementation does nothing.
+
+
+\begin{DoxyParams}{Parameters}
+{\em context} & The parse tree.\\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{interfacezlua_1_1_i_lua_listener_a5d79067d1b0d73aee302cf12972c0d4f}{zlua.\+I\+Lua\+Listener}}.
+
+\mbox{\Hypertarget{classzlua_1_1_lua_base_listener_ab89797d488c6f1700d00a8a609baf9f5}\label{classzlua_1_1_lua_base_listener_ab89797d488c6f1700d00a8a609baf9f5}} 
+\index{zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}!Exit\+Op\+\_\+mul\+\_\+div\+\_\+exp@{Exit\+Op\+\_\+mul\+\_\+div\+\_\+exp}}
+\index{Exit\+Op\+\_\+mul\+\_\+div\+\_\+exp@{Exit\+Op\+\_\+mul\+\_\+div\+\_\+exp}!zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}}
+\subsubsection{\texorpdfstring{Exit\+Op\+\_\+mul\+\_\+div\+\_\+exp()}{ExitOp\_mul\_div\_exp()}}
+{\footnotesize\ttfamily virtual void zlua.\+Lua\+Base\+Listener.\+Exit\+Op\+\_\+mul\+\_\+div\+\_\+exp (\begin{DoxyParamCaption}\item[{\mbox{[}\+Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_op__mul__div__exp_context}{Lua\+Parser.\+Op\+\_\+mul\+\_\+div\+\_\+exp\+Context}}}]{context }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Exit a parse tree produced by the {\ttfamily op\+\_\+mul\+\_\+div\+\_\+exp} labeled alternative in Lua\+Parser.\+exp. 
+
+The default implementation does nothing.
+
+
+\begin{DoxyParams}{Parameters}
+{\em context} & The parse tree.\\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{interfacezlua_1_1_i_lua_listener_a25a0b962824e954f08d1dc84e4e4d13d}{zlua.\+I\+Lua\+Listener}}.
+
+\mbox{\Hypertarget{classzlua_1_1_lua_base_listener_a2f3d1101cea30188e37757f54eeb45ad}\label{classzlua_1_1_lua_base_listener_a2f3d1101cea30188e37757f54eeb45ad}} 
+\index{zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}!Exit\+Op\+\_\+or\+\_\+exp@{Exit\+Op\+\_\+or\+\_\+exp}}
+\index{Exit\+Op\+\_\+or\+\_\+exp@{Exit\+Op\+\_\+or\+\_\+exp}!zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}}
+\subsubsection{\texorpdfstring{Exit\+Op\+\_\+or\+\_\+exp()}{ExitOp\_or\_exp()}}
+{\footnotesize\ttfamily virtual void zlua.\+Lua\+Base\+Listener.\+Exit\+Op\+\_\+or\+\_\+exp (\begin{DoxyParamCaption}\item[{\mbox{[}\+Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_op__or__exp_context}{Lua\+Parser.\+Op\+\_\+or\+\_\+exp\+Context}}}]{context }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Exit a parse tree produced by the {\ttfamily op\+\_\+or\+\_\+exp} labeled alternative in Lua\+Parser.\+exp. 
+
+The default implementation does nothing.
+
+
+\begin{DoxyParams}{Parameters}
+{\em context} & The parse tree.\\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{interfacezlua_1_1_i_lua_listener_acd1c99a866862f8c938fd314f3859852}{zlua.\+I\+Lua\+Listener}}.
+
+\mbox{\Hypertarget{classzlua_1_1_lua_base_listener_abf62739a5cda90c32f65e7a81c3e72a2}\label{classzlua_1_1_lua_base_listener_abf62739a5cda90c32f65e7a81c3e72a2}} 
+\index{zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}!Exit\+Op\+\_\+unary\+\_\+exp@{Exit\+Op\+\_\+unary\+\_\+exp}}
+\index{Exit\+Op\+\_\+unary\+\_\+exp@{Exit\+Op\+\_\+unary\+\_\+exp}!zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}}
+\subsubsection{\texorpdfstring{Exit\+Op\+\_\+unary\+\_\+exp()}{ExitOp\_unary\_exp()}}
+{\footnotesize\ttfamily virtual void zlua.\+Lua\+Base\+Listener.\+Exit\+Op\+\_\+unary\+\_\+exp (\begin{DoxyParamCaption}\item[{\mbox{[}\+Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_op__unary__exp_context}{Lua\+Parser.\+Op\+\_\+unary\+\_\+exp\+Context}}}]{context }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Exit a parse tree produced by the {\ttfamily op\+\_\+unary\+\_\+exp} labeled alternative in Lua\+Parser.\+exp. 
+
+The default implementation does nothing.
+
+
+\begin{DoxyParams}{Parameters}
+{\em context} & The parse tree.\\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{interfacezlua_1_1_i_lua_listener_a16b9b227b375c5bbe949db6e101f2dce}{zlua.\+I\+Lua\+Listener}}.
+
+\mbox{\Hypertarget{classzlua_1_1_lua_base_listener_aa8686e94c0d6dbf3292a7ed77baa54b5}\label{classzlua_1_1_lua_base_listener_aa8686e94c0d6dbf3292a7ed77baa54b5}} 
+\index{zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}!Exit\+Operator\+Add\+Sub@{Exit\+Operator\+Add\+Sub}}
+\index{Exit\+Operator\+Add\+Sub@{Exit\+Operator\+Add\+Sub}!zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}}
+\subsubsection{\texorpdfstring{Exit\+Operator\+Add\+Sub()}{ExitOperatorAddSub()}}
+{\footnotesize\ttfamily virtual void zlua.\+Lua\+Base\+Listener.\+Exit\+Operator\+Add\+Sub (\begin{DoxyParamCaption}\item[{\mbox{[}\+Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_operator_add_sub_context}{Lua\+Parser.\+Operator\+Add\+Sub\+Context}}}]{context }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Exit a parse tree produced by Lua\+Parser.\+operator\+Add\+Sub. 
+
+The default implementation does nothing.
+
+
+\begin{DoxyParams}{Parameters}
+{\em context} & The parse tree.\\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{interfacezlua_1_1_i_lua_listener_a3d98f03e4ef336437a07903ea76df622}{zlua.\+I\+Lua\+Listener}}.
+
+\mbox{\Hypertarget{classzlua_1_1_lua_base_listener_ad0372c70a4c0b53a69f958e1d8c16065}\label{classzlua_1_1_lua_base_listener_ad0372c70a4c0b53a69f958e1d8c16065}} 
+\index{zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}!Exit\+Operator\+And@{Exit\+Operator\+And}}
+\index{Exit\+Operator\+And@{Exit\+Operator\+And}!zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}}
+\subsubsection{\texorpdfstring{Exit\+Operator\+And()}{ExitOperatorAnd()}}
+{\footnotesize\ttfamily virtual void zlua.\+Lua\+Base\+Listener.\+Exit\+Operator\+And (\begin{DoxyParamCaption}\item[{\mbox{[}\+Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_operator_and_context}{Lua\+Parser.\+Operator\+And\+Context}}}]{context }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Exit a parse tree produced by Lua\+Parser.\+operator\+And. 
+
+The default implementation does nothing.
+
+
+\begin{DoxyParams}{Parameters}
+{\em context} & The parse tree.\\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{interfacezlua_1_1_i_lua_listener_a5b2a0ab0a1e41daa744680bd657adfa8}{zlua.\+I\+Lua\+Listener}}.
+
+\mbox{\Hypertarget{classzlua_1_1_lua_base_listener_ac5e1c31e302e8eeae5a2bb9c585b40a2}\label{classzlua_1_1_lua_base_listener_ac5e1c31e302e8eeae5a2bb9c585b40a2}} 
+\index{zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}!Exit\+Operator\+Bitwise@{Exit\+Operator\+Bitwise}}
+\index{Exit\+Operator\+Bitwise@{Exit\+Operator\+Bitwise}!zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}}
+\subsubsection{\texorpdfstring{Exit\+Operator\+Bitwise()}{ExitOperatorBitwise()}}
+{\footnotesize\ttfamily virtual void zlua.\+Lua\+Base\+Listener.\+Exit\+Operator\+Bitwise (\begin{DoxyParamCaption}\item[{\mbox{[}\+Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_operator_bitwise_context}{Lua\+Parser.\+Operator\+Bitwise\+Context}}}]{context }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Exit a parse tree produced by Lua\+Parser.\+operator\+Bitwise. 
+
+The default implementation does nothing.
+
+
+\begin{DoxyParams}{Parameters}
+{\em context} & The parse tree.\\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{interfacezlua_1_1_i_lua_listener_ab567120e6d7258b74d7f88c14d6cf3c3}{zlua.\+I\+Lua\+Listener}}.
+
+\mbox{\Hypertarget{classzlua_1_1_lua_base_listener_a650d952f0fddbd4ddb499a7074528e60}\label{classzlua_1_1_lua_base_listener_a650d952f0fddbd4ddb499a7074528e60}} 
+\index{zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}!Exit\+Operator\+Comparison@{Exit\+Operator\+Comparison}}
+\index{Exit\+Operator\+Comparison@{Exit\+Operator\+Comparison}!zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}}
+\subsubsection{\texorpdfstring{Exit\+Operator\+Comparison()}{ExitOperatorComparison()}}
+{\footnotesize\ttfamily virtual void zlua.\+Lua\+Base\+Listener.\+Exit\+Operator\+Comparison (\begin{DoxyParamCaption}\item[{\mbox{[}\+Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_operator_comparison_context}{Lua\+Parser.\+Operator\+Comparison\+Context}}}]{context }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Exit a parse tree produced by Lua\+Parser.\+operator\+Comparison. 
+
+The default implementation does nothing.
+
+
+\begin{DoxyParams}{Parameters}
+{\em context} & The parse tree.\\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{interfacezlua_1_1_i_lua_listener_a0c4de7c4814a744326fcf623c7ffc05c}{zlua.\+I\+Lua\+Listener}}.
+
+\mbox{\Hypertarget{classzlua_1_1_lua_base_listener_a686c3f75fd31a0b4c7cae3f3b99cd2aa}\label{classzlua_1_1_lua_base_listener_a686c3f75fd31a0b4c7cae3f3b99cd2aa}} 
+\index{zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}!Exit\+Operator\+Mul\+Div\+Mod@{Exit\+Operator\+Mul\+Div\+Mod}}
+\index{Exit\+Operator\+Mul\+Div\+Mod@{Exit\+Operator\+Mul\+Div\+Mod}!zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}}
+\subsubsection{\texorpdfstring{Exit\+Operator\+Mul\+Div\+Mod()}{ExitOperatorMulDivMod()}}
+{\footnotesize\ttfamily virtual void zlua.\+Lua\+Base\+Listener.\+Exit\+Operator\+Mul\+Div\+Mod (\begin{DoxyParamCaption}\item[{\mbox{[}\+Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_operator_mul_div_mod_context}{Lua\+Parser.\+Operator\+Mul\+Div\+Mod\+Context}}}]{context }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Exit a parse tree produced by Lua\+Parser.\+operator\+Mul\+Div\+Mod. 
+
+The default implementation does nothing.
+
+
+\begin{DoxyParams}{Parameters}
+{\em context} & The parse tree.\\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{interfacezlua_1_1_i_lua_listener_a67436f1864c243aabc07a339c1c96085}{zlua.\+I\+Lua\+Listener}}.
+
+\mbox{\Hypertarget{classzlua_1_1_lua_base_listener_ab2ff587916dcc9fe3b47ee7b560db090}\label{classzlua_1_1_lua_base_listener_ab2ff587916dcc9fe3b47ee7b560db090}} 
+\index{zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}!Exit\+Operator\+Or@{Exit\+Operator\+Or}}
+\index{Exit\+Operator\+Or@{Exit\+Operator\+Or}!zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}}
+\subsubsection{\texorpdfstring{Exit\+Operator\+Or()}{ExitOperatorOr()}}
+{\footnotesize\ttfamily virtual void zlua.\+Lua\+Base\+Listener.\+Exit\+Operator\+Or (\begin{DoxyParamCaption}\item[{\mbox{[}\+Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_operator_or_context}{Lua\+Parser.\+Operator\+Or\+Context}}}]{context }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Exit a parse tree produced by Lua\+Parser.\+operator\+Or. 
+
+The default implementation does nothing.
+
+
+\begin{DoxyParams}{Parameters}
+{\em context} & The parse tree.\\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{interfacezlua_1_1_i_lua_listener_adf5acf7049bb52ab0840b23bd5038a0a}{zlua.\+I\+Lua\+Listener}}.
+
+\mbox{\Hypertarget{classzlua_1_1_lua_base_listener_aed60ef8f2e3a221a83c9b5be20dcc8c0}\label{classzlua_1_1_lua_base_listener_aed60ef8f2e3a221a83c9b5be20dcc8c0}} 
+\index{zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}!Exit\+Operator\+Power@{Exit\+Operator\+Power}}
+\index{Exit\+Operator\+Power@{Exit\+Operator\+Power}!zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}}
+\subsubsection{\texorpdfstring{Exit\+Operator\+Power()}{ExitOperatorPower()}}
+{\footnotesize\ttfamily virtual void zlua.\+Lua\+Base\+Listener.\+Exit\+Operator\+Power (\begin{DoxyParamCaption}\item[{\mbox{[}\+Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_operator_power_context}{Lua\+Parser.\+Operator\+Power\+Context}}}]{context }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Exit a parse tree produced by Lua\+Parser.\+operator\+Power. 
+
+The default implementation does nothing.
+
+
+\begin{DoxyParams}{Parameters}
+{\em context} & The parse tree.\\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{interfacezlua_1_1_i_lua_listener_a9047288a8f7ec003bff25c26b1d2984d}{zlua.\+I\+Lua\+Listener}}.
+
+\mbox{\Hypertarget{classzlua_1_1_lua_base_listener_a120cd0798009d1b1574ac0ec556482a7}\label{classzlua_1_1_lua_base_listener_a120cd0798009d1b1574ac0ec556482a7}} 
+\index{zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}!Exit\+Operator\+Strcat@{Exit\+Operator\+Strcat}}
+\index{Exit\+Operator\+Strcat@{Exit\+Operator\+Strcat}!zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}}
+\subsubsection{\texorpdfstring{Exit\+Operator\+Strcat()}{ExitOperatorStrcat()}}
+{\footnotesize\ttfamily virtual void zlua.\+Lua\+Base\+Listener.\+Exit\+Operator\+Strcat (\begin{DoxyParamCaption}\item[{\mbox{[}\+Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_operator_strcat_context}{Lua\+Parser.\+Operator\+Strcat\+Context}}}]{context }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Exit a parse tree produced by Lua\+Parser.\+operator\+Strcat. 
+
+The default implementation does nothing.
+
+
+\begin{DoxyParams}{Parameters}
+{\em context} & The parse tree.\\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{interfacezlua_1_1_i_lua_listener_a9b0c6b0efb7d5c405477117f0df532fa}{zlua.\+I\+Lua\+Listener}}.
+
+\mbox{\Hypertarget{classzlua_1_1_lua_base_listener_a7c6d18b5d844f0af74c1123b245bc373}\label{classzlua_1_1_lua_base_listener_a7c6d18b5d844f0af74c1123b245bc373}} 
+\index{zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}!Exit\+Operator\+Unary@{Exit\+Operator\+Unary}}
+\index{Exit\+Operator\+Unary@{Exit\+Operator\+Unary}!zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}}
+\subsubsection{\texorpdfstring{Exit\+Operator\+Unary()}{ExitOperatorUnary()}}
+{\footnotesize\ttfamily virtual void zlua.\+Lua\+Base\+Listener.\+Exit\+Operator\+Unary (\begin{DoxyParamCaption}\item[{\mbox{[}\+Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_operator_unary_context}{Lua\+Parser.\+Operator\+Unary\+Context}}}]{context }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Exit a parse tree produced by Lua\+Parser.\+operator\+Unary. 
+
+The default implementation does nothing.
+
+
+\begin{DoxyParams}{Parameters}
+{\em context} & The parse tree.\\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{interfacezlua_1_1_i_lua_listener_ab4c9d1484b1f65d892ad588b7b01814e}{zlua.\+I\+Lua\+Listener}}.
+
+\mbox{\Hypertarget{classzlua_1_1_lua_base_listener_af7c71a424a8f8682ecd95c95cff6e64b}\label{classzlua_1_1_lua_base_listener_af7c71a424a8f8682ecd95c95cff6e64b}} 
+\index{zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}!Exit\+Parlist@{Exit\+Parlist}}
+\index{Exit\+Parlist@{Exit\+Parlist}!zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}}
+\subsubsection{\texorpdfstring{Exit\+Parlist()}{ExitParlist()}}
+{\footnotesize\ttfamily virtual void zlua.\+Lua\+Base\+Listener.\+Exit\+Parlist (\begin{DoxyParamCaption}\item[{\mbox{[}\+Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_parlist_context}{Lua\+Parser.\+Parlist\+Context}}}]{context }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Exit a parse tree produced by Lua\+Parser.\+parlist. 
+
+The default implementation does nothing.
+
+
+\begin{DoxyParams}{Parameters}
+{\em context} & The parse tree.\\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{interfacezlua_1_1_i_lua_listener_a067b1e085ec7ffaab84c99f820ccd5fa}{zlua.\+I\+Lua\+Listener}}.
+
+\mbox{\Hypertarget{classzlua_1_1_lua_base_listener_a7127f827c3355d3bac100faa365ffa5b}\label{classzlua_1_1_lua_base_listener_a7127f827c3355d3bac100faa365ffa5b}} 
+\index{zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}!Exit\+Prefix\+\_\+exp\+\_\+exp@{Exit\+Prefix\+\_\+exp\+\_\+exp}}
+\index{Exit\+Prefix\+\_\+exp\+\_\+exp@{Exit\+Prefix\+\_\+exp\+\_\+exp}!zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}}
+\subsubsection{\texorpdfstring{Exit\+Prefix\+\_\+exp\+\_\+exp()}{ExitPrefix\_exp\_exp()}}
+{\footnotesize\ttfamily virtual void zlua.\+Lua\+Base\+Listener.\+Exit\+Prefix\+\_\+exp\+\_\+exp (\begin{DoxyParamCaption}\item[{\mbox{[}\+Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_prefix__exp__exp_context}{Lua\+Parser.\+Prefix\+\_\+exp\+\_\+exp\+Context}}}]{context }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Exit a parse tree produced by the {\ttfamily prefix\+\_\+exp\+\_\+exp} labeled alternative in Lua\+Parser.\+exp. 
+
+The default implementation does nothing.
+
+
+\begin{DoxyParams}{Parameters}
+{\em context} & The parse tree.\\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{interfacezlua_1_1_i_lua_listener_a88094687ca2271e4cbef04c18a738b99}{zlua.\+I\+Lua\+Listener}}.
+
+\mbox{\Hypertarget{classzlua_1_1_lua_base_listener_a2d2173a2484aac9cb7e09010ca3170e9}\label{classzlua_1_1_lua_base_listener_a2d2173a2484aac9cb7e09010ca3170e9}} 
+\index{zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}!Exit\+Prefixexp@{Exit\+Prefixexp}}
+\index{Exit\+Prefixexp@{Exit\+Prefixexp}!zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}}
+\subsubsection{\texorpdfstring{Exit\+Prefixexp()}{ExitPrefixexp()}}
+{\footnotesize\ttfamily virtual void zlua.\+Lua\+Base\+Listener.\+Exit\+Prefixexp (\begin{DoxyParamCaption}\item[{\mbox{[}\+Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_prefixexp_context}{Lua\+Parser.\+Prefixexp\+Context}}}]{context }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Exit a parse tree produced by Lua\+Parser.\+prefixexp. 
+
+The default implementation does nothing.
+
+
+\begin{DoxyParams}{Parameters}
+{\em context} & The parse tree.\\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{interfacezlua_1_1_i_lua_listener_a844508765196c91884c10bcaa1a14424}{zlua.\+I\+Lua\+Listener}}.
+
+\mbox{\Hypertarget{classzlua_1_1_lua_base_listener_a8b590e84f7634f57b233bc7df33591e6}\label{classzlua_1_1_lua_base_listener_a8b590e84f7634f57b233bc7df33591e6}} 
+\index{zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}!Exit\+Retstat@{Exit\+Retstat}}
+\index{Exit\+Retstat@{Exit\+Retstat}!zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}}
+\subsubsection{\texorpdfstring{Exit\+Retstat()}{ExitRetstat()}}
+{\footnotesize\ttfamily virtual void zlua.\+Lua\+Base\+Listener.\+Exit\+Retstat (\begin{DoxyParamCaption}\item[{\mbox{[}\+Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_retstat_context}{Lua\+Parser.\+Retstat\+Context}}}]{context }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Exit a parse tree produced by Lua\+Parser.\+retstat. 
+
+The default implementation does nothing.
+
+
+\begin{DoxyParams}{Parameters}
+{\em context} & The parse tree.\\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{interfacezlua_1_1_i_lua_listener_a4f4bc76c085e375c69f6c34491670d9e}{zlua.\+I\+Lua\+Listener}}.
+
+\mbox{\Hypertarget{classzlua_1_1_lua_base_listener_abf60a39c358a7aafc2ddaa2fbb05d49d}\label{classzlua_1_1_lua_base_listener_abf60a39c358a7aafc2ddaa2fbb05d49d}} 
+\index{zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}!Exit\+Stat@{Exit\+Stat}}
+\index{Exit\+Stat@{Exit\+Stat}!zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}}
+\subsubsection{\texorpdfstring{Exit\+Stat()}{ExitStat()}}
+{\footnotesize\ttfamily virtual void zlua.\+Lua\+Base\+Listener.\+Exit\+Stat (\begin{DoxyParamCaption}\item[{\mbox{[}\+Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_stat_context}{Lua\+Parser.\+Stat\+Context}}}]{context }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Exit a parse tree produced by Lua\+Parser.\+stat. 
+
+The default implementation does nothing.
+
+
+\begin{DoxyParams}{Parameters}
+{\em context} & The parse tree.\\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{interfacezlua_1_1_i_lua_listener_adb5cede64711480ae76ce5eece644ee4}{zlua.\+I\+Lua\+Listener}}.
+
+\mbox{\Hypertarget{classzlua_1_1_lua_base_listener_ac80dc12b34aee654e56ecc7e37a77ac7}\label{classzlua_1_1_lua_base_listener_ac80dc12b34aee654e56ecc7e37a77ac7}} 
+\index{zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}!Exit\+String@{Exit\+String}}
+\index{Exit\+String@{Exit\+String}!zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}}
+\subsubsection{\texorpdfstring{Exit\+String()}{ExitString()}}
+{\footnotesize\ttfamily virtual void zlua.\+Lua\+Base\+Listener.\+Exit\+String (\begin{DoxyParamCaption}\item[{\mbox{[}\+Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_string_context}{Lua\+Parser.\+String\+Context}}}]{context }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Exit a parse tree produced by Lua\+Parser.\+string. 
+
+The default implementation does nothing.
+
+
+\begin{DoxyParams}{Parameters}
+{\em context} & The parse tree.\\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{interfacezlua_1_1_i_lua_listener_afc8e259f5d8629fd2fd800f847dd62a6}{zlua.\+I\+Lua\+Listener}}.
+
+\mbox{\Hypertarget{classzlua_1_1_lua_base_listener_ac4f5a6a5139a8c670bb8f075a8fc3782}\label{classzlua_1_1_lua_base_listener_ac4f5a6a5139a8c670bb8f075a8fc3782}} 
+\index{zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}!Exit\+String\+\_\+exp@{Exit\+String\+\_\+exp}}
+\index{Exit\+String\+\_\+exp@{Exit\+String\+\_\+exp}!zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}}
+\subsubsection{\texorpdfstring{Exit\+String\+\_\+exp()}{ExitString\_exp()}}
+{\footnotesize\ttfamily virtual void zlua.\+Lua\+Base\+Listener.\+Exit\+String\+\_\+exp (\begin{DoxyParamCaption}\item[{\mbox{[}\+Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_string__exp_context}{Lua\+Parser.\+String\+\_\+exp\+Context}}}]{context }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Exit a parse tree produced by the {\ttfamily string\+\_\+exp} labeled alternative in Lua\+Parser.\+exp. 
+
+The default implementation does nothing.
+
+
+\begin{DoxyParams}{Parameters}
+{\em context} & The parse tree.\\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{interfacezlua_1_1_i_lua_listener_adaa28943f1961d32164acc489c86f308}{zlua.\+I\+Lua\+Listener}}.
+
+\mbox{\Hypertarget{classzlua_1_1_lua_base_listener_ac8f2cae2546480b3e82b85cd55a7258e}\label{classzlua_1_1_lua_base_listener_ac8f2cae2546480b3e82b85cd55a7258e}} 
+\index{zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}!Exit\+Table\+\_\+ctor\+\_\+exp@{Exit\+Table\+\_\+ctor\+\_\+exp}}
+\index{Exit\+Table\+\_\+ctor\+\_\+exp@{Exit\+Table\+\_\+ctor\+\_\+exp}!zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}}
+\subsubsection{\texorpdfstring{Exit\+Table\+\_\+ctor\+\_\+exp()}{ExitTable\_ctor\_exp()}}
+{\footnotesize\ttfamily virtual void zlua.\+Lua\+Base\+Listener.\+Exit\+Table\+\_\+ctor\+\_\+exp (\begin{DoxyParamCaption}\item[{\mbox{[}\+Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_table__ctor__exp_context}{Lua\+Parser.\+Table\+\_\+ctor\+\_\+exp\+Context}}}]{context }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Exit a parse tree produced by the {\ttfamily table\+\_\+ctor\+\_\+exp} labeled alternative in Lua\+Parser.\+exp. 
+
+The default implementation does nothing.
+
+
+\begin{DoxyParams}{Parameters}
+{\em context} & The parse tree.\\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{interfacezlua_1_1_i_lua_listener_a30a4acd429120b15838dc24ddb201fc6}{zlua.\+I\+Lua\+Listener}}.
+
+\mbox{\Hypertarget{classzlua_1_1_lua_base_listener_aa0a2a4e40e4246abaddc0bbe731748c6}\label{classzlua_1_1_lua_base_listener_aa0a2a4e40e4246abaddc0bbe731748c6}} 
+\index{zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}!Exit\+Tableconstructor@{Exit\+Tableconstructor}}
+\index{Exit\+Tableconstructor@{Exit\+Tableconstructor}!zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}}
+\subsubsection{\texorpdfstring{Exit\+Tableconstructor()}{ExitTableconstructor()}}
+{\footnotesize\ttfamily virtual void zlua.\+Lua\+Base\+Listener.\+Exit\+Tableconstructor (\begin{DoxyParamCaption}\item[{\mbox{[}\+Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_tableconstructor_context}{Lua\+Parser.\+Tableconstructor\+Context}}}]{context }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Exit a parse tree produced by Lua\+Parser.\+tableconstructor. 
+
+The default implementation does nothing.
+
+
+\begin{DoxyParams}{Parameters}
+{\em context} & The parse tree.\\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{interfacezlua_1_1_i_lua_listener_ae19198d7c5130d70ca8ffa5ff81c168e}{zlua.\+I\+Lua\+Listener}}.
+
+\mbox{\Hypertarget{classzlua_1_1_lua_base_listener_a1f4f2a7162ad93c54ae0c86a15233bac}\label{classzlua_1_1_lua_base_listener_a1f4f2a7162ad93c54ae0c86a15233bac}} 
+\index{zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}!Exit\+True\+\_\+exp@{Exit\+True\+\_\+exp}}
+\index{Exit\+True\+\_\+exp@{Exit\+True\+\_\+exp}!zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}}
+\subsubsection{\texorpdfstring{Exit\+True\+\_\+exp()}{ExitTrue\_exp()}}
+{\footnotesize\ttfamily virtual void zlua.\+Lua\+Base\+Listener.\+Exit\+True\+\_\+exp (\begin{DoxyParamCaption}\item[{\mbox{[}\+Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_true__exp_context}{Lua\+Parser.\+True\+\_\+exp\+Context}}}]{context }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Exit a parse tree produced by the {\ttfamily true\+\_\+exp} labeled alternative in Lua\+Parser.\+exp. 
+
+The default implementation does nothing.
+
+
+\begin{DoxyParams}{Parameters}
+{\em context} & The parse tree.\\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{interfacezlua_1_1_i_lua_listener_a9d5a4a9bd56969dc9b5269fd3049187d}{zlua.\+I\+Lua\+Listener}}.
+
+\mbox{\Hypertarget{classzlua_1_1_lua_base_listener_a37244bd0d8813ac29d8b841496ff4a75}\label{classzlua_1_1_lua_base_listener_a37244bd0d8813ac29d8b841496ff4a75}} 
+\index{zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}!Exit\+Var@{Exit\+Var}}
+\index{Exit\+Var@{Exit\+Var}!zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}}
+\subsubsection{\texorpdfstring{Exit\+Var()}{ExitVar()}}
+{\footnotesize\ttfamily virtual void zlua.\+Lua\+Base\+Listener.\+Exit\+Var (\begin{DoxyParamCaption}\item[{\mbox{[}\+Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_var_context}{Lua\+Parser.\+Var\+Context}}}]{context }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Exit a parse tree produced by Lua\+Parser.\+var. 
+
+The default implementation does nothing.
+
+
+\begin{DoxyParams}{Parameters}
+{\em context} & The parse tree.\\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{interfacezlua_1_1_i_lua_listener_ab0371ff8288b99ae8fe05ccba2980ee2}{zlua.\+I\+Lua\+Listener}}.
+
+\mbox{\Hypertarget{classzlua_1_1_lua_base_listener_ad18289513e8ed51c9505bf21aa5c7523}\label{classzlua_1_1_lua_base_listener_ad18289513e8ed51c9505bf21aa5c7523}} 
+\index{zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}!Exit\+Varlist@{Exit\+Varlist}}
+\index{Exit\+Varlist@{Exit\+Varlist}!zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}}
+\subsubsection{\texorpdfstring{Exit\+Varlist()}{ExitVarlist()}}
+{\footnotesize\ttfamily virtual void zlua.\+Lua\+Base\+Listener.\+Exit\+Varlist (\begin{DoxyParamCaption}\item[{\mbox{[}\+Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_varlist_context}{Lua\+Parser.\+Varlist\+Context}}}]{context }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Exit a parse tree produced by Lua\+Parser.\+varlist. 
+
+The default implementation does nothing.
+
+
+\begin{DoxyParams}{Parameters}
+{\em context} & The parse tree.\\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{interfacezlua_1_1_i_lua_listener_a25fcca7c6476226f6faf33597226f9b3}{zlua.\+I\+Lua\+Listener}}.
+
+\mbox{\Hypertarget{classzlua_1_1_lua_base_listener_a741486bd709e9d345238f2f706e4e44b}\label{classzlua_1_1_lua_base_listener_a741486bd709e9d345238f2f706e4e44b}} 
+\index{zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}!Exit\+Var\+Or\+Exp@{Exit\+Var\+Or\+Exp}}
+\index{Exit\+Var\+Or\+Exp@{Exit\+Var\+Or\+Exp}!zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}}
+\subsubsection{\texorpdfstring{Exit\+Var\+Or\+Exp()}{ExitVarOrExp()}}
+{\footnotesize\ttfamily virtual void zlua.\+Lua\+Base\+Listener.\+Exit\+Var\+Or\+Exp (\begin{DoxyParamCaption}\item[{\mbox{[}\+Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_var_or_exp_context}{Lua\+Parser.\+Var\+Or\+Exp\+Context}}}]{context }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Exit a parse tree produced by Lua\+Parser.\+var\+Or\+Exp. 
+
+The default implementation does nothing.
+
+
+\begin{DoxyParams}{Parameters}
+{\em context} & The parse tree.\\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{interfacezlua_1_1_i_lua_listener_a0c463bdafad827e9a749f5276a7bb7df}{zlua.\+I\+Lua\+Listener}}.
+
+\mbox{\Hypertarget{classzlua_1_1_lua_base_listener_af8716e19b6123340f1a13c0ecf019d06}\label{classzlua_1_1_lua_base_listener_af8716e19b6123340f1a13c0ecf019d06}} 
+\index{zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}!Exit\+Var\+Suffix@{Exit\+Var\+Suffix}}
+\index{Exit\+Var\+Suffix@{Exit\+Var\+Suffix}!zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}}
+\subsubsection{\texorpdfstring{Exit\+Var\+Suffix()}{ExitVarSuffix()}}
+{\footnotesize\ttfamily virtual void zlua.\+Lua\+Base\+Listener.\+Exit\+Var\+Suffix (\begin{DoxyParamCaption}\item[{\mbox{[}\+Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_var_suffix_context}{Lua\+Parser.\+Var\+Suffix\+Context}}}]{context }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Exit a parse tree produced by Lua\+Parser.\+var\+Suffix. 
+
+The default implementation does nothing.
+
+
+\begin{DoxyParams}{Parameters}
+{\em context} & The parse tree.\\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{interfacezlua_1_1_i_lua_listener_a6445ba070fc2f85e9a4ca3caf3a75d0b}{zlua.\+I\+Lua\+Listener}}.
+
+\mbox{\Hypertarget{classzlua_1_1_lua_base_listener_a35e673f6a18bfef7e92e04ef244093fc}\label{classzlua_1_1_lua_base_listener_a35e673f6a18bfef7e92e04ef244093fc}} 
+\index{zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}!Exit\+While\+\_\+stat@{Exit\+While\+\_\+stat}}
+\index{Exit\+While\+\_\+stat@{Exit\+While\+\_\+stat}!zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}}
+\subsubsection{\texorpdfstring{Exit\+While\+\_\+stat()}{ExitWhile\_stat()}}
+{\footnotesize\ttfamily virtual void zlua.\+Lua\+Base\+Listener.\+Exit\+While\+\_\+stat (\begin{DoxyParamCaption}\item[{\mbox{[}\+Not\+Null\mbox{]} \mbox{\hyperlink{classzlua_1_1_lua_parser_1_1_while__stat_context}{Lua\+Parser.\+While\+\_\+stat\+Context}}}]{context }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Exit a parse tree produced by the {\ttfamily while\+\_\+stat} labeled alternative in Lua\+Parser.\+stat. 
+
+The default implementation does nothing.
+
+
+\begin{DoxyParams}{Parameters}
+{\em context} & The parse tree.\\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{interfacezlua_1_1_i_lua_listener_ab7cdf0dd588b664e1f8efbca0a03884e}{zlua.\+I\+Lua\+Listener}}.
+
+\mbox{\Hypertarget{classzlua_1_1_lua_base_listener_abd2e864ac32107d653a410868637a8f7}\label{classzlua_1_1_lua_base_listener_abd2e864ac32107d653a410868637a8f7}} 
+\index{zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}!Visit\+Error\+Node@{Visit\+Error\+Node}}
+\index{Visit\+Error\+Node@{Visit\+Error\+Node}!zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}}
+\subsubsection{\texorpdfstring{Visit\+Error\+Node()}{VisitErrorNode()}}
+{\footnotesize\ttfamily virtual void zlua.\+Lua\+Base\+Listener.\+Visit\+Error\+Node (\begin{DoxyParamCaption}\item[{\mbox{[}\+Not\+Null\mbox{]} I\+Error\+Node}]{node }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+The default implementation does nothing.\mbox{\Hypertarget{classzlua_1_1_lua_base_listener_a8cb7657e2ecbfc55be50ecb82ad121aa}\label{classzlua_1_1_lua_base_listener_a8cb7657e2ecbfc55be50ecb82ad121aa}} 
+\index{zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}!Visit\+Terminal@{Visit\+Terminal}}
+\index{Visit\+Terminal@{Visit\+Terminal}!zlua\+::\+Lua\+Base\+Listener@{zlua\+::\+Lua\+Base\+Listener}}
+\subsubsection{\texorpdfstring{Visit\+Terminal()}{VisitTerminal()}}
+{\footnotesize\ttfamily virtual void zlua.\+Lua\+Base\+Listener.\+Visit\+Terminal (\begin{DoxyParamCaption}\item[{\mbox{[}\+Not\+Null\mbox{]} I\+Terminal\+Node}]{node }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+The default implementation does nothing.
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+zlua/Lua\+Base\+Listener.\+cs\end{DoxyCompactItemize}
