@@ -42,7 +42,7 @@ namespace zlua {
             USERDATA = 7,
             THREAD = 8,
         }
-        public void dofile(string path)
+        public static void dofile(string path)
         {
             FileStream F = new FileStream(@"..\..\"+path,FileMode.Open, FileAccess.Read);
             AntlrInputStream inputStream = new AntlrInputStream(F);
@@ -53,7 +53,7 @@ namespace zlua {
             var walker =new ParseTreeWalker();
             var compiler = new Compiler();
             walker.Walk(compiler, tree);
-            new Thread(compiler.main_func).run();
+            new lua_Thread(compiler.main_func).run();
 
         }
     }

@@ -49,6 +49,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="compiler.cs" />
+    <Compile Include="ISA.cs" />
     <Compile Include="lobject.cs" />
     <Compile Include="lua.cs" />
     <Compile Include="LuaBaseListener.cs" />

@@ -10,7 +10,7 @@ namespace zlua
     {
         public static void Main(string[] args)
         {
-            new Lua().dofile("test.lua");
+            Lua.dofile("test.lua");
         }
     }
 }

@@ -12,7 +12,12 @@ namespace zlua
 
     class Compiler : ILuaListener
     {
-        public Lua.CompiledFunction main_func;
+        public Lua.CompiledFunction main_func=new Lua.CompiledFunction(null,null)
+        Lua.CompiledFunction curr_func;
+        void append_instr(Lua.AssembledInstr)
+        {
+            curr
+        }
         public void EnterArgs([NotNull] LuaParser.ArgsContext context)
         {
             

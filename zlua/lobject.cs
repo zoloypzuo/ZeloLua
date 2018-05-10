@@ -102,6 +102,7 @@ namespace zlua
                 };
                 return _ret;
             }
+            public bool is_tstring() => type == LuaType.STRING;
         }
         /// <summary>
         /// "Proto in lua.c"
@@ -111,9 +112,14 @@ namespace zlua
         {
             public List<string> param_names;
             public CompiledFunction parent;
-            public List<AssembledInstr> instrs;
-            public List<CompiledFunction> inner_funcs;
-            public Dictionary<string, int> label2pc; //label table
+            public List<AssembledInstr> instrs=new List<AssembledInstr>();
+            public List<CompiledFunction> inner_funcs=new List<CompiledFunction>();
+            public Dictionary<string, int> label2pc=new Dictionary<string, int>(); //label table
+            public CompiledFunction(CompiledFunction parent,List<string> param_names)
+            {
+                this.parent = parent;
+                this.param_names = param_names;
+            }
         }
         /// <summary>
         /// "Clousure" in lua.c
@@ -122,8 +128,8 @@ namespace zlua
         {
             public CompiledFunction func;
             public int ret_addr;
-            public Dictionary<string, lua_TValue> local_data;
-            public List<lua_TValue> stack;
+            public Dictionary<string, lua_TValue> local_data=new Dictionary<string, lua_TValue>();
+            public Stack<lua_TValue> stack=new Stack<lua_TValue>();
             public RuntimeFunc(CompiledFunction func)
             {
                 this.func = func;
@@ -155,15 +161,10 @@ namespace zlua
             public TString tstring { get { return this as TString; } }
             //public Table h { get { return (Table)this; } }
             //public UpVal uv { get { return (UpVal)this; } }
-            //public lua_Thread thread { get { return this as lua_Thread; } }
+            public lua_Thread thread { get { return this as lua_Thread; } }
             public CompiledFunction compiled_func { get { return this as CompiledFunction; } }
             public RuntimeFunc runtime_func { get { return this as RuntimeFunc; } }
         }
-        public class AssembledInstr
-        {
-            string opcode;
-            List<lua_TValue> operands;
-            public override string ToString() => opcode + " " + string.Join(",", operands);
-        }
+        
     }
 }
