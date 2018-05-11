@@ -30,9 +30,9 @@
     p=add(1,2)
 
 -- while loop
-    while true do
-        q=1
-    end
+--    while true do
+--        q=1
+--    end
 
     --while a==1 do
     --    q=1

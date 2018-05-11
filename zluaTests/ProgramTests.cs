@@ -17,8 +17,6 @@ namespace zlua.Tests
         [TestMethod()]
         public void ObjectTest()
         {
-            var a=new Lua.lua_TValue();
-            ;
         }
     }
 }

@@ -26,7 +26,7 @@ namespace zlua
             public int pc = 0;
             public lua_Thread(CompiledFunction main_func)
             {
-                rt_main_func = new RuntimeFunc(main_func);
+                rt_main_func = new RuntimeFunc(main_func) { ret_addr = -1 };
                 global_data = rt_main_func.local_data;
                 stack.Push(rt_main_func);
             }
@@ -36,7 +36,7 @@ namespace zlua
                 while (true)
                 {
                     var curr_instr = curr_func.func.instrs[pc];
-                    curr_instr.execute(this);
+                     curr_instr.execute(this);
                     pc++;
                 }
             }

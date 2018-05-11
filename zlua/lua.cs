@@ -42,6 +42,7 @@ namespace zlua {
             USERDATA = 7,
             THREAD = 8,
             CLOSURE=9, //自己加的
+            INT=10,//ziji jia de 
         }
         public static void dofile(string path)
         {

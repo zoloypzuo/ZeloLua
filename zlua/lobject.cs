@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace zlua
 {
@@ -69,8 +70,8 @@ namespace zlua
             {
 
             }
-            public static lua_TValue NIL() => new lua_TValue();
-            public static lua_TValue TString(string s)
+            public static lua_TValue nil_factory() => new lua_TValue();
+            public static lua_TValue tstring_factory(string s)
             {
                 var _ret = new lua_TValue()
                 {
@@ -82,7 +83,7 @@ namespace zlua
                 };
                 return _ret;
             }
-            public static lua_TValue RuntimeFunc(CompiledFunction func)
+            public static lua_TValue runtime_func_factory(CompiledFunction func)
             {
                 var _ret = new lua_TValue()
                 {
@@ -94,7 +95,7 @@ namespace zlua
                 };
                 return _ret;
             }
-            public static lua_TValue Bool(bool b)
+            public static lua_TValue bool_factory(bool b)
             {
                 var _ret = new lua_TValue()
                 {
@@ -107,7 +108,7 @@ namespace zlua
                 return _ret;
             }
             public bool is_tstring() => type == LuaType.STRING;
-            public static lua_TValue CompiledFunc(CompiledFunction compiledFunction)
+            public static lua_TValue compiled_func_factory(CompiledFunction compiledFunction)
             {
                 var _ret = new lua_TValue
                 {
@@ -119,9 +120,66 @@ namespace zlua
                 };
                 return _ret;
             }
-            public string str{ get => value.gcobject.tstring.str; }
+            public string str { get => value.gcobject.tstring.str; }
             public CompiledFunction compiled_func { get => value.gcobject.compiled_func; }
+            public int i { get => value.i; }
+            public static lua_TValue i_factory(int i){
+                var _ret = new lua_TValue
+                {
+                    type = LuaType.INT,
+                    value = new Value
+                    {
+                        i=i
+                    }
+                };
+                return _ret;
+            }
+            public static lua_TValue operator +(lua_TValue lhs, lua_TValue rhs)
+            {
+                Debug.Assert(lhs.type == rhs.type);
+                return lua_TValue.n_factory(lhs.n + rhs.n);
+            }
+            public lua_Number n { get => value.n; }
+            public static lua_TValue n_factory(lua_Number n)
+            {
+                var _ret = new lua_TValue()
+                {
+                    type = LuaType.NUMBER,
+                    value = new Value
+                    {
+                        n = n
+                    }
+                };
+                return _ret;
+            }
+            public static lua_TValue operator *(lua_TValue lhs, lua_TValue rhs)
+            {
+                Debug.Assert(lhs.type == rhs.type);
+                return n_factory(lhs.n * rhs.n);
+            }
+            public static lua_TValue and(lua_TValue lhs,lua_TValue rhs)
+            {
+                return b_factory(lhs.b && rhs.b);
+            }
+            public static lua_TValue eq(lua_TValue lhs,lua_TValue rhs)
+            {
+                return b_factory(lhs.b == rhs.b);
+            }
+            public bool b { get => value.b; }
+            public static lua_TValue b_factory(bool b)
+            {
+                var _ret = new lua_TValue
+                {
+                    type = LuaType.BOOLEAN,
+                    value = new Value
+                    {
+                        b = b
+                    }
+                };
+                return _ret;
+            }
         }
+
         /// <summary>
         /// "Proto in lua.c"
         /// proto is gcobject, but is not a primitive type
@@ -130,10 +188,10 @@ namespace zlua
         {
             public List<string> param_names;
             public CompiledFunction parent;
-            public List<AssembledInstr> instrs=new List<AssembledInstr>();
-            public List<CompiledFunction> inner_funcs=new List<CompiledFunction>();
-            public Dictionary<string, int> label2pc=new Dictionary<string, int>(); //label table
-            public CompiledFunction(CompiledFunction parent,List<string> param_names)
+            public List<AssembledInstr> instrs = new List<AssembledInstr>();
+            public List<CompiledFunction> inner_funcs = new List<CompiledFunction>();
+            public Dictionary<string, int> label2pc = new Dictionary<string, int>(); //label table
+            public CompiledFunction(CompiledFunction parent, List<string> param_names)
             {
                 this.parent = parent;
                 this.param_names = param_names;
@@ -146,8 +204,8 @@ namespace zlua
         {
             public CompiledFunction func;
             public int ret_addr;
-            public Dictionary<string, lua_TValue> local_data=new Dictionary<string, lua_TValue>();
-            public Stack<lua_TValue> stack=new Stack<lua_TValue>();
+            public Dictionary<string, lua_TValue> local_data = new Dictionary<string, lua_TValue>();
+            public Stack<lua_TValue> stack = new Stack<lua_TValue>();
             public RuntimeFunc(CompiledFunction func)
             {
                 this.func = func;
@@ -183,6 +241,6 @@ namespace zlua
             public CompiledFunction compiled_func { get { return this as CompiledFunction; } }
             public RuntimeFunc runtime_func { get { return this as RuntimeFunc; } }
         }
-        
+
     }
 }
