@@ -28,7 +28,7 @@ class RuntimeFunc:
         self.ret_addr = None  # None if _Main
         self.local_data = {}  # _Main's local_data is global data
         # self.args = []  # args for call another func
-        self.ret_val = None
+        # self.ret_val = None
         self.stack = []  # "stack-based vm"
 
 
@@ -104,7 +104,7 @@ class Thread:
         callee.ret_addr = self.pc
         # pass params
         for i in range(len(callee.func.param_names)):
-            callee.local_data[callee.func.param_names[i]] = self.curr_func.stack.pop()
+            callee.local_data[callee.func.param_names[i]] = self.pop()
         self.stack.append(callee)
         self.pc = -1  # -1 is tricky, pc will increment after execute
 
@@ -112,21 +112,15 @@ class Thread:
         if self.curr_func.ret_addr == None:
             exit('Return from _Main, Process executed')
         self.pc = self.curr_func.ret_addr
-        ret_val = self.curr_func.stack.pop()
+        ret_val = self.pop()
         self.stack.pop()
-        self.curr_func.stack.append(ret_val)
-
-    def load_arg(self, *operands):
-        self.curr_func.args.append(self.parse_value(operands[0]))
-
-    def load_ret_val(self, *operands):
-        self.curr_func.ret_val = self.parse_value(operands[0])
+        self.push(ret_val)
 
     def add(self, *operands):
         # self.curr_func.local_data[operands[0]] = sum(
         #     map(self.parse_value, operands[1:]))  # tricky, add C A B: C=A+B, ...
-        a0 = self.curr_func.stack.pop()
-        a1 = self.curr_func.stack.pop()
+        a0 = self.pop()
+        a1 = self.pop()
         self.push(a0 + a1)
 
     def load(self, path):

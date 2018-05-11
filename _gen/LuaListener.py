@@ -17,11 +17,9 @@ class LuaListener(ParseTreeListener):
         self.main_func = Function(None)
         self.current_func = self.main_func
 
-        self.exp_stakc = []
-
     # Exit a parse tree produced by LuaParser#chunk.
     def exitChunk(self, ctx: LuaParser.ChunkContext):
-        pass
+        self.append_instr('ret') #???需要吗
 
     # Enter a parse tree produced by LuaParser#block.
     def enterBlock(self, ctx: LuaParser.BlockContext):
@@ -295,9 +293,6 @@ class LuaListener(ParseTreeListener):
     # Exit a parse tree produced by LuaParser#true_exp.
     def exitTrue_exp(self, ctx: LuaParser.True_expContext):
         self.append_instr('push',True)
-
-    def push(self,item):
-        self.current_func.stack.append(item)
 
 
     # Enter a parse tree produced by LuaParser#func_def_exp.

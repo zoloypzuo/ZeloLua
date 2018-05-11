@@ -12,7 +12,7 @@ zasm is .zasm assembler, it outputs xxx_exe.json which is input of zvm
 
 from re import match, sub, split
 from ISA import ISA
-from z_json import beautified_json, plain_json
+# from z_json import beautified_json, plain_json
 from os import path as _p
 
 import pickle
