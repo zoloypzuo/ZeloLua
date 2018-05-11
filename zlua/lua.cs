@@ -41,6 +41,7 @@ namespace zlua {
             FUNCTION = 6,
             USERDATA = 7,
             THREAD = 8,
+            CLOSURE=9, //自己加的
         }
         public static void dofile(string path)
         {

@@ -12,11 +12,11 @@ namespace zlua
 
     class Compiler : ILuaListener
     {
-        public Lua.CompiledFunction main_func=new Lua.CompiledFunction(null,null)
+        public Lua.CompiledFunction main_func = new Lua.CompiledFunction(null, null);
         Lua.CompiledFunction curr_func;
-        void append_instr(Lua.AssembledInstr)
+        void append_instr(Lua.AssembledInstr instr)
         {
-            curr
+            curr_func.instrs.Add(instr);
         }
         public void EnterArgs([NotNull] LuaParser.ArgsContext context)
         {
@@ -40,7 +40,7 @@ namespace zlua
 
         public void EnterChunk([NotNull] LuaParser.ChunkContext context)
         {
-            
+            curr_func = main_func;
         }
 
         public void EnterDo_end_stat([NotNull] LuaParser.Do_end_statContext context)
@@ -120,7 +120,9 @@ namespace zlua
 
         public void EnterFunc_def_stat([NotNull] LuaParser.Func_def_statContext context)
         {
-            
+            var para_list = context.funcbody().parlist().GetText().Split(',');
+            var new_func = new Lua.CompiledFunction(curr_func, new List<string>(para_list));
+            append_instr(new Lua.closure())
         }
 
         public void EnterGlobal_func_def_stat([NotNull] LuaParser.Global_func_def_statContext context)
@@ -325,7 +327,7 @@ namespace zlua
 
         public void ExitAssign_stat([NotNull] LuaParser.Assign_statContext context)
         {
-            
+            append_instr(new Lua.mov(Lua.lua_TValue.TString(context.var().GetText())));
         }
 
         public void ExitBlock([NotNull] LuaParser.BlockContext context)

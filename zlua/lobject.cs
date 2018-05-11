@@ -35,21 +35,25 @@ namespace zlua
             /// <summary>
             /// the int type of lua
             /// </summary>
-            //public int i { get; set; }  ???怎么区别？？？
+            public int i { get; set; }  //用于index等
 
             public bool b { get; set; }
 
         }
         /// <summary>
         /// the general type of lua. T means "tagged" 
+        /// method brief:
+        /// 1. factory: return a new specified lua type value; cast C# type to lua type (eg. string => tstring)
+        /// 2. property: get, set a specified lua type value
+        /// 3. cast among lua types is not needed
         /// </summary>
         public class lua_TValue
         {
-            public Value value;
+            Value value;
             /// <summary>
             /// type tag, defined in lua.cs
             /// </summary>
-            public LuaType type;
+            LuaType type;
             public override string ToString()
             {
                 if (type == LuaType.NIL) return "nil";
@@ -103,6 +107,20 @@ namespace zlua
                 return _ret;
             }
             public bool is_tstring() => type == LuaType.STRING;
+            public static lua_TValue CompiledFunc(CompiledFunction compiledFunction)
+            {
+                var _ret = new lua_TValue
+                {
+                    type = LuaType.FUNCTION,
+                    value = new Value
+                    {
+                        gcobject = compiledFunction
+                    }
+                };
+                return _ret;
+            }
+            public string str{ get => value.gcobject.tstring.str; }
+            public CompiledFunction compiled_func { get => value.gcobject.compiled_func; }
         }
         /// <summary>
         /// "Proto in lua.c"

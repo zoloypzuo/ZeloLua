@@ -40,6 +40,11 @@ namespace zlua
                     pc++;
                 }
             }
+            public void push(lua_TValue item)
+            {
+                curr_func.stack.Push(item);
+            }
+            public lua_TValue pop() => curr_func.stack.Pop();
         }
 
 

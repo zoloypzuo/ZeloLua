@@ -14,7 +14,7 @@ namespace zlua
     {
         public abstract class AssembledInstr
         {
-            protected List<lua_TValue> operands;
+            protected List<lua_TValue> operands=new List<lua_TValue>();
             public abstract string ToString();
             /// <summary>
             /// differ from py ver: C# dont have meta programming, so must use 多态 to implement visitor pattern
@@ -33,12 +33,17 @@ namespace zlua
             }
 
             public override string ToString() => "mov " + string.Join(",", operands);
+            public mov(lua_TValue var_name)
+            {
+                operands.Add(var_name);
+            }
         }
         public class closure : AssembledInstr
         {
             public override void execute(lua_Thread thread)
             {
-
+                var compiled_func = Lua.lua_TValue.CompiledFunc(thread.curr_func.func.inner_funcs[operands[0].value.i]);
+                thread.push(compiled_func);
             }
 
             public override string ToString() => "closure " + string.Join(",", operands);
@@ -48,7 +53,8 @@ namespace zlua
         {
             public override void execute(lua_Thread thread)
             {
-
+                var callee = thread.curr_func.local_data[operands[0].value.gcobject.tstring.str];
+                callee.
             }
 
             public override string ToString()
