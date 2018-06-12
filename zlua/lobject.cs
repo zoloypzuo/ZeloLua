@@ -222,7 +222,7 @@ namespace zlua
             public TString(string str) { this.str = str; }
             public string str;
             //public override string ToString() { return str.ToString(); } // for debugging
-        };
+        }
         /// <summary>
         /// (C# simulated) union of GC objects
         /// how it simulates union: polymorphic
