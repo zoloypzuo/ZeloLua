@@ -66,102 +66,25 @@ $(function() {
 </div><!-- top -->
 <div class="header">
   <div class="summary">
-<a href="#nested-classes">Classes</a> &#124;
-<a href="#pub-types">Public Types</a> &#124;
-<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
 <a href="classzlua_1_1_lua-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">zlua.Lua Class Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 
-<p>some generic functions over lua objects (lobject.c）  
+<p>lua接口  
  <a href="classzlua_1_1_lua.html#details">More...</a></p>
 <table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
-Classes</h2></td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzlua_1_1_lua_1_1_assembled_instr.html">AssembledInstr</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzlua_1_1_lua_1_1_compiled_function.html">CompiledFunction</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">"Proto in lua.c" proto is gcobject, but is not a primitive type  <a href="classzlua_1_1_lua_1_1_compiled_function.html#details">More...</a><br /></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzlua_1_1_lua_1_1_g_c_object.html">GCObject</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">(C# simulated) union of GC objects how it simulates union: polymorphic  <a href="classzlua_1_1_lua_1_1_g_c_object.html#details">More...</a><br /></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzlua_1_1_lua_1_1lua___t_value.html">lua_TValue</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">the general type of lua. T means "tagged"  <a href="classzlua_1_1_lua_1_1lua___t_value.html#details">More...</a><br /></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzlua_1_1_lua_1_1_runtime_func.html">RuntimeFunc</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">"Clousure" in lua.c  <a href="classzlua_1_1_lua_1_1_runtime_func.html#details">More...</a><br /></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzlua_1_1_lua_1_1_t_string.html">TString</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">the string type of lua, just warpper of C# string  <a href="classzlua_1_1_lua_1_1_t_string.html#details">More...</a><br /></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzlua_1_1_lua_1_1_value.html">Value</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">(C# simulated) union of all lua values how it simulate union?: use extra fields size: 8+8+4=20B differ from clua: light userdata is removed because C# use GC TODO如何访问修饰符不被外卖呢看到  <a href="classzlua_1_1_lua_1_1_value.html#details">More...</a><br /></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
-Public Types</h2></td></tr>
-<tr class="memitem:a3bea46ecc2aabf23ac160bd7e7172e70"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzlua_1_1_lua.html#a3bea46ecc2aabf23ac160bd7e7172e70">LuaType</a> { <br />
-&#160;&#160;<b>NONE</b> = -1, 
-<b>NIL</b> = 0, 
-<b>BOOLEAN</b> = 1, 
-<b>LIGHTUSERDATA</b> = 2, 
-<br />
-&#160;&#160;<b>NUMBER</b> = 3, 
-<b>STRING</b> = 4, 
-<b>TABLE</b> = 5, 
-<b>FUNCTION</b> = 6, 
-<br />
-&#160;&#160;<b>USERDATA</b> = 7, 
-<b>THREAD</b> = 8
-<br />
- }</td></tr>
-<tr class="memdesc:a3bea46ecc2aabf23ac160bd7e7172e70"><td class="mdescLeft">&#160;</td><td class="mdescRight">differ from clua: const int... =&gt; enum  <a href="classzlua_1_1_lua.html#a3bea46ecc2aabf23ac160bd7e7172e70">More...</a><br /></td></tr>
-<tr class="separator:a3bea46ecc2aabf23ac160bd7e7172e70"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
-Public Member Functions</h2></td></tr>
-<tr class="memitem:a8d69f72236b14935e2f4da7360dfc00f"><td class="memItemLeft" align="right" valign="top"><a id="a8d69f72236b14935e2f4da7360dfc00f"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>dofile</b> (string path)</td></tr>
-<tr class="separator:a8d69f72236b14935e2f4da7360dfc00f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
+Static Public Member Functions</h2></td></tr>
+<tr class="memitem:ab7314880982fac295dd0eb6852465b6d"><td class="memItemLeft" align="right" valign="top"><a id="ab7314880982fac295dd0eb6852465b6d"></a>
+static void&#160;</td><td class="memItemRight" valign="bottom"><b>dofile</b> (string path)</td></tr>
+<tr class="separator:ab7314880982fac295dd0eb6852465b6d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>some generic functions over lua objects (lobject.c） </p>
-<p>vm </p>
-<p>lua对外接口，类型和dofile等等(lua.c in lua src) </p>
-<ol type="1">
-<li>interface] TValue, and other 9 specific types <br />
-2. GC不实现，使用C# GC </li>
-</ol>
-</div><h2 class="groupheader">Member Enumeration Documentation</h2>
-<a id="a3bea46ecc2aabf23ac160bd7e7172e70"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3bea46ecc2aabf23ac160bd7e7172e70">&#9670;&nbsp;</a></span>LuaType</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">enum <a class="el" href="classzlua_1_1_lua.html#a3bea46ecc2aabf23ac160bd7e7172e70">zlua.Lua.LuaType</a></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">strong</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>differ from clua: const int... =&gt; enum </p>
-
-</div>
-</div>
-<hr/>The documentation for this class was generated from the following files:<ul>
-<li>zlua/lobject.cs</li>
+<div class="textblock"><p>lua接口 </p>
+</div><hr/>The documentation for this class was generated from the following file:<ul>
 <li>zlua/lua.cs</li>
 </ul>
 </div><!-- contents -->

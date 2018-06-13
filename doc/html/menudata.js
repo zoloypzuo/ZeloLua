@@ -24,23 +24,15 @@ for the JavaScript code in this file
 var menudata={children:[
 {text:"Main Page",url:"index.html"},
 {text:"Packages",url:"namespaces.html",children:[
-{text:"Packages",url:"namespaces.html"}]},
+{text:"Packages",url:"namespaces.html"},
+{text:"Package Functions",url:"namespacemembers.html",children:[
+{text:"All",url:"namespacemembers.html"},
+{text:"Enumerations",url:"namespacemembers_enum.html"}]}]},
 {text:"Classes",url:"annotated.html",children:[
 {text:"Class List",url:"annotated.html"},
 {text:"Class Index",url:"classes.html"},
 {text:"Class Hierarchy",url:"inherits.html"},
 {text:"Class Members",url:"functions.html",children:[
-{text:"All",url:"functions.html",children:[
-{text:"b",url:"functions.html#index_b"},
-{text:"e",url:"functions_e.html#index_e"},
-{text:"g",url:"functions_g.html#index_g"},
-{text:"l",url:"functions_l.html#index_l"},
-{text:"n",url:"functions_n.html#index_n"},
-{text:"t",url:"functions_t.html#index_t"},
-{text:"v",url:"functions_v.html#index_v"}]},
-{text:"Functions",url:"functions_func.html",children:[
-{text:"e",url:"functions_func.html#index_e"},
-{text:"v",url:"functions_func_v.html#index_v"}]},
-{text:"Variables",url:"functions_vars.html"},
-{text:"Enumerations",url:"functions_enum.html"},
+{text:"All",url:"functions.html"},
+{text:"Functions",url:"functions_func.html"},
 {text:"Properties",url:"functions_prop.html"}]}]}]}

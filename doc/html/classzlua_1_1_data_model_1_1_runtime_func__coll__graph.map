@@ -1,0 +1,4 @@
+<map id="zlua.DataModel.RuntimeFunc" name="zlua.DataModel.RuntimeFunc">
+<area shape="rect" id="node2" href="$classzlua_1_1_data_model_1_1_g_c_object.html" title="(C# simulated) union of GC objects how it simulates union: polymorphic " alt="" coords="87,5,165,32"/>
+<area shape="rect" id="node3" href="$classzlua_1_1_data_model_1_1_compiled_function.html" title="&quot;Proto in lua.c&quot; proto is gcobject, but is not a primitive type " alt="" coords="119,81,339,108"/>
+</map>

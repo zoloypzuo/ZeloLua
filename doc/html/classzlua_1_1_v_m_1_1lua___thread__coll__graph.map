@@ -1,0 +1,5 @@
+<map id="zlua.VM.lua_Thread" name="zlua.VM.lua_Thread">
+<area shape="rect" id="node2" href="$classzlua_1_1_data_model_1_1_g_c_object.html" title="(C# simulated) union of GC objects how it simulates union: polymorphic " alt="" coords="41,5,120,32"/>
+<area shape="rect" id="node3" href="$classzlua_1_1_data_model_1_1_runtime_func.html" title="&quot;Clousure&quot; in lua.c " alt="" coords="68,171,261,197"/>
+<area shape="rect" id="node4" href="$classzlua_1_1_data_model_1_1_compiled_function.html" title="&quot;Proto in lua.c&quot; proto is gcobject, but is not a primitive type " alt="" coords="119,81,339,108"/>
+</map>

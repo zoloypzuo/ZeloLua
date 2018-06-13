@@ -1,5 +1,7 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node2" href="$interfacezlua_1_1_i_lua_listener.html" title="This interface defines a complete listener for a parse tree produced by LuaParser. " alt="" coords="184,31,304,57"/>
-<area shape="rect" id="node3" href="$classzlua_1_1_compiler.html" title="zlua.Compiler" alt="" coords="375,5,476,32"/>
-<area shape="rect" id="node4" href="$classzlua_1_1_lua_base_listener.html" title="This class provides an empty implementation of ILuaListener, which can be extended to create a listen..." alt="" coords="352,56,499,83"/>
+<area shape="rect" id="node1" href="$classzlua_1_1_data_model_1_1_g_c_object.html" title="(C# simulated) union of GC objects how it simulates union: polymorphic " alt="" coords="5,81,179,108"/>
+<area shape="rect" id="node2" href="$classzlua_1_1_data_model_1_1_compiled_function.html" title="&quot;Proto in lua.c&quot; proto is gcobject, but is not a primitive type " alt="" coords="227,5,447,32"/>
+<area shape="rect" id="node3" href="$classzlua_1_1_data_model_1_1_runtime_func.html" title="&quot;Clousure&quot; in lua.c " alt="" coords="240,56,433,83"/>
+<area shape="rect" id="node4" href="$classzlua_1_1_data_model_1_1_t_string.html" title="the string type of lua, just warpper of C# string " alt="" coords="258,107,415,133"/>
+<area shape="rect" id="node5" href="$classzlua_1_1_v_m_1_1lua___thread.html" title="zlua.VM.lua_Thread" alt="" coords="268,157,405,184"/>
 </map>

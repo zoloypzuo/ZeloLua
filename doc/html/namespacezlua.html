@@ -62,8 +62,9 @@ $(function() {
 </div><!-- top -->
 <div class="header">
   <div class="summary">
+<a href="#namespaces">Namespaces</a> &#124;
 <a href="#nested-classes">Classes</a> &#124;
-<a href="#typedef-members">Typedefs</a>  </div>
+<a href="#enum-members">Enumerations</a>  </div>
   <div class="headertitle">
 <div class="title">zlua Namespace Reference</div>  </div>
 </div><!--header-->
@@ -72,68 +73,76 @@ $(function() {
 <p>目标：实现90的lua 目的： 1.了解lua作为最简单的解释器的实现 2.自己实现一个可以用于辅助unity的脚本语言 要求： 1.以可读性为最优先 2.修改lua特性，让它足够简单，unity够用即可 代码规范： 1.python风格 2.命名规范：重新自己命名 3.保留： 1.文件命名 2.lua_, luaX_ 前缀命名  
 <a href="#details">More...</a></p>
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="namespaces"></a>
+Namespaces</h2></td></tr>
+<tr class="memitem:namespacezlua_1_1_data_model"><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacezlua_1_1_data_model.html">DataModel</a></td></tr>
+<tr class="memdesc:namespacezlua_1_1_data_model"><td class="mdescLeft">&#160;</td><td class="mdescRight">lua类型模型 <br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:namespacezlua_1_1_i_s_a"><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacezlua_1_1_i_s_a.html">ISA</a></td></tr>
+<tr class="memdesc:namespacezlua_1_1_i_s_a"><td class="mdescLeft">&#160;</td><td class="mdescRight">指令集和实现 <br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:namespacezlua_1_1_v_m"><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacezlua_1_1_v_m.html">VM</a></td></tr>
+<tr class="memdesc:namespacezlua_1_1_v_m"><td class="mdescLeft">&#160;</td><td class="mdescRight">虚拟机 <br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Classes</h2></td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzlua_1_1_compiler.html">Compiler</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">interface &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfacezlua_1_1_i_lua_listener.html">ILuaListener</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">This interface defines a complete listener for a parse tree produced by <a class="el" href="classzlua_1_1_lua_parser.html">LuaParser</a>.  <a href="interfacezlua_1_1_i_lua_listener.html#details">More...</a><br /></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">interface &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfacezlua_1_1_i_lua_visitor.html">ILuaVisitor</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">This interface defines a complete generic visitor for a parse tree produced by <a class="el" href="classzlua_1_1_lua_parser.html">LuaParser</a>.  <a href="interfacezlua_1_1_i_lua_visitor.html#details">More...</a><br /></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzlua_1_1_lua.html">Lua</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">some generic functions over lua objects (lobject.c）  <a href="classzlua_1_1_lua.html#details">More...</a><br /></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzlua_1_1_lua_base_listener.html">LuaBaseListener</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">This class provides an empty implementation of <a class="el" href="interfacezlua_1_1_i_lua_listener.html" title="This interface defines a complete listener for a parse tree produced by LuaParser. ">ILuaListener</a>, which can be extended to create a listener which only needs to handle a subset of the available methods.  <a href="classzlua_1_1_lua_base_listener.html#details">More...</a><br /></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzlua_1_1_lua_base_visitor.html">LuaBaseVisitor</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">This class provides an empty implementation of ILuaVisitor&lt;Result&gt;, which can be extended to create a visitor which only needs to handle a subset of the available methods.  <a href="classzlua_1_1_lua_base_visitor.html#details">More...</a><br /></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzlua_1_1_lua_lexer.html">LuaLexer</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzlua_1_1_lua_parser.html">LuaParser</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">lua接口  <a href="classzlua_1_1_lua.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzlua_1_1_program.html">Program</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
-Typedefs</h2></td></tr>
-<tr class="memitem:a366bdbff38407c9efbf04054127ed3cc"><td class="memItemLeft" align="right" valign="top"><a id="a366bdbff38407c9efbf04054127ed3cc"></a>
-using&#160;</td><td class="memItemRight" valign="bottom"><b>lua_Number</b> = System.Double</td></tr>
-<tr class="separator:a366bdbff38407c9efbf04054127ed3cc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aaa93e7c8244f49c8ea4a06de6632b905"><td class="memItemLeft" align="right" valign="top"><a id="aaa93e7c8244f49c8ea4a06de6632b905"></a>
-using&#160;</td><td class="memItemRight" valign="bottom"><b>IErrorNode</b> = Antlr4.Runtime.Tree.IErrorNode</td></tr>
-<tr class="separator:aaa93e7c8244f49c8ea4a06de6632b905"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2a234ddba24aacdde8d3d6027feca6f9"><td class="memItemLeft" align="right" valign="top"><a id="a2a234ddba24aacdde8d3d6027feca6f9"></a>
-using&#160;</td><td class="memItemRight" valign="bottom"><b>ITerminalNode</b> = Antlr4.Runtime.Tree.ITerminalNode</td></tr>
-<tr class="separator:a2a234ddba24aacdde8d3d6027feca6f9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a21f4f40ba2a397ae3f94bee5cb5c5538"><td class="memItemLeft" align="right" valign="top"><a id="a21f4f40ba2a397ae3f94bee5cb5c5538"></a>
-using&#160;</td><td class="memItemRight" valign="bottom"><b>IToken</b> = Antlr4.Runtime.IToken</td></tr>
-<tr class="separator:a21f4f40ba2a397ae3f94bee5cb5c5538"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afdb9d11994c29edae3688ab893c6daba"><td class="memItemLeft" align="right" valign="top"><a id="afdb9d11994c29edae3688ab893c6daba"></a>
-using&#160;</td><td class="memItemRight" valign="bottom"><b>ParserRuleContext</b> = Antlr4.Runtime.ParserRuleContext</td></tr>
-<tr class="separator:afdb9d11994c29edae3688ab893c6daba"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2786e51a9dbfe724b881a447b7a8aeb8"><td class="memItemLeft" align="right" valign="top"><a id="a2786e51a9dbfe724b881a447b7a8aeb8"></a>
-using&#160;</td><td class="memItemRight" valign="bottom"><b>DFA</b> = Antlr4.Runtime.Dfa.DFA</td></tr>
-<tr class="separator:a2786e51a9dbfe724b881a447b7a8aeb8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3556e4be3adbc82eeee921e503860d87"><td class="memItemLeft" align="right" valign="top"><a id="a3556e4be3adbc82eeee921e503860d87"></a>
-using&#160;</td><td class="memItemRight" valign="bottom"><b>IParseTreeListener</b> = Antlr4.Runtime.Tree.IParseTreeListener</td></tr>
-<tr class="separator:a3556e4be3adbc82eeee921e503860d87"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a594fa70411ab513608e3570dd6a525bd"><td class="memItemLeft" align="right" valign="top"><a id="a594fa70411ab513608e3570dd6a525bd"></a>
-using&#160;</td><td class="memItemRight" valign="bottom"><b>lu_byte</b> = System.Byte</td></tr>
-<tr class="separator:a594fa70411ab513608e3570dd6a525bd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3299a6560fca65b6b35ad9a9dc102b82"><td class="memItemLeft" align="right" valign="top"><a id="a3299a6560fca65b6b35ad9a9dc102b82"></a>
-using&#160;</td><td class="memItemRight" valign="bottom"><b>ptrdiff_t</b> = System.Int32</td></tr>
-<tr class="separator:a3299a6560fca65b6b35ad9a9dc102b82"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7137c618516f8b04a8a1a0cd15d977a4"><td class="memItemLeft" align="right" valign="top"><a id="a7137c618516f8b04a8a1a0cd15d977a4"></a>
-using&#160;</td><td class="memItemRight" valign="bottom"><b>Instruction</b> = System.UInt32</td></tr>
-<tr class="separator:a7137c618516f8b04a8a1a0cd15d977a4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="enum-members"></a>
+Enumerations</h2></td></tr>
+<tr class="memitem:a20aabb1ed24cd7036213c39d70b0d0b3"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacezlua.html#a20aabb1ed24cd7036213c39d70b0d0b3">LuaType</a> { <br />
+&#160;&#160;<b>NONE</b> = -1, 
+<b>NIL</b> = 0, 
+<b>BOOLEAN</b> = 1, 
+<b>LIGHTUSERDATA</b> = 2, 
+<br />
+&#160;&#160;<b>NUMBER</b> = 3, 
+<b>STRING</b> = 4, 
+<b>TABLE</b> = 5, 
+<b>FUNCTION</b> = 6, 
+<br />
+&#160;&#160;<b>USERDATA</b> = 7, 
+<b>THREAD</b> = 8, 
+<b>CLOSURE</b> = 9, 
+<b>INT</b> = 10
+<br />
+ }</td></tr>
+<tr class="memdesc:a20aabb1ed24cd7036213c39d70b0d0b3"><td class="mdescLeft">&#160;</td><td class="mdescRight">differ from clua: const int... =&gt; enum  <a href="namespacezlua.html#a20aabb1ed24cd7036213c39d70b0d0b3">More...</a><br /></td></tr>
+<tr class="separator:a20aabb1ed24cd7036213c39d70b0d0b3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>目标：实现90的lua 目的： 1.了解lua作为最简单的解释器的实现 2.自己实现一个可以用于辅助unity的脚本语言 要求： 1.以可读性为最优先 2.修改lua特性，让它足够简单，unity够用即可 代码规范： 1.python风格 2.命名规范：重新自己命名 3.保留： 1.文件命名 2.lua_, luaX_ 前缀命名 </p>
-</div></div><!-- contents -->
+</div><h2 class="groupheader">Enumeration Type Documentation</h2>
+<a id="a20aabb1ed24cd7036213c39d70b0d0b3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a20aabb1ed24cd7036213c39d70b0d0b3">&#9670;&nbsp;</a></span>LuaType</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="namespacezlua.html#a20aabb1ed24cd7036213c39d70b0d0b3">zlua.LuaType</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">strong</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>differ from clua: const int... =&gt; enum </p>
+
+</div>
+</div>
+</div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
 Generated by &#160;<a href="http://www.doxygen.org/index.html">

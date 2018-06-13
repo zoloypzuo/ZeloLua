@@ -1,6 +1,4 @@
 var searchData=
 [
-  ['if_5fstatcontext',['If_statContext',['../classzlua_1_1_lua_parser_1_1_if__stat_context.html',1,'zlua::LuaParser']]],
-  ['ilualistener',['ILuaListener',['../interfacezlua_1_1_i_lua_listener.html',1,'zlua']]],
-  ['iluavisitor',['ILuaVisitor',['../interfacezlua_1_1_i_lua_visitor.html',1,'zlua']]]
+  ['n',['n',['../classzlua_1_1_data_model_1_1_value.html#a11a5dbf33db408537c3c4b442e053efb',1,'zlua::DataModel::Value']]]
 ];

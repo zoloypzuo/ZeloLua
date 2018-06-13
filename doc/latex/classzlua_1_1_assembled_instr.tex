@@ -1,0 +1,63 @@
+\hypertarget{classzlua_1_1_assembled_instr}{}\section{zlua.\+Assembled\+Instr Class Reference}
+\label{classzlua_1_1_assembled_instr}\index{zlua.\+Assembled\+Instr@{zlua.\+Assembled\+Instr}}
+
+
+base class for all instructions  
+
+
+
+
+Inheritance diagram for zlua.\+Assembled\+Instr\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=297pt]{classzlua_1_1_assembled_instr__inherit__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classzlua_1_1_assembled_instr_a469a0a7a028bfa2bcc06920e1f6d45d6}\label{classzlua_1_1_assembled_instr_a469a0a7a028bfa2bcc06920e1f6d45d6}} 
+abstract string {\bfseries To\+String} ()
+\item 
+abstract void \mbox{\hyperlink{classzlua_1_1_assembled_instr_a44e081c4565b90b75e4a67b8dd418feb}{execute}} (\mbox{\hyperlink{classzlua_1_1lua___thread}{lua\+\_\+\+Thread}} thread)
+\begin{DoxyCompactList}\small\item\em differ from py ver\+: C\# dont have meta programming, so must use polymorphic to implement visitor pattern and cause execution is in Instr env (I\+OC) \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classzlua_1_1_assembled_instr_a5adc24105bcb8588365861da83919070}\label{classzlua_1_1_assembled_instr_a5adc24105bcb8588365861da83919070}} 
+List$<$ \mbox{\hyperlink{classzlua_1_1lua___t_value}{lua\+\_\+\+T\+Value}} $>$ {\bfseries operands} = new List$<$\mbox{\hyperlink{classzlua_1_1lua___t_value}{lua\+\_\+\+T\+Value}}$>$()
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+base class for all instructions 
+
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{classzlua_1_1_assembled_instr_a44e081c4565b90b75e4a67b8dd418feb}\label{classzlua_1_1_assembled_instr_a44e081c4565b90b75e4a67b8dd418feb}} 
+\index{zlua\+::\+Assembled\+Instr@{zlua\+::\+Assembled\+Instr}!execute@{execute}}
+\index{execute@{execute}!zlua\+::\+Assembled\+Instr@{zlua\+::\+Assembled\+Instr}}
+\subsubsection{\texorpdfstring{execute()}{execute()}}
+{\footnotesize\ttfamily abstract void zlua.\+Assembled\+Instr.\+execute (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classzlua_1_1lua___thread}{lua\+\_\+\+Thread}}}]{thread }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+
+
+differ from py ver\+: C\# dont have meta programming, so must use polymorphic to implement visitor pattern and cause execution is in Instr env (I\+OC) 
+
+
+\begin{DoxyParams}{Parameters}
+{\em thread} & \\
+\hline
+\end{DoxyParams}
+
+
+Implemented in \mbox{\hyperlink{classzlua_1_1pop_a72cea959966aec69448d61be5bfc322c}{zlua.\+pop}}, \mbox{\hyperlink{classzlua_1_1push_ab3284599ae65d600d21622bd407405e8}{zlua.\+push}}, \mbox{\hyperlink{classzlua_1_1push__var_a854bc287123c636f0c3d86735938879f}{zlua.\+push\+\_\+var}}, \mbox{\hyperlink{classzlua_1_1and_ad1ef9d7bf03b778753264a15bbd6ac04}{zlua.\+and}}, \mbox{\hyperlink{classzlua_1_1eq_a802b2377436b97b137b50c36b2867d29}{zlua.\+eq}}, \mbox{\hyperlink{classzlua_1_1mul_a22002ab020aaabcf37eddae16b6ba10a}{zlua.\+mul}}, \mbox{\hyperlink{classzlua_1_1add_a7a1a96e612bf700e73a640d4c4080179}{zlua.\+add}}, \mbox{\hyperlink{classzlua_1_1ret_a0c334b18dbe8e21c26aa785269b29253}{zlua.\+ret}}, \mbox{\hyperlink{classzlua_1_1call_a152a4ccd3e77e5172f97283a50d6ba45}{zlua.\+call}}, \mbox{\hyperlink{classzlua_1_1closure_aa569159f1b1106362a86951524e96bce}{zlua.\+closure}}, and \mbox{\hyperlink{classzlua_1_1mov_a729d173bb798f765ed20aabcfaf2f63c}{zlua.\+mov}}.
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+zlua/I\+S\+A.\+cs\end{DoxyCompactItemize}

@@ -8,56 +8,56 @@
 \subsection*{Classes}
 \begin{DoxyCompactItemize}
 \item 
-class \mbox{\hyperlink{classzlua_1_1_compiler}{Compiler}}
+class \mbox{\hyperlink{classzlua_1_1add}{add}}
 \item 
-interface \mbox{\hyperlink{interfacezlua_1_1_i_lua_listener}{I\+Lua\+Listener}}
-\begin{DoxyCompactList}\small\item\em This interface defines a complete listener for a parse tree produced by \mbox{\hyperlink{classzlua_1_1_lua_parser}{Lua\+Parser}}. \end{DoxyCompactList}\item 
-interface \mbox{\hyperlink{interfacezlua_1_1_i_lua_visitor}{I\+Lua\+Visitor}}
-\begin{DoxyCompactList}\small\item\em This interface defines a complete generic visitor for a parse tree produced by \mbox{\hyperlink{classzlua_1_1_lua_parser}{Lua\+Parser}}. \end{DoxyCompactList}\item 
+class \mbox{\hyperlink{classzlua_1_1and}{and}}
+\item 
+class \mbox{\hyperlink{classzlua_1_1_assembled_instr}{Assembled\+Instr}}
+\begin{DoxyCompactList}\small\item\em base class for all instructions \end{DoxyCompactList}\item 
+class \mbox{\hyperlink{classzlua_1_1call}{call}}
+\item 
+class \mbox{\hyperlink{classzlua_1_1closure}{closure}}
+\item 
+class \mbox{\hyperlink{classzlua_1_1_compiled_function}{Compiled\+Function}}
+\begin{DoxyCompactList}\small\item\em \char`\"{}\+Proto in lua.\+c\char`\"{} proto is gcobject, but is not a primitive type \end{DoxyCompactList}\item 
+class \mbox{\hyperlink{classzlua_1_1eq}{eq}}
+\item 
+class \mbox{\hyperlink{classzlua_1_1_g_c_object}{G\+C\+Object}}
+\begin{DoxyCompactList}\small\item\em (C\# simulated) union of GC objects how it simulates union\+: polymorphic \end{DoxyCompactList}\item 
 class \mbox{\hyperlink{classzlua_1_1_lua}{Lua}}
-\begin{DoxyCompactList}\small\item\em some generic functions over lua objects (lobject.\+c） \end{DoxyCompactList}\item 
-class \mbox{\hyperlink{classzlua_1_1_lua_base_listener}{Lua\+Base\+Listener}}
-\begin{DoxyCompactList}\small\item\em This class provides an empty implementation of \mbox{\hyperlink{interfacezlua_1_1_i_lua_listener}{I\+Lua\+Listener}}, which can be extended to create a listener which only needs to handle a subset of the available methods. \end{DoxyCompactList}\item 
-class \mbox{\hyperlink{classzlua_1_1_lua_base_visitor}{Lua\+Base\+Visitor}}
-\begin{DoxyCompactList}\small\item\em This class provides an empty implementation of I\+Lua\+Visitor$<$\+Result$>$, which can be extended to create a visitor which only needs to handle a subset of the available methods. \end{DoxyCompactList}\item 
-class \mbox{\hyperlink{classzlua_1_1_lua_lexer}{Lua\+Lexer}}
 \item 
-class \mbox{\hyperlink{classzlua_1_1_lua_parser}{Lua\+Parser}}
+class \mbox{\hyperlink{classzlua_1_1lua___thread}{lua\+\_\+\+Thread}}
+\item 
+class \mbox{\hyperlink{classzlua_1_1lua___t_value}{lua\+\_\+\+T\+Value}}
+\begin{DoxyCompactList}\small\item\em the general type of lua. T means \char`\"{}tagged\char`\"{} methods brief\+: \end{DoxyCompactList}\item 
+class \mbox{\hyperlink{classzlua_1_1mov}{mov}}
+\item 
+class \mbox{\hyperlink{classzlua_1_1mul}{mul}}
+\item 
+class \mbox{\hyperlink{classzlua_1_1pop}{pop}}
 \item 
 class \mbox{\hyperlink{classzlua_1_1_program}{Program}}
-\end{DoxyCompactItemize}
+\item 
+class \mbox{\hyperlink{classzlua_1_1push}{push}}
+\item 
+class \mbox{\hyperlink{classzlua_1_1push__var}{push\+\_\+var}}
+\item 
+class \mbox{\hyperlink{classzlua_1_1ret}{ret}}
+\item 
+class \mbox{\hyperlink{classzlua_1_1_runtime_func}{Runtime\+Func}}
+\begin{DoxyCompactList}\small\item\em \char`\"{}\+Clousure\char`\"{} in lua.\+c \end{DoxyCompactList}\item 
+class \mbox{\hyperlink{classzlua_1_1_t_string}{T\+String}}
+\begin{DoxyCompactList}\small\item\em the string type of lua, just warpper of C\# string \end{DoxyCompactList}\item 
+class \mbox{\hyperlink{classzlua_1_1_value}{Value}}
+\begin{DoxyCompactList}\small\item\em (C\# simulated) union of all lua values how it simulate union?\+: use extra fields size\+: 8+8+4=20\+Byte differ from clua\+: light userdata is removed because C\# use GC \end{DoxyCompactList}\end{DoxyCompactItemize}
 \subsection*{Typedefs}
 \begin{DoxyCompactItemize}
 \item 
-\mbox{\Hypertarget{namespacezlua_a366bdbff38407c9efbf04054127ed3cc}\label{namespacezlua_a366bdbff38407c9efbf04054127ed3cc}} 
+\mbox{\Hypertarget{namespacezlua_a61d392d834c4b17a298224ed0db6a947}\label{namespacezlua_a61d392d834c4b17a298224ed0db6a947}} 
 using {\bfseries lua\+\_\+\+Number} = System.\+Double
 \item 
-\mbox{\Hypertarget{namespacezlua_aaa93e7c8244f49c8ea4a06de6632b905}\label{namespacezlua_aaa93e7c8244f49c8ea4a06de6632b905}} 
-using {\bfseries I\+Error\+Node} = Antlr4.\+Runtime.\+Tree.\+I\+Error\+Node
-\item 
-\mbox{\Hypertarget{namespacezlua_a2a234ddba24aacdde8d3d6027feca6f9}\label{namespacezlua_a2a234ddba24aacdde8d3d6027feca6f9}} 
-using {\bfseries I\+Terminal\+Node} = Antlr4.\+Runtime.\+Tree.\+I\+Terminal\+Node
-\item 
-\mbox{\Hypertarget{namespacezlua_a21f4f40ba2a397ae3f94bee5cb5c5538}\label{namespacezlua_a21f4f40ba2a397ae3f94bee5cb5c5538}} 
-using {\bfseries I\+Token} = Antlr4.\+Runtime.\+I\+Token
-\item 
-\mbox{\Hypertarget{namespacezlua_afdb9d11994c29edae3688ab893c6daba}\label{namespacezlua_afdb9d11994c29edae3688ab893c6daba}} 
-using {\bfseries Parser\+Rule\+Context} = Antlr4.\+Runtime.\+Parser\+Rule\+Context
-\item 
-\mbox{\Hypertarget{namespacezlua_a2786e51a9dbfe724b881a447b7a8aeb8}\label{namespacezlua_a2786e51a9dbfe724b881a447b7a8aeb8}} 
-using {\bfseries D\+FA} = Antlr4.\+Runtime.\+Dfa.\+D\+FA
-\item 
-\mbox{\Hypertarget{namespacezlua_a3556e4be3adbc82eeee921e503860d87}\label{namespacezlua_a3556e4be3adbc82eeee921e503860d87}} 
-using {\bfseries I\+Parse\+Tree\+Listener} = Antlr4.\+Runtime.\+Tree.\+I\+Parse\+Tree\+Listener
-\item 
-\mbox{\Hypertarget{namespacezlua_a594fa70411ab513608e3570dd6a525bd}\label{namespacezlua_a594fa70411ab513608e3570dd6a525bd}} 
-using {\bfseries lu\+\_\+byte} = System.\+Byte
-\item 
-\mbox{\Hypertarget{namespacezlua_a3299a6560fca65b6b35ad9a9dc102b82}\label{namespacezlua_a3299a6560fca65b6b35ad9a9dc102b82}} 
-using {\bfseries ptrdiff\+\_\+t} = System.\+Int32
-\item 
-\mbox{\Hypertarget{namespacezlua_a7137c618516f8b04a8a1a0cd15d977a4}\label{namespacezlua_a7137c618516f8b04a8a1a0cd15d977a4}} 
-using {\bfseries Instruction} = System.\+U\+Int32
+\mbox{\Hypertarget{namespacezlua_a2b3709db4de9a217dcac9e793c531c62}\label{namespacezlua_a2b3709db4de9a217dcac9e793c531c62}} 
+using {\bfseries Lua\+Type} = \mbox{\hyperlink{classzlua_1_1_lua_a3bea46ecc2aabf23ac160bd7e7172e70}{Lua.\+Lua\+Type}}
 \end{DoxyCompactItemize}
 
 

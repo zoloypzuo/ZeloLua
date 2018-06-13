@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['b',['b',['../classzlua_1_1_lua_1_1_value.html#a2ab66efb3c8af25dc58ee788f7f2d243',1,'zlua::Lua::Value']]]
+  ['gcobject',['gcobject',['../classzlua_1_1_data_model_1_1_value.html#a598a7d1db28e25cbebac16b871f9a504',1,'zlua::DataModel::Value']]]
 ];

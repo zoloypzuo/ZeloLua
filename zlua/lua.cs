@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Antlr4.Runtime;
 using Antlr4.Runtime.Tree;
+using zlua.VM;
 /// <summary>
 /// 目标：实现90%的lua
 /// 目的：
@@ -21,38 +22,42 @@ using Antlr4.Runtime.Tree;
 ///     1.文件命名
 ///     2.lua_, luaX_ 前缀命名
 /// </summary>
-namespace zlua {
+namespace zlua
+{
     /// <summary>
-    /// lua对外接口，类型和dofile等等(lua.c in lua src)
+    /// differ from clua: const int... => enum
     /// </summary>
-    partial class Lua {
-        /// <summary>
-        /// differ from clua: const int... => enum
-        /// </summary>
-        public enum LuaType {
-            NONE = -1,
+    public enum LuaType
+    {
+        NONE = -1,
 
-            NIL = 0,
-            BOOLEAN = 1,
-            LIGHTUSERDATA = 2,
-            NUMBER = 3,
-            STRING = 4,
-            TABLE = 5,
-            FUNCTION = 6,
-            USERDATA = 7,
-            THREAD = 8,
-            CLOSURE=9, //自己加的
-            INT=10,//ziji jia de 
-        }
+        NIL = 0,
+        BOOLEAN = 1,
+        LIGHTUSERDATA = 2,
+        NUMBER = 3,
+        STRING = 4,
+        TABLE = 5,
+        FUNCTION = 6,
+        USERDATA = 7,
+        THREAD = 8,
+        CLOSURE = 9, //自己加的
+        INT = 10,  //自己加的，TODO这肯定是错的。
+    }
+    /// <summary>
+    /// lua接口
+    /// </summary>
+    public class Lua
+    {
+
         public static void dofile(string path)
         {
-            FileStream F = new FileStream(@"..\..\"+path,FileMode.Open, FileAccess.Read);
+            FileStream F = new FileStream(@"..\..\" + path, FileMode.Open, FileAccess.Read);
             AntlrInputStream inputStream = new AntlrInputStream(F);
             LuaLexer lexer = new LuaLexer(inputStream);
             CommonTokenStream tokens = new CommonTokenStream(lexer);
             LuaParser parser = new LuaParser(tokens);
             var tree = parser.chunk();
-            var walker =new ParseTreeWalker();
+            var walker = new ParseTreeWalker();
             var compiler = new Compiler();
             walker.Walk(compiler, tree);
             new lua_Thread(compiler.main_func).run();

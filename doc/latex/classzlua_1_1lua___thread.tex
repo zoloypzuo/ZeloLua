@@ -1,0 +1,58 @@
+\hypertarget{classzlua_1_1lua___thread}{}\section{zlua.\+lua\+\_\+\+Thread Class Reference}
+\label{classzlua_1_1lua___thread}\index{zlua.\+lua\+\_\+\+Thread@{zlua.\+lua\+\_\+\+Thread}}
+
+
+Inheritance diagram for zlua.\+lua\+\_\+\+Thread\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=165pt]{classzlua_1_1lua___thread__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for zlua.\+lua\+\_\+\+Thread\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=327pt]{classzlua_1_1lua___thread__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classzlua_1_1lua___thread_a636e6a5c2880d7d5c5b82284122dd46c}\label{classzlua_1_1lua___thread_a636e6a5c2880d7d5c5b82284122dd46c}} 
+{\bfseries lua\+\_\+\+Thread} (\mbox{\hyperlink{classzlua_1_1_compiled_function}{Compiled\+Function}} main\+\_\+func)
+\item 
+\mbox{\Hypertarget{classzlua_1_1lua___thread_a97db462cd29e287ac92aaa4e4e189cf9}\label{classzlua_1_1lua___thread_a97db462cd29e287ac92aaa4e4e189cf9}} 
+void {\bfseries run} ()
+\item 
+\mbox{\Hypertarget{classzlua_1_1lua___thread_aef81d9d2f99814679589de928a169dc1}\label{classzlua_1_1lua___thread_aef81d9d2f99814679589de928a169dc1}} 
+void {\bfseries push} (\mbox{\hyperlink{classzlua_1_1lua___t_value}{lua\+\_\+\+T\+Value}} item)
+\item 
+\mbox{\Hypertarget{classzlua_1_1lua___thread_a6bea0e6f7b063a4c2c7b66e3ea152d31}\label{classzlua_1_1lua___thread_a6bea0e6f7b063a4c2c7b66e3ea152d31}} 
+\mbox{\hyperlink{classzlua_1_1lua___t_value}{lua\+\_\+\+T\+Value}} {\bfseries pop} ()
+\end{DoxyCompactItemize}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classzlua_1_1lua___thread_ac75eedf89c86746fddf420372c1ba7b8}\label{classzlua_1_1lua___thread_ac75eedf89c86746fddf420372c1ba7b8}} 
+Stack$<$ \mbox{\hyperlink{classzlua_1_1_runtime_func}{Runtime\+Func}} $>$ {\bfseries stack} = new Stack$<$\mbox{\hyperlink{classzlua_1_1_runtime_func}{Runtime\+Func}}$>$()
+\item 
+\mbox{\Hypertarget{classzlua_1_1lua___thread_a6dbf42b795dc65215c8f04958901bbee}\label{classzlua_1_1lua___thread_a6dbf42b795dc65215c8f04958901bbee}} 
+Dictionary$<$ string, \mbox{\hyperlink{classzlua_1_1lua___t_value}{lua\+\_\+\+T\+Value}} $>$ {\bfseries global\+\_\+data}
+\item 
+\mbox{\Hypertarget{classzlua_1_1lua___thread_ab35e12bb7ab159fdef6ea7cb8548875d}\label{classzlua_1_1lua___thread_ab35e12bb7ab159fdef6ea7cb8548875d}} 
+int {\bfseries pc} = 0
+\item 
+\mbox{\Hypertarget{classzlua_1_1lua___thread_a826cce1f5eb8ad00973c8d4c4cda6754}\label{classzlua_1_1lua___thread_a826cce1f5eb8ad00973c8d4c4cda6754}} 
+\mbox{\hyperlink{classzlua_1_1_runtime_func}{Runtime\+Func}} {\bfseries curr\+\_\+func} =$>$ stack.\+Peek()
+\end{DoxyCompactItemize}
+\subsection*{Additional Inherited Members}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+zlua/lvm.\+cs\end{DoxyCompactItemize}
