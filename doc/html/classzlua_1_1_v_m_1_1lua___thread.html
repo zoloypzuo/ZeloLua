@@ -73,6 +73,9 @@ $(function() {
 <div class="title">zlua.VM.lua_Thread Class Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>TODO，thread整合入lobject  
+ <a href="classzlua_1_1_v_m_1_1lua___thread.html#details">More...</a></p>
 <div class="dynheader">
 Inheritance diagram for zlua.VM.lua_Thread:</div>
 <div class="dyncontent">
@@ -87,8 +90,8 @@ Collaboration diagram for zlua.VM.lua_Thread:</div>
 <div class="center"><img src="classzlua_1_1_v_m_1_1lua___thread__coll__graph.png" border="0" usemap="#zlua_8_v_m_8lua___thread_coll__map" alt="Collaboration graph"/></div>
 <map name="zlua_8_v_m_8lua___thread_coll__map" id="zlua_8_v_m_8lua___thread_coll__map">
 <area shape="rect" id="node2" href="classzlua_1_1_data_model_1_1_g_c_object.html" title="(C# simulated) union of GC objects how it simulates union: polymorphic " alt="" coords="41,5,120,32"/>
-<area shape="rect" id="node3" href="classzlua_1_1_data_model_1_1_runtime_func.html" title="&quot;Clousure&quot; in lua.c " alt="" coords="68,171,261,197"/>
-<area shape="rect" id="node4" href="classzlua_1_1_data_model_1_1_compiled_function.html" title="&quot;Proto in lua.c&quot; proto is gcobject, but is not a primitive type " alt="" coords="119,81,339,108"/>
+<area shape="rect" id="node3" href="classzlua_1_1_data_model_1_1_runtime_func.html" title="zlua.DataModel.RuntimeFunc" alt="" coords="68,171,261,197"/>
+<area shape="rect" id="node4" href="classzlua_1_1_data_model_1_1_compiled_function.html" title="is gcobject, but is not a primitive type " alt="" coords="119,81,339,108"/>
 </map>
 <center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
@@ -100,21 +103,21 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a3dcabe0b9a0cb73b27d39773be81ccd7"><td class="memItemLeft" align="right" valign="top"><a id="a3dcabe0b9a0cb73b27d39773be81ccd7"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>run</b> ()</td></tr>
 <tr class="separator:a3dcabe0b9a0cb73b27d39773be81ccd7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae779eb8ff0d874bdc5b7726a6a1e6dc2"><td class="memItemLeft" align="right" valign="top"><a id="ae779eb8ff0d874bdc5b7726a6a1e6dc2"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>push</b> (<a class="el" href="classzlua_1_1_data_model_1_1lua___t_value.html">lua_TValue</a> item)</td></tr>
-<tr class="separator:ae779eb8ff0d874bdc5b7726a6a1e6dc2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6d9f83c5887267fbf5dcb302ca8a5a7f"><td class="memItemLeft" align="right" valign="top"><a id="a6d9f83c5887267fbf5dcb302ca8a5a7f"></a>
-<a class="el" href="classzlua_1_1_data_model_1_1lua___t_value.html">lua_TValue</a>&#160;</td><td class="memItemRight" valign="bottom"><b>pop</b> ()</td></tr>
-<tr class="separator:a6d9f83c5887267fbf5dcb302ca8a5a7f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a02bee444ceae743c0e81d9f83f98d0f1"><td class="memItemLeft" align="right" valign="top"><a id="a02bee444ceae743c0e81d9f83f98d0f1"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>push</b> (<a class="el" href="classzlua_1_1_data_model_1_1_t_value.html">TValue</a> item)</td></tr>
+<tr class="separator:a02bee444ceae743c0e81d9f83f98d0f1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a38574a76b375df81633e1fe06f44c3ba"><td class="memItemLeft" align="right" valign="top"><a id="a38574a76b375df81633e1fe06f44c3ba"></a>
+<a class="el" href="classzlua_1_1_data_model_1_1_t_value.html">TValue</a>&#160;</td><td class="memItemRight" valign="bottom"><b>pop</b> ()</td></tr>
+<tr class="separator:a38574a76b375df81633e1fe06f44c3ba"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
 <tr class="memitem:a293c329876c785b7295c61518cc5ba63"><td class="memItemLeft" align="right" valign="top"><a id="a293c329876c785b7295c61518cc5ba63"></a>
 Stack&lt; <a class="el" href="classzlua_1_1_data_model_1_1_runtime_func.html">RuntimeFunc</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>stack</b> = new Stack&lt;<a class="el" href="classzlua_1_1_data_model_1_1_runtime_func.html">RuntimeFunc</a>&gt;()</td></tr>
 <tr class="separator:a293c329876c785b7295c61518cc5ba63"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aeb17ab4ede0ba2c1ed06fb5e54bc38e4"><td class="memItemLeft" align="right" valign="top"><a id="aeb17ab4ede0ba2c1ed06fb5e54bc38e4"></a>
-Dictionary&lt; string, <a class="el" href="classzlua_1_1_data_model_1_1lua___t_value.html">lua_TValue</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>global_data</b></td></tr>
-<tr class="separator:aeb17ab4ede0ba2c1ed06fb5e54bc38e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adbcfab86a5f7ee785a3f15663c8dce22"><td class="memItemLeft" align="right" valign="top"><a id="adbcfab86a5f7ee785a3f15663c8dce22"></a>
+Dictionary&lt; <a class="el" href="classzlua_1_1_data_model_1_1_t_string.html">TString</a>, <a class="el" href="classzlua_1_1_data_model_1_1_t_value.html">TValue</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>global_data</b></td></tr>
+<tr class="separator:adbcfab86a5f7ee785a3f15663c8dce22"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4c0c1f7ddb8dc5100e11eec7141eae02"><td class="memItemLeft" align="right" valign="top"><a id="a4c0c1f7ddb8dc5100e11eec7141eae02"></a>
 int&#160;</td><td class="memItemRight" valign="bottom"><b>pc</b> = 0</td></tr>
 <tr class="separator:a4c0c1f7ddb8dc5100e11eec7141eae02"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -125,9 +128,9 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>pc</b> = 0</td></tr>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
 Additional Inherited Members</h2></td></tr>
 <tr class="inherit_header properties_classzlua_1_1_data_model_1_1_g_c_object"><td colspan="2" onclick="javascript:toggleInherit('properties_classzlua_1_1_data_model_1_1_g_c_object')"><img src="closed.png" alt="-"/>&#160;Properties inherited from <a class="el" href="classzlua_1_1_data_model_1_1_g_c_object.html">zlua.DataModel.GCObject</a></td></tr>
-<tr class="memitem:ab9f66003ce45b1055073d03a828da99c inherit properties_classzlua_1_1_data_model_1_1_g_c_object"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classzlua_1_1_data_model_1_1_t_string.html">TString</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzlua_1_1_data_model_1_1_g_c_object.html#ab9f66003ce45b1055073d03a828da99c">tstring</a><code> [get]</code></td></tr>
-<tr class="memdesc:ab9f66003ce45b1055073d03a828da99c inherit properties_classzlua_1_1_data_model_1_1_g_c_object"><td class="mdescLeft">&#160;</td><td class="mdescRight">for convenience (eg. <a class="el" href="classzlua_1_1_data_model_1_1_t_string.html" title="the string type of lua, just warpper of C# string ">TString</a> is subclass of GCObject）  <a href="classzlua_1_1_data_model_1_1_g_c_object.html#ab9f66003ce45b1055073d03a828da99c">More...</a><br /></td></tr>
-<tr class="separator:ab9f66003ce45b1055073d03a828da99c inherit properties_classzlua_1_1_data_model_1_1_g_c_object"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a482be33d3252d8bc731eba9fefe12edd inherit properties_classzlua_1_1_data_model_1_1_g_c_object"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classzlua_1_1_data_model_1_1_t_string.html">TString</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzlua_1_1_data_model_1_1_g_c_object.html#a482be33d3252d8bc731eba9fefe12edd">tstr</a><code> [get]</code></td></tr>
+<tr class="memdesc:a482be33d3252d8bc731eba9fefe12edd inherit properties_classzlua_1_1_data_model_1_1_g_c_object"><td class="mdescLeft">&#160;</td><td class="mdescRight">for convenience (eg. <a class="el" href="classzlua_1_1_data_model_1_1_t_string.html" title="the string type of lua, just warpper of C# string ">TString</a> is subclass of GCObject）  <a href="classzlua_1_1_data_model_1_1_g_c_object.html#a482be33d3252d8bc731eba9fefe12edd">More...</a><br /></td></tr>
+<tr class="separator:a482be33d3252d8bc731eba9fefe12edd inherit properties_classzlua_1_1_data_model_1_1_g_c_object"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a48088d295eefc0b29a46246a67b9e1ae inherit properties_classzlua_1_1_data_model_1_1_g_c_object"><td class="memItemLeft" align="right" valign="top"><a id="a48088d295eefc0b29a46246a67b9e1ae"></a>
 <a class="el" href="classzlua_1_1_v_m_1_1lua___thread.html">lua_Thread</a>&#160;</td><td class="memItemRight" valign="bottom"><b>thread</b><code> [get]</code></td></tr>
 <tr class="separator:a48088d295eefc0b29a46246a67b9e1ae inherit properties_classzlua_1_1_data_model_1_1_g_c_object"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -138,7 +141,9 @@ Additional Inherited Members</h2></td></tr>
 <a class="el" href="classzlua_1_1_data_model_1_1_runtime_func.html">RuntimeFunc</a>&#160;</td><td class="memItemRight" valign="bottom"><b>runtime_func</b><code> [get]</code></td></tr>
 <tr class="separator:a7bddb64a6cfa3157af60ef4162ebdf8a inherit properties_classzlua_1_1_data_model_1_1_g_c_object"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<hr/>The documentation for this class was generated from the following file:<ul>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>TODO，thread整合入lobject </p>
+</div><hr/>The documentation for this class was generated from the following file:<ul>
 <li>zlua/lvm.cs</li>
 </ul>
 </div><!-- contents -->

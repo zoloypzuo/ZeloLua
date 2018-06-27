@@ -97,24 +97,24 @@ Inheritance diagram for zlua.ISA.AssembledInstr:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a3998ecdb31edd33141cc931435a19e54"><td class="memItemLeft" align="right" valign="top"><a id="a3998ecdb31edd33141cc931435a19e54"></a>
-abstract string&#160;</td><td class="memItemRight" valign="bottom"><b>ToString</b> ()</td></tr>
-<tr class="separator:a3998ecdb31edd33141cc931435a19e54"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afe9978cd6ca7264f0ac8da65624cd328"><td class="memItemLeft" align="right" valign="top">abstract void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzlua_1_1_i_s_a_1_1_assembled_instr.html#afe9978cd6ca7264f0ac8da65624cd328">execute</a> (<a class="el" href="classzlua_1_1_v_m_1_1lua___thread.html">lua_Thread</a> thread)</td></tr>
-<tr class="memdesc:afe9978cd6ca7264f0ac8da65624cd328"><td class="mdescLeft">&#160;</td><td class="mdescRight">differ from py ver: C# dont have meta programming, so must use polymorphic to implement visitor pattern and cause execution is in Instr env (IOC)  <a href="#afe9978cd6ca7264f0ac8da65624cd328">More...</a><br /></td></tr>
-<tr class="separator:afe9978cd6ca7264f0ac8da65624cd328"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a28934924d89585009c62813414937a5f"><td class="memItemLeft" align="right" valign="top"><a id="a28934924d89585009c62813414937a5f"></a>
+abstract new string&#160;</td><td class="memItemRight" valign="bottom"><b>ToString</b> ()</td></tr>
+<tr class="separator:a28934924d89585009c62813414937a5f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1a9bca6df8bb134d5a5422443605234b"><td class="memItemLeft" align="right" valign="top">abstract void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzlua_1_1_i_s_a_1_1_assembled_instr.html#a1a9bca6df8bb134d5a5422443605234b">execute</a> (<a class="el" href="classzlua_1_1_v_m_1_1_t_thread.html">TThread</a> thread)</td></tr>
+<tr class="memdesc:a1a9bca6df8bb134d5a5422443605234b"><td class="mdescLeft">&#160;</td><td class="mdescRight">differ from py ver: C# dont have meta programming, so must use polymorphic to implement visitor pattern and cause execution is in Instr env (IOC)  <a href="#a1a9bca6df8bb134d5a5422443605234b">More...</a><br /></td></tr>
+<tr class="separator:a1a9bca6df8bb134d5a5422443605234b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
 Protected Attributes</h2></td></tr>
-<tr class="memitem:af358e0ee58693e02da9ec837c7a829b3"><td class="memItemLeft" align="right" valign="top"><a id="af358e0ee58693e02da9ec837c7a829b3"></a>
-List&lt; <a class="el" href="classzlua_1_1_data_model_1_1lua___t_value.html">lua_TValue</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>operands</b> = new List&lt;<a class="el" href="classzlua_1_1_data_model_1_1lua___t_value.html">lua_TValue</a>&gt;()</td></tr>
-<tr class="separator:af358e0ee58693e02da9ec837c7a829b3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a50538c5122892a529116f93b1b4b8241"><td class="memItemLeft" align="right" valign="top"><a id="a50538c5122892a529116f93b1b4b8241"></a>
+List&lt; <a class="el" href="classzlua_1_1_type_model_1_1_t_value.html">TValue</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>operands</b> = new List&lt;<a class="el" href="classzlua_1_1_type_model_1_1_t_value.html">TValue</a>&gt;()</td></tr>
+<tr class="separator:a50538c5122892a529116f93b1b4b8241"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>base class for all instructions </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
-<a id="afe9978cd6ca7264f0ac8da65624cd328"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#afe9978cd6ca7264f0ac8da65624cd328">&#9670;&nbsp;</a></span>execute()</h2>
+<a id="a1a9bca6df8bb134d5a5422443605234b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1a9bca6df8bb134d5a5422443605234b">&#9670;&nbsp;</a></span>execute()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -125,7 +125,7 @@ List&lt; <a class="el" href="classzlua_1_1_data_model_1_1lua___t_value.html">lua
         <tr>
           <td class="memname">abstract void zlua.ISA.AssembledInstr.execute </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="classzlua_1_1_v_m_1_1lua___thread.html">lua_Thread</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="classzlua_1_1_v_m_1_1_t_thread.html">TThread</a>&#160;</td>
           <td class="paramname"><em>thread</em></td><td>)</td>
           <td></td>
         </tr>
@@ -145,7 +145,7 @@ List&lt; <a class="el" href="classzlua_1_1_data_model_1_1lua___t_value.html">lua
   </dd>
 </dl>
 
-<p>Implemented in <a class="el" href="classzlua_1_1_i_s_a_1_1pop.html#add890a80f0ada42237427d4220cfbf20">zlua.ISA.pop</a>, <a class="el" href="classzlua_1_1_i_s_a_1_1push.html#ac4085d6637dfafb401de3a67a6513edd">zlua.ISA.push</a>, <a class="el" href="classzlua_1_1_i_s_a_1_1push__var.html#a106430d16ca7b71b6d05f7565412c470">zlua.ISA.push_var</a>, <a class="el" href="classzlua_1_1_i_s_a_1_1and.html#ac4bbd10e875fb1b54110bfbee8fd2221">zlua.ISA.and</a>, <a class="el" href="classzlua_1_1_i_s_a_1_1eq.html#a1abdc8f1d30d38598bdefb220b717fd4">zlua.ISA.eq</a>, <a class="el" href="classzlua_1_1_i_s_a_1_1mul.html#ad9fdd0bcc9ce549bbad6cb5f204e7bcd">zlua.ISA.mul</a>, <a class="el" href="classzlua_1_1_i_s_a_1_1add.html#a855fdfa86894584842605c7d11689820">zlua.ISA.add</a>, <a class="el" href="classzlua_1_1_i_s_a_1_1ret.html#ac438d86eefcfa48c6083db225d6ce606">zlua.ISA.ret</a>, <a class="el" href="classzlua_1_1_i_s_a_1_1call.html#aa9ef6ad9d80f5497084688976238d003">zlua.ISA.call</a>, <a class="el" href="classzlua_1_1_i_s_a_1_1closure.html#abfa8a9e3a46f57fba29b8bfae1ac5e8f">zlua.ISA.closure</a>, and <a class="el" href="classzlua_1_1_i_s_a_1_1mov.html#a39817add07bdf4a15c65b3a5e448688e">zlua.ISA.mov</a>.</p>
+<p>Implemented in <a class="el" href="classzlua_1_1_i_s_a_1_1pop.html#a61a7e2ae8432f8f70659538d0b2599a1">zlua.ISA.pop</a>, <a class="el" href="classzlua_1_1_i_s_a_1_1push.html#a3f5be4e066642abbf3ae0392dcc5b002">zlua.ISA.push</a>, <a class="el" href="classzlua_1_1_i_s_a_1_1push__var.html#a17571319c4e658983fb840338549d67a">zlua.ISA.push_var</a>, <a class="el" href="classzlua_1_1_i_s_a_1_1and.html#a341378e553df9cc7682c81d37166abe6">zlua.ISA.and</a>, <a class="el" href="classzlua_1_1_i_s_a_1_1eq.html#a3d6fd8ac30fe3ab3d7195fbb806166ff">zlua.ISA.eq</a>, <a class="el" href="classzlua_1_1_i_s_a_1_1mul.html#a77d12d2467d366a10828f0e5482126f1">zlua.ISA.mul</a>, <a class="el" href="classzlua_1_1_i_s_a_1_1add.html#a62b38a6474dbf57d3bcfcfbe896b5412">zlua.ISA.add</a>, <a class="el" href="classzlua_1_1_i_s_a_1_1ret.html#afdf71bcbfb0d274c910b41bb748b3000">zlua.ISA.ret</a>, <a class="el" href="classzlua_1_1_i_s_a_1_1call.html#a9f616dac843660901929064c0addf3f6">zlua.ISA.call</a>, <a class="el" href="classzlua_1_1_i_s_a_1_1closure.html#afafa8224d1e9ad7bb67e3c16343b32cd">zlua.ISA.closure</a>, and <a class="el" href="classzlua_1_1_i_s_a_1_1mov.html#a0c475e61fc20a05984f08a24bf1a9bc9">zlua.ISA.mov</a>.</p>
 
 </div>
 </div>

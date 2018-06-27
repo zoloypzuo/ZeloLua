@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['i',['i',['../classzlua_1_1_data_model_1_1_value.html#ad1b77dd776c70fdc68f9244f2df29583',1,'zlua::DataModel::Value']]]
+  ['lua',['Lua',['../classzlua_1_1_lua.html',1,'zlua']]],
+  ['luatype',['LuaType',['../namespacezlua.html#a20aabb1ed24cd7036213c39d70b0d0b3',1,'zlua']]]
 ];

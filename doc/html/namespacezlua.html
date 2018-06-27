@@ -70,16 +70,16 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 
-<p>目标：实现90的lua 目的： 1.了解lua作为最简单的解释器的实现 2.自己实现一个可以用于辅助unity的脚本语言 要求： 1.以可读性为最优先 2.修改lua特性，让它足够简单，unity够用即可 代码规范： 1.python风格 2.命名规范：重新自己命名 3.保留： 1.文件命名 2.lua_, luaX_ 前缀命名  
+<p>注释规范  
 <a href="#details">More...</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="namespaces"></a>
 Namespaces</h2></td></tr>
-<tr class="memitem:namespacezlua_1_1_data_model"><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacezlua_1_1_data_model.html">DataModel</a></td></tr>
-<tr class="memdesc:namespacezlua_1_1_data_model"><td class="mdescLeft">&#160;</td><td class="mdescRight">lua类型模型 <br /></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:namespacezlua_1_1_i_s_a"><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacezlua_1_1_i_s_a.html">ISA</a></td></tr>
 <tr class="memdesc:namespacezlua_1_1_i_s_a"><td class="mdescLeft">&#160;</td><td class="mdescRight">指令集和实现 <br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:namespacezlua_1_1_type_model"><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacezlua_1_1_type_model.html">TypeModel</a></td></tr>
+<tr class="memdesc:namespacezlua_1_1_type_model"><td class="mdescLeft">&#160;</td><td class="mdescRight">lua类型模型 <br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:namespacezlua_1_1_v_m"><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacezlua_1_1_v_m.html">VM</a></td></tr>
 <tr class="memdesc:namespacezlua_1_1_v_m"><td class="mdescLeft">&#160;</td><td class="mdescRight">虚拟机 <br /></td></tr>
@@ -116,7 +116,15 @@ Enumerations</h2></td></tr>
 <tr class="separator:a20aabb1ed24cd7036213c39d70b0d0b3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>目标：实现90的lua 目的： 1.了解lua作为最简单的解释器的实现 2.自己实现一个可以用于辅助unity的脚本语言 要求： 1.以可读性为最优先 2.修改lua特性，让它足够简单，unity够用即可 代码规范： 1.python风格 2.命名规范：重新自己命名 3.保留： 1.文件命名 2.lua_, luaX_ 前缀命名 </p>
+<div class="textblock"><p>注释规范 </p>
+<ol type="1">
+<li>"&lt;lua_src&gt;...&lt;/lua_src&gt;" is quote from lua source code<ol type="a">
+<li>HOWTO 当你重命名某一名字时使用</li>
+<li>DONT 不要过度引用，讲你做了什么，打算以后做什么，以后不要做什么，不要讲没做什么</li>
+</ol>
+</li>
+<li>TString类型的变量以tstr命名 </li>
+</ol>
 </div><h2 class="groupheader">Enumeration Type Documentation</h2>
 <a id="a20aabb1ed24cd7036213c39d70b0d0b3"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a20aabb1ed24cd7036213c39d70b0d0b3">&#9670;&nbsp;</a></span>LuaType</h2>

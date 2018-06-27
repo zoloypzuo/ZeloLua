@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Antlr4.Runtime;
 using Antlr4.Runtime.Misc;
 using Antlr4.Runtime.Tree;
-using zlua.DataModel;
+using zlua.TypeModel;
 using zlua.VM;
 using zlua.ISA;
 namespace zlua
@@ -377,7 +377,7 @@ namespace zlua
 
         public void ExitFalse_exp([NotNull] LuaParser.False_expContext context)
         {
-            append_instr(new push(lua_TValue.bool_factory(false)));
+            append_instr(new push(TValue.bool_factory(false)));
         }
 
         public void ExitField([NotNull] LuaParser.FieldContext context)
@@ -458,7 +458,7 @@ namespace zlua
 
         public void ExitNil_exp([NotNull] LuaParser.Nil_expContext context)
         {
-            append_instr(new push(lua_TValue.nil_factory()));
+            append_instr(new push(TValue.nil_factory()));
         }
 
         public void ExitNumber([NotNull] LuaParser.NumberContext context)
@@ -468,7 +468,7 @@ namespace zlua
 
         public void ExitNum_exp([NotNull] LuaParser.Num_expContext context)
         {
-            var num = lua_TValue.n_factory(lua_Number.Parse(context.number().GetText()));
+            var num = TValue.n_factory(lua_Number.Parse(context.number().GetText()));
             append_instr(new push(num));
         }
 
@@ -592,7 +592,7 @@ namespace zlua
         public void ExitString_exp([NotNull] LuaParser.String_expContext context)
         {
             var s = context.@string().GetText().Trim('"');
-            append_instr(new push(lua_TValue.tstring_factory(s)));
+            append_instr(new push(TValue.tstring_factory(s)));
         }
 
         public void ExitTableconstructor([NotNull] LuaParser.TableconstructorContext context)
@@ -607,7 +607,7 @@ namespace zlua
 
         public void ExitTrue_exp([NotNull] LuaParser.True_expContext context)
         {
-            append_instr(new push(lua_TValue.bool_factory(true)));
+            append_instr(new push(TValue.bool_factory(true)));
         }
 
         public void ExitVar([NotNull] LuaParser.VarContext context)

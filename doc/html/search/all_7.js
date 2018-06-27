@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['n',['n',['../classzlua_1_1_data_model_1_1_value.html#a11a5dbf33db408537c3c4b442e053efb',1,'zlua::DataModel::Value']]]
+  ['ret',['ret',['../classzlua_1_1_i_s_a_1_1ret.html',1,'zlua::ISA']]],
+  ['runtimefunction',['RuntimeFunction',['../classzlua_1_1_type_model_1_1_runtime_function.html',1,'zlua::TypeModel']]]
 ];

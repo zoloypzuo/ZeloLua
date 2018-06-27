@@ -1,0 +1,8 @@
+<map id="zlua.TypeModel.GCObject" name="zlua.TypeModel.GCObject">
+<area shape="rect" id="node2" href="$classzlua_1_1_type_model_1_1_compiled_function.html" title="is gcobject, but is not a primitive type " alt="" coords="228,5,449,32"/>
+<area shape="rect" id="node3" href="$classzlua_1_1_type_model_1_1_runtime_function.html" title="zlua.TypeModel.RuntimeFunction" alt="" coords="231,56,446,83"/>
+<area shape="rect" id="node4" href="$classzlua_1_1_type_model_1_1_t_string.html" title="the string type of lua, just warpper of C# string " alt="" coords="259,107,418,133"/>
+<area shape="rect" id="node5" href="$classzlua_1_1_type_model_1_1_t_table.html" title="zlua.TypeModel.TTable" alt="" coords="261,157,416,184"/>
+<area shape="rect" id="node6" href="$classzlua_1_1_type_model_1_1_up_value.html" title="zlua.TypeModel.UpValue" alt="" coords="255,208,422,235"/>
+<area shape="rect" id="node7" href="$classzlua_1_1_v_m_1_1_t_thread.html" title="TODO，thread整合入lobject " alt="" coords="279,259,399,285"/>
+</map>

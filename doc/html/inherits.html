@@ -68,26 +68,12 @@ $(function() {
 <div class="textblock">
 <p><a href="hierarchy.html">Go to the textual class hierarchy</a></p>
 </div><table border="0" cellspacing="10" cellpadding="0">
-<tr><td><img src="inherit_graph_0.png" border="0" alt="" usemap="#zlua_8_data_model_8_g_c_object"/>
-<map name="zlua_8_data_model_8_g_c_object" id="zlua_8_data_model_8_g_c_object">
-<area shape="rect" id="node1" href="classzlua_1_1_data_model_1_1_g_c_object.html" title="(C# simulated) union of GC objects how it simulates union: polymorphic " alt="" coords="5,81,179,108"/>
-<area shape="rect" id="node2" href="classzlua_1_1_data_model_1_1_compiled_function.html" title="&quot;Proto in lua.c&quot; proto is gcobject, but is not a primitive type " alt="" coords="227,5,447,32"/>
-<area shape="rect" id="node3" href="classzlua_1_1_data_model_1_1_runtime_func.html" title="&quot;Clousure&quot; in lua.c " alt="" coords="240,56,433,83"/>
-<area shape="rect" id="node4" href="classzlua_1_1_data_model_1_1_t_string.html" title="the string type of lua, just warpper of C# string " alt="" coords="258,107,415,133"/>
-<area shape="rect" id="node5" href="classzlua_1_1_v_m_1_1lua___thread.html" title="zlua.VM.lua_Thread" alt="" coords="268,157,405,184"/>
+<tr><td><img src="inherit_graph_0.png" border="0" alt="" usemap="#zlua_8_global_state_8_global_state"/>
+<map name="zlua_8_global_state_8_global_state" id="zlua_8_global_state_8_global_state">
+<area shape="rect" id="node1" href="classzlua_1_1_global_state_1_1_global_state.html" title="zlua.GlobalState.GlobalState" alt="" coords="5,5,196,32"/>
 </map>
 </td></tr>
-<tr><td><img src="inherit_graph_1.png" border="0" alt="" usemap="#zlua_8_data_model_8lua___t_value"/>
-<map name="zlua_8_data_model_8lua___t_value" id="zlua_8_data_model_8lua___t_value">
-<area shape="rect" id="node1" href="classzlua_1_1_data_model_1_1lua___t_value.html" title="the general type of lua. T means &quot;tagged&quot; methods brief: " alt="" coords="5,5,139,47"/>
-</map>
-</td></tr>
-<tr><td><img src="inherit_graph_2.png" border="0" alt="" usemap="#zlua_8_data_model_8_value"/>
-<map name="zlua_8_data_model_8_value" id="zlua_8_data_model_8_value">
-<area shape="rect" id="node1" href="classzlua_1_1_data_model_1_1_value.html" title="(C# simulated) union of all lua values how it simulate union?: use extra fields size: 8+8+4=20Byte di..." alt="" coords="5,5,155,32"/>
-</map>
-</td></tr>
-<tr><td><img src="inherit_graph_3.png" border="0" alt="" usemap="#zlua_8_i_s_a_8_assembled_instr"/>
+<tr><td><img src="inherit_graph_1.png" border="0" alt="" usemap="#zlua_8_i_s_a_8_assembled_instr"/>
 <map name="zlua_8_i_s_a_8_assembled_instr" id="zlua_8_i_s_a_8_assembled_instr">
 <area shape="rect" id="node1" href="classzlua_1_1_i_s_a_1_1_assembled_instr.html" title="base class for all instructions " alt="" coords="5,259,171,285"/>
 <area shape="rect" id="node2" href="classzlua_1_1_i_s_a_1_1add.html" title="zlua.ISA.add" alt="" coords="234,5,330,32"/>
@@ -103,14 +89,30 @@ $(function() {
 <area shape="rect" id="node12" href="classzlua_1_1_i_s_a_1_1ret.html" title="zlua.ISA.ret" alt="" coords="237,512,327,539"/>
 </map>
 </td></tr>
-<tr><td><img src="inherit_graph_4.png" border="0" alt="" usemap="#zlua_8_lua"/>
+<tr><td><img src="inherit_graph_2.png" border="0" alt="" usemap="#zlua_8_lua"/>
 <map name="zlua_8_lua" id="zlua_8_lua">
 <area shape="rect" id="node1" href="classzlua_1_1_lua.html" title="lua接口 " alt="" coords="5,5,76,32"/>
 </map>
 </td></tr>
-<tr><td><img src="inherit_graph_5.png" border="0" alt="" usemap="#zlua_8_program"/>
+<tr><td><img src="inherit_graph_3.png" border="0" alt="" usemap="#zlua_8_program"/>
 <map name="zlua_8_program" id="zlua_8_program">
 <area shape="rect" id="node1" href="classzlua_1_1_program.html" title="zlua.Program" alt="" coords="5,5,104,32"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_4.png" border="0" alt="" usemap="#zlua_8_type_model_8_g_c_object"/>
+<map name="zlua_8_type_model_8_g_c_object" id="zlua_8_type_model_8_g_c_object">
+<area shape="rect" id="node1" href="classzlua_1_1_type_model_1_1_g_c_object.html" title="base class of all GC objects " alt="" coords="5,132,180,159"/>
+<area shape="rect" id="node2" href="classzlua_1_1_type_model_1_1_compiled_function.html" title="is gcobject, but is not a primitive type " alt="" coords="228,5,449,32"/>
+<area shape="rect" id="node3" href="classzlua_1_1_type_model_1_1_runtime_function.html" title="zlua.TypeModel.RuntimeFunction" alt="" coords="231,56,446,83"/>
+<area shape="rect" id="node4" href="classzlua_1_1_type_model_1_1_t_string.html" title="the string type of lua, just warpper of C# string " alt="" coords="259,107,418,133"/>
+<area shape="rect" id="node5" href="classzlua_1_1_type_model_1_1_t_table.html" title="zlua.TypeModel.TTable" alt="" coords="261,157,416,184"/>
+<area shape="rect" id="node6" href="classzlua_1_1_type_model_1_1_up_value.html" title="zlua.TypeModel.UpValue" alt="" coords="255,208,422,235"/>
+<area shape="rect" id="node7" href="classzlua_1_1_v_m_1_1_t_thread.html" title="TODO，thread整合入lobject " alt="" coords="279,259,399,285"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_5.png" border="0" alt="" usemap="#zlua_8_type_model_8_t_value"/>
+<map name="zlua_8_type_model_8_t_value" id="zlua_8_type_model_8_t_value">
+<area shape="rect" id="node1" href="classzlua_1_1_type_model_1_1_t_value.html" title="the general type of lua. T means &quot;tagged&quot;. methods brief: " alt="" coords="5,5,163,32"/>
 </map>
 </td></tr>
 </table>

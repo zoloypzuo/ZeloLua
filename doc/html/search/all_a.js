@@ -1,4 +1,8 @@
 var searchData=
 [
-  ['tstring',['TString',['../classzlua_1_1_data_model_1_1_t_string.html',1,'zlua.DataModel.TString'],['../classzlua_1_1_data_model_1_1_g_c_object.html#ab9f66003ce45b1055073d03a828da99c',1,'zlua.DataModel.GCObject.tstring()']]]
+  ['globalstate',['GlobalState',['../namespacezlua_1_1_global_state.html',1,'zlua']]],
+  ['isa',['ISA',['../namespacezlua_1_1_i_s_a.html',1,'zlua']]],
+  ['typemodel',['TypeModel',['../namespacezlua_1_1_type_model.html',1,'zlua']]],
+  ['vm',['VM',['../namespacezlua_1_1_v_m.html',1,'zlua']]],
+  ['zlua',['zlua',['../namespacezlua.html',1,'']]]
 ];

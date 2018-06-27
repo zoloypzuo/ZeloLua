@@ -91,9 +91,9 @@ Collaboration diagram for zlua.ISA.mov:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a39817add07bdf4a15c65b3a5e448688e"><td class="memItemLeft" align="right" valign="top">override void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzlua_1_1_i_s_a_1_1mov.html#a39817add07bdf4a15c65b3a5e448688e">execute</a> (<a class="el" href="classzlua_1_1_v_m_1_1lua___thread.html">lua_Thread</a> thread)</td></tr>
-<tr class="memdesc:a39817add07bdf4a15c65b3a5e448688e"><td class="mdescLeft">&#160;</td><td class="mdescRight">differ from py ver: C# dont have meta programming, so must use polymorphic to implement visitor pattern and cause execution is in Instr env (IOC)  <a href="#a39817add07bdf4a15c65b3a5e448688e">More...</a><br /></td></tr>
-<tr class="separator:a39817add07bdf4a15c65b3a5e448688e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0c475e61fc20a05984f08a24bf1a9bc9"><td class="memItemLeft" align="right" valign="top">override void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzlua_1_1_i_s_a_1_1mov.html#a0c475e61fc20a05984f08a24bf1a9bc9">execute</a> (<a class="el" href="classzlua_1_1_v_m_1_1_t_thread.html">TThread</a> thread)</td></tr>
+<tr class="memdesc:a0c475e61fc20a05984f08a24bf1a9bc9"><td class="mdescLeft">&#160;</td><td class="mdescRight">differ from py ver: C# dont have meta programming, so must use polymorphic to implement visitor pattern and cause execution is in Instr env (IOC)  <a href="#a0c475e61fc20a05984f08a24bf1a9bc9">More...</a><br /></td></tr>
+<tr class="separator:a0c475e61fc20a05984f08a24bf1a9bc9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0e552a2704e58929240698a08629b21c"><td class="memItemLeft" align="right" valign="top"><a id="a0e552a2704e58929240698a08629b21c"></a>
 override string&#160;</td><td class="memItemRight" valign="bottom"><b>ToString</b> ()</td></tr>
 <tr class="separator:a0e552a2704e58929240698a08629b21c"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -104,13 +104,13 @@ override string&#160;</td><td class="memItemRight" valign="bottom"><b>ToString</
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
 Additional Inherited Members</h2></td></tr>
 <tr class="inherit_header pro_attribs_classzlua_1_1_i_s_a_1_1_assembled_instr"><td colspan="2" onclick="javascript:toggleInherit('pro_attribs_classzlua_1_1_i_s_a_1_1_assembled_instr')"><img src="closed.png" alt="-"/>&#160;Protected Attributes inherited from <a class="el" href="classzlua_1_1_i_s_a_1_1_assembled_instr.html">zlua.ISA.AssembledInstr</a></td></tr>
-<tr class="memitem:af358e0ee58693e02da9ec837c7a829b3 inherit pro_attribs_classzlua_1_1_i_s_a_1_1_assembled_instr"><td class="memItemLeft" align="right" valign="top"><a id="af358e0ee58693e02da9ec837c7a829b3"></a>
-List&lt; <a class="el" href="classzlua_1_1_data_model_1_1lua___t_value.html">lua_TValue</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>operands</b> = new List&lt;<a class="el" href="classzlua_1_1_data_model_1_1lua___t_value.html">lua_TValue</a>&gt;()</td></tr>
-<tr class="separator:af358e0ee58693e02da9ec837c7a829b3 inherit pro_attribs_classzlua_1_1_i_s_a_1_1_assembled_instr"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a50538c5122892a529116f93b1b4b8241 inherit pro_attribs_classzlua_1_1_i_s_a_1_1_assembled_instr"><td class="memItemLeft" align="right" valign="top"><a id="a50538c5122892a529116f93b1b4b8241"></a>
+List&lt; <a class="el" href="classzlua_1_1_type_model_1_1_t_value.html">TValue</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>operands</b> = new List&lt;<a class="el" href="classzlua_1_1_type_model_1_1_t_value.html">TValue</a>&gt;()</td></tr>
+<tr class="separator:a50538c5122892a529116f93b1b4b8241 inherit pro_attribs_classzlua_1_1_i_s_a_1_1_assembled_instr"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="a39817add07bdf4a15c65b3a5e448688e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a39817add07bdf4a15c65b3a5e448688e">&#9670;&nbsp;</a></span>execute()</h2>
+<a id="a0c475e61fc20a05984f08a24bf1a9bc9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0c475e61fc20a05984f08a24bf1a9bc9">&#9670;&nbsp;</a></span>execute()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -121,7 +121,7 @@ List&lt; <a class="el" href="classzlua_1_1_data_model_1_1lua___t_value.html">lua
         <tr>
           <td class="memname">override void zlua.ISA.mov.execute </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="classzlua_1_1_v_m_1_1lua___thread.html">lua_Thread</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="classzlua_1_1_v_m_1_1_t_thread.html">TThread</a>&#160;</td>
           <td class="paramname"><em>thread</em></td><td>)</td>
           <td></td>
         </tr>
@@ -141,7 +141,7 @@ List&lt; <a class="el" href="classzlua_1_1_data_model_1_1lua___t_value.html">lua
   </dd>
 </dl>
 
-<p>Implements <a class="el" href="classzlua_1_1_i_s_a_1_1_assembled_instr.html#afe9978cd6ca7264f0ac8da65624cd328">zlua.ISA.AssembledInstr</a>.</p>
+<p>Implements <a class="el" href="classzlua_1_1_i_s_a_1_1_assembled_instr.html#a1a9bca6df8bb134d5a5422443605234b">zlua.ISA.AssembledInstr</a>.</p>
 
 </div>
 </div>

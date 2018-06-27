@@ -1,0 +1,4 @@
+<map id="zlua.TypeModel.RuntimeFunction" name="zlua.TypeModel.RuntimeFunction">
+<area shape="rect" id="node2" href="$classzlua_1_1_type_model_1_1_g_c_object.html" title="base class of all GC objects " alt="" coords="97,5,176,32"/>
+<area shape="rect" id="node3" href="$classzlua_1_1_type_model_1_1_compiled_function.html" title="is gcobject, but is not a primitive type " alt="" coords="129,81,350,108"/>
+</map>

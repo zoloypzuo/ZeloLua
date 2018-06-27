@@ -1,0 +1,5 @@
+<map id="zlua.VM.TThread" name="zlua.VM.TThread">
+<area shape="rect" id="node2" href="$classzlua_1_1_type_model_1_1_g_c_object.html" title="base class of all GC objects " alt="" coords="30,5,109,32"/>
+<area shape="rect" id="node3" href="$classzlua_1_1_type_model_1_1_runtime_function.html" title="zlua.TypeModel.RuntimeFunction" alt="" coords="57,171,271,197"/>
+<area shape="rect" id="node4" href="$classzlua_1_1_type_model_1_1_compiled_function.html" title="is gcobject, but is not a primitive type " alt="" coords="107,81,328,108"/>
+</map>
