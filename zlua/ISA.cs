@@ -64,7 +64,7 @@ namespace zlua.ISA
         }
         public override void execute(TThread thread)
         {
-            var callee = new RuntimeFunction(thread.curr_func.local_data[operands[0].tstr].compiled_func);
+            var callee = new Closure(thread.curr_func.local_data[operands[0].tstr].compiled_func);
             callee.ret_addr = thread.pc;
 
             foreach (var item in callee.func.param_names) {

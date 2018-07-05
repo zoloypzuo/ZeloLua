@@ -1,21 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Antlr4.Runtime;
 using Antlr4.Runtime.Misc;
 using Antlr4.Runtime.Tree;
 using zlua.TypeModel;
-using zlua.VM;
 using zlua.ISA;
 namespace zlua
 {
     using lua_Number = System.Double;
     class Compiler : ILuaListener
     {
-        public CompiledFunction main_func = new CompiledFunction(null, null);
-        CompiledFunction curr_func;
+        public Proto main_func = new Proto(null, null);
+        Proto curr_func;
         void append_instr(AssembledInstr instr)
         {
             curr_func.instrs.Add(instr);
@@ -123,7 +119,7 @@ namespace zlua
         public void EnterFunc_def_stat([NotNull] LuaParser.Func_def_statContext context)
         {
             var para_list = context.funcbody().parlist().GetText().Split(',');
-            var new_func = new CompiledFunction(curr_func, new List<string>(para_list));
+            var new_func = new Proto(curr_func, new List<string>(para_list));
             append_instr(new closure(curr_func.inner_funcs.Count()));
             append_instr(new mov(context.funcname().GetText()));
             curr_func.inner_funcs.Add(new_func);

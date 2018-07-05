@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['nil',['nil',['../classzlua_1_1_data_model_1_1_t_value.html#a4f8af9f55ea1c1ff500b444041b933b6',1,'zlua::DataModel::TValue']]]
+  ['curr_5ffunc',['curr_func',['../classzlua_1_1_v_m_1_1_t_thread.html#ad8e1a3bbf47278623ba5d25e71586b9e',1,'zlua::VM::TThread']]]
 ];

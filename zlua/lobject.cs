@@ -63,6 +63,79 @@ namespace zlua.TypeModel
 
         }
         #region factorys
+        /* <lua_src>
+         * Macros to set values 
+         #define setnilvalue(obj) ((obj)->tt=LUA_TNIL)
+
+         #define setnvalue(obj,x) \
+             { TValue* i_o = (obj); i_o->value.n=(x); i_o->tt=LUA_TNUMBER; }
+
+         #define setpvalue(obj,x) \
+             { TValue* i_o = (obj); i_o->value.p=(x); i_o->tt=LUA_TLIGHTUSERDATA; }
+
+         #define setbvalue(obj,x) \
+             { TValue* i_o = (obj); i_o->value.b=(x); i_o->tt=LUA_TBOOLEAN; }
+
+         #define setsvalue(L,obj,x) \
+             { TValue* i_o = (obj); \
+             i_o->value.gc=cast(GCObject*, (x)); i_o->tt=LUA_TSTRING; \
+             checkliveness(G(L), i_o); }
+
+         #define setuvalue(L,obj,x) \
+             { TValue* i_o = (obj); \
+             i_o->value.gc=cast(GCObject*, (x)); i_o->tt=LUA_TUSERDATA; \
+             checkliveness(G(L), i_o); }
+
+         #define setthvalue(L,obj,x) \
+             { TValue* i_o = (obj); \
+             i_o->value.gc=cast(GCObject*, (x)); i_o->tt=LUA_TTHREAD; \
+             checkliveness(G(L), i_o); }
+
+         #define setclvalue(L,obj,x) \
+             { TValue* i_o = (obj); \
+             i_o->value.gc=cast(GCObject*, (x)); i_o->tt=LUA_TFUNCTION; \
+             checkliveness(G(L), i_o); }
+
+         #define sethvalue(L,obj,x) \
+             { TValue* i_o = (obj); \
+             i_o->value.gc=cast(GCObject*, (x)); i_o->tt=LUA_TTABLE; \
+             checkliveness(G(L), i_o); }
+
+         #define setptvalue(L,obj,x) \
+             { TValue* i_o = (obj); \
+             i_o->value.gc=cast(GCObject*, (x)); i_o->tt=LUA_TPROTO; \
+             checkliveness(G(L), i_o); }
+
+
+
+
+         #define setobj(L,obj1,obj2) \
+             { const TValue* o2 = (obj2); TValue* o1 = (obj1); \
+             o1->value = o2->value; o1->tt=o2->tt; \
+             checkliveness(G(L), o1); }
+
+
+         /*
+         ** different types of sets, according to destination
+         *
+
+         /* from stack to (same) stack *
+         #define setobjs2s	setobj
+         /* to stack (not from same stack) *
+         #define setobj2s	setobj
+         #define setsvalue2s	setsvalue
+         #define sethvalue2s	sethvalue
+         #define setptvalue2s	setptvalue
+         /* from table to same table *
+         #define setobjt2t	setobj
+         /* to table 
+         #define setobj2t	setobj
+         /* to new object 
+         #define setobj2n	setobj
+         #define setsvalue2n	setsvalue
+
+         #define setttype(obj, tt) (ttype(obj) = (tt))
+         </lua_src>*/
         public static TValue nil_factory() => new TValue();
         public static TValue tstring_factory(string s)
         {
@@ -74,12 +147,12 @@ namespace zlua.TypeModel
             };
             return _ret;
         }
-        public static TValue runtime_func_factory(CompiledFunction func)
+        public static TValue runtime_func_factory(Proto func)
         {
             var _ret = new TValue() {
                 type = LuaType.FUNCTION,
                 value = new Value {
-                    gc = new RuntimeFunction(func)
+                    gc = new Closure(func)
                 }
             };
             return _ret;
@@ -94,7 +167,7 @@ namespace zlua.TypeModel
             };
             return _ret;
         }
-        public static TValue compiled_func_factory(CompiledFunction compiledFunction)
+        public static TValue compiled_func_factory(Proto compiledFunction)
         {
             var _ret = new TValue {
                 type = LuaType.FUNCTION,
@@ -150,7 +223,7 @@ namespace zlua.TypeModel
         // #define thvalue(o)	check_exp(ttisthread(o), &(o)->value.gc->th)
         </lua_src>*/
         public TString tstr { get => value.gc.tstr; }
-        public CompiledFunction compiled_func { get => value.gc.compiled_func; }
+        public Proto compiled_func { get => value.gc.compiled_func; }
         public int i { get => value.i; }
         public TNumber n { get => value.n; }
         public bool b { get => value.b; }
@@ -198,27 +271,27 @@ namespace zlua.TypeModel
     /// <summary>
     /// is gcobject, but is not a primitive type
     /// </summary>
-    public class CompiledFunction : GCObject
+    public class Proto : GCObject
     {
         public List<string> param_names;
-        public CompiledFunction parent;
+        public Proto parent;
         public List<AssembledInstr> instrs = new List<AssembledInstr>();
-        public List<CompiledFunction> inner_funcs = new List<CompiledFunction>();
+        public List<Proto> inner_funcs = new List<Proto>();
         public Dictionary<string, int> label2pc = new Dictionary<string, int>(); //label table
-        public CompiledFunction(CompiledFunction parent, List<string> param_names)
+        public Proto(Proto parent, List<string> param_names)
         {
             this.parent = parent;
             this.param_names = param_names;
         }
     }
     /* <lua_src> union Closure<lua_src>*/
-    public class RuntimeFunction : GCObject
+    public class Closure : GCObject
     {
-        public CompiledFunction func;
+        public Proto func;
         public int ret_addr;
         public Dictionary<TString, TValue> local_data = new Dictionary<TString, TValue>();
         public Stack<TValue> stack = new Stack<TValue>();
-        public RuntimeFunction(CompiledFunction func)
+        public Closure(Proto func)
         {
             this.func = func;
         }
@@ -235,16 +308,16 @@ namespace zlua.TypeModel
         public override string ToString() { return str.ToString(); } // for debugging
     }
     /* <lua_src>
-    // union GCObject {
-    //   GCheader gch;
-    //   union TString ts;
-    //   union Udata u;
-    //   union Closure cl;
-    //   struct Table h;
-    //   struct Proto p;
-    //   struct UpVal uv;
-    //   struct lua_State th;
-    // };
+     union GCObject {
+       GCheader gch;
+       union TString ts;
+       union Udata u;
+       union Closure cl;
+       struct Table h;
+       struct Proto p;
+       struct UpVal uv;
+       struct lua_State th;
+     };
     </lua_src>*/
     /// <summary>
     /// base class of all GC objects
@@ -258,12 +331,40 @@ namespace zlua.TypeModel
         public TTable table { get { return this as TTable; } }
         public UpValue upval { get { return this as UpValue; } }
         public TThread thread { get { return this as TThread; } }
-        public CompiledFunction compiled_func { get { return this as CompiledFunction; } }
-        public RuntimeFunction runtime_func { get { return this as RuntimeFunction; } }
+        public Proto compiled_func { get { return this as Proto; } }
+        public Closure runtime_func { get { return this as Closure; } }
     }
+
+
+
+
+    /* <lua_src>     typedef struct Table {       CommonHeader;       lu_byte flags;  /* 1<<p means tagmethod(p) is not present 
+       lu_byte lsizenode;  /* log2 of size of `node' array        struct Table * metatable;
+       TValue* array;  /* array part 
+       Node* node;
+       Node* lastfree;  /* any free position is before this position 
+       GCObject* gclist;
+       int sizearray;  /* size of `array' array 
+     } Table;
+    </lua_src> */
     public class TTable : GCObject
     {
+        byte flags;
+        TTable metatable;
+        Dictionary<TValue, TValue> hash_table;
 
+        /* <lua_src> Table *luaH_new (lua_State *L, int narray, int nhash) </lua_src>*/
+        public TTable(TThread L, int nhash)
+        {
+
+        }
+        /*<lua_src> const TValue *luaH_get (Table *t, const TValue *key) </lua_src>*/
+        public TValue get(TValue key) => hash_table[key];
+        /* <lua_src> TValue *luaH_set (lua_State *L, Table *t, const TValue *key) </lua_src>*/
+        public TValue set(TThread L, TValue key)
+        {
+            return null;
+        }
     }
     public class UpValue : GCObject
     {

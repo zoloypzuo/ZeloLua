@@ -48,6 +48,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="lstate.cs" />
     <Compile Include="parser_antlr\compiler.cs" />
     <Compile Include="ISA.cs" />
     <Compile Include="lobject.cs" />

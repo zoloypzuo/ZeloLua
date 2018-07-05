@@ -22,17 +22,52 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 for the JavaScript code in this file
 */
 var menudata={children:[
-{text:"Main Page",url:"index.html"},
-{text:"Packages",url:"namespaces.html",children:[
-{text:"Packages",url:"namespaces.html"},
-{text:"Package Functions",url:"namespacemembers.html",children:[
-{text:"All",url:"namespacemembers.html"},
-{text:"Enumerations",url:"namespacemembers_enum.html"}]}]},
-{text:"Classes",url:"annotated.html",children:[
-{text:"Class List",url:"annotated.html"},
-{text:"Class Index",url:"classes.html"},
-{text:"Class Hierarchy",url:"inherits.html"},
-{text:"Class Members",url:"functions.html",children:[
-{text:"All",url:"functions.html"},
-{text:"Functions",url:"functions_func.html"},
-{text:"Properties",url:"functions_prop.html"}]}]}]}
+{text:"首页",url:"index.html"},
+{text:"包",url:"namespaces.html",children:[
+{text:"包",url:"namespaces.html"},
+{text:"包函数",url:"namespacemembers.html",children:[
+{text:"全部",url:"namespacemembers.html"},
+{text:"类型定义",url:"namespacemembers_type.html"},
+{text:"枚举",url:"namespacemembers_enum.html"}]}]},
+{text:"类",url:"annotated.html",children:[
+{text:"类列表",url:"annotated.html"},
+{text:"类索引",url:"classes.html"},
+{text:"类继承关系",url:"inherits.html"},
+{text:"类成员",url:"functions.html",children:[
+{text:"全部",url:"functions.html",children:[
+{text:"a",url:"functions.html#index_a"},
+{text:"b",url:"functions.html#index_b"},
+{text:"c",url:"functions.html#index_c"},
+{text:"d",url:"functions.html#index_d"},
+{text:"e",url:"functions.html#index_e"},
+{text:"f",url:"functions.html#index_f"},
+{text:"g",url:"functions.html#index_g"},
+{text:"i",url:"functions.html#index_i"},
+{text:"l",url:"functions.html#index_l"},
+{text:"m",url:"functions.html#index_m"},
+{text:"n",url:"functions.html#index_n"},
+{text:"o",url:"functions.html#index_o"},
+{text:"p",url:"functions.html#index_p"},
+{text:"r",url:"functions.html#index_r"},
+{text:"s",url:"functions.html#index_s"},
+{text:"t",url:"functions.html#index_t"},
+{text:"u",url:"functions.html#index_u"}]},
+{text:"函数",url:"functions_func.html",children:[
+{text:"a",url:"functions_func.html#index_a"},
+{text:"b",url:"functions_func.html#index_b"},
+{text:"c",url:"functions_func.html#index_c"},
+{text:"d",url:"functions_func.html#index_d"},
+{text:"e",url:"functions_func.html#index_e"},
+{text:"g",url:"functions_func.html#index_g"},
+{text:"i",url:"functions_func.html#index_i"},
+{text:"m",url:"functions_func.html#index_m"},
+{text:"n",url:"functions_func.html#index_n"},
+{text:"o",url:"functions_func.html#index_o"},
+{text:"p",url:"functions_func.html#index_p"},
+{text:"r",url:"functions_func.html#index_r"},
+{text:"s",url:"functions_func.html#index_s"},
+{text:"t",url:"functions_func.html#index_t"}]},
+{text:"变量",url:"functions_vars.html"},
+{text:"属性",url:"functions_prop.html"}]}]},
+{text:"文件",url:"files.html",children:[
+{text:"文件列表",url:"files.html"}]}]}

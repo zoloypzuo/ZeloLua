@@ -42,8 +42,8 @@ namespace zlua
 
         public static void dofile(string path)
         {
-            FileStream F = new FileStream(@"..\..\" + path, FileMode.Open, FileAccess.Read);
-            AntlrInputStream inputStream = new AntlrInputStream(F);
+            FileStream fs = new FileStream(@"..\..\" + path, FileMode.Open, FileAccess.Read);
+            AntlrInputStream inputStream = new AntlrInputStream(fs);
             LuaLexer lexer = new LuaLexer(inputStream);
             CommonTokenStream tokens = new CommonTokenStream(lexer);
             LuaParser parser = new LuaParser(tokens);

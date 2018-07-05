@@ -15,13 +15,13 @@ namespace zlua.VM
     /// </summary>
     public class TThread : GCObject
     {
-        RuntimeFunction rt_main_func;
-        public Stack<RuntimeFunction> stack = new Stack<RuntimeFunction>();
+        Closure rt_main_func;
+        public Stack<Closure> stack = new Stack<Closure>();
         public Dictionary<TString, TValue> global_data;
         public int pc = 0;
-        public TThread(CompiledFunction main_func)
+        public TThread(Proto main_func)
         {
-            rt_main_func = new RuntimeFunction(main_func) { ret_addr = -1 };
+            rt_main_func = new Closure(main_func) { ret_addr = -1 };
             global_data = rt_main_func.local_data;
             stack.Push(rt_main_func);
         }
@@ -33,7 +33,7 @@ namespace zlua.VM
                 pc++;
             }
         }
-        public RuntimeFunction curr_func => stack.Peek();
+        public Closure curr_func => stack.Peek();
         public void push(TValue item) => curr_func.stack.Push(item);
         public TValue pop() => curr_func.stack.Pop();
     }

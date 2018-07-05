@@ -1,9 +1,9 @@
-<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
+<map id="类继承关系图" name="类继承关系图">
 <area shape="rect" id="node1" href="$classzlua_1_1_type_model_1_1_g_c_object.html" title="base class of all GC objects " alt="" coords="5,132,180,159"/>
-<area shape="rect" id="node2" href="$classzlua_1_1_type_model_1_1_compiled_function.html" title="is gcobject, but is not a primitive type " alt="" coords="228,5,449,32"/>
-<area shape="rect" id="node3" href="$classzlua_1_1_type_model_1_1_runtime_function.html" title="zlua.TypeModel.RuntimeFunction" alt="" coords="231,56,446,83"/>
-<area shape="rect" id="node4" href="$classzlua_1_1_type_model_1_1_t_string.html" title="the string type of lua, just warpper of C# string " alt="" coords="259,107,418,133"/>
-<area shape="rect" id="node5" href="$classzlua_1_1_type_model_1_1_t_table.html" title="zlua.TypeModel.TTable" alt="" coords="261,157,416,184"/>
-<area shape="rect" id="node6" href="$classzlua_1_1_type_model_1_1_up_value.html" title="zlua.TypeModel.UpValue" alt="" coords="255,208,422,235"/>
-<area shape="rect" id="node7" href="$classzlua_1_1_v_m_1_1_t_thread.html" title="TODO，thread整合入lobject " alt="" coords="279,259,399,285"/>
+<area shape="rect" id="node2" href="$classzlua_1_1_type_model_1_1_closure.html" title="zlua.TypeModel.Closure" alt="" coords="231,5,392,32"/>
+<area shape="rect" id="node3" href="$classzlua_1_1_type_model_1_1_proto.html" title="is gcobject, but is not a primitive type " alt="" coords="237,56,385,83"/>
+<area shape="rect" id="node4" href="$classzlua_1_1_type_model_1_1_t_string.html" title="the string type of lua, just warpper of C# string " alt="" coords="232,107,391,133"/>
+<area shape="rect" id="node5" href="$classzlua_1_1_type_model_1_1_t_table.html" title="zlua.TypeModel.TTable" alt="" coords="234,157,389,184"/>
+<area shape="rect" id="node6" href="$classzlua_1_1_type_model_1_1_up_value.html" title="zlua.TypeModel.UpValue" alt="" coords="228,208,395,235"/>
+<area shape="rect" id="node7" href="$classzlua_1_1_v_m_1_1_t_thread.html" title="TODO，thread整合入lobject " alt="" coords="251,259,371,285"/>
 </map>
