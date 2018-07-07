@@ -10,7 +10,7 @@ namespace zlua.TypeModel
 {
     using TNumber = Double;
     /// <summary>
-    /// the general type of lua. T means "tagged". 
+    /// the general type of lua. T means "tagged".  size: 8+8+4=20Byte
     /// methods brief:
     /// 1. factorys: return a new specified lua type value; cast C# type to lua type (eg. string => tstring)
     /// 2. propertys: get or set a specified lua type value
@@ -20,41 +20,36 @@ namespace zlua.TypeModel
     /// </summary>
     public class TValue
     {
+
         /// <summary>
-        /// size: 8+8+4=20Byte
+        /// the GC collectable object
         /// </summary>
-        class Value
-        {
-            /// <summary>
-            /// the GC collectable object
-            /// </summary>
-            public GCObject gc { get; set; }
+        GCObject gc { get; set; }
 
-            /// <summary>
-            /// the number type of lua
-            /// </summary>
-            public TNumber n { get; set; }
+        /// <summary>
+        /// the number type of lua
+        /// </summary>
+        TNumber n { get; set; }
 
-            /// <summary>
-            /// the int type of lua
-            /// </summary>
-            public int i { get; set; }  //用于index等
+        /// <summary>
+        /// the int type of lua
+        /// </summary>
+        int i { get; set; }  //用于index等
 
-            public bool b { get; set; }
+        bool b { get; set; }
+        LuaTypes type;
 
-        }
-        Value value;
-        LuaType type;
         public override string ToString()
         {
             switch (type) {
-                case LuaType.NIL: return "nil";
-                case LuaType.NUMBER: return n.ToString();
-                case LuaType.BOOLEAN: return b.ToString();
-                case LuaType.STRING: return tstr.ToString();
+                case LuaTypes.Nil: return "nil";
+                case LuaTypes.Number: return n.ToString();
+                case LuaTypes.Boolean: return b.ToString();
+                case LuaTypes.String: return tstr.ToString();
                 default: return "要么补充，要么看watch下拉去吧";
             }
         }
+
         /// <summary>
         /// ctor is private ie. must use following factorys
         /// </summary>
@@ -62,6 +57,7 @@ namespace zlua.TypeModel
         {
 
         }
+
         #region factorys
         /* <lua_src>
          * Macros to set values 
@@ -137,76 +133,65 @@ namespace zlua.TypeModel
          #define setttype(obj, tt) (ttype(obj) = (tt))
          </lua_src>*/
         public static TValue nil_factory() => new TValue();
-        public static TValue tstring_factory(string s)
+        static TValue tstring_factory(string s)
         {
             var _ret = new TValue() {
-                type = LuaType.STRING,
-                value = new Value {
-                    gc = new TString(s)
-                }
+                type = LuaTypes.String,
+                gc = new TString(s)
             };
             return _ret;
         }
-        public static TValue runtime_func_factory(Proto func)
+        static TValue runtime_func_factory(Proto func)
         {
             var _ret = new TValue() {
-                type = LuaType.FUNCTION,
-                value = new Value {
-                    gc = new Closure(func)
-                }
+                type = LuaTypes.Proto,
+                gc = new Closure(func)
             };
             return _ret;
         }
-        public static TValue bool_factory(bool b)
-        {
-            var _ret = new TValue() {
-                type = LuaType.BOOLEAN,
-                value = new Value {
-                    b = b  //注意 C# 能区分这两个b
-                }
-            };
-            return _ret;
-        }
+
         public static TValue compiled_func_factory(Proto compiledFunction)
         {
             var _ret = new TValue {
-                type = LuaType.FUNCTION,
-                value = new Value {
-                    gc = compiledFunction
-                }
+                type = LuaTypes.Proto,
+                gc = compiledFunction
             };
             return _ret;
         }
-        public static TValue i_factory(int i)
+        static TValue i_factory(int i)
         {
             var _ret = new TValue {
-                type = LuaType.INT,
-                value = new Value {
-                    i = i
-                }
+                type = LuaTypes.Int,
+                i = i
             };
             return _ret;
         }
-        public static TValue b_factory(bool b)
+        static TValue b_factory(bool b)
         {
             var _ret = new TValue {
-                type = LuaType.BOOLEAN,
-                value = new Value {
-                    b = b
-                }
+                type = LuaTypes.Boolean,
+                b = b
             };
             return _ret;
         }
-        public static TValue n_factory(TNumber n)
+        static TValue n_factory(TNumber n)
         {
             var _ret = new TValue() {
-                type = LuaType.NUMBER,
-                value = new Value {
-                    n = n
-                }
+                type = LuaTypes.Number,
+                n = n
             };
             return _ret;
         }
+        /*TODO 我目前认为值类型这样比较自然（string也是）。引用不该。*/
+        public static implicit operator TValue(string str) => tstring_factory(str);
+        public static implicit operator TValue(bool b) => b_factory(b);
+        public static implicit operator TValue(int i) => i_factory(i);
+        public static implicit operator TValue(TNumber n) => n_factory(n);
+        public static implicit operator string(TValue tval) => tval.tstr;
+        public static implicit operator TString(TValue tval) => tval.tstr;
+        public static implicit operator bool(TValue tval) => tval.b;
+        public static implicit operator int(TValue tval) => tval.i;
+        public static implicit operator TNumber(TValue tval) => tval.n;
         #endregion
         #region propertys to get or set value
         /* <lua_src>
@@ -222,11 +207,8 @@ namespace zlua.TypeModel
         // #define bvalue(o)	check_exp(ttisboolean(o), (o)->value.b)
         // #define thvalue(o)	check_exp(ttisthread(o), &(o)->value.gc->th)
         </lua_src>*/
-        public TString tstr { get => value.gc.tstr; }
-        public Proto compiled_func { get => value.gc.compiled_func; }
-        public int i { get => value.i; }
-        public TNumber n { get => value.n; }
-        public bool b { get => value.b; }
+        TString tstr { get => gc.tstr; }
+        public Proto compiled_func { get => gc.compiled_func; }
         #endregion
         #region operators
         public static TValue operator +(TValue lhs, TValue rhs)
@@ -250,7 +232,7 @@ namespace zlua.TypeModel
         }
         #endregion
         /*<lua_src>const TValue luaO_nilobject_;</lua_src>*/
-        public static readonly TValue nil = new TValue { value = null, type = LuaType.NIL };
+        public static readonly TValue nil = new TValue { type = LuaTypes.Nil };
         #region propertys to test type
         /* <lua_src>
         // #define ttisnil(o)	(ttype(o) == LUA_TNIL)
@@ -263,8 +245,8 @@ namespace zlua.TypeModel
         // #define ttisthread(o)	(ttype(o) == LUA_TTHREAD)
         // #define ttislightuserdata(o)	(ttype(o) == LUA_TLIGHTUSERDATA)
         </lua_src>*/
-        public bool ttisnil() => type == LuaType.NIL;
-        public bool ttisstring() => type == LuaType.STRING;
+        public bool ttisnil() => type == LuaTypes.Nil;
+        public bool ttisstring() => type == LuaTypes.String;
         #endregion
     }
     /* <lua_src> struct Proto; </lua_src>*/
@@ -300,12 +282,22 @@ namespace zlua.TypeModel
     /// <summary>
     /// the string type of lua, just warpper of C# string
     /// </summary>
-    public class TString : GCObject /*: TString_tsv*/
+    public class TString : GCObject
     {
 
         public TString(string str) { this.str = str; }
-        public string str;
+        string str;
         public override string ToString() { return str.ToString(); } // for debugging
+        public override bool Equals(object obj)
+        {
+            return str.Equals((obj as TString)?.str);
+        }
+        public override int GetHashCode()
+        {
+            return str.GetHashCode();
+        }
+        public static implicit operator string(TString tstr) => tstr.str;
+        public static implicit operator TString(string str) => new TString(str);
     }
     /* <lua_src>
      union GCObject {

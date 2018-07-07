@@ -373,7 +373,7 @@ namespace zlua
 
         public void ExitFalse_exp([NotNull] LuaParser.False_expContext context)
         {
-            append_instr(new push(TValue.bool_factory(false)));
+            append_instr(new push(false));
         }
 
         public void ExitField([NotNull] LuaParser.FieldContext context)
@@ -464,7 +464,7 @@ namespace zlua
 
         public void ExitNum_exp([NotNull] LuaParser.Num_expContext context)
         {
-            var num = TValue.n_factory(lua_Number.Parse(context.number().GetText()));
+            var num = lua_Number.Parse(context.number().GetText());
             append_instr(new push(num));
         }
 
@@ -588,7 +588,7 @@ namespace zlua
         public void ExitString_exp([NotNull] LuaParser.String_expContext context)
         {
             var s = context.@string().GetText().Trim('"');
-            append_instr(new push(TValue.tstring_factory(s)));
+            append_instr(new push(s));
         }
 
         public void ExitTableconstructor([NotNull] LuaParser.TableconstructorContext context)
@@ -603,7 +603,7 @@ namespace zlua
 
         public void ExitTrue_exp([NotNull] LuaParser.True_expContext context)
         {
-            append_instr(new push(TValue.bool_factory(true)));
+            append_instr(new push(true));
         }
 
         public void ExitVar([NotNull] LuaParser.VarContext context)

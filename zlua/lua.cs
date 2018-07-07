@@ -19,20 +19,20 @@ namespace zlua
     /// <summary>
     /// differ from clua: const int... => enum
     /// </summary>
-    public enum LuaType
+    public enum LuaTypes
     {
-        NONE = -1,
-        NIL = 0,
-        BOOLEAN = 1,
-        LIGHTUSERDATA = 2,
-        NUMBER = 3,
-        STRING = 4,
-        TABLE = 5,
-        FUNCTION = 6,
-        USERDATA = 7,
-        THREAD = 8,
-        CLOSURE = 9, //自己加的
-        INT = 10,  //自己加的，TODO这肯定是错的。
+        None = -1,
+        Nil = 0,
+        Boolean = 1,
+        LightUserdata = 2,
+        Number = 3,
+        String = 4,
+        Table = 5,
+        Proto = 6,
+        Userdata = 7,
+        Thread = 8,
+        Closure = 9, //自己加的
+        Int = 10,  //自己加的，TODO这肯定是错的。
     }
     /// <summary>
     /// lua接口

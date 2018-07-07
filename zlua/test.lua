@@ -28,6 +28,9 @@
         return a+b
     end
     p=add(1,2)
+    -- tough one
+    function fib(n) -- after if ... 
+    end
 
 -- while loop
 --    while true do

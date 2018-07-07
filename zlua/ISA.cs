@@ -11,6 +11,20 @@ using zlua.VM;
 /// </summary>
 namespace zlua.ISA
 {
+    public enum Opcodes
+    {
+        Mov,
+        Closure,
+        Call,
+        Ret,
+        Add,
+        Mul,
+        Eq,
+        And,
+        PushVar,
+        Push,
+        Pop,
+    }
     /// <summary>
     /// base class for all instructions 
     /// </summary>
@@ -31,24 +45,24 @@ namespace zlua.ISA
         {
             var var_name = operands[0];
             Debug.Assert(var_name.ttisstring());
-            thread.curr_func.local_data[var_name.tstr] = thread.curr_func.stack.Pop();
+            thread.curr_func.local_data[var_name] = thread.curr_func.stack.Pop();
         }
 
         public override string ToString() => "mov " + string.Join(",", operands);
         public mov(string var_name)
         {
-            operands.Add(TValue.tstring_factory(var_name));
+            operands.Add(var_name);
         }
     }
     class closure : AssembledInstr
     {
         public closure(int i)
         {
-            operands.Add(TValue.i_factory(i));
+            operands.Add(i);
         }
         public override void execute(TThread thread)
         {
-            var compiled_func = TValue.compiled_func_factory(thread.curr_func.func.inner_funcs[operands[0].i]);
+            var compiled_func = TValue.compiled_func_factory(thread.curr_func.func.inner_funcs[operands[0]]);
             thread.push(compiled_func);
         }
 
@@ -59,12 +73,11 @@ namespace zlua.ISA
     {
         public call(string func_name)
         {
-            var var = TValue.tstring_factory(func_name);
-            operands.Add(var);
+            operands.Add(func_name);
         }
         public override void execute(TThread thread)
         {
-            var callee = new Closure(thread.curr_func.local_data[operands[0].tstr].compiled_func);
+            var callee = new Closure(thread.curr_func.local_data[operands[0]].compiled_func);
             callee.ret_addr = thread.pc;
 
             foreach (var item in callee.func.param_names) {
@@ -74,7 +87,7 @@ namespace zlua.ISA
             thread.pc = -1;
         }
 
-        public override string ToString() => "call " + operands[0].tstr;
+        public override string ToString() => "call " + operands[0];
     }
     class ret : AssembledInstr
     {
@@ -145,17 +158,16 @@ namespace zlua.ISA
     {
         public push_var(string var_name)
         {
-            var var = TValue.tstring_factory(var_name);
-            operands.Add(var);
+            operands.Add(var_name);
         }
         public override void execute(TThread thread)
         {
-            var var = operands[0].tstr;
+            var var = operands[0];
             var val = thread.curr_func.local_data[var];
             thread.push(val);
         }
 
-        public override string ToString() => "push_var " + operands[0].tstr;
+        public override string ToString() => "push_var " + operands[0];
     }
     class push : AssembledInstr
     {

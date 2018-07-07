@@ -33,6 +33,20 @@ namespace zlua.VM
                 pc++;
             }
         }
+        /// <summary>
+        /// TODO 这是一个重新开始的地方，命名可以稍微参考一下。但是指令集要思考一下。要紧凑。理论上和寄存器式应该是一致的
+        /// </summary>
+        public void new_run()
+        {
+            //var curr_instr = curr_func.func.instrs[pc];
+            //var opcode = opcode(curr_instr);
+            //switch(opcode) {
+            //    case Mov:
+            //        foo;
+            //        continue;
+            //    case ...
+            //}
+        }
         public Closure curr_func => stack.Peek();
         public void push(TValue item) => curr_func.stack.Push(item);
         public TValue pop() => curr_func.stack.Pop();
