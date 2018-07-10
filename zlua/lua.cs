@@ -55,6 +55,10 @@ namespace zlua
             walker.Walk(compiler, tree);
             new TThread(compiler.main_func).run();
 
+
+            var L = new TThread();
+            L.load_file();
+            L.pcall();
         }
     }
 }

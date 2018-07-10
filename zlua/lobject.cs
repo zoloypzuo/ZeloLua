@@ -11,6 +11,7 @@ namespace zlua.TypeModel
 {
     using TNumber = Double;
     using TInteger = Int32;
+    using Instruction = UInt32;
     /// <summary>
     /// the general type of lua. T means "tagged".  size: 8+8+4=20Byte
     /// methods brief:
@@ -285,7 +286,18 @@ namespace zlua.TypeModel
             this.parent = parent;
             this.param_names = param_names;
         }
+        public List<TValue> consts; //k
+        public List<Instruction> codes;
+        public List<LocVar> local_vars;
     }
+    public class LocVar { public string var_name;public int startpc;public int endpc; }
+    public class FuncState
+    {
+        Proto f;
+        Dictionary<string, TConst> consts;
+        FuncState prev;
+    }
+    public class TConst { TNumber n;TString tstr; }
     /* <lua_src> union Closure<lua_src>*/
     public class Closure : GCObject
     {
