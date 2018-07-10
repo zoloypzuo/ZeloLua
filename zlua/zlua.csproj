@@ -49,8 +49,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="lstate.cs" />
+    <Compile Include="lualib.cs" />
     <Compile Include="parser_antlr\compiler.cs" />
-    <Compile Include="ISA.cs" />
+    <Compile Include="lopcodes.cs" />
     <Compile Include="lobject.cs" />
     <Compile Include="lua.cs" />
     <Compile Include="parser_antlr\LuaBaseListener.cs" />

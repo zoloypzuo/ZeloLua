@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using zlua.TypeModel;
+using zlua.ISA;
 /// <summary>
 /// 虚拟机
 /// </summary>
@@ -36,8 +37,11 @@ namespace zlua.VM
         /// <summary>
         /// TODO 这是一个重新开始的地方，命名可以稍微参考一下。但是指令集要思考一下。要紧凑。理论上和寄存器式应该是一致的
         /// </summary>
-        public void new_run()
+        public void new_run(int level)
         {
+            while (true) {
+                const Instruction pc = 1;
+            }
             //var curr_instr = curr_func.func.instrs[pc];
             //var opcode = opcode(curr_instr);
             //switch(opcode) {

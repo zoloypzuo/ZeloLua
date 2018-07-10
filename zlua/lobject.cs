@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using zlua.VM;
 using zlua.ISA;
+using zlua.Stdlib;
 /// <summary>
 /// lua类型模型
 /// </summary>
 namespace zlua.TypeModel
 {
     using TNumber = Double;
+    using TInteger = Int32;
     /// <summary>
     /// the general type of lua. T means "tagged".  size: 8+8+4=20Byte
     /// methods brief:
@@ -34,10 +36,14 @@ namespace zlua.TypeModel
         /// <summary>
         /// the int type of lua
         /// </summary>
-        int i { get; set; }  //用于index等
+        TInteger i { get; set; }  //用于index等
 
         bool b { get; set; }
-        LuaTypes type;
+        /* <lua_src> 
+           #define setttype(obj, tt) (ttype(obj) = (tt))
+           #define ttype(o)	((o)->tt)
+        </lua_src>*/
+        LuaTypes type { get; set; }
 
         public override string ToString()
         {
@@ -59,79 +65,7 @@ namespace zlua.TypeModel
         }
 
         #region factorys
-        /* <lua_src>
-         * Macros to set values 
-         #define setnilvalue(obj) ((obj)->tt=LUA_TNIL)
 
-         #define setnvalue(obj,x) \
-             { TValue* i_o = (obj); i_o->value.n=(x); i_o->tt=LUA_TNUMBER; }
-
-         #define setpvalue(obj,x) \
-             { TValue* i_o = (obj); i_o->value.p=(x); i_o->tt=LUA_TLIGHTUSERDATA; }
-
-         #define setbvalue(obj,x) \
-             { TValue* i_o = (obj); i_o->value.b=(x); i_o->tt=LUA_TBOOLEAN; }
-
-         #define setsvalue(L,obj,x) \
-             { TValue* i_o = (obj); \
-             i_o->value.gc=cast(GCObject*, (x)); i_o->tt=LUA_TSTRING; \
-             checkliveness(G(L), i_o); }
-
-         #define setuvalue(L,obj,x) \
-             { TValue* i_o = (obj); \
-             i_o->value.gc=cast(GCObject*, (x)); i_o->tt=LUA_TUSERDATA; \
-             checkliveness(G(L), i_o); }
-
-         #define setthvalue(L,obj,x) \
-             { TValue* i_o = (obj); \
-             i_o->value.gc=cast(GCObject*, (x)); i_o->tt=LUA_TTHREAD; \
-             checkliveness(G(L), i_o); }
-
-         #define setclvalue(L,obj,x) \
-             { TValue* i_o = (obj); \
-             i_o->value.gc=cast(GCObject*, (x)); i_o->tt=LUA_TFUNCTION; \
-             checkliveness(G(L), i_o); }
-
-         #define sethvalue(L,obj,x) \
-             { TValue* i_o = (obj); \
-             i_o->value.gc=cast(GCObject*, (x)); i_o->tt=LUA_TTABLE; \
-             checkliveness(G(L), i_o); }
-
-         #define setptvalue(L,obj,x) \
-             { TValue* i_o = (obj); \
-             i_o->value.gc=cast(GCObject*, (x)); i_o->tt=LUA_TPROTO; \
-             checkliveness(G(L), i_o); }
-
-
-
-
-         #define setobj(L,obj1,obj2) \
-             { const TValue* o2 = (obj2); TValue* o1 = (obj1); \
-             o1->value = o2->value; o1->tt=o2->tt; \
-             checkliveness(G(L), o1); }
-
-
-         /*
-         ** different types of sets, according to destination
-         *
-
-         /* from stack to (same) stack *
-         #define setobjs2s	setobj
-         /* to stack (not from same stack) *
-         #define setobj2s	setobj
-         #define setsvalue2s	setsvalue
-         #define sethvalue2s	sethvalue
-         #define setptvalue2s	setptvalue
-         /* from table to same table *
-         #define setobjt2t	setobj
-         /* to table 
-         #define setobj2t	setobj
-         /* to new object 
-         #define setobj2n	setobj
-         #define setsvalue2n	setsvalue
-
-         #define setttype(obj, tt) (ttype(obj) = (tt))
-         </lua_src>*/
         public static TValue nil_factory() => new TValue();
         static TValue tstring_factory(string s)
         {
@@ -207,12 +141,74 @@ namespace zlua.TypeModel
         // #define bvalue(o)	check_exp(ttisboolean(o), (o)->value.b)
         // #define thvalue(o)	check_exp(ttisthread(o), &(o)->value.gc->th)
         </lua_src>*/
-        TString tstr { get => gc.tstr; }
-        public Proto compiled_func { get => gc.compiled_func; }
+
+        // # getter APIs are divided into 2 parts: value types use implicit cast operator
+        //   and reference types use simple property (ie. method) TODO not right
+        
+        // 1. note that this is private, because string is someway more like value type
+        // 2. rawtsvalue, tsvalue is not needed because C# string is used as subsititute
+        TString tstr { get { Stdlib.Stdlib.assert(tt_is_string); return gc.tstr; } } 
+        public Proto compiled_func { get { Stdlib.Stdlib.assert(tt_is_proto); return gc.compiled_func; } }
+
+        /* <lua_src>
+        #define setobj(L,obj1,obj2) \
+          { const TValue *o2=(obj2); TValue *o1=(obj1); \
+            o1->value = o2->value; o1->tt=o2->tt; \
+            checkliveness(G(L),o1); }
+
+        #define setnilvalue(obj) ((obj)->tt=LUA_TNIL)
+
+        #define setnvalue(obj,x) \
+          { TValue *i_o=(obj); i_o->value.n=(x); i_o->tt=LUA_TNUMBER; }
+
+        #define setpvalue(obj,x) \
+          { TValue *i_o=(obj); i_o->value.p=(x); i_o->tt=LUA_TLIGHTUSERDATA; }
+
+        #define setbvalue(obj,x) \
+          { TValue *i_o=(obj); i_o->value.b=(x); i_o->tt=LUA_TBOOLEAN; }
+
+        #define setsvalue(L,obj,x) \
+          { TValue *i_o=(obj); \
+            i_o->value.gc=cast(GCObject *, (x)); i_o->tt=LUA_TSTRING; \
+            checkliveness(G(L),i_o); }
+
+        #define setuvalue(L,obj,x) \
+          { TValue *i_o=(obj); \
+            i_o->value.gc=cast(GCObject *, (x)); i_o->tt=LUA_TUSERDATA; \
+            checkliveness(G(L),i_o); }
+
+        #define setthvalue(L,obj,x) \
+          { TValue *i_o=(obj); \
+            i_o->value.gc=cast(GCObject *, (x)); i_o->tt=LUA_TTHREAD; \
+            checkliveness(G(L),i_o); }
+
+        #define setclvalue(L,obj,x) \
+          { TValue *i_o=(obj); \
+            i_o->value.gc=cast(GCObject *, (x)); i_o->tt=LUA_TFUNCTION; \
+            checkliveness(G(L),i_o); }
+
+        #define sethvalue(L,obj,x) \
+          { TValue *i_o=(obj); \
+            i_o->value.gc=cast(GCObject *, (x)); i_o->tt=LUA_TTABLE; \
+            checkliveness(G(L),i_o); }
+
+        #define setptvalue(L,obj,x) \
+          { TValue *i_o=(obj); \
+            i_o->value.gc=cast(GCObject *, (x)); i_o->tt=LUA_TPROTO; \
+            checkliveness(G(L),i_o); }
+        <lua_src>*/
+        
+        // # L is still included in parameters in case of refactor
+        
+
+
+
+
         #endregion
         #region operators
         public static TValue operator +(TValue lhs, TValue rhs)
         {
+
             Debug.Assert(lhs.type == rhs.type);
             return TValue.n_factory(lhs.n + rhs.n);
         }
@@ -231,8 +227,7 @@ namespace zlua.TypeModel
             return b_factory(lhs.b == rhs.b);
         }
         #endregion
-        /*<lua_src>const TValue luaO_nilobject_;</lua_src>*/
-        public static readonly TValue nil = new TValue { type = LuaTypes.Nil };
+
         #region propertys to test type
         /* <lua_src>
         // #define ttisnil(o)	(ttype(o) == LUA_TNIL)
@@ -245,9 +240,34 @@ namespace zlua.TypeModel
         // #define ttisthread(o)	(ttype(o) == LUA_TTHREAD)
         // #define ttislightuserdata(o)	(ttype(o) == LUA_TLIGHTUSERDATA)
         </lua_src>*/
-        public bool ttisnil() => type == LuaTypes.Nil;
-        public bool ttisstring() => type == LuaTypes.String;
+        public bool tt_is_nil { get => type == LuaTypes.Nil; }
+        public bool tt_is_string { get => type == LuaTypes.String; }
+        public bool tt_is_proto { get => type == LuaTypes.Proto; }
+        public bool tt_is_boolean { get => type == LuaTypes.Boolean; }
         #endregion
+        #region other functions
+        /* <lua_src> #define iscollectable(o)	(ttype(o) >= LUA_TSTRING)*/
+        public bool is_collectable { get => (int)type >= (int)LuaTypes.String; }
+        /* <lua_src> #define l_isfalse(o)	(ttisnil(o) || (ttisboolean(o) && bvalue(o) == 0))*/
+        public bool is_false { get => tt_is_nil || tt_is_boolean && this == false; }
+
+
+        // NO NEED TO IMPLEMENT, about gc 
+        /* <lua_src>
+        // for internal debug only
+        #define checkconsistency(obj) \
+        lua_assert(!iscollectable(obj) || (ttype(obj) == (obj)->value.gc->gch.tt))
+
+        #define checkliveness(g,obj) \
+          lua_assert(!iscollectable(obj) || \
+          ((ttype(obj) == (obj)->value.gc->gch.tt) && !isdead(g, (obj)->value.gc)))
+        <lua_src>*/
+        
+            
+        /*<lua_src>const TValue luaO_nilobject_;</lua_src>*/
+        public static readonly TValue nil = new TValue { type = LuaTypes.Nil };
+        #endregion
+
     }
     /* <lua_src> struct Proto; </lua_src>*/
     /// <summary>

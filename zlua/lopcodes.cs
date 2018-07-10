@@ -11,6 +11,97 @@ using zlua.VM;
 /// </summary>
 namespace zlua.ISA
 {
+    using Instruction = UInt32;
+    /* <lua_src> enum OpMode {iABC, iABx, iAsBx};  </lua_src>*/
+    public enum OpMode { iABC, iABx, iAsBx }
+    class ISA
+    {
+        #region size and position of instruction arguments
+        /* <lua_src>
+            #define SIZE_C		9
+            #define SIZE_B		9
+            #define SIZE_Bx		(SIZE_C + SIZE_B)
+            #define SIZE_A		8
+
+            #define SIZE_OP		6
+
+            #define POS_OP		0
+            #define POS_A		(POS_OP + SIZE_OP)
+            #define POS_C		(POS_A + SIZE_A)
+            #define POS_B		(POS_C + SIZE_C)
+            #define POS_Bx		POS_C
+        </lua_src>*/
+        public const int size_C = 9;
+        public const int size_B = 9;
+        public const int size_Bx = size_C + size_B;
+        public const int size_A = 8;
+        public const int size_Op = 6;
+
+        public const int pos_Op = 0;
+        public const int pos_A = pos_Op + size_Op;
+        public const int pos_C = pos_A + size_A;
+        public const int pos_B = pos_C + size_C;
+        public const int pos_Bx = pos_C;
+
+        #endregion
+
+        #region max size of instrucion arguments
+        /* <lua_src>
+            #if SIZE_Bx < LUAI_BITSINT-1
+            #define MAXARG_Bx        ((1<<SIZE_Bx)-1)
+            #define MAXARG_sBx        (MAXARG_Bx>>1)        
+            #else
+            #define MAXARG_Bx        MAX_INT
+            #define MAXARG_sBx        MAX_INT
+            #endif
+
+
+            #define MAXARG_A        ((1<<SIZE_A)-1)
+            #define MAXARG_B        ((1<<SIZE_B)-1)
+            #define MAXARG_C        ((1<<SIZE_C)-1)
+        </lua_src>*/
+
+        #endregion
+        #region getter and setter of instruction
+        /* <lua_src>
+            #define GET_OPCODE(i)	(cast(OpCode, ((i)>>POS_OP) & MASK1(SIZE_OP,0)))
+            #define SET_OPCODE(i,o)	((i) = (((i)&MASK0(SIZE_OP,POS_OP)) | \
+                    ((cast(Instruction, o)<<POS_OP)&MASK1(SIZE_OP, POS_OP))))
+
+            #define GETARG_A(i)	(cast(int, ((i)>>POS_A) & MASK1(SIZE_A,0)))
+            #define SETARG_A(i,u)	((i) = (((i)&MASK0(SIZE_A,POS_A)) | \
+		            ((cast(Instruction, u)<<POS_A)&MASK1(SIZE_A, POS_A))))
+
+            #define GETARG_B(i)	(cast(int, ((i)>>POS_B) & MASK1(SIZE_B,0)))
+            #define SETARG_B(i,b)	((i) = (((i)&MASK0(SIZE_B,POS_B)) | \
+		            ((cast(Instruction, b)<<POS_B)&MASK1(SIZE_B, POS_B))))
+
+            #define GETARG_C(i)	(cast(int, ((i)>>POS_C) & MASK1(SIZE_C,0)))
+            #define SETARG_C(i,b)	((i) = (((i)&MASK0(SIZE_C,POS_C)) | \
+		            ((cast(Instruction, b)<<POS_C)&MASK1(SIZE_C, POS_C))))
+
+            #define GETARG_Bx(i)	(cast(int, ((i)>>POS_Bx) & MASK1(SIZE_Bx,0)))
+            #define SETARG_Bx(i,b)	((i) = (((i)&MASK0(SIZE_Bx,POS_Bx)) | \
+		            ((cast(Instruction, b)<<POS_Bx)&MASK1(SIZE_Bx, POS_Bx))))
+
+            #define GETARG_sBx(i)	(GETARG_Bx(i)-MAXARG_sBx)
+            #define SETARG_sBx(i,b)	SETARG_Bx((i),cast(unsigned int, (b)+MAXARG_sBx))
+
+
+            #define CREATE_ABC(o,a,b,c)	((cast(Instruction, o)<<POS_OP) \
+			            | (cast(Instruction, a)<<POS_A) \
+			            | (cast(Instruction, b)<<POS_B) \
+			            | (cast(Instruction, c)<<POS_C))
+
+            #define CREATE_ABx(o,a,bc)	((cast(Instruction, o)<<POS_OP) \
+			            | (cast(Instruction, a)<<POS_A) \
+			            | (cast(Instruction, bc)<<POS_Bx))
+        </lua_src>*/
+        // # get_*, set_*, * = Op, A, C, B, sBx
+        //   create_abc, create_abx
+        //TODO foo 
+        #endregion
+    }
     public enum Opcodes
     {
         Mov,
@@ -44,7 +135,7 @@ namespace zlua.ISA
         public override void execute(TThread thread)
         {
             var var_name = operands[0];
-            Debug.Assert(var_name.ttisstring());
+            Debug.Assert(var_name.tt_is_string);
             thread.curr_func.local_data[var_name] = thread.curr_func.stack.Pop();
         }
 
