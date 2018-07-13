@@ -4,6 +4,7 @@ using System.Diagnostics;
 using zlua.VM;
 using zlua.ISA;
 using zlua.Stdlib;
+using zlua.Configuration;
 /// <summary>
 /// lua类型模型
 /// </summary>
@@ -54,13 +55,11 @@ namespace zlua.TypeModel
             }
         }
 
-        /// <summary>
-        /// ctor is private ie. must use following factorys
-        /// </summary>
-        private TValue()
+        public TValue()
         {
 
         }
+
         TValue(TString tstr)
         {
             Type = LuaTypes.String;
@@ -124,11 +123,11 @@ namespace zlua.TypeModel
         public static implicit operator TValue(TNumber n) => n_factory(n);
         public static implicit operator string(TValue tval) => tval.Str;
         public static implicit operator TString(TValue tval) => tval.Str;
-        public static explicit operator TValue(TString tstr)=>new TValue(tstr);
+        public static explicit operator TValue(TString tstr) => new TValue(tstr);
         public static implicit operator bool(TValue tval) => tval.b;
         public static implicit operator int(TValue tval) => tval.i;
         public static implicit operator TNumber(TValue tval) => tval.n;
-        public static explicit operator GCObject(TValue tval)=>tval.gc;
+        public static explicit operator GCObject(TValue tval) => tval.gc;
         #endregion
         #region propertys to get or set value
         // # getter APIs are divided into 2 parts: value types use implicit cast operator
@@ -266,7 +265,7 @@ namespace zlua.TypeModel
             if (Type != other.Type) return false;
             else
                 switch (other.Type) {
-                    case LuaTypes.Nil:return true;
+                    case LuaTypes.Nil: return true;
                     case LuaTypes.Number:
                         return (TNumber)this == (TNumber)other;
                     case LuaTypes.Boolean:
@@ -281,10 +280,10 @@ namespace zlua.TypeModel
         public override int GetHashCode()
         {
             switch (Type) {
-                case LuaTypes.Number:return ((TNumber)this).GetHashCode();
-                case LuaTypes.String:return ((TString)this).GetHashCode();
-                case LuaTypes.Boolean:return ((bool)this).GetHashCode();
-                default:return base.GetHashCode();
+                case LuaTypes.Number: return ((TNumber)this).GetHashCode();
+                case LuaTypes.String: return ((TString)this).GetHashCode();
+                case LuaTypes.Boolean: return ((bool)this).GetHashCode();
+                default: return base.GetHashCode();
             }
         }
     }
@@ -391,7 +390,11 @@ namespace zlua.TypeModel
         {
             hashTablePart = new Dictionary<TValue, TValue>(sizeHashTablePart);
             arrayPart = new List<TValue>(sizeArrayPart);
-        }
+        }/// <summary>
+         /// luaH_get
+         /// </summary>
+         /// <param name="key"></param>
+         /// <returns></returns>
         public TValue Get(TValue key)
         {
             switch (key.Type) {
@@ -403,18 +406,34 @@ namespace zlua.TypeModel
                     if ((TNumber)k == n) return GetByInt(k);
                     goto default; // sigh, must have break or return, so ...
                 default:
-                    if (hashTablePart.ContainsKey(key)) 
+                    if (hashTablePart.ContainsKey(key))
                         return hashTablePart[key];
                     return TValue.NilObject;
             }
         }
+        /// <summary>
+        /// luaH_set, return tvalue found with `key, 
+        /// else create a new pair and return the new tvalue
+        /// TODO try to return void, because "new TValue" and set outside is not controlable. bad smell.
+        /// </summary>
+        /// <param name="L"></param>
+        /// <param name="key"></param>
+        /// <returns></returns>
         public TValue Set(TThread L, TValue key)
         {
-            return null;
+            var tval = Get(key);
+            if (tval != TValue.NilObject) return tval;
+            else {
+                Debug.Assert(key.tt_is_nil, "table index is nil");
+                Debug.Assert(key.tt_is_number && luaconf.IsNaN(key), "table index is NaN");
+                var new_key = new TValue();
+                hashTablePart[key] = new_key;
+                return new_key;
+            }
         }
         TValue GetByStr(TString key)
         {
-            var k=(TValue)key;
+            var k = (TValue)key;
             if (hashTablePart.ContainsKey(k))
                 return hashTablePart[k];
             return TValue.NilObject;
@@ -424,10 +443,19 @@ namespace zlua.TypeModel
             if (key - 1 < arrayPart.Count) return arrayPart[key - 1];
             else {
                 TNumber k = (TNumber)key;
-                if(hashTablePart.ContainsKey(key))
-                  return hashTablePart[k];
+                if (hashTablePart.ContainsKey(key))
+                    return hashTablePart[k];
                 return TValue.NilObject;
             }
+        }
+        TValue SetStr(TString key)
+        {
+
+        }
+        TValue SetInt(int key)
+        {
+            var tval = GetByInt(key);
+            if(tval!=TValue.NilObject)
         }
     }
     public class UpValue : GCObject
