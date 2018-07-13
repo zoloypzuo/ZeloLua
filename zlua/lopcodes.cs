@@ -208,7 +208,7 @@ namespace zlua.ISA
         }
         public override void execute(TThread thread)
         {
-            var callee = new Closure(thread.curr_func.local_data[operands[0]].compiled_func);
+            var callee = new Closure(thread.curr_func.local_data[operands[0]].Proto);
             callee.ret_addr = thread.pc;
 
             foreach (var item in callee.func.param_names) {
