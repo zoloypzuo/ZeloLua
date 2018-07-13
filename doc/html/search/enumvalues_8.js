@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['userdata',['USERDATA',['../namespacezlua.html#a20aabb1ed24cd7036213c39d70b0d0b3a1dcbca7437c5545655a66891f5f546d5',1,'zlua']]]
+  ['jmp',['Jmp',['../namespacezlua_1_1_i_s_a.html#ac24bf7375cf6310db717d6535d3173c3a6cff4b2c006c869ef3c73f7fbd6e2711',1,'zlua::ISA']]]
 ];

@@ -40,10 +40,7 @@ namespace zlua.TypeModel
         TInteger i { get; set; }  //用于index等
 
         bool b { get; set; }
-        /* <lua_src> 
-           #define setttype(obj, tt) (ttype(obj) = (tt))
-           #define ttype(o)	((o)->tt)
-        </lua_src>*/
+
         LuaTypes type { get; set; }
 
         public override string ToString()
@@ -79,7 +76,7 @@ namespace zlua.TypeModel
         static TValue runtime_func_factory(Proto func)
         {
             var _ret = new TValue() {
-                type = LuaTypes.Proto,
+                type = LuaTypes.Function,
                 gc = new Closure(func)
             };
             return _ret;
@@ -88,7 +85,7 @@ namespace zlua.TypeModel
         public static TValue compiled_func_factory(Proto compiledFunction)
         {
             var _ret = new TValue {
-                type = LuaTypes.Proto,
+                type = LuaTypes.Function,
                 gc = compiledFunction
             };
             return _ret;
@@ -129,20 +126,6 @@ namespace zlua.TypeModel
         public static implicit operator TNumber(TValue tval) => tval.n;
         #endregion
         #region propertys to get or set value
-        /* <lua_src>
-        // #define gcvalue(o)	check_exp(iscollectable(o), (o)->value.gc)
-        // #define pvalue(o)	check_exp(ttislightuserdata(o), (o)->value.p)
-        // #define nvalue(o)	check_exp(ttisnumber(o), (o)->value.n)
-        // #define rawtsvalue(o)	check_exp(ttisstring(o), &(o)->value.gc->ts)
-        // #define tsvalue(o)	(&rawtsvalue(o)->tsv)
-        // #define rawuvalue(o)	check_exp(ttisuserdata(o), &(o)->value.gc->u)
-        // #define uvalue(o)	(&rawuvalue(o)->uv)
-        // #define clvalue(o)	check_exp(ttisfunction(o), &(o)->value.gc->cl)
-        // #define hvalue(o)	check_exp(ttistable(o), &(o)->value.gc->h)
-        // #define bvalue(o)	check_exp(ttisboolean(o), (o)->value.b)
-        // #define thvalue(o)	check_exp(ttisthread(o), &(o)->value.gc->th)
-        </lua_src>*/
-
         // # getter APIs are divided into 2 parts: value types use implicit cast operator
         //   and reference types use simple property (ie. method) TODO not right
         
@@ -200,7 +183,7 @@ namespace zlua.TypeModel
         <lua_src>*/
         
         // # L is still included in parameters in case of refactor
-        
+        //TODO
 
 
 
@@ -230,26 +213,20 @@ namespace zlua.TypeModel
         #endregion
 
         #region propertys to test type
-        /* <lua_src>
-        // #define ttisnil(o)	(ttype(o) == LUA_TNIL)
-        // #define ttisnumber(o)	(ttype(o) == LUA_TNUMBER)
-        // #define ttisstring(o)	(ttype(o) == LUA_TSTRING)
-        // #define ttistable(o)	(ttype(o) == LUA_TTABLE)
-        // #define ttisfunction(o)	(ttype(o) == LUA_TFUNCTION)
-        // #define ttisboolean(o)	(ttype(o) == LUA_TBOOLEAN)
-        // #define ttisuserdata(o)	(ttype(o) == LUA_TUSERDATA)
-        // #define ttisthread(o)	(ttype(o) == LUA_TTHREAD)
-        // #define ttislightuserdata(o)	(ttype(o) == LUA_TLIGHTUSERDATA)
-        </lua_src>*/
         public bool tt_is_nil { get => type == LuaTypes.Nil; }
+        public bool tt_is_number { get => type == LuaTypes.Number; }
         public bool tt_is_string { get => type == LuaTypes.String; }
-        public bool tt_is_proto { get => type == LuaTypes.Proto; }
+        public bool tt_is_table { get => type == LuaTypes.Table; }
+        public bool tt_is_proto { get => type == LuaTypes.Function; }
         public bool tt_is_boolean { get => type == LuaTypes.Boolean; }
+        public bool tt_is_userdata { get => type == LuaTypes.Userdata; }
+        public bool tt_is_thread { get => type == LuaTypes.Thread; }
+        public bool tt_is_light_userdata { get => type == LuaTypes.LightUserdata; }
+        public bool is_cs_function { get => type == LuaTypes.Function && (gc as Closure).is_Cs; }
+        public bool is_lua_function { get => type == LuaTypes.Function && !(gc as Closure).is_Cs; }
         #endregion
         #region other functions
-        /* <lua_src> #define iscollectable(o)	(ttype(o) >= LUA_TSTRING)*/
         public bool is_collectable { get => (int)type >= (int)LuaTypes.String; }
-        /* <lua_src> #define l_isfalse(o)	(ttisnil(o) || (ttisboolean(o) && bvalue(o) == 0))*/
         public bool is_false { get => tt_is_nil || tt_is_boolean && this == false; }
 
 
@@ -266,7 +243,12 @@ namespace zlua.TypeModel
         
             
         /*<lua_src>const TValue luaO_nilobject_;</lua_src>*/
-        public static readonly TValue nil = new TValue { type = LuaTypes.Nil };
+        public static readonly TValue nil_object = new TValue { type = LuaTypes.Nil };
+        
+        public int str2d(string s,TNumber result)
+        {
+            return 1;
+        }
         #endregion
 
     }
@@ -286,9 +268,11 @@ namespace zlua.TypeModel
             this.parent = parent;
             this.param_names = param_names;
         }
-        public List<TValue> consts; //k
+        public List<TValue> k;
         public List<Instruction> codes;
         public List<LocVar> local_vars;
+        public bool is_vararg;
+        public int max_stacksize;
     }
     public class LocVar { public string var_name;public int startpc;public int endpc; }
     public class FuncState
@@ -301,6 +285,7 @@ namespace zlua.TypeModel
     /* <lua_src> union Closure<lua_src>*/
     public class Closure : GCObject
     {
+        public bool IsCharp;
         public Proto func;
         public int ret_addr;
         public Dictionary<TString, TValue> local_data = new Dictionary<TString, TValue>();
@@ -309,6 +294,14 @@ namespace zlua.TypeModel
         {
             this.func = func;
         }
+    }
+    public class LuaClosure : Closure
+    {
+
+    }
+    public class CSharpClosure : Closure
+    {
+
     }
     /* <lua_src> union TString</lua_src>*/
     /// <summary>

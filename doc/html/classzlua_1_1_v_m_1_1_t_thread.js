@@ -1,11 +1,25 @@
 var classzlua_1_1_v_m_1_1_t_thread =
 [
     [ "TThread", "classzlua_1_1_v_m_1_1_t_thread.html#a9f624ec583ebbaeea4bc8e5e36b4164f", null ],
+    [ "is_number", "classzlua_1_1_v_m_1_1_t_thread.html#ad2b6a07a197bfdaba3f11f9c602053d9", null ],
+    [ "load_file", "classzlua_1_1_v_m_1_1_t_thread.html#ad233980c8ba09071a79ee5d68bb82f82", null ],
+    [ "new_run", "classzlua_1_1_v_m_1_1_t_thread.html#ab54367be03a4372c3cbc10d407a37f34", null ],
+    [ "pcall", "classzlua_1_1_v_m_1_1_t_thread.html#a03c024333797889e7569ef6ae098f574", null ],
     [ "pop", "classzlua_1_1_v_m_1_1_t_thread.html#a0738e0313c1e1edd9c5c16069bd80785", null ],
+    [ "pos_call", "classzlua_1_1_v_m_1_1_t_thread.html#a7b5c0fc81acab008c4a7d8c7383cf09f", null ],
+    [ "pre_call", "classzlua_1_1_v_m_1_1_t_thread.html#a63364ebcaf7e65c6cca322431d08d5ba", null ],
     [ "push", "classzlua_1_1_v_m_1_1_t_thread.html#a42524d14595c68548680ce01449df781", null ],
     [ "run", "classzlua_1_1_v_m_1_1_t_thread.html#a59e0249a2830affdbff167b882c714c3", null ],
+    [ "single_var_aux", "classzlua_1_1_v_m_1_1_t_thread.html#a17b73dc1ebb5b1acfe3a19ee3538fcfc", null ],
+    [ "tonumber", "classzlua_1_1_v_m_1_1_t_thread.html#a7048da81086f174ac204ed30ae7395cc", null ],
+    [ "tonumber", "classzlua_1_1_v_m_1_1_t_thread.html#a25b66590ab9e63b8d9ca73b471eb8063", null ],
+    [ "_stack", "classzlua_1_1_v_m_1_1_t_thread.html#aa36ed70bba26bc92dc3a251fa8516adc", null ],
+    [ "callinfo_stack", "classzlua_1_1_v_m_1_1_t_thread.html#a94bba7b39a6674af5cf24dae1206b865", null ],
     [ "curr_func", "classzlua_1_1_v_m_1_1_t_thread.html#ad8e1a3bbf47278623ba5d25e71586b9e", null ],
     [ "global_data", "classzlua_1_1_v_m_1_1_t_thread.html#aa85e02d0dccc686a4bb9051ea7d7645e", null ],
     [ "pc", "classzlua_1_1_v_m_1_1_t_thread.html#a3f6423960e9d1108d72410f0d811c006", null ],
-    [ "stack", "classzlua_1_1_v_m_1_1_t_thread.html#abe7d45fc345f7e97540c41960af818e0", null ]
+    [ "stack", "classzlua_1_1_v_m_1_1_t_thread.html#abe7d45fc345f7e97540c41960af818e0", null ],
+    [ "_base", "classzlua_1_1_v_m_1_1_t_thread.html#a6b9d1b8ca090cfecf2cb7e47643640be", null ],
+    [ "curr_callinfo", "classzlua_1_1_v_m_1_1_t_thread.html#a91f68e9fcbc784c12ee09086d6b98b02", null ],
+    [ "top", "classzlua_1_1_v_m_1_1_t_thread.html#a5c04b416d65f652d61c803da7f534773", null ]
 ];

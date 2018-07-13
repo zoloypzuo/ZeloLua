@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['luatype',['LuaType',['../namespacezlua.html#a20aabb1ed24cd7036213c39d70b0d0b3',1,'zlua']]]
+  ['luatypes',['LuaTypes',['../namespacezlua.html#a19cdd7b931f41a6caadb256139d880c1',1,'zlua']]]
 ];

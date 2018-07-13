@@ -87,15 +87,14 @@ $(document).ready(function(){initNavTree('classzlua_1_1_v_m_1_1_t_thread.html','
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public 成员函数</a> &#124;
+<a href="#pub-static-methods">静态 Public 成员函数</a> &#124;
 <a href="#pub-attribs">Public 属性</a> &#124;
+<a href="#properties">属性</a> &#124;
 <a href="classzlua_1_1_v_m_1_1_t_thread-members.html">所有成员列表</a>  </div>
   <div class="headertitle">
 <div class="title">zlua.VM.TThread类 参考</div>  </div>
 </div><!--header-->
 <div class="contents">
-
-<p>TODO，thread整合入lobject  
- <a href="classzlua_1_1_v_m_1_1_t_thread.html#details">更多...</a></p>
 <div class="dynheader">
 类 zlua.VM.TThread 继承关系图:</div>
 <div class="dyncontent">
@@ -121,10 +120,35 @@ Public 成员函数</h2></td></tr>
 <tr class="separator:a9f624ec583ebbaeea4bc8e5e36b4164f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a59e0249a2830affdbff167b882c714c3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzlua_1_1_v_m_1_1_t_thread.html#a59e0249a2830affdbff167b882c714c3">run</a> ()</td></tr>
 <tr class="separator:a59e0249a2830affdbff167b882c714c3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab54367be03a4372c3cbc10d407a37f34"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzlua_1_1_v_m_1_1_t_thread.html#ab54367be03a4372c3cbc10d407a37f34">new_run</a> (int level)</td></tr>
+<tr class="memdesc:ab54367be03a4372c3cbc10d407a37f34"><td class="mdescLeft">&#160;</td><td class="mdescRight">TODO 这是一个重新开始的地方，命名可以稍微参考一下。但是指令集要思考一下。要紧凑。理论上和寄存器式应该是一致的  <a href="#ab54367be03a4372c3cbc10d407a37f34">更多...</a><br /></td></tr>
+<tr class="separator:ab54367be03a4372c3cbc10d407a37f34"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a42524d14595c68548680ce01449df781"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzlua_1_1_v_m_1_1_t_thread.html#a42524d14595c68548680ce01449df781">push</a> (<a class="el" href="classzlua_1_1_type_model_1_1_t_value.html">TValue</a> item)</td></tr>
 <tr class="separator:a42524d14595c68548680ce01449df781"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0738e0313c1e1edd9c5c16069bd80785"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classzlua_1_1_type_model_1_1_t_value.html">TValue</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzlua_1_1_v_m_1_1_t_thread.html#a0738e0313c1e1edd9c5c16069bd80785">pop</a> ()</td></tr>
 <tr class="separator:a0738e0313c1e1edd9c5c16069bd80785"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad233980c8ba09071a79ee5d68bb82f82"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzlua_1_1_v_m_1_1_t_thread.html#ad233980c8ba09071a79ee5d68bb82f82">load_file</a> (string fn)</td></tr>
+<tr class="separator:ad233980c8ba09071a79ee5d68bb82f82"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a03c024333797889e7569ef6ae098f574"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzlua_1_1_v_m_1_1_t_thread.html#a03c024333797889e7569ef6ae098f574">pcall</a> (int n_args, int n_retvals)</td></tr>
+<tr class="separator:a03c024333797889e7569ef6ae098f574"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a63364ebcaf7e65c6cca322431d08d5ba"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzlua_1_1_v_m_1_1_t_thread.html#a63364ebcaf7e65c6cca322431d08d5ba">pre_call</a> ()</td></tr>
+<tr class="separator:a63364ebcaf7e65c6cca322431d08d5ba"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7b5c0fc81acab008c4a7d8c7383cf09f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzlua_1_1_v_m_1_1_t_thread.html#a7b5c0fc81acab008c4a7d8c7383cf09f">pos_call</a> ()</td></tr>
+<tr class="separator:a7b5c0fc81acab008c4a7d8c7383cf09f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a17b73dc1ebb5b1acfe3a19ee3538fcfc"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzlua_1_1_v_m_1_1_t_thread.html#a17b73dc1ebb5b1acfe3a19ee3538fcfc">single_var_aux</a> ()</td></tr>
+<tr class="separator:a17b73dc1ebb5b1acfe3a19ee3538fcfc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad2b6a07a197bfdaba3f11f9c602053d9"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzlua_1_1_v_m_1_1_t_thread.html#ad2b6a07a197bfdaba3f11f9c602053d9">is_number</a> (int index)</td></tr>
+<tr class="separator:ad2b6a07a197bfdaba3f11f9c602053d9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7048da81086f174ac204ed30ae7395cc"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacezlua_1_1_v_m.html#a7f7fcd6692ec18408bca0ffe3613dae3">TNumber</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzlua_1_1_v_m_1_1_t_thread.html#a7048da81086f174ac204ed30ae7395cc">tonumber</a> (int index)</td></tr>
+<tr class="separator:a7048da81086f174ac204ed30ae7395cc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a25b66590ab9e63b8d9ca73b471eb8063"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classzlua_1_1_type_model_1_1_t_value.html">TValue</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzlua_1_1_v_m_1_1_t_thread.html#a25b66590ab9e63b8d9ca73b471eb8063">tonumber</a> (<a class="el" href="classzlua_1_1_type_model_1_1_t_value.html">TValue</a> obj)</td></tr>
+<tr class="separator:a25b66590ab9e63b8d9ca73b471eb8063"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
+静态 Public 成员函数</h2></td></tr>
+<tr class="memitem:acb41b1d1b3098a8f4089b186e44f037a"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classzlua_1_1_type_model_1_1_t_value.html">TValue</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzlua_1_1_v_m_1_1_t_thread.html#acb41b1d1b3098a8f4089b186e44f037a">index2tval</a> (int index)</td></tr>
+<tr class="memdesc:acb41b1d1b3098a8f4089b186e44f037a"><td class="mdescLeft">&#160;</td><td class="mdescRight">get tvalue from stack, accept an signed index (which allows index that under 0) or pesudo index to index special variable like _G  <a href="#acb41b1d1b3098a8f4089b186e44f037a">更多...</a><br /></td></tr>
+<tr class="separator:acb41b1d1b3098a8f4089b186e44f037a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public 属性</h2></td></tr>
@@ -134,11 +158,21 @@ Public 属性</h2></td></tr>
 <tr class="separator:aa85e02d0dccc686a4bb9051ea7d7645e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3f6423960e9d1108d72410f0d811c006"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzlua_1_1_v_m_1_1_t_thread.html#a3f6423960e9d1108d72410f0d811c006">pc</a> = 0</td></tr>
 <tr class="separator:a3f6423960e9d1108d72410f0d811c006"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa36ed70bba26bc92dc3a251fa8516adc"><td class="memItemLeft" align="right" valign="top">List&lt; <a class="el" href="classzlua_1_1_type_model_1_1_t_value.html">TValue</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzlua_1_1_v_m_1_1_t_thread.html#aa36ed70bba26bc92dc3a251fa8516adc">_stack</a></td></tr>
+<tr class="separator:aa36ed70bba26bc92dc3a251fa8516adc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a94bba7b39a6674af5cf24dae1206b865"><td class="memItemLeft" align="right" valign="top">Stack&lt; <a class="el" href="classzlua_1_1_v_m_1_1_call_info.html">CallInfo</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzlua_1_1_v_m_1_1_t_thread.html#a94bba7b39a6674af5cf24dae1206b865">callinfo_stack</a></td></tr>
+<tr class="separator:a94bba7b39a6674af5cf24dae1206b865"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad8e1a3bbf47278623ba5d25e71586b9e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classzlua_1_1_type_model_1_1_closure.html">Closure</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzlua_1_1_v_m_1_1_t_thread.html#ad8e1a3bbf47278623ba5d25e71586b9e">curr_func</a> =&gt; stack.Peek()</td></tr>
 <tr class="separator:ad8e1a3bbf47278623ba5d25e71586b9e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
-额外继承的成员函数</h2></td></tr>
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="properties"></a>
+属性</h2></td></tr>
+<tr class="memitem:a5c04b416d65f652d61c803da7f534773"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzlua_1_1_v_m_1_1_t_thread.html#a5c04b416d65f652d61c803da7f534773">top</a><code> [get]</code></td></tr>
+<tr class="memdesc:a5c04b416d65f652d61c803da7f534773"><td class="mdescLeft">&#160;</td><td class="mdescRight">= callinfo_stack.top().top  <a href="#a5c04b416d65f652d61c803da7f534773">更多...</a><br /></td></tr>
+<tr class="separator:a5c04b416d65f652d61c803da7f534773"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6b9d1b8ca090cfecf2cb7e47643640be"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzlua_1_1_v_m_1_1_t_thread.html#a6b9d1b8ca090cfecf2cb7e47643640be">_base</a><code> [get]</code></td></tr>
+<tr class="memdesc:a6b9d1b8ca090cfecf2cb7e47643640be"><td class="mdescLeft">&#160;</td><td class="mdescRight">= callinfo_stack.top()._base  <a href="#a6b9d1b8ca090cfecf2cb7e47643640be">更多...</a><br /></td></tr>
+<tr class="separator:a6b9d1b8ca090cfecf2cb7e47643640be"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header properties_classzlua_1_1_type_model_1_1_g_c_object"><td colspan="2" onclick="javascript:toggleInherit('properties_classzlua_1_1_type_model_1_1_g_c_object')"><img src="closed.png" alt="-"/>&#160;属性 继承自 <a class="el" href="classzlua_1_1_type_model_1_1_g_c_object.html">zlua.TypeModel.GCObject</a></td></tr>
 <tr class="memitem:a0455ff438871cf19fc7c6d2df127ccb5 inherit properties_classzlua_1_1_type_model_1_1_g_c_object"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classzlua_1_1_type_model_1_1_t_string.html">TString</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzlua_1_1_type_model_1_1_g_c_object.html#a0455ff438871cf19fc7c6d2df127ccb5">tstr</a><code> [get]</code></td></tr>
 <tr class="memdesc:a0455ff438871cf19fc7c6d2df127ccb5 inherit properties_classzlua_1_1_type_model_1_1_g_c_object"><td class="mdescLeft">&#160;</td><td class="mdescRight">for convenience (eg. <a class="el" href="classzlua_1_1_type_model_1_1_t_string.html" title="the string type of lua, just warpper of C# string ">TString</a> is subclass of GCObject）  <a href="classzlua_1_1_type_model_1_1_g_c_object.html#a0455ff438871cf19fc7c6d2df127ccb5">更多...</a><br /></td></tr>
@@ -154,9 +188,7 @@ Public 属性</h2></td></tr>
 <tr class="memitem:a19f567e5f5172b6ebeb698e2e3a5b84a inherit properties_classzlua_1_1_type_model_1_1_g_c_object"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classzlua_1_1_type_model_1_1_closure.html">Closure</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzlua_1_1_type_model_1_1_g_c_object.html#a19f567e5f5172b6ebeb698e2e3a5b84a">runtime_func</a><code> [get]</code></td></tr>
 <tr class="separator:a19f567e5f5172b6ebeb698e2e3a5b84a inherit properties_classzlua_1_1_type_model_1_1_g_c_object"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<a name="details" id="details"></a><h2 class="groupheader">详细描述</h2>
-<div class="textblock"><p>TODO，thread整合入lobject </p>
-</div><h2 class="groupheader">构造及析构函数说明</h2>
+<h2 class="groupheader">构造及析构函数说明</h2>
 <a id="a9f624ec583ebbaeea4bc8e5e36b4164f"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a9f624ec583ebbaeea4bc8e5e36b4164f">&#9670;&nbsp;</a></span>TThread()</h2>
 
@@ -176,6 +208,118 @@ Public 属性</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">成员函数说明</h2>
+<a id="acb41b1d1b3098a8f4089b186e44f037a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acb41b1d1b3098a8f4089b186e44f037a">&#9670;&nbsp;</a></span>index2tval()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static <a class="el" href="classzlua_1_1_type_model_1_1_t_value.html">TValue</a> zlua.VM.TThread.index2tval </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>index</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>get tvalue from stack, accept an signed index (which allows index that under 0) or pesudo index to index special variable like _G </p>
+
+</div>
+</div>
+<a id="ad2b6a07a197bfdaba3f11f9c602053d9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad2b6a07a197bfdaba3f11f9c602053d9">&#9670;&nbsp;</a></span>is_number()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool zlua.VM.TThread.is_number </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>index</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ad233980c8ba09071a79ee5d68bb82f82"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad233980c8ba09071a79ee5d68bb82f82">&#9670;&nbsp;</a></span>load_file()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void zlua.VM.TThread.load_file </td>
+          <td>(</td>
+          <td class="paramtype">string&#160;</td>
+          <td class="paramname"><em>fn</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ab54367be03a4372c3cbc10d407a37f34"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab54367be03a4372c3cbc10d407a37f34">&#9670;&nbsp;</a></span>new_run()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void zlua.VM.TThread.new_run </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>level</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>TODO 这是一个重新开始的地方，命名可以稍微参考一下。但是指令集要思考一下。要紧凑。理论上和寄存器式应该是一致的 </p>
+
+</div>
+</div>
+<a id="a03c024333797889e7569ef6ae098f574"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a03c024333797889e7569ef6ae098f574">&#9670;&nbsp;</a></span>pcall()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void zlua.VM.TThread.pcall </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>n_args</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>n_retvals</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a0738e0313c1e1edd9c5c16069bd80785"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a0738e0313c1e1edd9c5c16069bd80785">&#9670;&nbsp;</a></span>pop()</h2>
 
@@ -184,6 +328,40 @@ Public 属性</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="classzlua_1_1_type_model_1_1_t_value.html">TValue</a> zlua.VM.TThread.pop </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a7b5c0fc81acab008c4a7d8c7383cf09f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7b5c0fc81acab008c4a7d8c7383cf09f">&#9670;&nbsp;</a></span>pos_call()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void zlua.VM.TThread.pos_call </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a63364ebcaf7e65c6cca322431d08d5ba"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a63364ebcaf7e65c6cca322431d08d5ba">&#9670;&nbsp;</a></span>pre_call()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void zlua.VM.TThread.pre_call </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -228,7 +406,88 @@ Public 属性</h2></td></tr>
 
 </div>
 </div>
+<a id="a17b73dc1ebb5b1acfe3a19ee3538fcfc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a17b73dc1ebb5b1acfe3a19ee3538fcfc">&#9670;&nbsp;</a></span>single_var_aux()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void zlua.VM.TThread.single_var_aux </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a7048da81086f174ac204ed30ae7395cc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7048da81086f174ac204ed30ae7395cc">&#9670;&nbsp;</a></span>tonumber() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespacezlua_1_1_v_m.html#a7f7fcd6692ec18408bca0ffe3613dae3">TNumber</a> zlua.VM.TThread.tonumber </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>index</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a25b66590ab9e63b8d9ca73b471eb8063"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a25b66590ab9e63b8d9ca73b471eb8063">&#9670;&nbsp;</a></span>tonumber() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classzlua_1_1_type_model_1_1_t_value.html">TValue</a> zlua.VM.TThread.tonumber </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classzlua_1_1_type_model_1_1_t_value.html">TValue</a>&#160;</td>
+          <td class="paramname"><em>obj</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <h2 class="groupheader">类成员变量说明</h2>
+<a id="aa36ed70bba26bc92dc3a251fa8516adc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa36ed70bba26bc92dc3a251fa8516adc">&#9670;&nbsp;</a></span>_stack</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">List&lt;<a class="el" href="classzlua_1_1_type_model_1_1_t_value.html">TValue</a>&gt; zlua.VM.TThread._stack</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a94bba7b39a6674af5cf24dae1206b865"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a94bba7b39a6674af5cf24dae1206b865">&#9670;&nbsp;</a></span>callinfo_stack</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Stack&lt;<a class="el" href="classzlua_1_1_v_m_1_1_call_info.html">CallInfo</a>&gt; zlua.VM.TThread.callinfo_stack</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="ad8e1a3bbf47278623ba5d25e71586b9e"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ad8e1a3bbf47278623ba5d25e71586b9e">&#9670;&nbsp;</a></span>curr_func</h2>
 
@@ -282,6 +541,55 @@ Public 属性</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">属性说明</h2>
+<a id="a6b9d1b8ca090cfecf2cb7e47643640be"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6b9d1b8ca090cfecf2cb7e47643640be">&#9670;&nbsp;</a></span>_base</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int zlua.VM.TThread._base</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>= callinfo_stack.top()._base </p>
+
+</div>
+</div>
+<a id="a5c04b416d65f652d61c803da7f534773"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5c04b416d65f652d61c803da7f534773">&#9670;&nbsp;</a></span>top</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int zlua.VM.TThread.top</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>= callinfo_stack.top().top </p>
 
 </div>
 </div>

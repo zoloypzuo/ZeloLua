@@ -51,7 +51,8 @@ var NAVTREE =
 
 var NAVTREEINDEX =
 [
-"_i_s_a_8cs.html"
+"_program_8cs.html",
+"namespacezlua_1_1_v_m.html"
 ];
 
 var SYNCONMSG = '点击 关闭 面板同步';

@@ -86,21 +86,45 @@ $(document).ready(function(){initNavTree('functions_prop.html','');});
 
 <div class="contents">
 &#160;<ul>
-<li>b
-: <a class="el" href="classzlua_1_1_type_model_1_1_t_value.html#a931333b3be6ee50de09ca2f7f5e411b3">zlua.TypeModel.TValue</a>
+<li>_base
+: <a class="el" href="classzlua_1_1_v_m_1_1_t_thread.html#a6b9d1b8ca090cfecf2cb7e47643640be">zlua.VM.TThread</a>
+</li>
+<li>A
+: <a class="el" href="classzlua_1_1_i_s_a_1_1_instruction.html#a59ab706e535a9fc23bfb273d33206da6">zlua.ISA.Instruction</a>
+</li>
+<li>B
+: <a class="el" href="classzlua_1_1_i_s_a_1_1_instruction.html#a87fa3beb62816f73b7c6ee6588194228">zlua.ISA.Instruction</a>
+</li>
+<li>Bx
+: <a class="el" href="classzlua_1_1_i_s_a_1_1_instruction.html#a503e90f5b6720a16e8d511429566d7e4">zlua.ISA.Instruction</a>
+</li>
+<li>C
+: <a class="el" href="classzlua_1_1_i_s_a_1_1_instruction.html#a645db33664e38fbbaba4ba2090fea8be">zlua.ISA.Instruction</a>
 </li>
 <li>compiled_func
 : <a class="el" href="classzlua_1_1_type_model_1_1_g_c_object.html#a1c8be13a4c04dad3cdec5e2ffa3b7547">zlua.TypeModel.GCObject</a>
 , <a class="el" href="classzlua_1_1_type_model_1_1_t_value.html#aed30e9fee997029390327da0f5c66938">zlua.TypeModel.TValue</a>
 </li>
-<li>i
-: <a class="el" href="classzlua_1_1_type_model_1_1_t_value.html#ada2bfe9a145b664fc05359bb34726141">zlua.TypeModel.TValue</a>
+<li>is_collectable
+: <a class="el" href="classzlua_1_1_type_model_1_1_t_value.html#a69359d008dd94d068bbbc1952b8006eb">zlua.TypeModel.TValue</a>
 </li>
-<li>n
-: <a class="el" href="classzlua_1_1_type_model_1_1_t_value.html#a934b05c9e1a3e433cfa0b6b75a366ba4">zlua.TypeModel.TValue</a>
+<li>is_cs_function
+: <a class="el" href="classzlua_1_1_type_model_1_1_t_value.html#afa908effa41dfe2dbf83dca1b064b389">zlua.TypeModel.TValue</a>
+</li>
+<li>is_false
+: <a class="el" href="classzlua_1_1_type_model_1_1_t_value.html#a30e9eab8d5f18a3cca69c092a2dfdc68">zlua.TypeModel.TValue</a>
+</li>
+<li>is_lua_function
+: <a class="el" href="classzlua_1_1_type_model_1_1_t_value.html#a7cf1d13c9136e327a71bb1217220fdf9">zlua.TypeModel.TValue</a>
+</li>
+<li>opcode
+: <a class="el" href="classzlua_1_1_i_s_a_1_1_instruction.html#a98e7ea521198741b174d062ce4731348">zlua.ISA.Instruction</a>
 </li>
 <li>runtime_func
 : <a class="el" href="classzlua_1_1_type_model_1_1_g_c_object.html#a19f567e5f5172b6ebeb698e2e3a5b84a">zlua.TypeModel.GCObject</a>
+</li>
+<li>sBx
+: <a class="el" href="classzlua_1_1_i_s_a_1_1_instruction.html#a35f76580896b72ccf026fd57473227a3">zlua.ISA.Instruction</a>
 </li>
 <li>table
 : <a class="el" href="classzlua_1_1_type_model_1_1_g_c_object.html#a96b65c234a1d51f832063b4c8a19fd96">zlua.TypeModel.GCObject</a>
@@ -108,9 +132,38 @@ $(document).ready(function(){initNavTree('functions_prop.html','');});
 <li>thread
 : <a class="el" href="classzlua_1_1_type_model_1_1_g_c_object.html#a86909e98565f1982fd2db4a0b11f30f1">zlua.TypeModel.GCObject</a>
 </li>
+<li>top
+: <a class="el" href="classzlua_1_1_v_m_1_1_t_thread.html#a5c04b416d65f652d61c803da7f534773">zlua.VM.TThread</a>
+</li>
 <li>tstr
 : <a class="el" href="classzlua_1_1_type_model_1_1_g_c_object.html#a0455ff438871cf19fc7c6d2df127ccb5">zlua.TypeModel.GCObject</a>
-, <a class="el" href="classzlua_1_1_type_model_1_1_t_value.html#a6efc3d4b342c6096c7c40f2beae64faf">zlua.TypeModel.TValue</a>
+</li>
+<li>tt_is_boolean
+: <a class="el" href="classzlua_1_1_type_model_1_1_t_value.html#a3d429f0ad5c2379aeaef3ae3a1a7f28e">zlua.TypeModel.TValue</a>
+</li>
+<li>tt_is_light_userdata
+: <a class="el" href="classzlua_1_1_type_model_1_1_t_value.html#aee7d2f5a2f2d932443bd9c8c1fd4037b">zlua.TypeModel.TValue</a>
+</li>
+<li>tt_is_nil
+: <a class="el" href="classzlua_1_1_type_model_1_1_t_value.html#ac2ea81755236b1156e6aa980c30cc507">zlua.TypeModel.TValue</a>
+</li>
+<li>tt_is_number
+: <a class="el" href="classzlua_1_1_type_model_1_1_t_value.html#a8b4de65bb4329a953eb3d054d8e60cf5">zlua.TypeModel.TValue</a>
+</li>
+<li>tt_is_proto
+: <a class="el" href="classzlua_1_1_type_model_1_1_t_value.html#a096ed3fd5193dc68ee40996a84ac53ac">zlua.TypeModel.TValue</a>
+</li>
+<li>tt_is_string
+: <a class="el" href="classzlua_1_1_type_model_1_1_t_value.html#ac245daa02a0c8eb667144806e2dc378c">zlua.TypeModel.TValue</a>
+</li>
+<li>tt_is_table
+: <a class="el" href="classzlua_1_1_type_model_1_1_t_value.html#aa06be3f9046818aae05841eea0f1f639">zlua.TypeModel.TValue</a>
+</li>
+<li>tt_is_thread
+: <a class="el" href="classzlua_1_1_type_model_1_1_t_value.html#af566b0dae8234217ec0c28e2794f27f9">zlua.TypeModel.TValue</a>
+</li>
+<li>tt_is_userdata
+: <a class="el" href="classzlua_1_1_type_model_1_1_t_value.html#a9ed18ce3528ce1f1fe326979d45c846e">zlua.TypeModel.TValue</a>
 </li>
 <li>upval
 : <a class="el" href="classzlua_1_1_type_model_1_1_g_c_object.html#aa68d07851da4cf56865772ad7769d59a">zlua.TypeModel.GCObject</a>

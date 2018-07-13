@@ -48,7 +48,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="lapi.cs" />
+    <Compile Include="lauxlib.cs" />
+    <Compile Include="lbaselib.cs" />
+    <Compile Include="ldo.cs" />
     <Compile Include="lstate.cs" />
+    <Compile Include="luaconf.cs" />
     <Compile Include="lualib.cs" />
     <Compile Include="parser_antlr\compiler.cs" />
     <Compile Include="lopcodes.cs" />

@@ -86,11 +86,31 @@ $(document).ready(function(){initNavTree('functions_vars.html','');});
 
 <div class="contents">
 &#160;<ul>
+<li>_base
+: <a class="el" href="classzlua_1_1_v_m_1_1_call_info.html#a4a5e3d27e3e37988fb7fa610443e86f3">zlua.VM.CallInfo</a>
+</li>
+<li>_stack
+: <a class="el" href="classzlua_1_1_v_m_1_1_t_thread.html#aa36ed70bba26bc92dc3a251fa8516adc">zlua.VM.TThread</a>
+</li>
+<li>callinfo_stack
+: <a class="el" href="classzlua_1_1_v_m_1_1_t_thread.html#a94bba7b39a6674af5cf24dae1206b865">zlua.VM.TThread</a>
+</li>
+<li>codes
+: <a class="el" href="classzlua_1_1_type_model_1_1_proto.html#a36881ce0f5687b57a4143d0c825ba969">zlua.TypeModel.Proto</a>
+</li>
+<li>consts
+: <a class="el" href="classzlua_1_1_type_model_1_1_proto.html#a69ee516834b0a8aabe753b86fc207104">zlua.TypeModel.Proto</a>
+</li>
 <li>curr_func
 : <a class="el" href="classzlua_1_1_v_m_1_1_t_thread.html#ad8e1a3bbf47278623ba5d25e71586b9e">zlua.VM.TThread</a>
 </li>
+<li>endpc
+: <a class="el" href="classzlua_1_1_type_model_1_1_loc_var.html#a7846a6bc5fa9169352b648cc9e966cd5">zlua.TypeModel.LocVar</a>
+</li>
 <li>func
 : <a class="el" href="classzlua_1_1_type_model_1_1_closure.html#ac4e222121c59c3476411d16cad359ad5">zlua.TypeModel.Closure</a>
+, <a class="el" href="classzlua_1_1_v_m_1_1_call_info.html#a2d681afdb555ee34d5ec61a6a71db6b3">zlua.VM.CallInfo</a>
+, <a class="el" href="classzlua_1_1_v_m_1_1_call_s.html#af2cebe0c0c2fc2c9955daa2b93a0d6bc">zlua.VM.CallS</a>
 </li>
 <li>global_data
 : <a class="el" href="classzlua_1_1_v_m_1_1_t_thread.html#aa85e02d0dccc686a4bb9051ea7d7645e">zlua.VM.TThread</a>
@@ -101,14 +121,23 @@ $(document).ready(function(){initNavTree('functions_vars.html','');});
 <li>instrs
 : <a class="el" href="classzlua_1_1_type_model_1_1_proto.html#ab7ba45087235e46dadcd556ba8401256">zlua.TypeModel.Proto</a>
 </li>
+<li>is_Cs
+: <a class="el" href="classzlua_1_1_type_model_1_1_closure.html#a86fbbccb1645044668b4c55261ffc361">zlua.TypeModel.Closure</a>
+</li>
 <li>label2pc
 : <a class="el" href="classzlua_1_1_type_model_1_1_proto.html#a74ad526092a4bafb92a14bd23e868f48">zlua.TypeModel.Proto</a>
 </li>
 <li>local_data
 : <a class="el" href="classzlua_1_1_type_model_1_1_closure.html#a79bbdfa372bdde6248d0d0d4b216864c">zlua.TypeModel.Closure</a>
 </li>
-<li>nil
-: <a class="el" href="classzlua_1_1_type_model_1_1_t_value.html#ae9224e60fc9292dfbe6654c244801de9">zlua.TypeModel.TValue</a>
+<li>local_vars
+: <a class="el" href="classzlua_1_1_type_model_1_1_proto.html#ac6f86f463d8059d24d678c59c4ab2b06">zlua.TypeModel.Proto</a>
+</li>
+<li>n_retvals
+: <a class="el" href="classzlua_1_1_v_m_1_1_call_s.html#a34ada5468c7674b7e4e1ed5b1e3d66f2">zlua.VM.CallS</a>
+</li>
+<li>nil_object
+: <a class="el" href="classzlua_1_1_type_model_1_1_t_value.html#a49b4a5e898bd47fdd58d745cb0ef7676">zlua.TypeModel.TValue</a>
 </li>
 <li>operands
 : <a class="el" href="classzlua_1_1_i_s_a_1_1_assembled_instr.html#a50538c5122892a529116f93b1b4b8241">zlua.ISA.AssembledInstr</a>
@@ -129,8 +158,14 @@ $(document).ready(function(){initNavTree('functions_vars.html','');});
 : <a class="el" href="classzlua_1_1_type_model_1_1_closure.html#a1527bacf09cc4d6acbde6a51a657b604">zlua.TypeModel.Closure</a>
 , <a class="el" href="classzlua_1_1_v_m_1_1_t_thread.html#abe7d45fc345f7e97540c41960af818e0">zlua.VM.TThread</a>
 </li>
-<li>str
-: <a class="el" href="classzlua_1_1_type_model_1_1_t_string.html#a68025b2fcc3950011bf922e93ea8ac1e">zlua.TypeModel.TString</a>
+<li>startpc
+: <a class="el" href="classzlua_1_1_type_model_1_1_loc_var.html#a91ee5f96f17871d06afeb961d24c33c0">zlua.TypeModel.LocVar</a>
+</li>
+<li>top
+: <a class="el" href="classzlua_1_1_v_m_1_1_call_info.html#a5737b707a0741d4ea736b63291ad3dae">zlua.VM.CallInfo</a>
+</li>
+<li>var_name
+: <a class="el" href="classzlua_1_1_type_model_1_1_loc_var.html#a24820b6a8057ff50c4e510e6f578d6fd">zlua.TypeModel.LocVar</a>
 </li>
 </ul>
 </div><!-- contents -->

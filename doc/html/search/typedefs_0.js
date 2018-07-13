@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['tnumber',['TNumber',['../namespacezlua_1_1_type_model.html#aaf73dbd47fc3c0409eb02dd10ff9f5d7',1,'zlua::TypeModel']]]
+  ['instruction',['Instruction',['../namespacezlua_1_1_type_model.html#ab77e99bead7fc7e20566077e3449100f',1,'zlua::TypeModel']]]
 ];

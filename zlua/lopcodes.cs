@@ -11,111 +11,151 @@ using zlua.VM;
 /// </summary>
 namespace zlua.ISA
 {
-    using Instruction = UInt32;
-    /* <lua_src> enum OpMode {iABC, iABx, iAsBx};  </lua_src>*/
-    public enum OpMode { iABC, iABx, iAsBx }
-    class ISA
+    /// <summary>
+    /// byte code instruction
+    /// </summary>
+    public class Instruction
     {
+        int i;
+        Instruction(int i)
+        {
+            this.i = i;
+        }
+        public Instruction(Opcodes opcode, int A, int B, int C)
+        {
+            i = (int)opcode << pos_Op | A << pos_A | B << pos_B | C << pos_C;
+        }
+        public Instruction(Opcodes opcode, int A, int Bx)
+        {
+            i = (int)opcode << pos_Op | A << pos_A | Bx << pos_Bx;
+        }
+        public static implicit operator int(Instruction i) => i.i;
+        public static implicit operator Instruction(int i) => new Instruction(i);
         #region size and position of instruction arguments
-        /* <lua_src>
-            #define SIZE_C		9
-            #define SIZE_B		9
-            #define SIZE_Bx		(SIZE_C + SIZE_B)
-            #define SIZE_A		8
 
-            #define SIZE_OP		6
+        const int size_C = 9;
+        const int size_B = 9;
+        const int size_Bx = size_C + size_B;
+        const int size_A = 8;
+        const int size_Op = 6;
 
-            #define POS_OP		0
-            #define POS_A		(POS_OP + SIZE_OP)
-            #define POS_C		(POS_A + SIZE_A)
-            #define POS_B		(POS_C + SIZE_C)
-            #define POS_Bx		POS_C
-        </lua_src>*/
-        public const int size_C = 9;
-        public const int size_B = 9;
-        public const int size_Bx = size_C + size_B;
-        public const int size_A = 8;
-        public const int size_Op = 6;
-
-        public const int pos_Op = 0;
-        public const int pos_A = pos_Op + size_Op;
-        public const int pos_C = pos_A + size_A;
-        public const int pos_B = pos_C + size_C;
-        public const int pos_Bx = pos_C;
+        const int pos_Op = 0;
+        const int pos_A = pos_Op + size_Op;
+        const int pos_C = pos_A + size_A;
+        const int pos_B = pos_C + size_C;
+        const int pos_Bx = pos_C;
 
         #endregion
 
         #region max size of instrucion arguments
-        /* <lua_src>
-            #if SIZE_Bx < LUAI_BITSINT-1
-            #define MAXARG_Bx        ((1<<SIZE_Bx)-1)
-            #define MAXARG_sBx        (MAXARG_Bx>>1)        
-            #else
-            #define MAXARG_Bx        MAX_INT
-            #define MAXARG_sBx        MAX_INT
-            #endif
 
-
-            #define MAXARG_A        ((1<<SIZE_A)-1)
-            #define MAXARG_B        ((1<<SIZE_B)-1)
-            #define MAXARG_C        ((1<<SIZE_C)-1)
-        </lua_src>*/
-
+        const int max_argBx = (1 << size_Bx) - 1; // 1. "<<" is less prior to "-" 2. "1<<n" = 2**n 
+        const int max_argsBx = max_argBx >> 1;
+        const int max_argA = (1 << size_A) - 1;
+        const int max_argB = (1 << size_B) - 1;
+        const int max_argC = (1 << size_C) - 1;
         #endregion
         #region getter and setter of instruction
-        /* <lua_src>
-            #define GET_OPCODE(i)	(cast(OpCode, ((i)>>POS_OP) & MASK1(SIZE_OP,0)))
-            #define SET_OPCODE(i,o)	((i) = (((i)&MASK0(SIZE_OP,POS_OP)) | \
-                    ((cast(Instruction, o)<<POS_OP)&MASK1(SIZE_OP, POS_OP))))
+        static int mask1(int n, int pos) => (~((~0) << n)) << pos;
+        static int mask0(int n, int pos) => ~mask0(n, pos);
+        static int get(int i, int n, int pos) => (i >> pos) & mask1(n, pos);
+        static void set(ref int i, int x, int n, int pos) => i = i & mask0(n, pos) | (x << pos) & mask1(n, pos);
 
-            #define GETARG_A(i)	(cast(int, ((i)>>POS_A) & MASK1(SIZE_A,0)))
-            #define SETARG_A(i,u)	((i) = (((i)&MASK0(SIZE_A,POS_A)) | \
-		            ((cast(Instruction, u)<<POS_A)&MASK1(SIZE_A, POS_A))))
+        public Opcodes opcode
+        {
+            get => (Opcodes)get(i, size_Op, pos_Op);
+            set => set(ref i, (int)value, size_Op, pos_Op);
+        }
 
-            #define GETARG_B(i)	(cast(int, ((i)>>POS_B) & MASK1(SIZE_B,0)))
-            #define SETARG_B(i,b)	((i) = (((i)&MASK0(SIZE_B,POS_B)) | \
-		            ((cast(Instruction, b)<<POS_B)&MASK1(SIZE_B, POS_B))))
+        public int A
+        {
+            get => get(i, size_A, pos_A);
+            set => set(ref i, value, size_A, pos_A);
+        }
 
-            #define GETARG_C(i)	(cast(int, ((i)>>POS_C) & MASK1(SIZE_C,0)))
-            #define SETARG_C(i,b)	((i) = (((i)&MASK0(SIZE_C,POS_C)) | \
-		            ((cast(Instruction, b)<<POS_C)&MASK1(SIZE_C, POS_C))))
+        public int B
+        {
+            get => get(i, size_B, pos_B);
+            set => set(ref i, value, size_B, pos_B);
+        }
 
-            #define GETARG_Bx(i)	(cast(int, ((i)>>POS_Bx) & MASK1(SIZE_Bx,0)))
-            #define SETARG_Bx(i,b)	((i) = (((i)&MASK0(SIZE_Bx,POS_Bx)) | \
-		            ((cast(Instruction, b)<<POS_Bx)&MASK1(SIZE_Bx, POS_Bx))))
+        public int C
+        {
+            get => get(i, size_C, pos_C);
+            set => set(ref i, value, size_C, pos_C);
+        }
 
-            #define GETARG_sBx(i)	(GETARG_Bx(i)-MAXARG_sBx)
-            #define SETARG_sBx(i,b)	SETARG_Bx((i),cast(unsigned int, (b)+MAXARG_sBx))
+        public int Bx
+        {
+            get => get(i, size_Bx, pos_Bx);
+            set => set(ref i, value, size_Bx, pos_Bx);
+        }
 
-
-            #define CREATE_ABC(o,a,b,c)	((cast(Instruction, o)<<POS_OP) \
-			            | (cast(Instruction, a)<<POS_A) \
-			            | (cast(Instruction, b)<<POS_B) \
-			            | (cast(Instruction, c)<<POS_C))
-
-            #define CREATE_ABx(o,a,bc)	((cast(Instruction, o)<<POS_OP) \
-			            | (cast(Instruction, a)<<POS_A) \
-			            | (cast(Instruction, bc)<<POS_Bx))
-        </lua_src>*/
-        // # get_*, set_*, * = Op, A, C, B, sBx
-        //   create_abc, create_abx
-        //TODO foo 
+        public int sBx
+        {
+            get => Bx - max_argsBx;
+            set => Bx = value + max_argsBx;
+        }
+        #endregion
+        #region other things
+        const int n_opcodes = (int)Opcodes.VarArg + 1;
+        /// <summary>
+        /// if x[7] (in bit) is 1, return true, and RKB returns KB
+        /// </summary>
+        /// <param name="x">B or C</param>
+        /// <returns></returns>
+        public static bool is_k(int x) => (x & (1 << (size_B - 1)))!=0;
+        public static int index_k(int x)=>x&~(1 << (size_B - 1));
         #endregion
     }
+
     public enum Opcodes
     {
-        Mov,
-        Closure,
-        Call,
-        Ret,
+        Move,
+        LoadK,
+        LoadBool,
+        LoadNil,
+        GetUpVal,
+        GetGlobal,
+        GetTable,
+        SetGlobal,
+        SetUpval,
+        SetTable,
+        NewTable,
+        Self,
         Add,
+        Sub,
         Mul,
+        Div,
+        Mod,
+        Pow,
+        Unm,
+        Not,
+        Len,
+        Concat,
+        Jmp,
         Eq,
+        Lt,
+        Le,
+        Test,
+        Testset,
+        Call,
+        TailCall,
+        Return,
+        ForLoop,
+        ForPrep,
+        TForLoop,
+        SetList,
+        Close,
+        Closure,
+        VarArg,
+
         And,
         PushVar,
         Push,
         Pop,
     }
+
     /// <summary>
     /// base class for all instructions 
     /// </summary>

@@ -7,15 +7,7 @@ using System.Threading.Tasks;
 using Antlr4.Runtime;
 using Antlr4.Runtime.Tree;
 using zlua.VM;
-/// <summary>
-/// 注释规范
-/// 1. "<lua_src>...</lua_src>" is quote from lua source code
-///     1. HOWTO 当你重命名某一名字时使用
-///     2. DONT 不要过度引用，讲你做了什么，打算以后做什么，以后不要做什么，不要讲没做什么
-/// 2. TString类型的变量以tstr命名
-/// 3. "// ..."，而不是"/* ... */"，使用"1."提高可读性，"#" 来描述代码段落
-/// 4. "NO NEED TO IMPLEMENT"，因为C#和自己的选择，有些不必实现了
-/// </summary>
+
 namespace zlua
 {
     /// <summary>
@@ -30,7 +22,7 @@ namespace zlua
         Number = 3,
         String = 4,
         Table = 5,
-        Proto = 6,
+        Function = 6, // lua src's Function TODO
         Userdata = 7,
         Thread = 8,
         Closure = 9, //自己加的
@@ -41,7 +33,7 @@ namespace zlua
     /// </summary>
     public class Lua
     {
-
+        public const string Version = "zlua 1.0, based on lua 5.1.4";
         public static void dofile(string path)
         {
             FileStream fs = new FileStream(@"..\..\" + path, FileMode.Open, FileAccess.Read);
@@ -54,11 +46,6 @@ namespace zlua
             var compiler = new Compiler();
             walker.Walk(compiler, tree);
             new TThread(compiler.main_func).run();
-
-
-            var L = new TThread();
-            L.load_file();
-            L.pcall();
         }
     }
 }
