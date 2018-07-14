@@ -47,7 +47,7 @@ namespace zlua
             var walker = new ParseTreeWalker();
             var compiler = new Compiler();
             walker.Walk(compiler, tree);
-            new TThread(compiler.main_func).run();
+            new TThread(compiler.main_func).execute(1);
         }
         /// <summary>
         /// LUA_MULTRET, an option for lua_pcall and lua_call

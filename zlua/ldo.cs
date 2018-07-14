@@ -32,7 +32,7 @@ namespace zlua.CallSystem
             --L.nCSharpCalls;
         }
         /// <summary>
-        /// luaD_precall
+        /// luaD_precall, TODO save pc to caller CallInfo, create new CallInfo for callee
         /// </summary>
         /// <param name="L"></param>
         /// <param name="funcIndex"></param>
@@ -45,8 +45,8 @@ namespace zlua.CallSystem
                 //TODO foo
                 var ci = L.IncrementCallInfo();
                 ci.func = func;
-                L._base=ci._base=_base;
-                L.savedpc =;
+                //L._base=ci._base=_base;
+                //L.savedpc =;
             }
         }
         /// <summary>

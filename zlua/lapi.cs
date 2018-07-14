@@ -86,9 +86,9 @@ namespace zlua.API
                 return L.Stack[L.top + index];
             } else {
                 switch (index) {
-                    case lua.RegisteyIndex: return L.GlobalState.registery;
+                    case lua.RegisteyIndex: return L.globalState.registery;
                     case lua.EnvIndex: return null;  //TODO, src use curr func's env, why
-                    case lua.GlobalsIndex: return L.GlobalsTable;
+                    case lua.GlobalsIndex: return L.globalsTable;
                     default:
                         return null; //TODO
                 }
@@ -147,5 +147,11 @@ namespace zlua.API
             var either_nil = (o1 == TValue.NilObject || o2 == TValue.NilObject);
             return either_nil ? false : L.LessThan(o1, o2);
         }
+        /// <summary>
+        /// lua_iscfunction
+        /// </summary>
+        /// <param name="index"></param>
+        /// <returns></returns>
+        public static bool IsCSFunction(this TThread L,int index) => L.Index2TVal(index).is_cs_function;
     }
 }
