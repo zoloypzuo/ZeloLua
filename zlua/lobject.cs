@@ -13,6 +13,8 @@ namespace zlua.TypeModel
     using TNumber = Double;
     using TInteger = Int32;
     using Instruction = UInt32;
+    using System.Collections;
+
     /// <summary>
     /// the general type of lua. T means "tagged".  size: 8+8+4=20Byte
     /// methods brief:
@@ -64,6 +66,11 @@ namespace zlua.TypeModel
         {
             Type = LuaTypes.String;
             gc = tstr;
+        }
+        TValue(TTable table)
+        {
+            Type = LuaTypes.Table;
+            gc = table;
         }
         #region factorys
 
@@ -128,6 +135,8 @@ namespace zlua.TypeModel
         public static implicit operator int(TValue tval) => tval.i;
         public static implicit operator TNumber(TValue tval) => tval.n;
         public static explicit operator GCObject(TValue tval) => tval.gc;
+        public static explicit operator TValue(TTable table)=>new TValue(table);
+        public static explicit operator TTable(TValue tval)=>tval.gc as TTable;
         #endregion
         #region propertys to get or set value
         // # getter APIs are divided into 2 parts: value types use implicit cast operator
@@ -144,46 +153,6 @@ namespace zlua.TypeModel
             o1->value = o2->value; o1->tt=o2->tt; \
             checkliveness(G(L),o1); }
 
-        #define setnilvalue(obj) ((obj)->tt=LUA_TNIL)
-
-        #define setnvalue(obj,x) \
-          { TValue *i_o=(obj); i_o->value.n=(x); i_o->tt=LUA_TNUMBER; }
-
-        #define setpvalue(obj,x) \
-          { TValue *i_o=(obj); i_o->value.p=(x); i_o->tt=LUA_TLIGHTUSERDATA; }
-
-        #define setbvalue(obj,x) \
-          { TValue *i_o=(obj); i_o->value.b=(x); i_o->tt=LUA_TBOOLEAN; }
-
-        #define setsvalue(L,obj,x) \
-          { TValue *i_o=(obj); \
-            i_o->value.gc=cast(GCObject *, (x)); i_o->tt=LUA_TSTRING; \
-            checkliveness(G(L),i_o); }
-
-        #define setuvalue(L,obj,x) \
-          { TValue *i_o=(obj); \
-            i_o->value.gc=cast(GCObject *, (x)); i_o->tt=LUA_TUSERDATA; \
-            checkliveness(G(L),i_o); }
-
-        #define setthvalue(L,obj,x) \
-          { TValue *i_o=(obj); \
-            i_o->value.gc=cast(GCObject *, (x)); i_o->tt=LUA_TTHREAD; \
-            checkliveness(G(L),i_o); }
-
-        #define setclvalue(L,obj,x) \
-          { TValue *i_o=(obj); \
-            i_o->value.gc=cast(GCObject *, (x)); i_o->tt=LUA_TFUNCTION; \
-            checkliveness(G(L),i_o); }
-
-        #define sethvalue(L,obj,x) \
-          { TValue *i_o=(obj); \
-            i_o->value.gc=cast(GCObject *, (x)); i_o->tt=LUA_TTABLE; \
-            checkliveness(G(L),i_o); }
-
-        #define setptvalue(L,obj,x) \
-          { TValue *i_o=(obj); \
-            i_o->value.gc=cast(GCObject *, (x)); i_o->tt=LUA_TPROTO; \
-            checkliveness(G(L),i_o); }
         <lua_src>*/
 
         // # L is still included in parameters in case of refactor
@@ -287,7 +256,6 @@ namespace zlua.TypeModel
             }
         }
     }
-    /* <lua_src> struct Proto; </lua_src>*/
     /// <summary>
     /// is gcobject, but is not a primitive type
     /// </summary>
@@ -308,6 +276,7 @@ namespace zlua.TypeModel
         public List<LocVar> local_vars;
         public bool is_vararg;
         public int max_stacksize;
+        public int nParams;
     }
     public class LocVar { public string var_name; public int startpc; public int endpc; }
     public class FuncState
@@ -380,9 +349,9 @@ namespace zlua.TypeModel
 
     }
 
-    public class TTable : GCObject
+    public class TTable : GCObject, IEnumerable<KeyValuePair<TValue, TValue>>
     {
-        List<TValue> metatable;
+        public TValue metatable;
         Dictionary<TValue, TValue> hashTablePart;
         List<TValue> arrayPart;
 
@@ -390,11 +359,12 @@ namespace zlua.TypeModel
         {
             hashTablePart = new Dictionary<TValue, TValue>(sizeHashTablePart);
             arrayPart = new List<TValue>(sizeArrayPart);
-        }/// <summary>
-         /// luaH_get
-         /// </summary>
-         /// <param name="key"></param>
-         /// <returns></returns>
+        }
+        /// <summary>
+        /// luaH_get
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
         public TValue Get(TValue key)
         {
             switch (key.Type) {
@@ -426,9 +396,9 @@ namespace zlua.TypeModel
             else {
                 Debug.Assert(key.tt_is_nil, "table index is nil");
                 Debug.Assert(key.tt_is_number && luaconf.IsNaN(key), "table index is NaN");
-                var new_key = new TValue();
-                hashTablePart[key] = new_key;
-                return new_key;
+                var new_val = new TValue();
+                hashTablePart[key] = new_val;
+                return new_val;
             }
         }
         TValue GetByStr(TString key)
@@ -450,13 +420,40 @@ namespace zlua.TypeModel
         }
         TValue SetStr(TString key)
         {
-
+            var tval = GetByStr(key);
+            if (tval != TValue.NilObject)
+                return tval;
+            else {
+                var new_val = new TValue();
+                hashTablePart[(TValue)key] = new_val;
+                return new_val;
+            }
         }
         TValue SetInt(int key)
         {
             var tval = GetByInt(key);
-            if(tval!=TValue.NilObject)
+            if (tval != TValue.NilObject) return tval;
+            else {
+                var new_val = new TValue();
+                hashTablePart[key] = new_val;
+                return new_val; //TODO 这里是错的。应该有分配到arraypart的逻辑
+            }
         }
+
+
+
+        IEnumerator<KeyValuePair<TValue, TValue>> IEnumerable<KeyValuePair<TValue, TValue>>.GetEnumerator()
+        {
+            int index = 0;
+            foreach (var item in arrayPart) {
+                yield return new KeyValuePair<TValue, TValue>(++index, item);
+            }
+            foreach (var item in hashTablePart) {
+                yield return item;
+            }
+        }
+
+        public IEnumerator GetEnumerator() => this.GetEnumerator();
     }
     public class UpValue : GCObject
     {

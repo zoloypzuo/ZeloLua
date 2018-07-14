@@ -6,6 +6,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Antlr4.Runtime;
 using Antlr4.Runtime.Tree;
+using zlua.API;
+using zlua.TypeModel;
 using zlua.VM;
 
 namespace zlua
@@ -31,7 +33,7 @@ namespace zlua
     /// <summary>
     /// lua接口
     /// </summary>
-    public class Lua
+    public static class lua
     {
         public const string Version = "zlua 1.0, based on lua 5.1.4";
         public static void dofile(string path)
@@ -47,5 +49,16 @@ namespace zlua
             walker.Walk(compiler, tree);
             new TThread(compiler.main_func).run();
         }
+        /// <summary>
+        /// LUA_MULTRET, an option for lua_pcall and lua_call
+        /// </summary>
+        public const int MultiRet = -1;
+        #region pseudo indicdes
+        public const int RegisteyIndex = -10000;
+        public const int EnvIndex = -10001;
+        public const int GlobalsIndex = -10002;
+        public static int UpvalIndex(int index) => GlobalsIndex - index;
+        #endregion
+        public static void GetGlobal(this TThread L,TString s)=>L.GetField(GlobalsIndex,s);
     }
 }

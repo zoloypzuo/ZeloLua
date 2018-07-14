@@ -5,6 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using zlua.VM;
 using zlua.TypeModel;
+using zlua.Configuration;
+using System.Diagnostics;
+
 namespace zlua.CallSystem
 {
     delegate void ProtectedFunc(TThread L, object ud);
@@ -20,13 +23,47 @@ namespace zlua.CallSystem
         /// right after `func on the stack of `L; when returns, return values start at the original position
         /// of `func
         /// </summary>
-        public static void Call(this TThread L,TValue func,int n_retvals)
+        public static void Call(this TThread L,int funcIndex,int nRetvals)
         {
-
+            ++L.nCSharpCalls;
+            if (L.nCSharpCalls >= luaconf.MaxCalls)
+                throw new Exception("CSharp stack overflow");
+            PreCall(L, funcIndex, nRetvals);
+            --L.nCSharpCalls;
         }
-        public static void PreCall(this TThread L,TValue func,int n_retvals)
+        /// <summary>
+        /// luaD_precall
+        /// </summary>
+        /// <param name="L"></param>
+        /// <param name="funcIndex"></param>
+        /// <param name="n_retvals"></param>
+        public static void PreCall(this TThread L,int funcIndex,int n_retvals)
         {
-            L.curr_callinfo.savedpc = L.savedpc;
+            L.CurrCallInfo.savedpc = L.savedpc;
+            var func = L.Stack[funcIndex];
+            if (func.is_lua_function) {
+                //TODO foo
+                var ci = L.IncrementCallInfo();
+                ci.func = func;
+                L._base=ci._base=_base;
+                L.savedpc =;
+            }
+        }
+        /// <summary>
+        /// adjust_varargs
+        /// </summary>
+        /// <param name="L"></param>
+        /// <param name="p"></param>
+        /// <param name="acutal"></param>
+        public static void AdjustVararg(this TThread L,Proto p,int acutal)
+        {
+            //TODO
+        }
+        /// <summary>
+        /// luaD_checkstack
+        /// </summary>
+        public static void CheckStack()
+        {
 
         }
     }
