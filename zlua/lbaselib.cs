@@ -5,6 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using zlua.VM;
+/// <summary>
+/// 基本库
+/// </summary>
 namespace zlua.BaseLib
 {
     static class lbaselib

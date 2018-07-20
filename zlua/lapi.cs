@@ -8,6 +8,9 @@ using zlua.TypeModel;
 using zlua.CallSystem;
 using System.Diagnostics;
 
+/// <summary>
+/// CSharp API
+/// </summary>
 namespace zlua.API
 {
     static class lapi

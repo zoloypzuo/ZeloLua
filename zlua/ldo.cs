@@ -8,6 +8,9 @@ using zlua.TypeModel;
 using zlua.Configuration;
 using System.Diagnostics;
 
+/// <summary>
+/// 调用系统
+/// </summary>
 namespace zlua.CallSystem
 {
     delegate void ProtectedFunc(TThread L, object ud);

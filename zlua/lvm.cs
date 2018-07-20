@@ -59,11 +59,11 @@ namespace zlua.VM
         /// luaV_execute
         /// </summary>
         /// <param name="level"></param>
-        public void execute(int level)
+        public void Execute(int level)
         {
             while (true) {
                 Instruction i = 0;
-                switch (i.opcode) {
+                switch (i.Opcode) {
                     case Opcodes.Move:
                         break;
                     case Opcodes.LoadK:

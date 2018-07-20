@@ -5,7 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using zlua.TypeModel;
 using zlua.VM;
-
+/// <summary>
+/// 全局状态
+/// </summary>
 namespace zlua.GlobalState
 {
     /* <lua_src>struct global_State;</lua_src>*/

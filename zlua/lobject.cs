@@ -5,15 +5,16 @@ using zlua.VM;
 using zlua.ISA;
 using zlua.Stdlib;
 using zlua.Configuration;
+using System.Collections;
+
 /// <summary>
-/// lua类型模型
+/// 类型模型
 /// </summary>
 namespace zlua.TypeModel
 {
     using TNumber = Double;
     using TInteger = Int32;
     using Instruction = UInt32;
-    using System.Collections;
 
     /// <summary>
     /// the general type of lua. T means "tagged".  size: 8+8+4=20Byte
@@ -30,19 +31,19 @@ namespace zlua.TypeModel
         /// <summary>
         /// the GC collectable object
         /// </summary>
-        GCObject gc { get; set; }
+        GCObject gc; 
 
         /// <summary>
         /// the number type of lua
         /// </summary>
-        TNumber n { get; set; }
+        TNumber n;
 
         /// <summary>
         /// the int type of lua
         /// </summary>
-        TInteger i { get; set; }  //用于index等
+        TInteger i; //用于index等
 
-        bool b { get; set; }
+        bool b;
 
         public LuaTypes Type { get; set; }
 
@@ -123,7 +124,6 @@ namespace zlua.TypeModel
             };
             return _ret;
         }
-        /*TODO 我目前认为值类型这样比较自然（string也是）。引用不该。*/
         public static implicit operator TValue(string str) => tstring_factory(str);
         public static implicit operator TValue(bool b) => b_factory(b);
         public static implicit operator TValue(int i) => i_factory(i);
@@ -163,26 +163,7 @@ namespace zlua.TypeModel
 
         #endregion
         #region operators
-        public static TValue operator +(TValue lhs, TValue rhs)
-        {
 
-            Debug.Assert(lhs.Type == rhs.Type);
-            return TValue.n_factory(lhs.n + rhs.n);
-        }
-
-        public static TValue operator *(TValue lhs, TValue rhs)
-        {
-            Debug.Assert(lhs.Type == rhs.Type);
-            return n_factory(lhs.n * rhs.n);
-        }
-        public static TValue and(TValue lhs, TValue rhs)
-        {
-            return b_factory(lhs.b && rhs.b);
-        }
-        public static TValue eq(TValue lhs, TValue rhs)
-        {
-            return b_factory(lhs.b == rhs.b);
-        }
         #endregion
 
         #region propertys to test type
@@ -215,7 +196,9 @@ namespace zlua.TypeModel
         <lua_src>*/
 
 
-        /*<lua_src>const TValue luaO_nilobject_;</lua_src>*/
+        /// <summary>
+        /// luaO_nilobject_
+        /// </summary>
         public static readonly TValue NilObject = new TValue { Type = LuaTypes.Nil };
 
         public int str2d(string s, TNumber result)
@@ -261,16 +244,8 @@ namespace zlua.TypeModel
     /// </summary>
     public class Proto : GCObject
     {
-        public List<string> param_names;
         public Proto parent;
-        public List<AssembledInstr> instrs = new List<AssembledInstr>();
         public List<Proto> inner_funcs = new List<Proto>();
-        public Dictionary<string, int> label2pc = new Dictionary<string, int>(); //label table
-        public Proto(Proto parent, List<string> param_names)
-        {
-            this.parent = parent;
-            this.param_names = param_names;
-        }
         public List<TValue> k;
         public List<Instruction> codes;
         public List<LocVar> local_vars;

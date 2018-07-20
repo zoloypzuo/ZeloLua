@@ -4,6 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using zlua.VM;
+
+/// <summary>
+/// 辅助库
+/// </summary>
 namespace zlua.AuxLib
 {
     static class lauxlib
