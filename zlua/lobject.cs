@@ -45,7 +45,7 @@ namespace zlua.TypeModel
             switch (Type) {
                 case LuaTypes.None:
                     break;
-                case LuaTypes.Nil:
+                case LuaTypes.Nil:return "Nil";
                     break;
                 case LuaTypes.Boolean:more = b.ToString();
                     break;
@@ -70,7 +70,7 @@ namespace zlua.TypeModel
             }
             return _base + more;
         }
-        #region ctor getter setter
+        #region ctors getters setters
 
         public TValue()
         {
@@ -97,12 +97,18 @@ namespace zlua.TypeModel
             Type = LuaTypes.Number;
             this.n = n;
         }
+        public TValue(TThread thead)
+        {
+            Type = LuaTypes.Thread;
+            this.tobj = Thread;
+        }
 
         public static explicit operator TValue(string str) => new TValue((TString)str);
         public static explicit operator TValue(bool b) => new TValue(b);
         public static explicit operator TValue(double n) => new TValue(n);
         public static explicit operator TValue(TString tstr) => new TValue(tstr);
         public static explicit operator TValue(TTable table) => new TValue(table);
+        public static explicit operator TValue(TThread thread)=>new TValue(thread);
 
         public static explicit operator TString(TValue tval) { Debug.Assert(tval.IsString); return tval.tobj as TString; }
         public static explicit operator string(TValue tval) { Debug.Assert(tval.IsString); return (string)(TString)tval; }
@@ -111,7 +117,8 @@ namespace zlua.TypeModel
         public static explicit operator double(TValue tval) { Debug.Assert(tval.IsNumber); return tval.n; }
         public static explicit operator TObject(TValue tval) => tval.tobj;
         public static explicit operator TTable(TValue tval) { Debug.Assert(tval.IsTable); return tval.tobj as TTable; }
-        public static explicit operator Proto(TValue tval) { Debug.Assert(tval.IsLuaFunction); return tval.tobj as Proto; }// TODO 大概不应该有
+        public static explicit operator Proto(TValue tval) { Debug.Assert(tval.IsLuaFunction); return tval.tobj as Proto; }
+        public static explicit operator TThread(TValue tval) { Debug.Assert(tval.IsThread);return tval.tobj as TThread; }
 
         public double N
         {
@@ -162,22 +169,37 @@ namespace zlua.TypeModel
                 b = value;
             }
         }
-        public TThread L
+        public TThread Thread
         {
-            get; set;
+            get => (TThread)this;
+            set
+            {
+                Type = LuaTypes.Thread;
+                tobj = value;
+            }
         }
         public Proto P
         {
-            get; set;
+            get => (Proto)this;
+            set
+            {
+                Type = LuaTypes.Function;//TODO function???
+                tobj = value;
+            }
         }
         public TTable Table
         {
-            get;set;
+            get => (TTable)this;
+            set
+            {
+                Type = LuaTypes.Table;
+                tobj = value;
+            }
         }
         public TValue TVal
         {
             get => this;
-            set
+            set /*copy the value part and type part*/
             {
                 Type = value.Type; 
                 tobj = value.tobj;
@@ -266,13 +288,16 @@ namespace zlua.TypeModel
         public int nParams;
         public int nUpvals;
     }
+    //TODO
     public class LocVar { public string var_name; public int startpc; public int endpc; }
+    //TODO
     public class FuncState
     {
         Proto f;
         Dictionary<string, TConst> consts;
         FuncState prev;
     }
+    //TODO
     public class TConst { double n; TString tstr; }
 
     public class Closure : TObject
@@ -289,6 +314,7 @@ namespace zlua.TypeModel
     {
         public Proto p;
         public List<Upval> upvals;
+        public int NUpvals { get => upvals.Count; }
         /// <summary>
         /// luaF_newLclosure
         /// called] f_parser in ldo.c; luaV_execute in lvm.c
@@ -301,14 +327,14 @@ namespace zlua.TypeModel
     }
     public class CSharpClosure : Closure
     {
-        lua.CSharpFunction f;
-        List<TValue> upvals;
+        public lua.CSharpFunction f;
+        public List<TValue> upvals;
+        public int NUpvals { get => upvals.Count; }
         public CSharpClosure() : base(null)
         {
 
         }
     }
-    /* <lua_src> union TString</lua_src>*/
     /// <summary>
     /// the string type of lua, just warpper of C# string
     /// </summary>
@@ -335,7 +361,8 @@ namespace zlua.TypeModel
     public class TObject
     {
     }
-    public class UserData : TObject
+    //TODO
+    public class LightUserdata : TObject
     {
 
     }
@@ -446,6 +473,7 @@ namespace zlua.TypeModel
 
         public IEnumerator GetEnumerator() => this.GetEnumerator();
     }
+    //TODO
     public class Upval : TObject
     {
         public TValue val;

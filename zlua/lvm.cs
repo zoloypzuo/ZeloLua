@@ -21,7 +21,7 @@ namespace zlua.VM
         /// <summary>
         /// = callinfo_stack.top().top 
         /// </summary>
-        public int top;  // StkId top, but you know, use "pointer + int" to get array element
+        public int top; 
         /// <summary>
         /// = callinfo_stack.top()._base
         /// </summary>
@@ -46,6 +46,11 @@ namespace zlua.VM
         public List<Bytecode> codes;
         public int nCSharpCalls;
         public GlobalState.GlobalState globalState;
+        /// <summary>
+        /// "temp place for env", used only in index2adr currently
+        /// </summary>
+        public TValue env;
+
         /// <summary>
         /// lua_newstate    
         /// </summary>

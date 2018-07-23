@@ -7,7 +7,7 @@ using zlua.VM;
 using zlua.TypeModel;
 using zlua.CallSystem;
 using System.Diagnostics;
-
+using zlua;
 /// <summary>
 /// CSharp API
 /// </summary>
@@ -20,11 +20,102 @@ namespace zlua.API
         /// </summary>
         /// <param name="L"></param>
         /// <param name="obj"></param>
-        static void PushObject(this TThread L,TValue obj)
+        public static void PushObject(this TThread L, TValue obj)
         {
             L.Stack[L.top++].TVal = obj;
         }
-
+        /// <summary>
+        /// lua_pushnil
+        /// </summary>
+        /// <param name="L"></param>
+        public static void PushNil(this TThread L)
+        {
+            L.Stack[L.top++].SetNil();
+        }
+        /// <summary>
+        /// lua_pushnumber
+        /// </summary>
+        /// <param name="L"></param>
+        /// <param name="n"></param>
+        public static void PushNumber(this TThread L, double n)
+        {
+            L.Stack[L.top++].N = n;
+        }
+        /// <summary>
+        /// lua_pushinteger
+        /// </summary>
+        /// <param name="L"></param>
+        /// <param name="n"></param>
+        public static void PushInteger(this TThread L, int n)
+        {
+            L.Stack[L.top++].N = (double)n;
+        }
+        /// <summary>
+        /// lua_pushlstring, lua_pushstring
+        /// </summary>
+        /// <param name="L"></param>
+        /// <param name="s"></param>
+        public static void PushString(this TThread L, string s)
+        {
+            if (s == null)
+                PushNil(L);
+            else
+                L.Stack[L.top++].TStr = (TString)s;
+        }
+        /// <summary>
+        /// lua_pushvfstring, pushfstring
+        /// </summary>
+        /// <param name="L"></param>
+        /// <param name="format"></param>
+        static void PushFormatedString(this TThread L, string format)
+        {
+            //TODO 
+        }
+        /// <summary>
+        /// lua_pushcclosure
+        /// </summary>
+        /// <param name="L"></param>
+        /// <param name="func"></param>
+        /// <param name="n"></param>
+        public static void PushCShapClosure(this TThread L, lua.CSharpFunction func, int n)
+        {
+            //TODO
+        }
+        /// <summary>
+        /// lua_pushboolean
+        /// </summary>
+        /// <param name="L"></param>
+        /// <param name="b"></param>
+        public static void PushBool(this TThread L, bool b)
+        {
+            L.Stack[L.top++].B = b;
+        }
+        /// <summary>
+        /// lua_pushlighuserdata
+        /// </summary>
+        /// <param name=""></param>
+        /// <param name="lud"></param>
+        public static void PushLightUserdata(this TThread L, object lud)
+        {
+            //TODO
+        }
+        /// <summary>
+        /// lua_pushthread; push L itself
+        /// </summary>
+        /// <param name="L"></param>
+        public static void PushThread(this TThread L)
+        {
+            L.Stack[L.top++].Thread = L;
+        }
+        /// <summary>
+        /// lua_pushvalue; push L[index]
+        /// </summary>
+        /// <param name="L"></param>
+        /// <param name="index"></param>
+        public static void PushValue(this TThread L, int index)
+        {
+            L.Stack[L.top++] = Index2TVal(L, index);
+        }
         /// <summary>
         /// lua_gettop
         /// </summary>
@@ -60,25 +151,15 @@ namespace zlua.API
         /// <param name="sizeHashTablePart"></param>
         public static void CreateTable(this TThread L, int sizeArrayPart, int sizeHashTablePart)
         {
-            var new_table = new TTable( sizeHashTablePart, sizeArrayPart);
+            var new_table = new TTable(sizeHashTablePart, sizeArrayPart);
             L.Stack.Add((TValue)new_table);
         }
-        /// <summary>
-        /// lua_equal
-        /// </summary>
-        /// <param name="L"></param>
-        /// <param name="index1"></param>
-        /// <param name="index2"></param>
-        /// <returns></returns>
-        public static bool Equal(this TThread L, int index1, int index2)
-        {
-            var o1 = L.Index2TVal(index1);
-            var o2 = L.Index2TVal(index2);
-            var either_nil = (o1 == TValue.NilObject || o2 == TValue.NilObject);
-            return either_nil ? false : L.EqualObj(o1, o2);
-        }
+
         /// <summary>
         /// get tvalue from stack, accept an signed index (which allows index that under 0) or pesudo index to index special variable like _G
+        /// 正数idx允许超界，返回nilObject，而负数不允许；
+        /// 伪索引包含：注册表，_G，C函数相关的两样东西：env和upvals，这点请阅读一下5.1 manual里C API处 3.4 CCLosure小节的笔记，总之是为了CClosure服务的
+        /// get env有一点困惑（他设置了L.env）但是无所谓，upvals数组同样是从1开始索引，超界返回nilObject（应该是个约定，正数索引都这样）
         /// </summary>
         public static TValue Index2TVal(this TThread L, int index)
         {
@@ -93,10 +174,16 @@ namespace zlua.API
             } else {
                 switch (index) {
                     case lua.RegisteyIndex: return L.globalState.registry;
-                    case lua.EnvIndex: return null;  //TODO, src use curr func's env, why
+                    case lua.EnvIndex: {
+                            L.env.Table = (L.CurrCallInfo.func.Cl as CSharpClosure).env;
+                            return L.env;
+                        }
                     case lua.GlobalsIndex: return L.globalsTable;
-                    default:
-                        return null; //TODO
+                    default: {
+                            CSharpClosure func = L.CurrCallInfo.func.Cl as CSharpClosure;
+                            index = lua.GlobalsIndex - index;
+                            return index <= func.NUpvals ? func.upvals[index - 1] : TValue.NilObject;
+                        }
                 }
             }
         }
@@ -134,11 +221,83 @@ namespace zlua.API
         /// </summary>
         /// <param name="L"></param>
         /// <param name="index"></param>
-        public static void GetTable(this TThread L,int index)
+        public static void GetTable(this TThread L, int index)
         {
             var t = L.Index2TVal(index);
             var top = L.Stack[L.top - 1];
             L.GetTable(t, top, top);
+        }
+
+        /// <summary>
+        /// lua_type
+        /// </summary>
+        /// <param name="L"></param>
+        /// <param name="index"></param>
+        /// <returns></returns>
+        public static LuaTypes Type(this TThread L, int index)
+        {
+            TValue o = Index2TVal(L, index);
+            return (o == TValue.NilObject) ? LuaTypes.None : o.Type;
+        }
+        /// <summary>
+        /// lua_iscfunction
+        /// </summary>
+        /// <param name="index"></param>
+        /// <returns></returns>
+        public static bool IsCSharpFunction(this TThread L, int index) => L.Index2TVal(index).IsCSharpFunction;
+        /// <summary>
+        /// lua_isnumber
+        /// </summary>
+        /// <param name="L"></param>
+        /// <param name="index"></param>
+        /// <returns></returns>
+        public static bool IsNumber(this TThread L, int index) => false;//TODO tonumber
+        /// <summary>
+        /// lua_isstring
+        /// </summary>
+        /// <param name="L"></param>
+        /// <param name="index"></param>
+        /// <returns></returns>
+        public static bool IsString(this TThread L, int index)
+        {
+            var t = Type(L, index);
+            return t == LuaTypes.String || t == LuaTypes.Number;
+        }
+        /// <summary>
+        /// lua_isuserdata; `src check both light and full ud
+        /// 没有引用】
+        /// </summary>
+        /// <param name=""></param>
+        /// <param name="index"></param>
+        /// <returns></returns>
+        public static bool IsLightUserData(this TThread L, int index) => Index2TVal(L, index).Type == LuaTypes.LightUserdata;
+        /// <summary>
+        /// lua_rawequal； raw指不调用元方法__eq
+        /// </summary>
+        /// <param name="L"></param>
+        /// <param name="index1"></param>
+        /// <param name="index2"></param>
+        /// <returns></returns>
+        public static bool RawEqual(this TThread L, int index1, int index2)
+        {
+            var o1 = Index2TVal(L, index1);
+            var o2 = Index2TVal(L, index2);
+            return (o1 == TValue.NilObject || o2 == TValue.NilObject) ? false : o1.Equals(o2);
+        }
+        /// <summary>
+        /// lua_equal
+        /// 没有引用】
+        /// </summary>
+        /// <param name="L"></param>
+        /// <param name="index1"></param>
+        /// <param name="index2"></param>
+        /// <returns></returns>
+        public static bool Equal(this TThread L, int index1, int index2)
+        {
+            var o1 = L.Index2TVal(index1);
+            var o2 = L.Index2TVal(index2);
+            var either_nil = (o1 == TValue.NilObject || o2 == TValue.NilObject);
+            return either_nil ? false : L.EqualObj(o1, o2);
         }
         /// <summary>
         /// lua_lessthan
@@ -146,7 +305,7 @@ namespace zlua.API
         /// <param name="L"></param>
         /// <param name="index1"></param>
         /// <param name="index2"></param>
-        public static bool LessThan(this TThread L,int index1,int index2)
+        public static bool LessThan(this TThread L, int index1, int index2)
         {
             var o1 = L.Index2TVal(index1);
             var o2 = L.Index2TVal(index2);
@@ -154,10 +313,44 @@ namespace zlua.API
             return either_nil ? false : L.LessThan(o1, o2);
         }
         /// <summary>
-        /// lua_iscfunction
+        /// lua_tonumber
         /// </summary>
+        /// <param name="L"></param>
         /// <param name="index"></param>
         /// <returns></returns>
-        public static bool IsCSFunction(this TThread L,int index) => L.Index2TVal(index).IsCSharpFunction;
+        public static double ToNumber(this TThread L,int index)
+        {
+
+        }
+        /// <summary>
+        /// lua_tointeger
+        /// </summary>
+        /// <param name="L"></param>
+        /// <param name="index"></param>
+        /// <returns></returns>
+        public static int ToInteger(this TThread L,int index)
+        {
+
+        }
+        /// <summary>
+        /// lua_toboolean
+        /// </summary>
+        /// <param name="L"></param>
+        /// <param name="index"></param>
+        /// <returns></returns>
+        public static bool ToBoolean(this TThread L,int index)
+        {
+
+        }
+        /// <summary>
+        /// lua_tolstring
+        /// </summary>
+        /// <param name="L"></param>
+        /// <param name="index"></param>
+        public static string ToString(this TThread L,int index)
+        {
+
+        }
+        public static 
     }
 }
