@@ -9,6 +9,7 @@ using zlua.GlobalState;
 using System.Diagnostics;
 using zlua.API;
 using zlua.CallSystem;
+using zlua.FuncAux;
 /// <summary>
 /// 虚拟机
 /// </summary>
@@ -121,7 +122,7 @@ namespace zlua.VM
                         SetTable((TValue)cl.env, KBx(instr), ra);
                         continue;
                     case Opcodes.SetUpval: {
-                            UpValue upval = cl.upvals[instr.B];
+                            Upval upval = cl.upvals[instr.B];
                             upval.val.TVal = ra;
                             continue;
                         }
@@ -187,7 +188,17 @@ namespace zlua.VM
                     case Opcodes.TailCall:
                         continue;
                     case Opcodes.Return: {
-
+                            int b = instr.B;
+                            if (b != 0) top = instr.A + b - 1;
+                            savedpc = pc;
+                            int i = ldo.PosCall(this, instr.A);
+                            if (--level == 0) /* chunk executed, return*/
+                                return;
+                            else { /*continue the execution*/
+                                if (i != 0) 
+                                    top = CurrCallInfo.top;
+                                goto reentry;
+                            }
                             continue;
                         }
                     case Opcodes.ForLoop:
@@ -200,8 +211,23 @@ namespace zlua.VM
                         continue;
                     case Opcodes.Close:
                         continue;
-                    case Opcodes.Closure:
-                        continue;
+                    case Opcodes.Closure: { /*用Proto简单new一个LuaClosure，提前执行下面的指令初始化upvals*/
+                            Proto p = cl.p.inner_funcs[instr.Bx];
+                            LuaClosure ncl = new LuaClosure(cl.env, p.nUpvals, p);
+                            // 后面一定跟着一些getUpval或mov指令用来初始化upvals，分情况讨论，把这些指令在这个周期就执行掉
+                            for (int j = 0; j < p.nUpvals; j++, pc++) { /*从父函数的upvals直接取upvals*/
+                                var next_instr = codes[pc];
+                                if (next_instr.Opcode == Opcodes.GetUpVal)
+                                    ncl.upvals[j] = cl.upvals[codes[pc].B];
+                                else { /*否则得用复杂的方法确定upval的位置*/
+                                    Debug.Assert(codes[pc].Opcode == Opcodes.Move);
+                                    ncl.upvals[j] = lfunc.FindUpval(this, _base + next_instr.B);
+                                }
+                            }
+                            ra.Cl = ncl as Closure;
+                            continue;
+                        }
+
                     case Opcodes.VarArg:
                         continue;
                     default:

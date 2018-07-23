@@ -264,6 +264,7 @@ namespace zlua.TypeModel
         public bool isVararg;
         public int maxStacksize;
         public int nParams;
+        public int nUpvals;
     }
     public class LocVar { public string var_name; public int startpc; public int endpc; }
     public class FuncState
@@ -278,26 +279,24 @@ namespace zlua.TypeModel
     {
         public bool IsCharp;
         public TTable env;
-        //int n_upvals;  no need
         public Closure(TTable env)
         {
             this.env = env;
             this.IsCharp = false;
-            //this.n_upvals = n_upvals;
         }
     }
     public class LuaClosure : Closure
     {
         public Proto p;
-        public List<UpValue> upvals;
+        public List<Upval> upvals;
         /// <summary>
         /// luaF_newLclosure
         /// called] f_parser in ldo.c; luaV_execute in lvm.c
         /// </summary>
-        public LuaClosure(TTable env, int n_upvals, Proto p) : base(env)
+        public LuaClosure(TTable env, int nUpvals, Proto p) : base(env)
         {
             this.p = p;
-            upvals = new List<UpValue>(n_upvals);
+            upvals = new List<Upval>(nUpvals);
         }
     }
     public class CSharpClosure : Closure
@@ -447,7 +446,7 @@ namespace zlua.TypeModel
 
         public IEnumerator GetEnumerator() => this.GetEnumerator();
     }
-    public class UpValue : TObject
+    public class Upval : TObject
     {
         public TValue val;
     }

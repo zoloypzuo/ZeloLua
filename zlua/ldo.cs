@@ -58,7 +58,10 @@ namespace zlua.CallSystem
             L.k = p.k;
             L.callinfoStack.Push(ci);
         }
-
+        public static int PosCall(this TThread L,int funcIndex)
+        {
+            return 0;
+        }
         /// <summary>
         /// adjust_varargs
         /// </summary>

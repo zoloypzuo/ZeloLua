@@ -15,18 +15,16 @@ namespace zlua.API
 {
     public static class lapi
     {
-        //class CallS
-        //{
-        //    public TValue func;
-        //    public int n_retvals;
-        //}
-        //static void pcall(this TThread L,int n_args,int n_retvals,int errfunc)
-        //{
-        //    var cs=new CallS();
-        //    cs.func = L.Stack[L.Top - n_args + 1];
-        //    cs.n_retvals = n_retvals;
+        /// <summary>
+        /// luaA_pushobject
+        /// </summary>
+        /// <param name="L"></param>
+        /// <param name="obj"></param>
+        static void PushObject(this TThread L,TValue obj)
+        {
+            L.Stack[L.top++].TVal = obj;
+        }
 
-        //}
         /// <summary>
         /// lua_gettop
         /// </summary>
