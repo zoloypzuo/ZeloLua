@@ -4,12 +4,11 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Antlr4.Runtime;
-using Antlr4.Runtime.Tree;
+
 using zlua.API;
 using zlua.TypeModel;
 using zlua.VM;
-
+using zlua.AuxLib;
 namespace zlua
 {
     /// <summary>
@@ -36,18 +35,15 @@ namespace zlua
     public static class lua
     {
         public const string Version = "zlua 1.0, based on lua 5.1.4";
-        public static void dofile(string path)
+        /// <summary>
+        /// luaL_dofile, luaB_dofile, dofile
+        /// 实现决策】dofile在src中共有三处，luaB的实现简单，从luaD_call开始，lua.c的dofile不知道包装了什么鬼，不允许实现;但是lua.c是独立解释器，因此把实现放在这里
+        /// </summary>
+        /// <param name="path"></param>
+        public static void DoFile(this TThread L, string path)
         {
-            FileStream fs = new FileStream(@"..\..\" + path, FileMode.Open, FileAccess.Read);
-            AntlrInputStream inputStream = new AntlrInputStream(fs);
-            LuaLexer lexer = new LuaLexer(inputStream);
-            CommonTokenStream tokens = new CommonTokenStream(lexer);
-            LuaParser parser = new LuaParser(tokens);
-            var tree = parser.chunk();
-            var walker = new ParseTreeWalker();
-            var compiler = new Compiler();
-            walker.Walk(compiler, tree);
-            new TThread(compiler.main_func).Execute(1);
+            L.LoadFile(path);
+            lapi.Call(L, 0, 0);
         }
         /// <summary>
         /// LUA_MULTRET, an option for lua_pcall and lua_call
@@ -59,6 +55,7 @@ namespace zlua
         public const int GlobalsIndex = -10002;
         public static int UpvalIndex(int index) => GlobalsIndex - index;
         #endregion
-        public static void GetGlobal(this TThread L,TString s)=>L.GetField(GlobalsIndex,s);
+        public static void GetGlobal(this TThread L, TString s) => L.GetField(GlobalsIndex, (string)s);
+        public delegate int CSharpFunction(TThread L);
     }
 }

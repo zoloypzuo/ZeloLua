@@ -12,196 +12,208 @@ using System.Collections;
 /// </summary>
 namespace zlua.TypeModel
 {
-    using TNumber = Double;
-    using TInteger = Int32;
-    using Instruction = UInt32;
 
     /// <summary>
-    /// the general type of lua. T means "tagged".  size: 8+8+4=20Byte
-    /// methods brief:
-    /// 1. factorys: return a new specified lua type value; cast C# type to lua type (eg. string => tstring)
-    /// 2. propertys: get or set a specified lua type value
-    /// 3. casts: among lua types; is not needed
-    /// 4. operators: foo
-    /// 5. propertys: test type
+    /// the general type of lua; T means "tagged";  size: TODO 8+8+4=20Byte
     /// </summary>
     public class TValue
     {
-
+        #region fields
         /// <summary>
-        /// the GC collectable object
+        /// the reference type object
         /// </summary>
-        GCObject gc; 
-
+        TObject tobj;
         /// <summary>
         /// the number type of lua
         /// </summary>
-        TNumber n;
-
+        double n;
         /// <summary>
         /// the int type of lua
         /// </summary>
-        TInteger i; //用于index等
-
+        int i; //用于index等
         bool b;
-
-        public LuaTypes Type { get; set; }
+        /// <summary>
+        /// the type tag; readonly externly, modified by setting `this as a specific value
+        /// </summary>
+        public LuaTypes Type { private set; get; }
+        #endregion
 
         public override string ToString()
         {
+            var _base = Type.ToString()+": ";
+            string more= " 要么补充，要么看watch下拉去吧";
             switch (Type) {
-                case LuaTypes.Nil: return "nil";
-                case LuaTypes.Number: return n.ToString();
-                case LuaTypes.Boolean: return b.ToString();
-                case LuaTypes.String: return Str.ToString();
-                default: return "要么补充，要么看watch下拉去吧";
+                case LuaTypes.None:
+                    break;
+                case LuaTypes.Nil:
+                    break;
+                case LuaTypes.Boolean:more = b.ToString();
+                    break;
+                case LuaTypes.LightUserdata:
+                    break;
+                case LuaTypes.Number:more = n.ToString();
+                    break;
+                case LuaTypes.String:more = Str.ToString();
+                    break;
+                case LuaTypes.Table:
+                    break;
+                case LuaTypes.Function:
+                    break;
+                case LuaTypes.Userdata:
+                    break;
+                case LuaTypes.Thread:
+                    break;
+                case LuaTypes.Closure:
+                    break;
+                case LuaTypes.Int:
+                    break;
             }
+            return _base + more;
         }
+        #region ctor getter setter
 
         public TValue()
         {
-
+            Type = LuaTypes.Nil;
         }
 
-        TValue(TString tstr)
+        public TValue(TString tstr)
         {
             Type = LuaTypes.String;
-            gc = tstr;
+            tobj = tstr;
         }
-        TValue(TTable table)
+        public TValue(TTable table)
         {
             Type = LuaTypes.Table;
-            gc = table;
+            tobj = table;
         }
-        #region factorys
-
-        static TValue tstring_factory(string s)
+        public TValue(bool b)
         {
-            var _ret = new TValue() {
-                Type = LuaTypes.String,
-                gc = new TString(s)
-            };
-            return _ret;
+            Type = LuaTypes.Boolean;
+            this.b = b;
         }
-        static TValue runtime_func_factory(Proto func)
+        public TValue(double n)
         {
-            var _ret = new TValue() {
-                Type = LuaTypes.Function,
-                gc = new Closure(func)
-            };
-            return _ret;
+            Type = LuaTypes.Number;
+            this.n = n;
         }
 
-        public static TValue compiled_func_factory(Proto compiledFunction)
-        {
-            var _ret = new TValue {
-                Type = LuaTypes.Function,
-                gc = compiledFunction
-            };
-            return _ret;
-        }
-        static TValue i_factory(int i)
-        {
-            var _ret = new TValue {
-                Type = LuaTypes.Int,
-                i = i
-            };
-            return _ret;
-        }
-        static TValue b_factory(bool b)
-        {
-            var _ret = new TValue {
-                Type = LuaTypes.Boolean,
-                b = b
-            };
-            return _ret;
-        }
-        static TValue n_factory(TNumber n)
-        {
-            var _ret = new TValue() {
-                Type = LuaTypes.Number,
-                n = n
-            };
-            return _ret;
-        }
-        public static implicit operator TValue(string str) => tstring_factory(str);
-        public static implicit operator TValue(bool b) => b_factory(b);
-        public static implicit operator TValue(int i) => i_factory(i);
-        public static implicit operator TValue(TNumber n) => n_factory(n);
-        public static implicit operator string(TValue tval) => tval.Str;
-        public static implicit operator TString(TValue tval) => tval.Str;
+        public static explicit operator TValue(string str) => new TValue((TString)str);
+        public static explicit operator TValue(bool b) => new TValue(b);
+        public static explicit operator TValue(double n) => new TValue(n);
         public static explicit operator TValue(TString tstr) => new TValue(tstr);
-        public static implicit operator bool(TValue tval) => tval.b;
-        public static implicit operator int(TValue tval) => tval.i;
-        public static implicit operator TNumber(TValue tval) => tval.n;
-        public static explicit operator GCObject(TValue tval) => tval.gc;
-        public static explicit operator TValue(TTable table)=>new TValue(table);
-        public static explicit operator TTable(TValue tval)=>tval.gc as TTable;
+        public static explicit operator TValue(TTable table) => new TValue(table);
+
+        public static explicit operator TString(TValue tval) { Debug.Assert(tval.IsString); return tval.tobj as TString; }
+        public static explicit operator string(TValue tval) { Debug.Assert(tval.IsString); return (string)(TString)tval; }
+        public static explicit operator bool(TValue tval) { Debug.Assert(tval.IsBool); return tval.b; }
+        public static explicit operator int(TValue tval) => tval.i; //TODO 不应该有
+        public static explicit operator double(TValue tval) { Debug.Assert(tval.IsNumber); return tval.n; }
+        public static explicit operator TObject(TValue tval) => tval.tobj;
+        public static explicit operator TTable(TValue tval) { Debug.Assert(tval.IsTable); return tval.tobj as TTable; }
+        public static explicit operator Proto(TValue tval) { Debug.Assert(tval.IsLuaFunction); return tval.tobj as Proto; }// TODO 大概不应该有
+
+        public double N
+        {
+            get => (double)this;
+            set
+            {
+                Type = LuaTypes.Number;
+                n = value;
+            }
+        }
+        public TString TStr
+        {
+            get => (TString)this;
+            set
+            {
+                Type = LuaTypes.String;
+                tobj = value;
+            }
+        }
+        public TObject TObj
+        {
+            get => (TObject)this;
+        }
+        public string Str
+        {
+            get => (string)this;
+            set
+            {
+                Type = LuaTypes.String;
+                tobj = (TString)value;
+            }
+        }
+        public Closure Cl
+        {
+            get => (Closure)this;
+            set
+            {
+                Type = LuaTypes.Closure;
+                tobj = value;
+            }
+        }
+        public bool B
+        {
+            get => (bool)this;
+            set
+            {
+                Type = LuaTypes.Boolean;
+                b = value;
+            }
+        }
+        public TThread L
+        {
+            get; set;
+        }
+        public Proto P
+        {
+            get; set;
+        }
+        public TTable Table
+        {
+            get;set;
+        }
+        public TValue TVal
+        {
+            get => this;
+            set
+            {
+                Type = value.Type; 
+                tobj = value.tobj;
+                n = value.n;
+                b = value.b;
+            }
+        }
+        public void SetNil() => Type = LuaTypes.Nil;
         #endregion
-        #region propertys to get or set value
-        // # getter APIs are divided into 2 parts: value types use implicit cast operator
-        //   and reference types use simple property (ie. method) TODO not right
 
-        // 1. note that this is private, because string is someway more like value type
-        // 2. rawtsvalue, tsvalue is not needed because C# string is used as subsititute
-        TString Str { get { Stdlib.Stdlib.assert(tt_is_string); return gc.Str; } }
-        public Proto Proto { get { Stdlib.Stdlib.assert(tt_is_proto); return gc.Proto; } }
-
-        /* <lua_src>
-        #define setobj(L,obj1,obj2) \
-          { const TValue *o2=(obj2); TValue *o1=(obj1); \
-            o1->value = o2->value; o1->tt=o2->tt; \
-            checkliveness(G(L),o1); }
-
-        <lua_src>*/
-
-        // # L is still included in parameters in case of refactor
-        //TODO
-
-
-
-
-        #endregion
         #region operators
 
         #endregion
 
-        #region propertys to test type
-        public bool tt_is_nil { get => Type == LuaTypes.Nil; }
-        public bool tt_is_number { get => Type == LuaTypes.Number; }
-        public bool tt_is_string { get => Type == LuaTypes.String; }
-        public bool tt_is_table { get => Type == LuaTypes.Table; }
-        public bool tt_is_proto { get => Type == LuaTypes.Function; }
-        public bool tt_is_boolean { get => Type == LuaTypes.Boolean; }
-        public bool tt_is_userdata { get => Type == LuaTypes.Userdata; }
-        public bool tt_is_thread { get => Type == LuaTypes.Thread; }
-        public bool tt_is_light_userdata { get => Type == LuaTypes.LightUserdata; }
-        public bool is_cs_function { get => Type == LuaTypes.Function && (gc as Closure).IsCharp; }
-        public bool is_lua_function { get => Type == LuaTypes.Function && !(gc as Closure).IsCharp; }
+        #region propertys to test type 不做源代码引用，因为太简单了。不要浪费时间增加累赘
+        public bool IsNil { get => Type == LuaTypes.Nil; }
+        public bool IsNumber { get => Type == LuaTypes.Number; }
+        public bool IsString { get => Type == LuaTypes.String; }
+        public bool IsTable { get => Type == LuaTypes.Table; }
+        public bool IsProto { get => Type == LuaTypes.Function; }
+        public bool IsBool { get => Type == LuaTypes.Boolean; }
+        public bool IsUserdata { get => Type == LuaTypes.Userdata; }
+        public bool IsThread { get => Type == LuaTypes.Thread; }
+        public bool IsLightUserdata { get => Type == LuaTypes.LightUserdata; }
+        public bool IsCSharpFunction { get => Type == LuaTypes.Function && (tobj as Closure).IsCharp; }
+        public bool IsLuaFunction { get => Type == LuaTypes.Function && !(tobj as Closure).IsCharp; }
         #endregion
         #region other functions
-        public bool is_collectable { get => (int)Type >= (int)LuaTypes.String; }
-        public bool is_false { get => tt_is_nil || tt_is_boolean && this == false; }
-
-
-        // NO NEED TO IMPLEMENT, about gc 
-        /* <lua_src>
-        // for internal debug only
-        #define checkconsistency(obj) \
-        lua_assert(!iscollectable(obj) || (ttype(obj) == (obj)->value.gc->gch.tt))
-
-        #define checkliveness(g,obj) \
-          lua_assert(!iscollectable(obj) || \
-          ((ttype(obj) == (obj)->value.gc->gch.tt) && !isdead(g, (obj)->value.gc)))
-        <lua_src>*/
-
-
+        public bool IsCollectable { get => (int)Type >= (int)LuaTypes.String; }
+        public bool IsFalse { get => IsNil || IsBool && (bool)this == false; }
         /// <summary>
         /// luaO_nilobject_
         /// </summary>
         public static readonly TValue NilObject = new TValue { Type = LuaTypes.Nil };
 
-        public int str2d(string s, TNumber result)
+        public int str2d(string s, double result)
         {
             return 1;
         }
@@ -219,20 +231,20 @@ namespace zlua.TypeModel
                 switch (other.Type) {
                     case LuaTypes.Nil: return true;
                     case LuaTypes.Number:
-                        return (TNumber)this == (TNumber)other;
+                        return (double)this == (double)other;
                     case LuaTypes.Boolean:
                         return (bool)this == (bool)other;
                     case LuaTypes.String:
                         return (TString)this == (TString)other;
                     default:
-                        Debug.Assert(other.is_collectable);
-                        return (GCObject)this == (GCObject)other;
+                        Debug.Assert(other.IsCollectable);
+                        return (TObject)this == (TObject)other;
                 }
         }
         public override int GetHashCode()
         {
             switch (Type) {
-                case LuaTypes.Number: return ((TNumber)this).GetHashCode();
+                case LuaTypes.Number: return ((double)this).GetHashCode();
                 case LuaTypes.String: return ((TString)this).GetHashCode();
                 case LuaTypes.Boolean: return ((bool)this).GetHashCode();
                 default: return base.GetHashCode();
@@ -242,15 +254,15 @@ namespace zlua.TypeModel
     /// <summary>
     /// is gcobject, but is not a primitive type
     /// </summary>
-    public class Proto : GCObject
+    public class Proto : TObject
     {
-        public Proto parent;
+        //public Proto parent;
         public List<Proto> inner_funcs = new List<Proto>();
         public List<TValue> k;
-        public List<Instruction> codes;
-        public List<LocVar> local_vars;
-        public bool is_vararg;
-        public int max_stacksize;
+        public List<Bytecode> codes;
+        public List<LocVar> locvars;
+        public bool isVararg;
+        public int maxStacksize;
         public int nParams;
     }
     public class LocVar { public string var_name; public int startpc; public int endpc; }
@@ -260,33 +272,48 @@ namespace zlua.TypeModel
         Dictionary<string, TConst> consts;
         FuncState prev;
     }
-    public class TConst { TNumber n; TString tstr; }
-    /* <lua_src> union Closure<lua_src>*/
-    public class Closure : GCObject
+    public class TConst { double n; TString tstr; }
+
+    public class Closure : TObject
     {
         public bool IsCharp;
-        public Proto func;
-        public int ret_addr;
-        public Dictionary<TString, TValue> local_data = new Dictionary<TString, TValue>();
-        public Stack<TValue> stack = new Stack<TValue>();
-        public Closure(Proto func)
+        public TTable env;
+        //int n_upvals;  no need
+        public Closure(TTable env)
         {
-            this.func = func;
+            this.env = env;
+            this.IsCharp = false;
+            //this.n_upvals = n_upvals;
         }
     }
-    //public class LuaClosure : Closure
-    //{
+    public class LuaClosure : Closure
+    {
+        public Proto p;
+        public List<UpValue> upvals;
+        /// <summary>
+        /// luaF_newLclosure
+        /// called] f_parser in ldo.c; luaV_execute in lvm.c
+        /// </summary>
+        public LuaClosure(TTable env, int n_upvals, Proto p) : base(env)
+        {
+            this.p = p;
+            upvals = new List<UpValue>(n_upvals);
+        }
+    }
+    public class CSharpClosure : Closure
+    {
+        lua.CSharpFunction f;
+        List<TValue> upvals;
+        public CSharpClosure() : base(null)
+        {
 
-    //}
-    //public class CSharpClosure : Closure
-    //{
-
-    //}
+        }
+    }
     /* <lua_src> union TString</lua_src>*/
     /// <summary>
     /// the string type of lua, just warpper of C# string
     /// </summary>
-    public class TString : GCObject
+    public class TString : TObject
     {
 
         public TString(string str) { this.str = str; }
@@ -300,37 +327,27 @@ namespace zlua.TypeModel
         {
             return str.GetHashCode();
         }
-        public static implicit operator string(TString tstr) => tstr.str;
-        public static implicit operator TString(string str) => new TString(str);
+        public static explicit operator string(TString tstr) => tstr.str;
+        public static explicit operator TString(string str) => new TString(str);
     }
     /// <summary>
-    /// base class of all GC objects
+    /// GCObject; base class of all reference type objects in lua
     /// </summary>
-    public class GCObject
+    public class TObject
     {
-        /// <summary>
-        /// for convenience (eg. TString is subclass of GCObject）
-        /// </summary>
-        public TString Str { get { return this as TString; } }
-        public TTable Table { get { return this as TTable; } }
-        public UpValue Upval { get { return this as UpValue; } }
-        public TThread Thread { get { return this as TThread; } }
-        public Proto Proto { get { return this as Proto; } }
-        public Closure Closure { get { return this as Closure; } }
-        public UserData UserData { get { return this as UserData; } }
     }
-    public class UserData : GCObject
+    public class UserData : TObject
     {
 
     }
 
-    public class TTable : GCObject, IEnumerable<KeyValuePair<TValue, TValue>>
+    public class TTable : TObject, IEnumerable<KeyValuePair<TValue, TValue>>
     {
         public TValue metatable;
         Dictionary<TValue, TValue> hashTablePart;
         List<TValue> arrayPart;
 
-        public TTable(TThread L, int sizeHashTablePart, int sizeArrayPart)
+        public TTable(int sizeHashTablePart, int sizeArrayPart)
         {
             hashTablePart = new Dictionary<TValue, TValue>(sizeHashTablePart);
             arrayPart = new List<TValue>(sizeArrayPart);
@@ -344,11 +361,11 @@ namespace zlua.TypeModel
         {
             switch (key.Type) {
                 case LuaTypes.Nil: return TValue.NilObject;
-                case LuaTypes.String: return GetByStr(key);
+                case LuaTypes.String: return GetByStr((TString)key);
                 case LuaTypes.Number:
-                    TNumber n = key;
+                    double n = (double)key;
                     int k = (int)Math.Round(n);
-                    if ((TNumber)k == n) return GetByInt(k);
+                    if ((double)k == n) return GetByInt(k);
                     goto default; // sigh, must have break or return, so ...
                 default:
                     if (hashTablePart.ContainsKey(key))
@@ -369,8 +386,8 @@ namespace zlua.TypeModel
             var tval = Get(key);
             if (tval != TValue.NilObject) return tval;
             else {
-                Debug.Assert(key.tt_is_nil, "table index is nil");
-                Debug.Assert(key.tt_is_number && luaconf.IsNaN(key), "table index is NaN");
+                Debug.Assert(key.IsNil, "table index is nil");
+                Debug.Assert(key.IsNumber && luaconf.IsNaN((double)key), "table index is NaN");
                 var new_val = new TValue();
                 hashTablePart[key] = new_val;
                 return new_val;
@@ -387,9 +404,9 @@ namespace zlua.TypeModel
         {
             if (key - 1 < arrayPart.Count) return arrayPart[key - 1];
             else {
-                TNumber k = (TNumber)key;
-                if (hashTablePart.ContainsKey(key))
-                    return hashTablePart[k];
+                double k = (double)key;
+                if (hashTablePart.ContainsKey((TValue)key))
+                    return hashTablePart[(TValue)k];
                 return TValue.NilObject;
             }
         }
@@ -410,7 +427,7 @@ namespace zlua.TypeModel
             if (tval != TValue.NilObject) return tval;
             else {
                 var new_val = new TValue();
-                hashTablePart[key] = new_val;
+                hashTablePart[(TValue)key] = new_val;
                 return new_val; //TODO 这里是错的。应该有分配到arraypart的逻辑
             }
         }
@@ -421,7 +438,7 @@ namespace zlua.TypeModel
         {
             int index = 0;
             foreach (var item in arrayPart) {
-                yield return new KeyValuePair<TValue, TValue>(++index, item);
+                yield return new KeyValuePair<TValue, TValue>((TValue)(++index), item);
             }
             foreach (var item in hashTablePart) {
                 yield return item;
@@ -430,9 +447,9 @@ namespace zlua.TypeModel
 
         public IEnumerator GetEnumerator() => this.GetEnumerator();
     }
-    public class UpValue : GCObject
+    public class UpValue : TObject
     {
-
+        public TValue val;
     }
 
 

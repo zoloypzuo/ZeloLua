@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace zlua.Stdlib
 {
-    class Stdlib
+    class lualib
     {
         /* <lua_src> #define lua_assert(x)	((void)0)*/
         public static void assert(bool x) => Debug.Assert(x);

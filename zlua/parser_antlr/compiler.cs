@@ -10,11 +10,9 @@ namespace zlua
     using lua_Number = System.Double;
     class Compiler : ILuaListener
     {
-        public Proto main_func = new Proto(null, null);
         Proto curr_func;
-        void append_instr(AssembledInstr instr)
+        void append_instr(object instr)
         {
-            curr_func.instrs.Add(instr);
         }
         public void EnterArgs([NotNull] LuaParser.ArgsContext context)
         {
@@ -38,7 +36,6 @@ namespace zlua
 
         public void EnterChunk([NotNull] LuaParser.ChunkContext context)
         {
-            curr_func = main_func;
         }
 
         public void EnterDo_end_stat([NotNull] LuaParser.Do_end_statContext context)
@@ -118,12 +115,6 @@ namespace zlua
 
         public void EnterFunc_def_stat([NotNull] LuaParser.Func_def_statContext context)
         {
-            var para_list = context.funcbody().parlist().GetText().Split(',');
-            var new_func = new Proto(curr_func, new List<string>(para_list));
-            append_instr(new closure(curr_func.inner_funcs.Count()));
-            append_instr(new mov(context.funcname().GetText()));
-            curr_func.inner_funcs.Add(new_func);
-            curr_func = new_func;
         }
 
         public void EnterGlobal_func_def_stat([NotNull] LuaParser.Global_func_def_statContext context)
@@ -328,7 +319,6 @@ namespace zlua
 
         public void ExitAssign_stat([NotNull] LuaParser.Assign_statContext context)
         {
-            append_instr(new mov(context.var().GetText()));
         }
 
         public void ExitBlock([NotNull] LuaParser.BlockContext context)
@@ -343,7 +333,6 @@ namespace zlua
 
         public void ExitChunk([NotNull] LuaParser.ChunkContext context)
         {
-            append_instr(new ret());
         }
 
         public void ExitDo_end_stat([NotNull] LuaParser.Do_end_statContext context)
@@ -373,7 +362,6 @@ namespace zlua
 
         public void ExitFalse_exp([NotNull] LuaParser.False_expContext context)
         {
-            append_instr(new push(false));
         }
 
         public void ExitField([NotNull] LuaParser.FieldContext context)
@@ -403,7 +391,6 @@ namespace zlua
 
         public void ExitFunctioncall([NotNull] LuaParser.FunctioncallContext context)
         {
-            append_instr(new call(context.varOrExp().var().NAME().GetText()));
         }
 
         public void ExitFunctiondef([NotNull] LuaParser.FunctiondefContext context)
@@ -423,8 +410,6 @@ namespace zlua
 
         public void ExitFunc_def_stat([NotNull] LuaParser.Func_def_statContext context)
         {
-            append_instr(new ret());
-            curr_func = curr_func.parent;
         }
 
         public void ExitGlobal_func_def_stat([NotNull] LuaParser.Global_func_def_statContext context)
@@ -454,7 +439,6 @@ namespace zlua
 
         public void ExitNil_exp([NotNull] LuaParser.Nil_expContext context)
         {
-            append_instr(new push(TValue.nil_factory()));
         }
 
         public void ExitNumber([NotNull] LuaParser.NumberContext context)
@@ -464,8 +448,6 @@ namespace zlua
 
         public void ExitNum_exp([NotNull] LuaParser.Num_expContext context)
         {
-            var num = lua_Number.Parse(context.number().GetText());
-            append_instr(new push(num));
         }
 
         public void ExitOperatorAddSub([NotNull] LuaParser.OperatorAddSubContext context)
@@ -515,9 +497,6 @@ namespace zlua
 
         public void ExitOp_add_sub_exp([NotNull] LuaParser.Op_add_sub_expContext context)
         {
-            var punc = context.operatorAddSub().GetText();
-            if (punc == "+") append_instr(new add());
-            //else if (punc == "-") append_instr(new sub());
         }
 
         public void ExitOp_and_exp([NotNull] LuaParser.Op_and_expContext context)
@@ -527,8 +506,6 @@ namespace zlua
 
         public void ExitOp_caompare_exp([NotNull] LuaParser.Op_caompare_expContext context)
         {
-            var punc = context.operatorComparison().GetText();
-            append_instr(new eq());
         }
 
         public void ExitOp_concat_exp([NotNull] LuaParser.Op_concat_expContext context)
@@ -538,9 +515,6 @@ namespace zlua
 
         public void ExitOp_mul_div_exp([NotNull] LuaParser.Op_mul_div_expContext context)
         {
-            var punc = context.operatorMulDivMod().GetText();
-            if (punc == "*") append_instr(new mul());
-            //else if (punc == "/") append_instr(new div());
         }
 
         public void ExitOp_or_exp([NotNull] LuaParser.Op_or_expContext context)
@@ -560,9 +534,6 @@ namespace zlua
 
         public void ExitPrefixexp([NotNull] LuaParser.PrefixexpContext context)
         {
-            var a = context.nameAndArgs();
-            if (a.Length == 0) append_instr(new push_var(context.varOrExp().GetText()));
-            else append_instr(new call( context.varOrExp().var().NAME().GetText()));
         }
 
         public void ExitPrefix_exp_exp([NotNull] LuaParser.Prefix_exp_expContext context)
@@ -587,8 +558,6 @@ namespace zlua
 
         public void ExitString_exp([NotNull] LuaParser.String_expContext context)
         {
-            var s = context.@string().GetText().Trim('"');
-            append_instr(new push(s));
         }
 
         public void ExitTableconstructor([NotNull] LuaParser.TableconstructorContext context)
@@ -603,7 +572,6 @@ namespace zlua
 
         public void ExitTrue_exp([NotNull] LuaParser.True_expContext context)
         {
-            append_instr(new push(true));
         }
 
         public void ExitVar([NotNull] LuaParser.VarContext context)

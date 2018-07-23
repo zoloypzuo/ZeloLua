@@ -10,10 +10,9 @@ using zlua.VM;
 /// </summary>
 namespace zlua.GlobalState
 {
-    /* <lua_src>struct global_State;</lua_src>*/
     public class GlobalState
     {
-        public TValue registery;
+        public TValue registry;
         public TThread mainThread;
     }
 }

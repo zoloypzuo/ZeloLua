@@ -4,7 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using zlua.VM;
-
+using zlua.TypeModel;
+using Antlr4.Runtime;
+using Antlr4.Runtime.Tree;
+using System.IO;
 /// <summary>
 /// 辅助库
 /// </summary>
@@ -12,14 +15,36 @@ namespace zlua.AuxLib
 {
     static class lauxlib
     {
-        public static void loadfile(this TThread L,string filename)
+        /// <summary>
+        /// luaL_loadfile
+        /// 实现决策】我们简化src实现方式，src中经过了三个复杂的函数到fparser内才判断文件是字节码还是text，然后。。。，所以实现中这里就做完了
+        /// </summary>
+        /// <param name="L"></param>
+        /// <param name="filename"></param>
+        public static void LoadFile(this TThread L, string path)
         {
+            using (FileStream fs = new FileStream(path,
+                FileMode.Open, FileAccess.Read)) {
+                AntlrInputStream inputStream = new AntlrInputStream(fs);
+                LuaLexer lexer = new LuaLexer(inputStream);
+                CommonTokenStream tokens = new CommonTokenStream(lexer);
+                LuaParser parser = new LuaParser(tokens);
+                var tree = parser.chunk();
+                var walker = new ParseTreeWalker();
+                var compiler = new Compiler();
+                walker.Walk(compiler, tree);
+            }
+            //TODO导出一个proto
 
+            Proto proto = new Proto();
+            Closure closure = new LuaClosure((TTable)L.globalsTable, 0, proto);
+            L.Stack[L.top].Cl = closure;
+            L.top++;
         }
         /// <summary>
         /// luaL_checkany
         /// </summary>
-        public static void CheckAny(this TThread L,int n_arg)
+        public static void CheckAny(this TThread L, int n_arg)
         {
         }
         /// <summary>
@@ -37,7 +62,7 @@ namespace zlua.AuxLib
         /// <summary>
         /// lua_call
         /// </summary>
-        public static void Call(TThread L,int n_args,int n_retvals)
+        public static void Call(TThread L, int n_args, int n_retvals)
         {
 
         }

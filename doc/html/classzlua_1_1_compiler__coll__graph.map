@@ -1,4 +1,0 @@
-<map id="zlua.Compiler" name="zlua.Compiler">
-<area shape="rect" id="node2" href="$interfacezlua_1_1_i_lua_listener.html" title="This interface defines a complete listener for a parse tree produced by LuaParser. " alt="" coords="25,81,117,108"/>
-<area shape="rect" id="node4" href="$classzlua_1_1_lua.html" title="some generic functions over lua objects (lobject.c） " alt="" coords="141,81,211,108"/>
-</map>

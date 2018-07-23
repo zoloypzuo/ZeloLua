@@ -13,7 +13,7 @@ using System.Diagnostics;
 /// </summary>
 namespace zlua.API
 {
-    static class lapi
+    public static class lapi
     {
         //class CallS
         //{
@@ -33,12 +33,17 @@ namespace zlua.API
         /// <param name="L"></param>
         /// <returns></returns>
         public static int GetTop(this TThread L) => L.top - L._base;
-
-        static void Call(this TThread L, int nArgs, int nRetvals)
+        /// <summary>
+        /// lua_call
+        /// </summary>
+        /// <param name="L"></param>
+        /// <param name="nArgs"></param>
+        /// <param name="nRetvals"></param>
+        public static void Call(this TThread L, int nArgs, int nRetvals)
         {
             int funcIndex = L.top - (nArgs + 1);
-            CallSystem.ldo.Call(L, funcIndex, nRetvals);
-            AdjustRetvals(L, nRetvals);
+            ldo.Call(L, funcIndex, nRetvals); //TODO 名字重复了，不好。而且签名是一样的。
+            //AdjustRetvals(L, nRetvals);
         }
         /// <summary>
         /// adjustresults
@@ -57,7 +62,7 @@ namespace zlua.API
         /// <param name="sizeHashTablePart"></param>
         public static void CreateTable(this TThread L, int sizeArrayPart, int sizeHashTablePart)
         {
-            var new_table = new TTable(L, sizeHashTablePart, sizeArrayPart);
+            var new_table = new TTable( sizeHashTablePart, sizeArrayPart);
             L.Stack.Add((TValue)new_table);
         }
         /// <summary>
@@ -89,7 +94,7 @@ namespace zlua.API
                 return L.Stack[L.top + index];
             } else {
                 switch (index) {
-                    case lua.RegisteyIndex: return L.globalState.registery;
+                    case lua.RegisteyIndex: return L.globalState.registry;
                     case lua.EnvIndex: return null;  //TODO, src use curr func's env, why
                     case lua.GlobalsIndex: return L.globalsTable;
                     default:
@@ -155,6 +160,6 @@ namespace zlua.API
         /// </summary>
         /// <param name="index"></param>
         /// <returns></returns>
-        public static bool IsCSFunction(this TThread L,int index) => L.Index2TVal(index).is_cs_function;
+        public static bool IsCSFunction(this TThread L,int index) => L.Index2TVal(index).IsCSharpFunction;
     }
 }

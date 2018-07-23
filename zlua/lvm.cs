@@ -8,13 +8,13 @@ using zlua.ISA;
 using zlua.GlobalState;
 using System.Diagnostics;
 using zlua.API;
+using zlua.CallSystem;
 /// <summary>
 /// 虚拟机
 /// </summary>
 namespace zlua.VM
 {
-    using TNumber = Double;
-    public class TThread : GCObject
+    public class TThread : TObject
     {
         public List<TValue> Stack;
         /// <summary>
@@ -25,18 +25,15 @@ namespace zlua.VM
         /// = callinfo_stack.top()._base
         /// </summary>
         public int _base; // "base" is a C# keyword, ...
-        public CallInfo CurrCallInfo { get; }
-        public CallInfo IncrementCallInfo()
-        {
-            var ci = new CallInfo();
-            callinfoStack.Push(ci);
-            return ci;
-        }
+        public CallInfo CurrCallInfo { get => callinfoStack.Peek(); }
+
         public Stack<CallInfo> callinfoStack;
+        const int BasicCISize = 8;
+        const int BasicStackSize = 40;
         /// <summary>
         /// consts
         /// </summary>
-        List<TValue> k;
+        public List<TValue> k;
         /// <summary>
         /// _G
         /// </summary>
@@ -45,111 +42,170 @@ namespace zlua.VM
         /// saved pc when call a function; index of instruction array
         /// </summary>
         public int savedpc;
+        public List<Bytecode> codes;
         public int nCSharpCalls;
         public GlobalState.GlobalState globalState;
         /// <summary>
         /// lua_newstate    
         /// </summary>
         /// <param name="main_func"></param>
-        public TThread(Proto main_func)
+        public TThread()
         {
-            globalState = new GlobalState.GlobalState() { mainThread = this };
+            globalState = new GlobalState.GlobalState() {
+                mainThread = this,
+                registry = new TValue(new TTable(sizeHashTablePart: 2, sizeArrayPart: 0))
+            };
+            globalsTable = new TValue(new TTable(sizeHashTablePart: 2, sizeArrayPart: 0));
+            callinfoStack = new Stack<CallInfo>(BasicCISize);
+            callinfoStack.Push(new CallInfo());
+            Stack = new List<TValue>();
+            for (int i = 0; i < BasicStackSize; i++) {
+                Stack.Add(new TValue());
+            }
+            CurrCallInfo._base = _base = top = 1;
         }
         /// <summary>
         /// luaV_execute
         /// </summary>
-        /// <param name="level"></param>
+        /// <param name="level">1 is the first level</param>
         public void Execute(int level)
         {
+            LuaClosure cl;
+            List<TValue> k;
+            Bytecode instr;
+            int pc;
+            reentry:
+            //Debug.Assert(CurrCallInfo.func.IsLuaFunction);
+            pc = savedpc;
+            cl = CurrCallInfo.func.Cl as LuaClosure;
+            k = cl.p.k;
             while (true) {
-                Instruction i = 0;
-                switch (i.Opcode) {
+                instr = codes[pc++];
+                TValue ra = RA(instr);
+                switch (instr.Opcode) {
                     case Opcodes.Move:
-                        break;
+                        ra.TVal = RB(instr);
+                        continue;
                     case Opcodes.LoadK:
-                        break;
+                        ra.TVal = KBx(instr);
+                        continue;
                     case Opcodes.LoadBool:
-                        break;
-                    case Opcodes.LoadNil:
-                        break;
-                    case Opcodes.GetUpVal:
-                        break;
-                    case Opcodes.GetGlobal:
-                        break;
+                        ra.B = Convert.ToBoolean(instr.B);
+                        if (Convert.ToBoolean(instr.C)) pc++;
+                        continue;
+                    case Opcodes.LoadNil: {
+                            int a = instr.A;
+                            int b = instr.B;
+                            do {
+                                R(b--).SetNil();
+                            } while (b >= a);
+                            continue;
+                        }
+                    case Opcodes.GetUpVal: {
+                            int b = instr.B;
+                            ra.TVal = cl.upvals[b].val;
+                            continue;
+                        }
+                    case Opcodes.GetGlobal: {
+                            TValue rb = KBx(instr);
+                            Debug.Assert(rb.IsString);
+                            //TODO what is `Protect, why save savedpc and 
+                            GetTable((TValue)cl.env, rb, ra);
+                            continue;
+                        }
                     case Opcodes.GetTable:
-                        break;
+                        GetTable(RB(instr), RKC(instr), ra);
+                        continue;
                     case Opcodes.SetGlobal:
-                        break;
-                    case Opcodes.SetUpval:
-                        break;
+                        Debug.Assert(KBx(instr).IsString);
+                        SetTable((TValue)cl.env, KBx(instr), ra);
+                        continue;
+                    case Opcodes.SetUpval: {
+                            UpValue upval = cl.upvals[instr.B];
+                            upval.val.TVal = ra;
+                            continue;
+                        }
                     case Opcodes.SetTable:
-                        break;
-                    case Opcodes.NewTable:
-                        break;
-                    case Opcodes.Self:
-                        break;
+                        SetTable(ra, RKB(instr), RKC(instr));
+                        continue;
+                    case Opcodes.NewTable: {
+                            int b = instr.B;
+                            int c = instr.C;
+                            //TODO luaO_fb2int, float byte 2 int
+                            ra.Table = new TTable(c, b);
+                            continue;
+                        }
+                    case Opcodes.Self: {
+                            TValue rb = RB(instr);
+                            R(instr.A + 1).TVal = rb;
+                            GetTable(rb, RKC(instr), ra);
+                            continue;
+                        }
                     case Opcodes.Add:
-                        break;
+                        continue;
                     case Opcodes.Sub:
-                        break;
+                        continue;
                     case Opcodes.Mul:
-                        break;
+                        continue;
                     case Opcodes.Div:
-                        break;
+                        continue;
                     case Opcodes.Mod:
-                        break;
+                        continue;
                     case Opcodes.Pow:
-                        break;
+                        continue;
                     case Opcodes.Unm:
-                        break;
+                        continue;
                     case Opcodes.Not:
-                        break;
+                        ra.B = RB(instr).IsFalse; //TODO  /* next assignment may change this value */
+                        continue;
                     case Opcodes.Len:
-                        break;
+                        continue;
                     case Opcodes.Concat:
-                        break;
+                        continue;
                     case Opcodes.Jmp:
-                        break;
+                        continue;
                     case Opcodes.Eq:
-                        break;
+                        continue;
                     case Opcodes.Lt:
-                        break;
+                        continue;
                     case Opcodes.Le:
-                        break;
+                        continue;
                     case Opcodes.Test:
-                        break;
+                        continue;
                     case Opcodes.Testset:
-                        break;
-                    case Opcodes.Call:
-                        break;
+                        continue;
+                    case Opcodes.Call: {
+                            int b = instr.B;
+                            int n_retvals = instr.C - 1;
+                            //TODO
+                            savedpc = pc;
+                            ldo.PreCall(this, _base + instr.A, n_retvals);
+                            ++level;
+                            goto reentry;
+                            continue;
+                        }
                     case Opcodes.TailCall:
-                        break;
-                    case Opcodes.Return:
-                        break;
+                        continue;
+                    case Opcodes.Return: {
+
+                            continue;
+                        }
                     case Opcodes.ForLoop:
-                        break;
+                        continue;
                     case Opcodes.ForPrep:
-                        break;
+                        continue;
                     case Opcodes.TForLoop:
-                        break;
+                        continue;
                     case Opcodes.SetList:
-                        break;
+                        continue;
                     case Opcodes.Close:
-                        break;
+                        continue;
                     case Opcodes.Closure:
-                        break;
+                        continue;
                     case Opcodes.VarArg:
-                        break;
-                    case Opcodes.And:
-                        break;
-                    case Opcodes.PushVar:
-                        break;
-                    case Opcodes.Push:
-                        break;
-                    case Opcodes.Pop:
-                        break;
+                        continue;
                     default:
-                        break;
+                        continue;
                 }
             }
 
@@ -161,13 +217,21 @@ namespace zlua.VM
         /// </summary>
         /// <param name="i"></param>
         /// <returns></returns>
-        TValue RA(Instruction i) => Stack[_base + i.A];
-        TValue RB(Instruction i) => Stack[_base + i.B];
-        TValue RC(Instruction i) => Stack[_base + i.C];
+        [DebuggerStepThroughAttribute]
+        TValue R(int i) => Stack[_base + i];
+        [DebuggerStepThroughAttribute]
+        TValue RA(Bytecode i) => Stack[_base + i.A];
+        [DebuggerStepThroughAttribute]
+        TValue RB(Bytecode i) => Stack[_base + i.B];
+        [DebuggerStepThroughAttribute]
+        TValue RC(Bytecode i) => Stack[_base + i.C];
 
-        TValue RKB(Instruction i) => Instruction.is_k(i.B) ? k[Instruction.index_k(i.B)] : RB(i);
-        TValue RKC(Instruction i) => Instruction.is_k(i.C) ? k[Instruction.index_k(i.C)] : RC(i);
-        TValue KBx(Instruction i) => k[i.Bx];
+        [DebuggerStepThroughAttribute]
+        TValue RKB(Bytecode i) => Bytecode.IsK(i.B) ? k[Bytecode.IndexK(i.B)] : RB(i);
+        [DebuggerStepThroughAttribute]
+        TValue RKC(Bytecode i) => Bytecode.IsK(i.C) ? k[Bytecode.IndexK(i.C)] : RC(i);
+        [DebuggerStepThroughAttribute]
+        TValue KBx(Bytecode i) => k[i.Bx];
         #endregion
         #region other things
 
@@ -179,6 +243,24 @@ namespace zlua.VM
         public TValue ToNumber(TValue obj, TValue n)
         {
             return null;//TODO
+        }
+        /// <summary>
+        /// luaV_tostring
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public bool ToString(TValue obj)
+        {
+            return false;
+        }
+        /// <summary>
+        /// luaV_concat
+        /// </summary>
+        /// <param name="total"></param>
+        /// <param name="last"></param>
+        public void Concat(int total, int last)
+        {
+
         }
         /// <summary>
         /// equalobj
@@ -196,7 +278,7 @@ namespace zlua.VM
             Debug.Assert(t1.Type == t2.Type);
             switch (t1.Type) {
                 case LuaTypes.Nil: return true;
-                case LuaTypes.Number: return (TNumber)t1 == (TNumber)t2;
+                case LuaTypes.Number: return (double)t1 == (double)t2;
                 case LuaTypes.Boolean: return (bool)t1 == (bool)t2; //为什么cast多余，不应该啊。要么得改成字段访问
                 case LuaTypes.Userdata: return false;//TODO 有meta方法
                 case LuaTypes.Table: {
@@ -204,7 +286,7 @@ namespace zlua.VM
                         return false;//TODO metatable compare
                     }
                 default:
-                    return (GCObject)t1 == (GCObject)t2;
+                    return (TObject)t1 == (TObject)t2;
                     //TODO metatable compare???
             }
         }
@@ -218,13 +300,19 @@ namespace zlua.VM
         {
             //TODO, 要无限查元表。
         }
+        public void SetTable(TValue t, TValue key, TValue val)
+        {
+
+        }
+
         public bool LessThan(TValue lhs, TValue rhs)
         {
             if (lhs.Type != rhs.Type) throw new Exception();
-            if (lhs.tt_is_number) return (TNumber)lhs < (TNumber)rhs;
-            if (lhs.tt_is_string) return false;//TODO 字典序。或者你看标准库有没有
+            if (lhs.IsNumber) return (double)lhs < (double)rhs;
+            if (lhs.IsString) return false;//TODO 字典序。或者你看标准库有没有
             else return false; //TODO 调用meta方法
         }
+
         #endregion
 
     }
