@@ -40,20 +40,24 @@ namespace zlua.TypeModel
 
         public override string ToString()
         {
-            var _base = Type.ToString()+": ";
-            string more= " 要么补充，要么看watch下拉去吧";
+            var _base = Type.ToString() + ": ";
+            string more = " 要么补充，要么看watch下拉去吧";
             switch (Type) {
                 case LuaTypes.None:
                     break;
-                case LuaTypes.Nil:return "Nil";
+                case LuaTypes.Nil:
+                    return "Nil";
                     break;
-                case LuaTypes.Boolean:more = b.ToString();
+                case LuaTypes.Boolean:
+                    more = b.ToString();
                     break;
                 case LuaTypes.LightUserdata:
                     break;
-                case LuaTypes.Number:more = n.ToString();
+                case LuaTypes.Number:
+                    more = n.ToString();
                     break;
-                case LuaTypes.String:more = Str.ToString();
+                case LuaTypes.String:
+                    more = Str.ToString();
                     break;
                 case LuaTypes.Table:
                     break;
@@ -108,7 +112,7 @@ namespace zlua.TypeModel
         public static explicit operator TValue(double n) => new TValue(n);
         public static explicit operator TValue(TString tstr) => new TValue(tstr);
         public static explicit operator TValue(TTable table) => new TValue(table);
-        public static explicit operator TValue(TThread thread)=>new TValue(thread);
+        public static explicit operator TValue(TThread thread) => new TValue(thread);
 
         public static explicit operator TString(TValue tval) { Debug.Assert(tval.IsString); return tval.tobj as TString; }
         public static explicit operator string(TValue tval) { Debug.Assert(tval.IsString); return (string)(TString)tval; }
@@ -118,7 +122,7 @@ namespace zlua.TypeModel
         public static explicit operator TObject(TValue tval) => tval.tobj;
         public static explicit operator TTable(TValue tval) { Debug.Assert(tval.IsTable); return tval.tobj as TTable; }
         public static explicit operator Proto(TValue tval) { Debug.Assert(tval.IsLuaFunction); return tval.tobj as Proto; }
-        public static explicit operator TThread(TValue tval) { Debug.Assert(tval.IsThread);return tval.tobj as TThread; }
+        public static explicit operator TThread(TValue tval) { Debug.Assert(tval.IsThread); return tval.tobj as TThread; }
 
         public double N
         {
@@ -201,7 +205,7 @@ namespace zlua.TypeModel
             get => this;
             set /*copy the value part and type part*/
             {
-                Type = value.Type; 
+                Type = value.Type;
                 tobj = value.tobj;
                 n = value.n;
                 b = value.b;
@@ -373,7 +377,7 @@ namespace zlua.TypeModel
         Dictionary<TValue, TValue> hashTablePart;
         List<TValue> arrayPart;
 
-        public TTable(int sizeHashTablePart, int sizeArrayPart)
+        public TTable(int sizeArrayPart, int sizeHashTablePart)
         {
             hashTablePart = new Dictionary<TValue, TValue>(sizeHashTablePart);
             arrayPart = new List<TValue>(sizeArrayPart);
@@ -426,7 +430,12 @@ namespace zlua.TypeModel
                 return hashTablePart[k];
             return TValue.NilObject;
         }
-        TValue GetByInt(int key)
+        /// <summary>
+        /// luaH_getnum
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        public TValue GetByInt(int key)
         {
             if (key - 1 < arrayPart.Count) return arrayPart[key - 1];
             else {

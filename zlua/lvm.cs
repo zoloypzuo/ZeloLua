@@ -343,7 +343,11 @@ namespace zlua.VM
             if (lhs.IsString) return false;//TODO 字典序。或者你看标准库有没有
             else return false; //TODO 调用meta方法
         }
-
+        public  TValue this[int i]
+        {
+            get => Stack[i];
+            set => Stack[i] = value;
+        }
         #endregion
 
     }

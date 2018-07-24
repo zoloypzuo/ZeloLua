@@ -15,6 +15,7 @@ namespace zlua.API
 {
     public static class lapi
     {
+        #region push functions (C# -> L.Stack)
         /// <summary>
         /// luaA_pushobject
         /// </summary>
@@ -116,118 +117,8 @@ namespace zlua.API
         {
             L.Stack[L.top++] = Index2TVal(L, index);
         }
-        /// <summary>
-        /// lua_gettop
-        /// </summary>
-        /// <param name="L"></param>
-        /// <returns></returns>
-        public static int GetTop(this TThread L) => L.top - L._base;
-        /// <summary>
-        /// lua_call
-        /// </summary>
-        /// <param name="L"></param>
-        /// <param name="nArgs"></param>
-        /// <param name="nRetvals"></param>
-        public static void Call(this TThread L, int nArgs, int nRetvals)
-        {
-            int funcIndex = L.top - (nArgs + 1);
-            ldo.Call(L, funcIndex, nRetvals); //TODO 名字重复了，不好。而且签名是一样的。
-            //AdjustRetvals(L, nRetvals);
-        }
-        /// <summary>
-        /// adjustresults
-        /// </summary>
-        /// <param name="L"></param>
-        /// <param name="nRetvals"></param>
-        public static void AdjustRetvals(this TThread L, int nRetvals)
-        {
-            if (nRetvals == lua.MultiRet && L.top >= L.CurrCallInfo.top) L.CurrCallInfo.top = L.top;
-        }
-        /// <summary>
-        /// lua_createtable
-        /// </summary>
-        /// <param name="L"></param>
-        /// <param name="sizeArrayPart"></param>
-        /// <param name="sizeHashTablePart"></param>
-        public static void CreateTable(this TThread L, int sizeArrayPart, int sizeHashTablePart)
-        {
-            var new_table = new TTable(sizeHashTablePart, sizeArrayPart);
-            L.Stack.Add((TValue)new_table);
-        }
-
-        /// <summary>
-        /// get tvalue from stack, accept an signed index (which allows index that under 0) or pesudo index to index special variable like _G
-        /// 正数idx允许超界，返回nilObject，而负数不允许；
-        /// 伪索引包含：注册表，_G，C函数相关的两样东西：env和upvals，这点请阅读一下5.1 manual里C API处 3.4 CCLosure小节的笔记，总之是为了CClosure服务的
-        /// get env有一点困惑（他设置了L.env）但是无所谓，upvals数组同样是从1开始索引，超界返回nilObject（应该是个约定，正数索引都这样）
-        /// </summary>
-        public static TValue Index2TVal(this TThread L, int index)
-        {
-            if (index > 0) {
-                Debug.Assert(index <= L.CurrCallInfo.top - L._base); // check array boundary
-                int idx = L._base + (index - 1);
-                if (idx >= L.top) return TValue.NilObject;
-                else return L.Stack[idx];
-            } else if (index > lua.RegisteyIndex) /* -10000 < index < 0*/ {
-                Debug.Assert(index != 0 && -index <= L.top - L._base); // check array boundary
-                return L.Stack[L.top + index];
-            } else {
-                switch (index) {
-                    case lua.RegisteyIndex: return L.globalState.registry;
-                    case lua.EnvIndex: {
-                            L.env.Table = (L.CurrCallInfo.func.Cl as CSharpClosure).env;
-                            return L.env;
-                        }
-                    case lua.GlobalsIndex: return L.globalsTable;
-                    default: {
-                            CSharpClosure func = L.CurrCallInfo.func.Cl as CSharpClosure;
-                            index = lua.GlobalsIndex - index;
-                            return index <= func.NUpvals ? func.upvals[index - 1] : TValue.NilObject;
-                        }
-                }
-            }
-        }
-        /// <summary>
-        /// lua_getfield, get field from table (indexed by `index), and push the field into L.Stack
-        /// </summary>
-        /// <param name="L"></param>
-        /// <param name="index"></param>
-        /// <param name="key"></param>
-        public static void GetField(this TThread L, int index, string key)
-        {
-            var t = L.Index2TVal(index);
-            //TODO luaV_gettable, metable table
-        }
-
-        /// <summary>
-        /// lua_getmetable
-        /// </summary>
-        /// <param name="L"></param>
-        /// <param name="index"></param>
-        public static void GetMetatable(this TThread L, int index)
-        {
-            var obj = L.Index2TVal(index);
-            TValue mt = null;
-            switch (obj.Type) {
-                case LuaTypes.Table: mt = ((TTable)obj).metatable; break;
-                case LuaTypes.Userdata: break;
-                default: break;
-            }
-            if (mt != null)
-                L.Stack.Add(mt);
-        }
-        /// <summary>
-        /// lua_gettable
-        /// </summary>
-        /// <param name="L"></param>
-        /// <param name="index"></param>
-        public static void GetTable(this TThread L, int index)
-        {
-            var t = L.Index2TVal(index);
-            var top = L.Stack[L.top - 1];
-            L.GetTable(t, top, top);
-        }
-
+        #endregion
+        #region access functions (L.Stack -> C#)
         /// <summary>
         /// lua_type
         /// </summary>
@@ -318,9 +209,9 @@ namespace zlua.API
         /// <param name="L"></param>
         /// <param name="index"></param>
         /// <returns></returns>
-        public static double ToNumber(this TThread L,int index)
+        public static double ToNumber(this TThread L, int index)
         {
-
+            return 0;
         }
         /// <summary>
         /// lua_tointeger
@@ -328,9 +219,9 @@ namespace zlua.API
         /// <param name="L"></param>
         /// <param name="index"></param>
         /// <returns></returns>
-        public static int ToInteger(this TThread L,int index)
+        public static int ToInteger(this TThread L, int index)
         {
-
+            return 0;
         }
         /// <summary>
         /// lua_toboolean
@@ -338,19 +229,259 @@ namespace zlua.API
         /// <param name="L"></param>
         /// <param name="index"></param>
         /// <returns></returns>
-        public static bool ToBoolean(this TThread L,int index)
+        public static bool ToBoolean(this TThread L, int index)
         {
-
+            return false;
         }
         /// <summary>
         /// lua_tolstring
         /// </summary>
         /// <param name="L"></param>
         /// <param name="index"></param>
-        public static string ToString(this TThread L,int index)
+        public static string ToString(this TThread L, int index)
+        {
+            return null;
+        }
+        /// <summary>
+        /// lua_objlen
+        /// </summary>
+        /// <param name="L"></param>
+        /// <param name="index"></param>
+        /// <returns></returns>
+        public static int ObjLen(this TThread L, int index)
+        {
+            return 0;
+        }
+        /// <summary>
+        /// lua_tocfunction
+        /// </summary>
+        /// <param name="L"></param>
+        /// <param name="index"></param>
+        /// <returns></returns>
+        public static lua.CSharpFunction ToCSharpFunction(this TThread L, int index)
+        {
+            return null;
+        }
+        /// <summary>
+        /// lua_touserdata; `src handle both light and full ud
+        /// </summary>
+        /// <param name="L"></param>
+        /// <param name="index"></param>
+        /// <returns></returns>
+        public static object ToUserdata(this TThread L, int index)
+        {
+            return null;
+        }
+        /// <summary>
+        /// lua_tothread
+        /// </summary>
+        /// <param name="L"></param>
+        /// <param name="index"></param>
+        /// <returns></returns>
+        public static TThread ToThread(this TThread L, int index)
+        {
+            return null;
+        }
+        /// <summary>
+        /// lua_topointer; return all lua reference type as object 
+        /// </summary>
+        /// <param name="L"></param>
+        /// <param name="index"></param>
+        /// <returns></returns>
+        public static object ToPointer(this TThread L, int index)
+        {
+            return null;
+        }
+        #endregion
+        #region get functions (Lua -> L.Stack)
+        /// <summary>
+        /// lua_gettable; may call metamethold __index, which rawget does not
+        /// </summary>
+        /// <param name="L"></param>
+        /// <param name="index"></param>
+        public static void GetTable(this TThread L, int index)
+        {
+            var t = L.Index2TVal(index);
+            var top = L.Stack[L.top - 1];
+            L.GetTable(t, top, top);
+        }
+        /// <summary>
+        /// lua_getfield; get field from table (indexed by `index), and push the field into L.Stack
+        /// </summary>
+        /// <param name="L"></param>
+        /// <param name="index"></param>
+        /// <param name="key"></param>
+        public static void GetField(this TThread L, int index, string key)
+        {
+            var t = L.Index2TVal(index);
+            //TODO luaV_gettable, metable table
+        }
+        /// <summary>
+        /// lua_rawget; key is pushed, only find the value in the original table (thus metamethod __index is not called),
+        /// and set key to value, thus value is at the top (to save an entry =_=)
+        /// </summary>
+        /// <param name="L"></param>
+        /// <param name="index"></param>
+        public static void RawGet(this TThread L, int index)
+        {
+            TValue table = Index2TVal(L, index);
+            Debug.Assert(table.IsTable);
+            L.Stack[L.top - 1].TVal = table.Table.Get(L.Stack[L.top - 1]);
+        }
+
+        //实现决策】下面的代码L实现了indexer（用的多了自然要），之前写好的不会改，这样也好。Stack的访问仍然是像数组一样，而不是真正的Stack
+
+        /// <summary>
+        /// lua_rawgeti; key is int (compared to `rawget) and value is pushed
+        /// </summary>
+        /// <param name="L"></param>
+        /// <param name="index"></param>
+        public static void RawGetInt(this TThread L, int index, int n)
+        {
+            TValue table = Index2TVal(L, index);
+            Debug.Assert(table.IsTable);
+            L[L.top++] = table.Table.GetByInt(n);
+        }
+        /// <summary>
+        /// lua_createtable
+        /// </summary>
+        /// <param name="L"></param>
+        /// <param name="sizeArrayPart"></param>
+        /// <param name="sizeHashTablePart"></param>
+        public static void CreateTable(this TThread L, int sizeArrayPart, int sizeHashTablePart)
+        {
+            L[L.top++] = (TValue)new TTable(sizeHashTablePart: sizeHashTablePart, sizeArrayPart: sizeArrayPart);
+        }
+        /// <summary>
+        /// lua_getmetable
+        /// </summary>
+        /// <param name="L"></param>
+        /// <param name="index"></param>
+        public static void GetMetatable(this TThread L, int index)
+        {
+            var obj = L.Index2TVal(index);
+            TValue mt = null;
+            switch (obj.Type) {
+                case LuaTypes.Table: mt = ((TTable)obj).metatable; break;
+                case LuaTypes.Userdata: break;
+                default: break;
+            }
+            if (mt != null)
+                L.Stack.Add(mt);
+        }/// <summary>
+         /// lua_getfenv; get env of Function, Userdata and Thread
+         /// </summary>
+         /// <param name="L"></param>
+         /// <param name="index"></param>
+        public static void GetFEnv(this TThread L, int index)
         {
 
         }
-        public static 
+        #region set functions (L.Stack -> Lua)
+        /// <summary>
+        /// lua_settable; 
+        /// </summary>
+        /// <param name="L"></param>
+        /// <param name="index"></param>
+        public static void SetTable(this TThread L, int index)
+        {
+
+        }
+        /// <summary>
+        /// lua_setfield;
+        /// </summary>
+        /// <param name="L"></param>
+        /// <param name="index"></param>
+        /// <param name="k"></param>
+        public static void SetField(this TThread L, int index, string k)
+        {
+
+        }
+        public static void RawSet(this TThread L, int index)
+        {
+
+        }
+        public static void RawSetInt(this TThread L, int index, int n)
+        {
+
+        }
+        public static void SetMetatable(this TThread L, int objIndex)
+        {
+
+        }
+        public static void SetFenv(this TThread L, int index)
+        {
+
+        }
+        #endregion
+        #endregion
+        #region load and call functions (run Lua code)
+        /// <summary>
+        /// adjustresults
+        /// </summary>
+        /// <param name="L"></param>
+        /// <param name="nRetvals"></param>
+        static void AdjustRetvals(this TThread L, int nRetvals)
+        {
+            if (nRetvals == lua.MultiRet && L.top >= L.CurrCallInfo.top) L.CurrCallInfo.top = L.top;
+        }
+        /// <summary>
+        /// lua_call
+        /// </summary>
+        /// <param name="L"></param>
+        /// <param name="nArgs"></param>
+        /// <param name="nRetvals"></param>
+        public static void Call(this TThread L, int nArgs, int nRetvals)
+        {
+            int funcIndex = L.top - (nArgs + 1);
+            ldo.Call(L, funcIndex, nRetvals); //TODO 名字重复了，不好。而且签名是一样的。
+            //AdjustRetvals(L, nRetvals);
+        }
+        #endregion
+        #region other functions
+        #endregion
+        /// <summary>
+        /// lua_gettop
+        /// </summary>
+        /// <param name="L"></param>
+        /// <returns></returns>
+        public static int GetTop(this TThread L) => L.top - L._base;
+
+
+
+
+        /// <summary>
+        /// get tvalue from stack, accept an signed index (which allows index that under 0) or pesudo index to index special variable like _G
+        /// 正数idx允许超界，返回nilObject，而负数不允许；
+        /// 伪索引包含：注册表，_G，C函数相关的两样东西：env和upvals，这点请阅读一下5.1 manual里C API处 3.4 CCLosure小节的笔记，总之是为了CClosure服务的
+        /// get env有一点困惑（他设置了L.env）但是无所谓，upvals数组同样是从1开始索引，超界返回nilObject（应该是个约定，正数索引都这样）
+        /// </summary>
+        public static TValue Index2TVal(this TThread L, int index)
+        {
+            if (index > 0) {
+                Debug.Assert(index <= L.CurrCallInfo.top - L._base); // check array boundary
+                int idx = L._base + (index - 1);
+                if (idx >= L.top) return TValue.NilObject;
+                else return L.Stack[idx];
+            } else if (index > lua.RegisteyIndex) /* -10000 < index < 0*/ {
+                Debug.Assert(index != 0 && -index <= L.top - L._base); // check array boundary
+                return L.Stack[L.top + index];
+            } else {
+                switch (index) {
+                    case lua.RegisteyIndex: return L.globalState.registry;
+                    case lua.EnvIndex: {
+                            L.env.Table = (L.CurrCallInfo.func.Cl as CSharpClosure).env;
+                            return L.env;
+                        }
+                    case lua.GlobalsIndex: return L.globalsTable;
+                    default: {
+                            CSharpClosure func = L.CurrCallInfo.func.Cl as CSharpClosure;
+                            index = lua.GlobalsIndex - index;
+                            return index <= func.NUpvals ? func.upvals[index - 1] : TValue.NilObject;
+                        }
+                }
+            }
+        }
+
     }
 }
