@@ -15,10 +15,12 @@ namespace zlua.TypeModel
 
     /// <summary>
     /// the general type of lua; T means "tagged";  size: TODO 8+8+4=20Byte
+    /// 实现决策】Value完全展开，不用structLayout，因为不能一致，TObject是class，不能用
+    /// light ud没了解足够，先不管
     /// </summary>
     public class TValue
     {
-        #region fields
+        #region value fields
         /// <summary>
         /// the reference type object
         /// </summary>
@@ -30,52 +32,14 @@ namespace zlua.TypeModel
         /// <summary>
         /// the int type of lua
         /// </summary>
-        int i; //用于index等
         bool b;
+        #endregion
         /// <summary>
         /// the type tag; readonly externly, modified by setting `this as a specific value
         /// </summary>
         public LuaTypes Type { private set; get; }
-        #endregion
 
-        public override string ToString()
-        {
-            var _base = Type.ToString() + ": ";
-            string more = " 要么补充，要么看watch下拉去吧";
-            switch (Type) {
-                case LuaTypes.None:
-                    break;
-                case LuaTypes.Nil:
-                    return "Nil";
-                    break;
-                case LuaTypes.Boolean:
-                    more = b.ToString();
-                    break;
-                case LuaTypes.LightUserdata:
-                    break;
-                case LuaTypes.Number:
-                    more = n.ToString();
-                    break;
-                case LuaTypes.String:
-                    more = Str.ToString();
-                    break;
-                case LuaTypes.Table:
-                    break;
-                case LuaTypes.Function:
-                    break;
-                case LuaTypes.Userdata:
-                    break;
-                case LuaTypes.Thread:
-                    break;
-                case LuaTypes.Closure:
-                    break;
-                case LuaTypes.Int:
-                    break;
-            }
-            return _base + more;
-        }
         #region ctors getters setters
-
         public TValue()
         {
             Type = LuaTypes.Nil;
@@ -106,6 +70,11 @@ namespace zlua.TypeModel
             Type = LuaTypes.Thread;
             this.tobj = Thread;
         }
+        public TValue(Userdata userdata)
+        {
+            Type = LuaTypes.Userdata;
+            tobj = userdata;
+        }
 
         public static explicit operator TValue(string str) => new TValue((TString)str);
         public static explicit operator TValue(bool b) => new TValue(b);
@@ -113,17 +82,17 @@ namespace zlua.TypeModel
         public static explicit operator TValue(TString tstr) => new TValue(tstr);
         public static explicit operator TValue(TTable table) => new TValue(table);
         public static explicit operator TValue(TThread thread) => new TValue(thread);
+        public static explicit operator TValue(Userdata userdata)=>new TValue(userdata);
 
         public static explicit operator TString(TValue tval) { Debug.Assert(tval.IsString); return tval.tobj as TString; }
         public static explicit operator string(TValue tval) { Debug.Assert(tval.IsString); return (string)(TString)tval; }
         public static explicit operator bool(TValue tval) { Debug.Assert(tval.IsBool); return tval.b; }
-        public static explicit operator int(TValue tval) => tval.i; //TODO 不应该有
         public static explicit operator double(TValue tval) { Debug.Assert(tval.IsNumber); return tval.n; }
         public static explicit operator TObject(TValue tval) => tval.tobj;
         public static explicit operator TTable(TValue tval) { Debug.Assert(tval.IsTable); return tval.tobj as TTable; }
         public static explicit operator Proto(TValue tval) { Debug.Assert(tval.IsLuaFunction); return tval.tobj as Proto; }
         public static explicit operator TThread(TValue tval) { Debug.Assert(tval.IsThread); return tval.tobj as TThread; }
-
+        public static explicit operator Userdata(TValue tval) { Debug.Assert(tval.IsUserdata);return tval.tobj as Userdata; }
         public double N
         {
             get => (double)this;
@@ -160,7 +129,7 @@ namespace zlua.TypeModel
             get => (Closure)this;
             set
             {
-                Type = LuaTypes.Closure;
+                Type = LuaTypes.Function;
                 tobj = value;
             }
         }
@@ -187,7 +156,7 @@ namespace zlua.TypeModel
             get => (Proto)this;
             set
             {
-                Type = LuaTypes.Function;//TODO function???
+                Type = LuaTypes.Function;
                 tobj = value;
             }
         }
@@ -197,6 +166,15 @@ namespace zlua.TypeModel
             set
             {
                 Type = LuaTypes.Table;
+                tobj = value;
+            }
+        }
+        public Userdata Userdata
+        {
+            get => (Userdata)this;
+            set
+            {
+                Type = LuaTypes.Userdata;
                 tobj = value;
             }
         }
@@ -213,11 +191,9 @@ namespace zlua.TypeModel
         }
         public void SetNil() => Type = LuaTypes.Nil;
         #endregion
-
         #region operators
 
         #endregion
-
         #region propertys to test type 不做源代码引用，因为太简单了。不要浪费时间增加累赘
         public bool IsNil { get => Type == LuaTypes.Nil; }
         public bool IsNumber { get => Type == LuaTypes.Number; }
@@ -235,15 +211,21 @@ namespace zlua.TypeModel
         public bool IsCollectable { get => (int)Type >= (int)LuaTypes.String; }
         public bool IsFalse { get => IsNil || IsBool && (bool)this == false; }
         /// <summary>
-        /// luaO_nilobject_
+        /// luaO_nilobject_; 单例
         /// </summary>
         public static readonly TValue NilObject = new TValue { Type = LuaTypes.Nil };
-
-        public int str2d(string s, double result)
+        /// <summary>
+        /// luaO_str2d; 简单地包装Parse，返回成功和double
+        /// src返回bool用参数返回double，我改了】他除了了x结尾的”hex const“没空研究，放弃
+        /// </summary>
+        public static double Str2Num(string s, out bool canBeConvertedToNum)
         {
-            return 1;
+            double _ret;
+            canBeConvertedToNum = Double.TryParse(s, out _ret);
+            return _ret;
         }
         #endregion
+        #region overload basic functions
         /// <summary>
         /// luaO_rawequalObj
         /// </summary>
@@ -261,7 +243,7 @@ namespace zlua.TypeModel
                     case LuaTypes.Boolean:
                         return (bool)this == (bool)other;
                     case LuaTypes.String:
-                        return (TString)this == (TString)other;
+                        return (string)this == (string)other;
                     default:
                         Debug.Assert(other.IsCollectable);
                         return (TObject)this == (TObject)other;
@@ -276,6 +258,40 @@ namespace zlua.TypeModel
                 default: return base.GetHashCode();
             }
         }
+
+        public override string ToString()
+        {
+            var type = Type.ToString() + ": ";
+            string more = " 要么补充，要么看watch下拉去吧";
+            switch (Type) {
+                case LuaTypes.None:
+                    break;
+                case LuaTypes.Nil:
+                    return "Nil";
+                    break;
+                case LuaTypes.Boolean:
+                    more = b.ToString();
+                    break;
+                case LuaTypes.LightUserdata:
+                    break;
+                case LuaTypes.Number:
+                    more = n.ToString();
+                    break;
+                case LuaTypes.String:
+                    more = Str.ToString();
+                    break;
+                case LuaTypes.Table:
+                    break;
+                case LuaTypes.Function:
+                    break;
+                case LuaTypes.Userdata:
+                    break;
+                case LuaTypes.Thread:
+                    break;
+            }
+            return type + more;
+        }
+        #endregion
     }
     /// <summary>
     /// is gcobject, but is not a primitive type
@@ -366,14 +382,15 @@ namespace zlua.TypeModel
     {
     }
     //TODO
-    public class LightUserdata : TObject
+    public class Userdata : TObject
     {
-
+        public TTable metaTable;
+        public TTable env;
     }
 
     public class TTable : TObject, IEnumerable<KeyValuePair<TValue, TValue>>
     {
-        public TValue metatable;
+        public TTable metatable;
         Dictionary<TValue, TValue> hashTablePart;
         List<TValue> arrayPart;
 
@@ -423,7 +440,7 @@ namespace zlua.TypeModel
                 return new_val;
             }
         }
-        TValue GetByStr(TString key)
+        public TValue GetByStr(TString key)
         {
             var k = (TValue)key;
             if (hashTablePart.ContainsKey(k))

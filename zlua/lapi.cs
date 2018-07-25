@@ -8,6 +8,7 @@ using zlua.TypeModel;
 using zlua.CallSystem;
 using System.Diagnostics;
 using zlua;
+using zlua.Configuration;
 /// <summary>
 /// CSharp API
 /// </summary>
@@ -131,6 +132,17 @@ namespace zlua.API
             return (o == TValue.NilObject) ? LuaTypes.None : o.Type;
         }
         /// <summary>
+        /// lua_typename; 
+        /// 没用，仅仅是为了与src API一致，完整】
+        /// </summary>
+        /// <param name="L"></param>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        public static string TypeName(this TThread L, LuaTypes type)
+        {
+            return type == LuaTypes.None ? "no value" : type.ToString();
+        }
+        /// <summary>
         /// lua_iscfunction
         /// </summary>
         /// <param name="index"></param>
@@ -156,7 +168,7 @@ namespace zlua.API
         }
         /// <summary>
         /// lua_isuserdata; `src check both light and full ud
-        /// 没有引用】
+        /// 没有引用】和src不一致，他把light 和full都算ud】
         /// </summary>
         /// <param name=""></param>
         /// <param name="index"></param>
@@ -204,24 +216,30 @@ namespace zlua.API
             return either_nil ? false : L.LessThan(o1, o2);
         }
         /// <summary>
-        /// lua_tonumber
+        /// lua_tonumber; 即使转换失败，返回0
         /// </summary>
         /// <param name="L"></param>
         /// <param name="index"></param>
         /// <returns></returns>
         public static double ToNumber(this TThread L, int index)
         {
-            return 0;
+            TValue o = Index2TVal(L, index);
+            bool canBeConvertedToNum;
+            double num = (double)L.ToNumber(o, out canBeConvertedToNum);
+            if (canBeConvertedToNum)
+                return num;
+            else
+                return 0;
         }
         /// <summary>
-        /// lua_tointeger
+        /// lua_tointeger; 基于ToNumber，转成int，四舍五入
         /// </summary>
         /// <param name="L"></param>
         /// <param name="index"></param>
         /// <returns></returns>
         public static int ToInteger(this TThread L, int index)
         {
-            return 0;
+            return luaconf.Double2Integer(ToNumber(L, index));
         }
         /// <summary>
         /// lua_toboolean
@@ -231,7 +249,7 @@ namespace zlua.API
         /// <returns></returns>
         public static bool ToBoolean(this TThread L, int index)
         {
-            return false;
+            return !Index2TVal(L,index).IsFalse;
         }
         /// <summary>
         /// lua_tolstring
@@ -439,7 +457,6 @@ namespace zlua.API
         }
         #endregion
         #region other functions
-        #endregion
         /// <summary>
         /// lua_gettop
         /// </summary>
@@ -447,8 +464,10 @@ namespace zlua.API
         /// <returns></returns>
         public static int GetTop(this TThread L) => L.top - L._base;
 
-
-
+        public static TTable GetCurrEnv(this TThread L)
+        {
+            return null;
+        }
 
         /// <summary>
         /// get tvalue from stack, accept an signed index (which allows index that under 0) or pesudo index to index special variable like _G
@@ -482,6 +501,7 @@ namespace zlua.API
                 }
             }
         }
-
+        #endregion
+        
     }
 }

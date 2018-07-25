@@ -9,11 +9,17 @@ using System.Threading.Tasks;
 namespace zlua.Configuration
 {
     using TNumber = Double;
-    static class luaconf
+    public static class luaconf
     {
         public const int MaxCalls = 200;
         public const int MaxRegs = 200;
         public const int MaxUpVals = 60;
         public static bool IsNaN(TNumber a) => !(a != a);
+        /// <summary>
+        /// lua_number2integer, lua_number2int; 四舍五入
+        /// </summary>
+        /// <param name="d"></param>
+        /// <returns></returns>
+        public static int Double2Integer(double d) => (int)Math.Round(d, MidpointRounding.AwayFromZero);
     }
 }

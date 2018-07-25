@@ -17,17 +17,17 @@ namespace zlua.VM
 {
     public class TThread : TObject
     {
+        #region fields
         public List<TValue> Stack;
         /// <summary>
-        /// = callinfo_stack.top().top 
+        /// callinfo_stack.top().top 
         /// </summary>
-        public int top; 
+        public int top;
         /// <summary>
-        /// = callinfo_stack.top()._base
+        /// callinfo_stack.top()._base
         /// </summary>
         public int _base; // "base" is a C# keyword, ...
         public CallInfo CurrCallInfo { get => callinfoStack.Peek(); }
-
         public Stack<CallInfo> callinfoStack;
         const int BasicCISize = 8;
         const int BasicStackSize = 40;
@@ -50,11 +50,11 @@ namespace zlua.VM
         /// "temp place for env", used only in index2adr currently
         /// </summary>
         public TValue env;
+        #endregion
 
         /// <summary>
         /// lua_newstate    
         /// </summary>
-        /// <param name="main_func"></param>
         public TThread()
         {
             globalState = new GlobalState.GlobalState() {
@@ -115,7 +115,6 @@ namespace zlua.VM
                     case Opcodes.GetGlobal: {
                             TValue rb = KBx(instr);
                             Debug.Assert(rb.IsString);
-                            //TODO what is `Protect, why save savedpc and 
                             GetTable((TValue)cl.env, rb, ra);
                             continue;
                         }
@@ -137,7 +136,6 @@ namespace zlua.VM
                     case Opcodes.NewTable: {
                             int b = instr.B;
                             int c = instr.C;
-                            //TODO luaO_fb2int, float byte 2 int
                             ra.Table = new TTable(c, b);
                             continue;
                         }
@@ -200,7 +198,7 @@ namespace zlua.VM
                             if (--level == 0) /* chunk executed, return*/
                                 return;
                             else { /*continue the execution*/
-                                if (i != 0) 
+                                if (i != 0)
                                     top = CurrCallInfo.top;
                                 goto reentry;
                             }
@@ -267,14 +265,30 @@ namespace zlua.VM
         #region other things
 
         /// <summary>
-        /// luaV_tonumber
+        /// luaV_tonumber; number直接返回，string如果能parse返回新的转成double的TValue，否则返回null
+        /// src的参数n是没有必要的
         /// </summary>
         /// <param name="index"></param>
         /// <returns></returns>
-        public TValue ToNumber(TValue obj, TValue n)
+        public TValue ToNumber(TValue obj, out bool canBeConvertedToNum)
         {
-            return null;//TODO
+            canBeConvertedToNum = true;
+            if (obj.IsNumber) return obj;
+            if (obj.IsString) {
+                double num = TValue.Str2Num((string)obj, out canBeConvertedToNum);
+                if (canBeConvertedToNum)
+                    return (TValue)num;
+            }
+            canBeConvertedToNum = false;
+            return null;
         }
+        /// <summary>
+        /// tonumber；返回是否能转成number（number和能转的string），如果是后者，原地修改为number类型
+        /// 原来的命名令人困惑，因为他确实是tonumber，有副作用】实现决策】放弃这个函数，没有任何意义，让人困惑。他只是为了短路求值对luaV tonumber包装了
+        /// 而且是错的。我确认过了。他的n没有malloc就访问字段。所以彻底放弃，只实现API为目的
+        /// </summary>
+        //bool TryToNumber(TValue obj) => obj.IsNumber || ToNumber(obj) != null;
+
         /// <summary>
         /// luaV_tostring
         /// </summary>
@@ -295,6 +309,7 @@ namespace zlua.VM
         }
         /// <summary>
         /// equalobj
+        /// 实现决策】不调用元方法的rawequal作为Equals重载，这个是调用的，单独写一个函数
         /// </summary>
         public bool EqualObj(TValue o1, TValue o2) => (o1.Type == o2.Type) && EqualVal(o1, o2);
         /// <summary>
@@ -343,7 +358,7 @@ namespace zlua.VM
             if (lhs.IsString) return false;//TODO 字典序。或者你看标准库有没有
             else return false; //TODO 调用meta方法
         }
-        public  TValue this[int i]
+        public TValue this[int i]
         {
             get => Stack[i];
             set => Stack[i] = value;
@@ -354,7 +369,7 @@ namespace zlua.VM
     /// <summary>
     /// protected call
     /// </summary>
-    public class CallS { public TValue func; public int n_retvals; }
+    //public class CallS { public TValue func; public int n_retvals; }
     public class CallInfo
     {
         public TValue func;
@@ -364,6 +379,6 @@ namespace zlua.VM
         /// saved pc when call function, index of instruction array
         /// </summary>
         public int savedpc;
-        int n_retvals;
+        int nRetvals;
     }
 }

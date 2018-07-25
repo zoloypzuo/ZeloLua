@@ -23,11 +23,12 @@ namespace zlua
         Number = 3,
         String = 4,
         Table = 5,
-        Function = 6, // lua src's Function TODO
+        Function = 6,
         Userdata = 7,
         Thread = 8,
-        Closure = 9, //自己加的
-        Int = 10,  //自己加的，TODO这肯定是错的。
+        /*extra tags*/
+        Proto=9,
+        Upval=10
     }
     /// <summary>
     /// lua接口

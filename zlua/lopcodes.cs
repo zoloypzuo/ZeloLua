@@ -188,6 +188,7 @@ namespace zlua.ISA
 
     public enum Opcodes
     {
+        /* mov类*/
         Move,
         LoadK,
         LoadBool,
@@ -198,8 +199,10 @@ namespace zlua.ISA
         SetGlobal,
         SetUpval,
         SetTable,
+
         NewTable,
         Self,
+        /* 算术运算类*/
         Add,
         Sub,
         Mul,
@@ -207,6 +210,7 @@ namespace zlua.ISA
         Mod,
         Pow,
         Unm,
+        /* 关系运算 逻辑运算 jmp*/
         Not,
         Len,
         Concat,
@@ -216,15 +220,20 @@ namespace zlua.ISA
         Le,
         Test,
         Testset,
+        /* 调用*/
         Call,
         TailCall,
         Return,
+        /* 循环*/
         ForLoop,
         ForPrep,
         TForLoop,
+        /* 特殊，最后补上即可*/
         SetList,
+
         Close,
         Closure,
+        /* 特殊，最后补上即可*/
         VarArg,
     }
 }
