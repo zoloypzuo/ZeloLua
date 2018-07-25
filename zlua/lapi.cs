@@ -378,14 +378,14 @@ namespace zlua.API
         public static void GetMetatable(this TThread L, int index)
         {
             var obj = L.Index2TVal(index);
-            TValue mt = null;
+            TTable mt = null;
             switch (obj.Type) {
                 case LuaTypes.Table: mt = ((TTable)obj).metatable; break;
                 case LuaTypes.Userdata: break;
                 default: break;
             }
             if (mt != null)
-                L.Stack.Add(mt);
+                L[L.top++].Table = mt;
         }/// <summary>
          /// lua_getfenv; get env of Function, Userdata and Thread
          /// </summary>
@@ -489,12 +489,12 @@ namespace zlua.API
                 switch (index) {
                     case lua.RegisteyIndex: return L.globalState.registry;
                     case lua.EnvIndex: {
-                            L.env.Table = (L.CurrCallInfo.func.Cl as CSharpClosure).env;
+                            L.env.Table = (L[L.CurrCallInfo.funcIndex].Cl as CSharpClosure).env;
                             return L.env;
                         }
                     case lua.GlobalsIndex: return L.globalsTable;
                     default: {
-                            CSharpClosure func = L.CurrCallInfo.func.Cl as CSharpClosure;
+                            CSharpClosure func = L[L.CurrCallInfo.funcIndex].Cl as CSharpClosure;
                             index = lua.GlobalsIndex - index;
                             return index <= func.NUpvals ? func.upvals[index - 1] : TValue.NilObject;
                         }

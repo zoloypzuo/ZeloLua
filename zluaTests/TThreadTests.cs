@@ -8,6 +8,10 @@ using System.Threading.Tasks;
 using zlua.ISA;
 using zlua.TypeModel;
 using zlua.API;
+using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
+
 namespace zlua.VM.Tests
 {
     [TestClass()]
@@ -56,6 +60,10 @@ namespace zlua.VM.Tests
                 },
                 inner_funcs = new List<Proto> { new Proto()}
             };
+            IFormatter formatter = new BinaryFormatter();
+            Stream stream = new FileStream("MyFile.bin", FileMode.Create, FileAccess.Write, FileShare.None);
+            formatter.Serialize(stream, p);
+            stream.Close();
             Closure closure = new LuaClosure((TTable)L.globalsTable, 0, p);
             L.Stack[L.top].Cl = closure;
             L.top++;

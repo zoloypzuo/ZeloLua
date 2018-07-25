@@ -18,6 +18,7 @@ namespace zlua.TypeModel
     /// 实现决策】Value完全展开，不用structLayout，因为不能一致，TObject是class，不能用
     /// light ud没了解足够，先不管
     /// </summary>
+    [Serializable]
     public class TValue
     {
         #region value fields
@@ -206,6 +207,7 @@ namespace zlua.TypeModel
         public bool IsLightUserdata { get => Type == LuaTypes.LightUserdata; }
         public bool IsCSharpFunction { get => Type == LuaTypes.Function && (tobj as Closure).IsCharp; }
         public bool IsLuaFunction { get => Type == LuaTypes.Function && !(tobj as Closure).IsCharp; }
+        public bool IsFunction { get => Type == LuaTypes.Function; }
         #endregion
         #region other functions
         public bool IsCollectable { get => (int)Type >= (int)LuaTypes.String; }
@@ -296,6 +298,7 @@ namespace zlua.TypeModel
     /// <summary>
     /// is gcobject, but is not a primitive type
     /// </summary>
+    [Serializable]
     public class Proto : TObject
     {
         //public Proto parent;
@@ -309,6 +312,7 @@ namespace zlua.TypeModel
         public int nUpvals;
     }
     //TODO
+    [Serializable]
     public class LocVar { public string var_name; public int startpc; public int endpc; }
     //TODO
     public class FuncState
@@ -358,6 +362,7 @@ namespace zlua.TypeModel
     /// <summary>
     /// the string type of lua, just warpper of C# string
     /// </summary>
+    [Serializable]
     public class TString : TObject
     {
 
@@ -378,6 +383,7 @@ namespace zlua.TypeModel
     /// <summary>
     /// GCObject; base class of all reference type objects in lua
     /// </summary>
+    [Serializable]
     public class TObject
     {
     }

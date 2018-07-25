@@ -48,6 +48,7 @@ namespace zlua.ISA
     /// <summary>
     /// byte code instruction
     /// </summary>
+    [Serializable]
     public struct Bytecode : IInstruction
     {
         uint i;

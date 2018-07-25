@@ -58,5 +58,6 @@ namespace zlua
         #endregion
         public static void GetGlobal(this TThread L, TString s) => L.GetField(GlobalsIndex, (string)s);
         public delegate int CSharpFunction(TThread L);
+        public const int MinStackSizeForCSharpFunction = 20;
     }
 }

@@ -10,6 +10,7 @@ using System.Diagnostics;
 using zlua.API;
 using zlua.CallSystem;
 using zlua.FuncAux;
+using zlua.Metamethod;
 /// <summary>
 /// 虚拟机
 /// </summary>
@@ -27,6 +28,7 @@ namespace zlua.VM
         /// callinfo_stack.top()._base
         /// </summary>
         public int _base; // "base" is a C# keyword, ...
+        public int stackLastFree;
         public CallInfo CurrCallInfo { get => callinfoStack.Peek(); }
         public Stack<CallInfo> callinfoStack;
         const int BasicCISize = 8;
@@ -83,7 +85,7 @@ namespace zlua.VM
             reentry:
             //Debug.Assert(CurrCallInfo.func.IsLuaFunction);
             pc = savedpc;
-            cl = CurrCallInfo.func.Cl as LuaClosure;
+            cl = this[CurrCallInfo.funcIndex].Cl as LuaClosure;
             k = cl.p.k;
             while (true) {
                 instr = codes[pc++];
@@ -145,8 +147,16 @@ namespace zlua.VM
                             GetTable(rb, RKC(instr), ra);
                             continue;
                         }
-                    case Opcodes.Add:
-                        continue;
+                    case Opcodes.Add: {
+                            TValue rb = RKB(instr);
+                            TValue rc = RKC(instr);
+                            double nb = (double)ToNumber(rb, out bool b);
+                            double nc = (double)ToNumber(rc, out bool c);
+                            if (b && c) ra.N = nb + nc;
+                            else
+                                CallBinaryMetamethod(rb, rc, ra, MetamethodTypes.Add);
+                            continue;
+                        }
                     case Opcodes.Sub:
                         continue;
                     case Opcodes.Mul:
@@ -363,6 +373,49 @@ namespace zlua.VM
             get => Stack[i];
             set => Stack[i] = value;
         }
+        /// <summary>
+        /// Arith; call metamethod
+        /// 实现决策】src为什么使用亢余的写法。莫名其妙，我把cast str到num的部分转移到execute里了，这个函数删除，直接使用callTMmeta
+        /// </summary>
+        //void Arith(TValue ra, TValue rb, TValue rc, MetamethodTypes metamethodType)
+        //{
+
+        //}
+        /// <summary>
+        /// call_binTM
+        /// </summary>
+        /// <param name="lhs"></param>
+        /// <param name="rhs"></param>
+        /// <param name="result"></param>
+        /// <param name="metamethodType"></param>
+        /// <returns></returns>
+        bool CallBinaryMetamethod(TValue lhs, TValue rhs, TValue result, MetamethodTypes metamethodType)
+        {
+            result = null;
+            TValue metamethod = ltm.GetMetamethod(this, lhs, metamethodType);
+            if (metamethod.IsNil)
+                metamethod = ltm.GetMetamethod(this, rhs, metamethodType);
+            if (metamethod.IsNil)
+                return false;
+            result.TVal = CallMetamethod(metamethod, lhs, rhs);
+            return true;
+        }
+        /// <summary>
+        /// callTMres
+        /// </summary>
+        /// <param name="result"></param>
+        /// <param name="metamethod"></param>
+        /// <param name="lhs"></param>
+        /// <param name="rhs"></param>
+        TValue CallMetamethod(TValue metamethod, TValue lhs, TValue rhs)
+        {
+            /* push func and 2 args*/
+            this[top++].TVal = metamethod;
+            this[top++].TVal = lhs;
+            this[top++].TVal = rhs;
+            ldo.Call(this, top - 3, 1);
+            return this[--top]; //TODO call做了什么，result放在哪里
+        }
         #endregion
 
     }
@@ -372,13 +425,13 @@ namespace zlua.VM
     //public class CallS { public TValue func; public int n_retvals; }
     public class CallInfo
     {
-        public TValue func;
+        public int funcIndex;
         public int _base; // = func+1
         public int top;
         /// <summary>
         /// saved pc when call function, index of instruction array
         /// </summary>
         public int savedpc;
-        int nRetvals;
+        public int nRetvals;
     }
 }
