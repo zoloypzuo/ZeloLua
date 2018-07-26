@@ -18,7 +18,7 @@ namespace zlua.GlobalState
     {
         public TValue registry;
         public TThread mainThread;
-        public TTable[] metaTableForBasicType = new TTable[(int)LuaTypes.Thread+1];
+        public TTable[] metaTableForBasicType = new TTable[(int)LuaTypes.Thread + 1];
         public TString[] metaMethodNames = new TString[(int)MetamethodTypes.N];
     }
 }

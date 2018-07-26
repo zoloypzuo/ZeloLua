@@ -55,7 +55,6 @@ namespace zlua.ISA
         /// <summary>
         /// 实现决策】struct本身语义就是与int相等，因此只允许使用cast
         /// </summary>
-        /// <param name="i"></param>
         Bytecode(uint i)
         {
             this.i = i;
@@ -167,8 +166,7 @@ namespace zlua.ISA
         /// if x[7] (in bit) is 1, return true, and RKB returns KB
         /// </summary>
         /// <param name="x">B or C</param>
-        /// <returns></returns>
-        public static bool IsK(int x) => (x & (1 << (SizeB - 1))) != 0;
+                public static bool IsK(int x) => (x & (1 << (SizeB - 1))) != 0;
         public static int IndexK(int x) => x & ~(1 << (SizeB - 1));
         public static List<Bytecode> Gen(uint[] hexs)
         {
@@ -181,7 +179,7 @@ namespace zlua.ISA
         public override string ToString()
         {
             return Opcode.ToString() + " A: " + A.ToString() +
-               " B: " + B.ToString() + " C: " + C.ToString() + 
+               " B: " + B.ToString() + " C: " + C.ToString() +
                " Bx: " + Bx.ToString();
         }
         #endregion

@@ -27,8 +27,8 @@ namespace zlua
         Userdata = 7,
         Thread = 8,
         /*extra tags*/
-        Proto=9,
-        Upval=10
+        Proto = 9,
+        Upval = 10
     }
     /// <summary>
     /// lua接口
@@ -40,7 +40,6 @@ namespace zlua
         /// luaL_dofile, luaB_dofile, dofile
         /// 实现决策】dofile在src中共有三处，luaB的实现简单，从luaD_call开始，lua.c的dofile不知道包装了什么鬼，不允许实现;但是lua.c是独立解释器，因此把实现放在这里
         /// </summary>
-        /// <param name="path"></param>
         public static void DoFile(this TThread L, string path)
         {
             L.LoadFile(path);
@@ -56,7 +55,7 @@ namespace zlua
         public const int GlobalsIndex = -10002;
         public static int UpvalIndex(int index) => GlobalsIndex - index;
         #endregion
-        public static void GetGlobal(this TThread L, TString s) => L.GetField(GlobalsIndex, (string)s);
+        public static void GetGlobal(this TThread L, TString s) => L.GetField(GlobalsIndex, (string)s); //没有引用】
         public delegate int CSharpFunction(TThread L);
         public const int MinStackSizeForCSharpFunction = 20;
     }

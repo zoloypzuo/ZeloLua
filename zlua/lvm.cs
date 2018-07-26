@@ -21,13 +21,16 @@ namespace zlua.VM
         #region fields
         public List<TValue> Stack;
         /// <summary>
-        /// callinfo_stack.top().top 
+        /// callinfo_stack.top().top; lua栈遵循栈约定：top指向第一个可用位置，每次push时 top++ = value
         /// </summary>
         public int top;
         /// <summary>
         /// callinfo_stack.top()._base
         /// </summary>
         public int _base; // "base" is a C# keyword, ...
+        /// <summary>
+        /// 标记分配的大小
+        /// </summary>
         public int stackLastFree;
         public CallInfo CurrCallInfo { get => callinfoStack.Peek(); }
         public Stack<CallInfo> callinfoStack;
@@ -154,28 +157,100 @@ namespace zlua.VM
                             double nc = (double)ToNumber(rc, out bool c);
                             if (b && c) ra.N = nb + nc;
                             else
-                                CallBinaryMetamethod(rb, rc, ra, MetamethodTypes.Add);
+                                if (!CallBinaryMetamethod(rb, rc, ra, MetamethodTypes.Add))
+                                throw new ArithmeticException("operands cannot be added");
                             continue;
                         }
-                    case Opcodes.Sub:
-                        continue;
-                    case Opcodes.Mul:
-                        continue;
-                    case Opcodes.Div:
-                        continue;
-                    case Opcodes.Mod:
-                        continue;
-                    case Opcodes.Pow:
-                        continue;
-                    case Opcodes.Unm:
-                        continue;
+                    case Opcodes.Sub: {
+                            TValue rb = RKB(instr);
+                            TValue rc = RKC(instr);
+                            double nb = (double)ToNumber(rb, out bool b);
+                            double nc = (double)ToNumber(rc, out bool c);
+                            if (b && c) ra.N = nb - nc;
+                            else
+                                if (!CallBinaryMetamethod(rb, rc, ra, MetamethodTypes.Sub))
+                                throw new ArithmeticException("operands cannot be subtracted");
+                            continue;
+                        }
+                    case Opcodes.Mul: {
+                            TValue rb = RKB(instr);
+                            TValue rc = RKC(instr);
+                            double nb = (double)ToNumber(rb, out bool b);
+                            double nc = (double)ToNumber(rc, out bool c);
+                            if (b && c) ra.N = nb * nc;
+                            else
+                                if (!CallBinaryMetamethod(rb, rc, ra, MetamethodTypes.Mul))
+                                throw new ArithmeticException("operands cannot be multiplied");
+                            continue;
+                        }
+                    case Opcodes.Div: {
+                            TValue rb = RKB(instr);
+                            TValue rc = RKC(instr);
+                            double nb = (double)ToNumber(rb, out bool b);
+                            double nc = (double)ToNumber(rc, out bool c);
+                            if (b && c) ra.N = nb / nc;
+                            else
+                                if (!CallBinaryMetamethod(rb, rc, ra, MetamethodTypes.Div))
+                                throw new ArithmeticException("operands cannot be divided");
+                            continue;
+                        }
+                    case Opcodes.Mod: {
+                            TValue rb = RKB(instr);
+                            TValue rc = RKC(instr);
+                            double nb = (double)ToNumber(rb, out bool b);
+                            double nc = (double)ToNumber(rc, out bool c);
+                            if (b && c) ra.N = nb % nc;
+                            else
+                                if (!CallBinaryMetamethod(rb, rc, ra, MetamethodTypes.Mod))
+                                throw new ArithmeticException("operands cannot be moded");
+                            continue;
+                        }
+                    case Opcodes.Pow: {
+                            TValue rb = RKB(instr);
+                            TValue rc = RKC(instr);
+                            double nb = (double)ToNumber(rb, out bool b);
+                            double nc = (double)ToNumber(rc, out bool c);
+                            if (b && c) ra.N = Math.Pow(nb, nc);
+                            else
+                                if (!CallBinaryMetamethod(rb, rc, ra, MetamethodTypes.Pow))
+                                throw new ArithmeticException("operands cannot be powered");
+                            continue;
+                        }
+                    case Opcodes.Unm: {
+                            TValue rb = RB(instr);
+                            double nb = (double)ToNumber(rb, out bool b);
+                            if (b) ra.N = -nb;
+                            else
+                                if (!CallBinaryMetamethod(rb, rb, ra, MetamethodTypes.Unm))
+                                throw new ArithmeticException("operand cannot be unmed");
+                            continue;
+                        }
                     case Opcodes.Not:
                         ra.B = RB(instr).IsFalse; //TODO  /* next assignment may change this value */
                         continue;
-                    case Opcodes.Len:
-                        continue;
-                    case Opcodes.Concat:
-                        continue;
+                    case Opcodes.Len: {
+                            TValue rb = RB(instr);
+                            switch (rb.Type) {
+                                case LuaTypes.Table:
+                                    ra.N = rb.Table.GetN();
+                                    break;
+                                case LuaTypes.String:
+                                    ra.N = rb.TStr.Len;
+                                    break;
+                                default:
+                                    if (!CallBinaryMetamethod(rb, TValue.NilObject, ra, MetamethodTypes.Len))
+                                        throw new ArithmeticException("operand cannot be lened");
+                                    break;
+                            }
+                            continue;
+                        }
+                    case Opcodes.Concat: {
+                            int b = instr.B;
+                            int c = instr.C;
+                            Concat(c - b + 1, c);
+                            RA(instr).TVal = this[_base + b];
+                            continue;
+                        }
                     case Opcodes.Jmp:
                         continue;
                     case Opcodes.Eq:
@@ -191,18 +266,27 @@ namespace zlua.VM
                     case Opcodes.Call: {
                             int b = instr.B;
                             int n_retvals = instr.C - 1;
-                            //TODO
+                            if (b != 0) top = _base + instr.A + b;
                             savedpc = pc;
-                            ldo.PreCall(this, _base + instr.A, n_retvals);
-                            ++level;
-                            goto reentry;
-                            continue;
+                            switch (ldo.PreCall(this, _base + instr.A, n_retvals)) {
+                                case ldo.PCRLUA: {
+                                        level++;
+                                        goto reentry;
+                                    }
+                                case ldo.PCRC:
+                                    if (n_retvals >= 0)
+                                        top = CurrCallInfo.top;
+                                    _base = _base; //TODO???
+                                    continue;
+                                default:
+                                    return;
+                            }
                         }
                     case Opcodes.TailCall:
                         continue;
                     case Opcodes.Return: {
                             int b = instr.B;
-                            if (b != 0) top = instr.A + b - 1;
+                            if (b != 0) top = _base+instr.A + b - 1;
                             savedpc = pc;
                             int i = ldo.PosCall(this, instr.A);
                             if (--level == 0) /* chunk executed, return*/
@@ -254,8 +338,6 @@ namespace zlua.VM
         /// <summary>
         /// NO NEED TO IMPLEMENT check opmode of B, C
         /// </summary>
-        /// <param name="i"></param>
-        /// <returns></returns>
         [DebuggerStepThroughAttribute]
         TValue R(int i) => Stack[_base + i];
         [DebuggerStepThroughAttribute]
@@ -278,8 +360,6 @@ namespace zlua.VM
         /// luaV_tonumber; number直接返回，string如果能parse返回新的转成double的TValue，否则返回null
         /// src的参数n是没有必要的
         /// </summary>
-        /// <param name="index"></param>
-        /// <returns></returns>
         public TValue ToNumber(TValue obj, out bool canBeConvertedToNum)
         {
             canBeConvertedToNum = true;
@@ -302,8 +382,6 @@ namespace zlua.VM
         /// <summary>
         /// luaV_tostring
         /// </summary>
-        /// <param name="obj"></param>
-        /// <returns></returns>
         public bool ToString(TValue obj)
         {
             return false;
@@ -311,8 +389,6 @@ namespace zlua.VM
         /// <summary>
         /// luaV_concat
         /// </summary>
-        /// <param name="total"></param>
-        /// <param name="last"></param>
         public void Concat(int total, int last)
         {
 
@@ -325,10 +401,6 @@ namespace zlua.VM
         /// <summary>
         /// luaV_equalval
         /// </summary>
-        /// <param name="t1"></param>
-        /// <param name="o"></param>
-        /// <param name=""></param>
-        /// <returns></returns>
         public bool EqualVal(TValue t1, TValue t2)
         {
             Debug.Assert(t1.Type == t2.Type);
@@ -349,9 +421,6 @@ namespace zlua.VM
         /// <summary>
         /// luaV_gettable
         /// </summary>
-        /// <param name="t"></param>
-        /// <param name="key"></param>
-        /// <param name="val"></param>
         public void GetTable(TValue t, TValue key, TValue val)
         {
             //TODO, 要无限查元表。
@@ -382,13 +451,8 @@ namespace zlua.VM
 
         //}
         /// <summary>
-        /// call_binTM
+        /// call_binTM; result = __add(lhs, rhs); __add从lhs和rhs的元表查找出，如果都没找到返回false
         /// </summary>
-        /// <param name="lhs"></param>
-        /// <param name="rhs"></param>
-        /// <param name="result"></param>
-        /// <param name="metamethodType"></param>
-        /// <returns></returns>
         bool CallBinaryMetamethod(TValue lhs, TValue rhs, TValue result, MetamethodTypes metamethodType)
         {
             result = null;
@@ -401,12 +465,8 @@ namespace zlua.VM
             return true;
         }
         /// <summary>
-        /// callTMres
+        /// callTMres; `metamethod(lhs, rhs)，使用lua通用调用协议，可以去Ido.Call的文档看；调用后top恢复到原处，就像没有调用过一样
         /// </summary>
-        /// <param name="result"></param>
-        /// <param name="metamethod"></param>
-        /// <param name="lhs"></param>
-        /// <param name="rhs"></param>
         TValue CallMetamethod(TValue metamethod, TValue lhs, TValue rhs)
         {
             /* push func and 2 args*/

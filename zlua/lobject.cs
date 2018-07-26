@@ -83,7 +83,7 @@ namespace zlua.TypeModel
         public static explicit operator TValue(TString tstr) => new TValue(tstr);
         public static explicit operator TValue(TTable table) => new TValue(table);
         public static explicit operator TValue(TThread thread) => new TValue(thread);
-        public static explicit operator TValue(Userdata userdata)=>new TValue(userdata);
+        public static explicit operator TValue(Userdata userdata) => new TValue(userdata);
 
         public static explicit operator TString(TValue tval) { Debug.Assert(tval.IsString); return tval.tobj as TString; }
         public static explicit operator string(TValue tval) { Debug.Assert(tval.IsString); return (string)(TString)tval; }
@@ -93,7 +93,7 @@ namespace zlua.TypeModel
         public static explicit operator TTable(TValue tval) { Debug.Assert(tval.IsTable); return tval.tobj as TTable; }
         public static explicit operator Proto(TValue tval) { Debug.Assert(tval.IsLuaFunction); return tval.tobj as Proto; }
         public static explicit operator TThread(TValue tval) { Debug.Assert(tval.IsThread); return tval.tobj as TThread; }
-        public static explicit operator Userdata(TValue tval) { Debug.Assert(tval.IsUserdata);return tval.tobj as Userdata; }
+        public static explicit operator Userdata(TValue tval) { Debug.Assert(tval.IsUserdata); return tval.tobj as Userdata; }
         public double N
         {
             get => (double)this;
@@ -231,9 +231,7 @@ namespace zlua.TypeModel
         /// <summary>
         /// luaO_rawequalObj
         /// </summary>
-        /// <param name="obj"></param>
-        /// <returns></returns>
-        public override bool Equals(object obj)
+                public override bool Equals(object obj)
         {
             var other = obj as TValue;
             if (Type != other.Type) return false;
@@ -379,6 +377,7 @@ namespace zlua.TypeModel
         }
         public static explicit operator string(TString tstr) => tstr.str;
         public static explicit operator TString(string str) => new TString(str);
+        public int Len { get => str.Length; }
     }
     /// <summary>
     /// GCObject; base class of all reference type objects in lua
@@ -408,9 +407,7 @@ namespace zlua.TypeModel
         /// <summary>
         /// luaH_get
         /// </summary>
-        /// <param name="key"></param>
-        /// <returns></returns>
-        public TValue Get(TValue key)
+                public TValue Get(TValue key)
         {
             switch (key.Type) {
                 case LuaTypes.Nil: return TValue.NilObject;
@@ -431,10 +428,7 @@ namespace zlua.TypeModel
         /// else create a new pair and return the new tvalue
         /// TODO try to return void, because "new TValue" and set outside is not controlable. bad smell.
         /// </summary>
-        /// <param name="L"></param>
-        /// <param name="key"></param>
-        /// <returns></returns>
-        public TValue Set(TThread L, TValue key)
+                public TValue Set(TThread L, TValue key)
         {
             var tval = Get(key);
             if (tval != TValue.NilObject) return tval;
@@ -456,9 +450,7 @@ namespace zlua.TypeModel
         /// <summary>
         /// luaH_getnum
         /// </summary>
-        /// <param name="key"></param>
-        /// <returns></returns>
-        public TValue GetByInt(int key)
+                public TValue GetByInt(int key)
         {
             if (key - 1 < arrayPart.Count) return arrayPart[key - 1];
             else {
@@ -489,7 +481,14 @@ namespace zlua.TypeModel
                 return new_val; //TODO 这里是错的。应该有分配到arraypart的逻辑
             }
         }
-
+        /// <summary>
+        /// luaH_getn; 返回一个int索引作为bound，本身不为空，下一个位置为空
+        /// </summary>
+        /// <returns></returns>
+        public int GetN()
+        {
+            return 1;
+        }
 
 
         IEnumerator<KeyValuePair<TValue, TValue>> IEnumerable<KeyValuePair<TValue, TValue>>.GetEnumerator()

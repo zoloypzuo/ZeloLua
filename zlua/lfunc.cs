@@ -15,10 +15,7 @@ namespace zlua.FuncAux
         /// <summary>
         /// luaF_findupval
         /// </summary>
-        /// <param name="L"></param>
-        /// <param name="level"></param>
-        /// <returns></returns>
-        public static Upval FindUpval(this TThread L,int levelIndex)
+                public static Upval FindUpval(this TThread L, int levelIndex)
         {
             return null;
         }

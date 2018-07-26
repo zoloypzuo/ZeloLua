@@ -18,8 +18,7 @@ namespace zlua.Configuration
         /// <summary>
         /// lua_number2integer, lua_number2int; 四舍五入
         /// </summary>
-        /// <param name="d"></param>
-        /// <returns></returns>
-        public static int Double2Integer(double d) => (int)Math.Round(d, MidpointRounding.AwayFromZero);
+
+                public static int Double2Integer(double d) => (int)Math.Round(d, MidpointRounding.AwayFromZero);
     }
 }

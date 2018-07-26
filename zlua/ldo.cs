@@ -38,10 +38,7 @@ namespace zlua.CallSystem
         /// <summary>
         /// tryfuncTM; 尝试返回元方法__call
         /// </summary>
-        /// <param name="L"></param>
-        /// <param name="funcIndex"></param>
-        /// <returns></returns>
-        static TValue TryMetaCall(this TThread L, int funcIndex)
+                static TValue TryMetaCall(this TThread L, int funcIndex)
         {
             TValue metamethod = ltm.GetMetamethod(L, L[funcIndex], MetamethodTypes.Call);
             Debug.Assert(metamethod.IsFunction);
@@ -53,17 +50,14 @@ namespace zlua.CallSystem
             return L[funcIndex];
         }
         /* results from luaD_precall */
-        const int PCRLUA = 0;   /* 说明precall初始化了一个lua函数：initiated a call to a Lua function */
-        const int PCRC = 1;    /* 说明precall调用了一个c函数：did a call to a C function */
-        const int PCRYIELD = 2;	/* c函数yield？？？：C funtion yielded */
+        public const int PCRLUA = 0;   /* 说明precall初始化了一个lua函数：initiated a call to a Lua function */
+        public const int PCRC = 1;    /* 说明precall调用了一个c函数：did a call to a C function */
+        public const int PCRYIELD = 2; /* c函数yield？？？：C funtion yielded */
 
         /// <summary>
         /// luaD_precall, TODO save pc to caller CallInfo, create new CallInfo for callee
         /// 中文说明】call指令实现；所以即调用新韩淑，因此保存数据，push栈帧
         /// </summary>
-        /// <param name="L"></param>
-        /// <param name="funcIndex"></param>
-        /// <param name="n_retvals"></param>
         public static int PreCall(this TThread L, int funcIndex, int n_retvals)
         {
             TValue func = L[funcIndex];
@@ -144,9 +138,6 @@ namespace zlua.CallSystem
         /// <summary>
         /// adjust_varargs 根据函数的参数数量调整base和top指针位置
         /// </summary>
-        /// <param name="L"></param>
-        /// <param name="p"></param>
-        /// <param name="acutal"></param>
         public static int AdjustVararg(this TThread L, Proto p, int acutal)
         {
             //TODO
@@ -162,10 +153,7 @@ namespace zlua.CallSystem
         /// <summary>
         /// savestack; 嗯，就这么简单
         /// </summary>
-        /// <param name="L"></param>
-        /// <param name="index"></param>
-        /// <returns></returns>
-        public static int SaveStack(this TThread L, int index)
+                public static int SaveStack(this TThread L, int index)
         {
             return index;
         }
@@ -184,9 +172,7 @@ namespace zlua.CallSystem
         /// called] luaD_protectedparser
         /// 实现决策】已经归并入loadfile，被其替代
         /// </summary>
-        /// <param name="L"></param>
-        /// <param name="ud"></param>
-        //public static void FParser(this TThread L, object ud)
+                        //public static void FParser(this TThread L, object ud)
         //{
         //    // TODO 目前当然是parse
 

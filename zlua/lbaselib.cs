@@ -15,7 +15,7 @@ namespace zlua.BaseLib
         /// <summary>
         /// luaB_assert
         /// </summary>
-        /// <param name="b"></param>
+        
         public static void Assert(this TThread L) { /*TODO */; }
         public static void DoFile(this TThread L) { }
     }
