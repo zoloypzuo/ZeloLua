@@ -65,8 +65,8 @@ namespace zlua.VM.Tests
             formatter.Serialize(stream, p);
             stream.Close();
             Closure closure = new LuaClosure((TTable)L.globalsTable, 0, p);
-            L[L.top].Cl = closure;
-            L.top++;
+            L[L.topIndex].Cl = closure;
+            L.topIndex++;
             lapi.Call(L, 0, 0);
         }
 

@@ -53,20 +53,14 @@
     <Compile Include="lbaselib.cs" />
     <Compile Include="ldo.cs" />
     <Compile Include="lfunc.cs" />
+    <Compile Include="lparser.cs" />
     <Compile Include="lstate.cs" />
     <Compile Include="ltm.cs" />
     <Compile Include="luaconf.cs" />
     <Compile Include="lualib.cs" />
-    <Compile Include="parser_antlr\compiler.cs" />
     <Compile Include="lopcodes.cs" />
     <Compile Include="lobject.cs" />
     <Compile Include="lua.cs" />
-    <Compile Include="parser_antlr\LuaBaseListener.cs" />
-    <Compile Include="parser_antlr\LuaBaseVisitor.cs" />
-    <Compile Include="parser_antlr\LuaLexer.cs" />
-    <Compile Include="parser_antlr\LuaListener.cs" />
-    <Compile Include="parser_antlr\LuaParser.cs" />
-    <Compile Include="parser_antlr\LuaVisitor.cs" />
     <Compile Include="lvm.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -75,6 +69,10 @@
     <None Include="App.config">
       <SubType>Designer</SubType>
     </None>
+    <Antlr4 Include="Lua.g4">
+      <Generator>MSBuild:Compile</Generator>
+      <CustomToolNamespace>zlua</CustomToolNamespace>
+    </Antlr4>
     <None Include="packages.config" />
     <None Include="test.lua" />
   </ItemGroup>
@@ -91,4 +89,5 @@
     <!-- This is the required reference which is missing from your project file -->
     <PackageReference Include="Antlr4" Version="4.6.5-beta001" />
   </ItemGroup>
+  <ItemGroup />
 </Project>

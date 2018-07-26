@@ -26,28 +26,28 @@ namespace zlua.API
         /// </summary>
         public static void PushObject(this TThread L, TValue obj)
         {
-            L[L.top++].TVal = obj;
+            L[L.topIndex++].TVal = obj;
         }
         /// <summary>
         /// lua_pushnil
         /// </summary>
         public static void PushNil(this TThread L)
         {
-            L[L.top++].SetNil();
+            L[L.topIndex++].SetNil();
         }
         /// <summary>
         /// lua_pushnumber
         /// </summary>
         public static void PushNumber(this TThread L, double n)
         {
-            L[L.top++].N = n;
+            L[L.topIndex++].N = n;
         }
         /// <summary>
         /// lua_pushinteger
         /// </summary>
         public static void PushInteger(this TThread L, int n)
         {
-            L[L.top++].N = (double)n;
+            L[L.topIndex++].N = (double)n;
         }
         /// <summary>
         /// lua_pushlstring, lua_pushstring
@@ -57,7 +57,7 @@ namespace zlua.API
             if (s == null)
                 PushNil(L);
             else
-                L[L.top++].TStr = (TString)s;
+                L[L.topIndex++].TStr = (TString)s;
         }
         /// <summary>
         /// lua_pushvfstring, pushfstring
@@ -78,7 +78,7 @@ namespace zlua.API
         /// </summary>
         public static void PushBool(this TThread L, bool b)
         {
-            L[L.top++].B = b;
+            L[L.topIndex++].B = b;
         }
         /// <summary>
         /// lua_pushlighuserdata
@@ -92,14 +92,14 @@ namespace zlua.API
         /// </summary>
         public static void PushThread(this TThread L)
         {
-            L[L.top++].Thread = L;
+            L[L.topIndex++].Thread = L;
         }
         /// <summary>
         /// lua_pushvalue; push L[index]
         /// </summary>
         public static void PushValue(this TThread L, int index)
         {
-            L[L.top++] = Index2TVal(L, index);
+            L[L.topIndex++] = Index2TVal(L, index);
         }
         #endregion
         #region access functions (L -> C#)
@@ -247,7 +247,7 @@ namespace zlua.API
         public static void GetTable(this TThread L, int index)
         {
             var t = L.Index2TVal(index);
-            var top = L[L.top - 1];
+            var top = L[L.topIndex - 1];
             L.GetTable(t, top, top);
         }
         /// <summary>
@@ -266,7 +266,7 @@ namespace zlua.API
         {
             TValue table = Index2TVal(L, index);
             Debug.Assert(table.IsTable);
-            L[L.top - 1].TVal = table.Table.Get(L[L.top - 1]);
+            L[L.topIndex - 1].TVal = table.Table.Get(L[L.topIndex - 1]);
         }
 
         //实现决策】下面的代码L实现了indexer（用的多了自然要），之前写好的不会改，这样也好。Stack的访问仍然是像数组一样，而不是真正的Stack
@@ -278,14 +278,14 @@ namespace zlua.API
         {
             TValue table = Index2TVal(L, index);
             Debug.Assert(table.IsTable);
-            L[L.top++] = table.Table.GetByInt(n);
+            L[L.topIndex++] = table.Table.GetByInt(n);
         }
         /// <summary>
         /// lua_createtable
         /// </summary>
         public static void CreateTable(this TThread L, int sizeArrayPart, int sizeHashTablePart)
         {
-            L[L.top++] = (TValue)new TTable(sizeHashTablePart: sizeHashTablePart, sizeArrayPart: sizeArrayPart);
+            L[L.topIndex++] = (TValue)new TTable(sizeHashTablePart: sizeHashTablePart, sizeArrayPart: sizeArrayPart);
         }
         /// <summary>
         /// lua_getmetable
@@ -300,7 +300,7 @@ namespace zlua.API
                 default: break;
             }
             if (mt != null)
-                L[L.top++].Table = mt;
+                L[L.topIndex++].Table = mt;
         }/// <summary>
          /// lua_getfenv; get env of Function, Userdata and Thread
          /// </summary>
@@ -347,14 +347,14 @@ namespace zlua.API
         /// </summary>
         static void AdjustRetvals(this TThread L, int nRetvals)
         {
-            if (nRetvals == lua.MultiRet && L.top >= L.CurrCallInfo.top) L.CurrCallInfo.top = L.top;
+            if (nRetvals == lua.MultiRet && L.topIndex >= L.Ci.topIndex) L.Ci.topIndex = L.topIndex;
         }
         /// <summary>
         /// lua_call
         /// </summary>
         public static void Call(this TThread L, int nArgs, int nRetvals)
         {
-            int funcIndex = L.top - (nArgs + 1);
+            int funcIndex = L.topIndex - (nArgs + 1);
             ldo.Call(L, funcIndex, nRetvals); //TODO 名字重复了，不好。而且签名是一样的。
             //AdjustRetvals(L, nRetvals);
         }
@@ -363,7 +363,7 @@ namespace zlua.API
         /// <summary>
         /// lua_gettop
         /// </summary>
-        public static int GetTop(this TThread L) => L.top - L._base;
+        public static int GetTop(this TThread L) => L.topIndex - L.baseIndex;
 
         public static TTable GetCurrEnv(this TThread L)
         {
@@ -379,23 +379,23 @@ namespace zlua.API
         public static TValue Index2TVal(this TThread L, int index)
         {
             if (index > 0) {
-                Debug.Assert(index <= L.CurrCallInfo.top - L._base); // check array boundary
-                int idx = L._base + (index - 1);
-                if (idx >= L.top) return TValue.NilObject;
+                Debug.Assert(index <= L.Ci.topIndex - L.baseIndex); // check array boundary
+                int idx = L.baseIndex + (index - 1);
+                if (idx >= L.topIndex) return TValue.NilObject;
                 else return L[idx];
             } else if (index > lua.RegisteyIndex) /* -10000 < index < 0*/ {
-                Debug.Assert(index != 0 && -index <= L.top - L._base); // check array boundary
-                return L[L.top + index];
+                Debug.Assert(index != 0 && -index <= L.topIndex - L.baseIndex); // check array boundary
+                return L[L.topIndex + index];
             } else {
                 switch (index) {
                     case lua.RegisteyIndex: return L.globalState.registry;
                     case lua.EnvIndex: {
-                            L.env.Table = (L[L.CurrCallInfo.funcIndex].Cl as CSharpClosure).env;
+                            L.env.Table = (L[L.Ci.funcIndex].Cl as CSharpClosure).env;
                             return L.env;
                         }
                     case lua.GlobalsIndex: return L.globalsTable;
                     default: {
-                            CSharpClosure func = L[L.CurrCallInfo.funcIndex].Cl as CSharpClosure;
+                            CSharpClosure func = L[L.Ci.funcIndex].Cl as CSharpClosure;
                             index = lua.GlobalsIndex - index;
                             return index <= func.NUpvals ? func.upvals[index - 1] : TValue.NilObject;
                         }

@@ -43,9 +43,9 @@ namespace zlua.CallSystem
             TValue metamethod = ltm.GetMetamethod(L, L[funcIndex], MetamethodTypes.Call);
             Debug.Assert(metamethod.IsFunction);
             /* Open a hole inside the stack at `func' */
-            for (int i = L.top; i > funcIndex; i--)
+            for (int i = L.topIndex; i > funcIndex; i--)
                 L[i].TVal = L[i - 1];
-            L.top++;
+            L.topIndex++;
             L[funcIndex].TVal = metamethod;/* tag method is the new function to be called */
             return L[funcIndex];
         }
@@ -63,51 +63,51 @@ namespace zlua.CallSystem
             TValue func = L[funcIndex];
             if (!func.IsFunction)
                 func = TryMetaCall(L, funcIndex);
-            L.CurrCallInfo.savedpc = L.savedpc;// 保存PC
+            L.Ci.savedpc = L.savedpc;// 保存PC
             LuaClosure cl = func.Cl as LuaClosure;
             if (!cl.IsCharp) {  /* Lua function? prepare its call */
                 int st, _base;
                 Proto p = cl.p;
                 if (!p.isVararg) {  /* no varargs? */
                     _base = funcIndex + 1;
-                    if (L.top > _base + p.nParams)
-                        L.top = _base + p.nParams;
+                    if (L.topIndex > _base + p.nParams)
+                        L.topIndex = _base + p.nParams;
                 } else {  /* vararg function */
-                    int nargs = (L.top - funcIndex) - 1;
+                    int nargs = (L.topIndex - funcIndex) - 1;
                     _base = AdjustVararg(L, p, nargs);
                 }
-                CallInfo ci = new CallInfo() {
+                Callinfo ci = new Callinfo() {
                     funcIndex = funcIndex,
-                    _base = _base,
-                    top = L._base + p.maxStacksize,
+                    baseIndex = _base,
+                    topIndex = L.baseIndex + p.maxStacksize,
                     nRetvals = n_retvals
                 };
-                Debug.Assert(ci.top <= L.stackLastFree);
-                L._base = _base;
+                Debug.Assert(ci.topIndex <= L.stackLastFree);
+                L.baseIndex = _base;
 
                 L.savedpc = 0;
                 L.codes = p.codes;
                 L.k = p.k;
-                L.callinfoStack.Push(ci);
-                for (st = L.top; st < ci.top; st++)
+                L.ciStack.Push(ci);
+                for (st = L.topIndex; st < ci.topIndex; st++)
                     L[st].SetNil();
-                L.top = ci.top;
+                L.topIndex = ci.topIndex;
                 return PCRLUA;
             } else {  /* if is a C function, call it */
                 int n;
-                CallInfo ci = new CallInfo();
-                L._base = ci._base = ci.funcIndex + 1;
-                ci.top = L.top + lua.MinStackSizeForCSharpFunction;
-                Debug.Assert(ci.top <= L.stackLastFree);
+                Callinfo ci = new Callinfo();
+                L.baseIndex = ci.baseIndex = ci.funcIndex + 1;
+                ci.topIndex = L.topIndex + lua.MinStackSizeForCSharpFunction;
+                Debug.Assert(ci.topIndex <= L.stackLastFree);
                 // 期待返回多少个返回值
                 ci.nRetvals = n_retvals;
                 // 调用C函数
-                n = (L[L.CurrCallInfo.funcIndex].Cl as CSharpClosure).f(L);
+                n = (L[L.Ci.funcIndex].Cl as CSharpClosure).f(L);
                 if (n < 0)  /* yielding? */
                     return PCRYIELD;
                 else {
                     // 调用结束之后的处理
-                    PosCall(L, L.top - n);
+                    PosCall(L, L.topIndex - n);
                     return PCRC;
                 }
             }
@@ -118,21 +118,21 @@ namespace zlua.CallSystem
         /// </summary>
         public static int PosCall(this TThread L, int firstResultIndex)
         {
-            CallInfo ci = L.callinfoStack.Pop(); //ci弹栈
+            Callinfo ci = L.ciStack.Pop(); //ci弹栈
                                                  /* 恢复一部分*/
             int resultIndex = ci.funcIndex;
             int wanted = ci.nRetvals;
-            L._base = L.CurrCallInfo._base;
-            L.savedpc = L.CurrCallInfo.savedpc;
+            L.baseIndex = L.Ci.baseIndex;
+            L.savedpc = L.Ci.savedpc;
             /* 返回值压栈, 补nil到wanted个返回值*/
             int i;
-            for (i = wanted; i != 0 && firstResultIndex < L.top; i--) {
+            for (i = wanted; i != 0 && firstResultIndex < L.topIndex; i--) {
                 L[resultIndex++].TVal = L[firstResultIndex++];
             }
             while (i-- > 0) {
                 L[resultIndex++].SetNil();
             }
-            L.top = resultIndex; //恢复top
+            L.topIndex = resultIndex; //恢复top
             return wanted - lua.MultiRet; /* 0 if wanted == LUA_MULTRET */
         }
         /// <summary>

@@ -26,20 +26,20 @@ namespace zlua.AuxLib
             using (FileStream fs = new FileStream(path,
                 FileMode.Open, FileAccess.Read)) {
                 AntlrInputStream inputStream = new AntlrInputStream(fs);
-                LuaLexer lexer = new LuaLexer(inputStream);
-                CommonTokenStream tokens = new CommonTokenStream(lexer);
-                LuaParser parser = new LuaParser(tokens);
-                var tree = parser.chunk();
-                var walker = new ParseTreeWalker();
-                var compiler = new Compiler();
-                walker.Walk(compiler, tree);
+                //LuaLexer lexer = new LuaLexer(inputStream);
+                //CommonTokenStream tokens = new CommonTokenStream(lexer);
+                //LuaParser parser = new LuaParser(tokens);
+                //var tree = parser.chunk();
+                //var walker = new ParseTreeWalker();
+                //var compiler = new Compiler();
+                //walker.Walk(compiler, tree);
             }
             //TODO导出一个proto
 
             Proto proto = new Proto();
             Closure closure = new LuaClosure((TTable)L.globalsTable, 0, proto);
-            L[L.top].Cl = closure;
-            L.top++;
+            L[L.topIndex].Cl = closure;
+            L.topIndex++;
         }
         /// <summary>
         /// luaL_checkany

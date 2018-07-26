@@ -16,26 +16,47 @@ using zlua.Metamethod;
 /// </summary>
 namespace zlua.VM
 {
+    public enum ThreadStatus
+    {
+        Yield = 1,
+        ErrRun = 2,
+        ErrSyntax = 3,
+        ErrMem = 4,
+        ErrErr = 5
+    }
+    /// <summary>
+    /// 相比src，几乎没用。
+    /// </summary>
+    public class GlobalState
+    {
+        public TValue registry;
+        public TThread mainThread;
+        public TTable[] metaTableForBasicType = new TTable[(int)LuaTypes.Thread + 1];
+        public TString[] metaMethodNames = new TString[(int)MetamethodTypes.N];
+    }
     public class TThread : TObject
     {
         #region fields
+        ThreadStatus status;
         public List<TValue> Stack;
         /// <summary>
-        /// callinfo_stack.top().top; lua栈遵循栈约定：top指向第一个可用位置，每次push时 top++ = value
+        /// lua栈遵循栈约定：top指向第一个可用位置，每次push时 top++ = value
         /// </summary>
-        public int top;
+        public int topIndex;
         /// <summary>
-        /// callinfo_stack.top()._base
+        /// 当前函数的base
         /// </summary>
-        public int _base; // "base" is a C# keyword, ...
+        public int baseIndex; // "base" is a C# keyword, ...
         /// <summary>
         /// 标记分配的大小
         /// </summary>
         public int stackLastFree;
-        public CallInfo CurrCallInfo { get => callinfoStack.Peek(); }
-        public Stack<CallInfo> callinfoStack;
-        const int BasicCISize = 8;
-        const int BasicStackSize = 40;
+        /// <summary>
+        /// 当前函数
+        /// </summary>
+        public Callinfo Ci { get => ciStack.Peek(); }
+        public Stack<Callinfo> ciStack;
+
         /// <summary>
         /// consts
         /// </summary>
@@ -50,11 +71,13 @@ namespace zlua.VM
         public int savedpc;
         public List<Bytecode> codes;
         public int nCSharpCalls;
-        public GlobalState.GlobalState globalState;
+        public GlobalState globalState;
         /// <summary>
-        /// "temp place for env", used only in index2adr currently
+        /// "temp place for env", 仅被index2adr调用;除此之外，thread通过分支创建时，和父thread共享环境（然而并没有看到引用）
         /// </summary>
         public TValue env;
+        short nCcalls;  /* number of nested C calls */
+        short baseCcalls;  /* nested C calls when resuming coroutine */
         #endregion
 
         /// <summary>
@@ -62,36 +85,37 @@ namespace zlua.VM
         /// </summary>
         public TThread()
         {
-            globalState = new GlobalState.GlobalState() {
+            globalState = new GlobalState() {
                 mainThread = this,
                 registry = new TValue(new TTable(sizeHashTablePart: 2, sizeArrayPart: 0))
             };
             globalsTable = new TValue(new TTable(sizeHashTablePart: 2, sizeArrayPart: 0));
-            callinfoStack = new Stack<CallInfo>(BasicCISize);
-            callinfoStack.Push(new CallInfo());
+            const int BasicCiStackSize = 8;
+            const int BasicStackSize = 40;
+            ciStack = new Stack<Callinfo>(BasicCiStackSize);
+            ciStack.Push(new Callinfo());
             Stack = new List<TValue>();
             for (int i = 0; i < BasicStackSize; i++) {
                 Stack.Add(new TValue());
             }
-            CurrCallInfo._base = _base = top = 1;
+            Ci.baseIndex = baseIndex = topIndex = 1;
         }
         /// <summary>
-        /// luaV_execute
+        /// luaV_execute; 执行一个深度为level的lua函数，chunk深度为1；没有level就不知道什么时候结束了（事实上可以，用callinfo栈）
         /// </summary>
         /// <param name="level">1 is the first level</param>
         public void Execute(int level)
         {
-            LuaClosure cl;
-            List<TValue> k;
-            Bytecode instr;
-            int pc;
             reentry:
-            //Debug.Assert(CurrCallInfo.func.IsLuaFunction);
-            pc = savedpc;
-            cl = this[CurrCallInfo.funcIndex].Cl as LuaClosure;
-            k = cl.p.k;
+            Debug.Assert(this[Ci.funcIndex].IsLuaFunction);
+            int pc = savedpc;
+            LuaClosure cl = this[Ci.funcIndex].Cl as LuaClosure;
+            int baseIndex = this.baseIndex;
+            List<TValue> k = cl.p.k;
             while (true) {
-                instr = codes[pc++];
+                Bytecode instr = codes[pc++];
+                Debug.Assert(baseIndex == this.baseIndex && this.baseIndex == Ci.baseIndex);
+                Debug.Assert(baseIndex <= topIndex && topIndex <= Stack.Count);
                 TValue ra = RA(instr);
                 switch (instr.Opcode) {
                     case Opcodes.Move:
@@ -248,7 +272,7 @@ namespace zlua.VM
                             int b = instr.B;
                             int c = instr.C;
                             Concat(c - b + 1, c);
-                            RA(instr).TVal = this[_base + b];
+                            RA(instr).TVal = this[this.baseIndex + b];
                             continue;
                         }
                     case Opcodes.Jmp:
@@ -266,17 +290,17 @@ namespace zlua.VM
                     case Opcodes.Call: {
                             int b = instr.B;
                             int n_retvals = instr.C - 1;
-                            if (b != 0) top = _base + instr.A + b;
+                            if (b != 0) topIndex = this.baseIndex + instr.A + b;
                             savedpc = pc;
-                            switch (ldo.PreCall(this, _base + instr.A, n_retvals)) {
+                            switch (ldo.PreCall(this, this.baseIndex + instr.A, n_retvals)) {
                                 case ldo.PCRLUA: {
                                         level++;
                                         goto reentry;
                                     }
                                 case ldo.PCRC:
                                     if (n_retvals >= 0)
-                                        top = CurrCallInfo.top;
-                                    _base = _base; //TODO???
+                                        topIndex = Ci.topIndex;
+                                    this.baseIndex = this.baseIndex; //TODO???
                                     continue;
                                 default:
                                     return;
@@ -286,14 +310,14 @@ namespace zlua.VM
                         continue;
                     case Opcodes.Return: {
                             int b = instr.B;
-                            if (b != 0) top = _base+instr.A + b - 1;
+                            if (b != 0) topIndex = this.baseIndex + instr.A + b - 1;
                             savedpc = pc;
                             int i = ldo.PosCall(this, instr.A);
                             if (--level == 0) /* chunk executed, return*/
                                 return;
                             else { /*continue the execution*/
                                 if (i != 0)
-                                    top = CurrCallInfo.top;
+                                    topIndex = Ci.topIndex;
                                 goto reentry;
                             }
                             continue;
@@ -318,7 +342,7 @@ namespace zlua.VM
                                     ncl.upvals[j] = cl.upvals[codes[pc].B];
                                 else { /*否则得用复杂的方法确定upval的位置*/
                                     Debug.Assert(codes[pc].Opcode == Opcodes.Move);
-                                    ncl.upvals[j] = lfunc.FindUpval(this, _base + next_instr.B);
+                                    ncl.upvals[j] = lfunc.FindUpval(this, this.baseIndex + next_instr.B);
                                 }
                             }
                             ra.Cl = ncl as Closure;
@@ -339,13 +363,13 @@ namespace zlua.VM
         /// NO NEED TO IMPLEMENT check opmode of B, C
         /// </summary>
         [DebuggerStepThroughAttribute]
-        TValue R(int i) => Stack[_base + i];
+        TValue R(int i) => Stack[baseIndex + i];
         [DebuggerStepThroughAttribute]
-        TValue RA(Bytecode i) => Stack[_base + i.A];
+        TValue RA(Bytecode i) => Stack[baseIndex + i.A];
         [DebuggerStepThroughAttribute]
-        TValue RB(Bytecode i) => Stack[_base + i.B];
+        TValue RB(Bytecode i) => Stack[baseIndex + i.B];
         [DebuggerStepThroughAttribute]
-        TValue RC(Bytecode i) => Stack[_base + i.C];
+        TValue RC(Bytecode i) => Stack[baseIndex + i.C];
 
         [DebuggerStepThroughAttribute]
         TValue RKB(Bytecode i) => Bytecode.IsK(i.B) ? k[Bytecode.IndexK(i.B)] : RB(i);
@@ -470,28 +494,30 @@ namespace zlua.VM
         TValue CallMetamethod(TValue metamethod, TValue lhs, TValue rhs)
         {
             /* push func and 2 args*/
-            this[top++].TVal = metamethod;
-            this[top++].TVal = lhs;
-            this[top++].TVal = rhs;
-            ldo.Call(this, top - 3, 1);
-            return this[--top]; //TODO call做了什么，result放在哪里
+            this[topIndex++].TVal = metamethod;
+            this[topIndex++].TVal = lhs;
+            this[topIndex++].TVal = rhs;
+            ldo.Call(this, topIndex - 3, 1);
+            return this[--topIndex]; //TODO call做了什么，result放在哪里
         }
         #endregion
 
     }
+
     /// <summary>
-    /// protected call
+    /// 栈帧信息，或者说是一次调用的信息
     /// </summary>
-    //public class CallS { public TValue func; public int n_retvals; }
-    public class CallInfo
+    public class Callinfo
     {
         public int funcIndex;
-        public int _base; // = func+1
-        public int top;
+        public int baseIndex; // = func+1
+        public int topIndex;
         /// <summary>
         /// saved pc when call function, index of instruction array
         /// </summary>
         public int savedpc;
-        public int nRetvals;
+        public int nRetvals; //期望的返回值个数
+        int nTailCalls;/* number of tail calls lost under this entry ???*/
     }
+
 }
