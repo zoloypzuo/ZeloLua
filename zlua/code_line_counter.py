@@ -8,3 +8,4 @@ for fn in fns:
 		for i in f:
 			n_lines+=1
 print(n_lines)
+input()

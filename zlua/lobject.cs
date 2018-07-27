@@ -312,13 +312,7 @@ namespace zlua.TypeModel
     //TODO
     [Serializable]
     public class LocVar { public string var_name; public int startpc; public int endpc; }
-    //TODO
-    public class FuncState
-    {
-        Proto f;
-        Dictionary<string, TConst> consts;
-        FuncState prev;
-    }
+
     //TODO
     public class TConst { double n; TString tstr; }
 

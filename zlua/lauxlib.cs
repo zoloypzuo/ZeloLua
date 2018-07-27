@@ -8,7 +8,7 @@ using zlua.TypeModel;
 using Antlr4.Runtime;
 using Antlr4.Runtime.Tree;
 using System.IO;
-using p = zlua.Parser;
+using p = zlua.Parser; // 防止名字冲突，大概不需要把
 using zlua.AntlrGen;
 /// <summary>
 /// 辅助库
@@ -21,23 +21,24 @@ namespace zlua.AuxLib
         /// luaL_loadfile
         /// 实现决策】我们简化src实现方式，src中经过了三个复杂的函数到fparser内才判断文件是字节码还是text，然后。。。，所以实现中这里就做完了
         /// </summary>
-
-
         public static void LoadFile(this TThread L, string path)
         {
-            using (FileStream fs = new FileStream(path,FileMode.Open, FileAccess.Read)) {
-                AntlrInputStream inputStream = new AntlrInputStream(fs);
-                LuaLexer lexer = new LuaLexer(inputStream);
-                CommonTokenStream tokens = new CommonTokenStream(lexer);
-                LuaParser parser = new LuaParser(tokens);
+            AntlrInputStream inputStream; //输入流传递给antlr的输入流
+            LuaLexer lexer; //*传递给lexer
+            CommonTokenStream tokens; //lexer分析好token流
+            LuaParser parser; //*由token流生成AST
+            p.lparser lp = new p.lparser(); //Listener遍历AST返回Proto
+            using (FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read)) {
+                inputStream = new AntlrInputStream(fs);
+                lexer = new LuaLexer(inputStream);
+                tokens = new CommonTokenStream(lexer);
+                parser = new LuaParser(tokens);
                 var tree = parser.chunk();
                 var walker = new ParseTreeWalker();
-                var lp = new p.lparser();
                 walker.Walk(lp, tree);
-                Console.WriteLine(tree.ToStringTree());
-            }//TODO导出一个proto
-
-            Proto proto = new Proto();
+                Console.WriteLine(tree.ToStringTree()); //虽然C#的根本没法看，留着呗
+            }
+            Proto proto = lp.P;
             Closure closure = new LuaClosure((TTable)L.globalsTable, 0, proto);
             L[L.topIndex].Cl = closure;
             L.topIndex++;

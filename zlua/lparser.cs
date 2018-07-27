@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -7,10 +8,50 @@ using Antlr4.Runtime;
 using Antlr4.Runtime.Misc;
 using Antlr4.Runtime.Tree;
 using zlua.AntlrGen;
+using zlua.TypeModel;
 namespace zlua.Parser
 {
     public class lparser : LuaBaseListener
     {
+        /// <summary>
+        /// 由chunk编译好的proto，返回给loadfile
+        /// </summary>
+        public Proto P
+        {
+            get
+            {
+                Debug.Assert(fs.prev == null); //chunk没有父
+                Debug.Assert(fs.f.nUpvals == 0); //chunk没有upval（别忘了是5.1.4）
+                return fs.f;
+            }
+        }
+        /// <summary>
+        /// 编译时函数块是一个同质的嵌套结构，因此是一个标准的Stack<T>，所以T=FuncState
+        /// 其实只要Stack<Proto>就可以了，但是我们把需要的东西包裹起来,这里用单链表实现一个栈（可以改进）
+        /// </summary>
+        public class FuncState
+        {
+            public Proto f; //当前proto
+            public Dictionary<string, TValue> k;
+            public FuncState prev; //父指针 /* enclosing function */
+            public TTable h;  /* table to find (and reuse) elements in `k' */
+                              //struct LexState *ls;  /* lexical state */
+                              //struct lua_State *L;  /* copy of the Lua state */
+                              //struct BlockCnt *bl;  /* chain of current blocks */
+            int pc;  /* next position to code (equivalent to `ncode') */
+            int lasttarget;   /* `pc' of last `jump target' */ // 这里存放的是所有空悬,也就是没有确定好跳转位置的pc链表
+            int jpc;  /* list of pending jumps to `pc' */
+            int freereg;  /* first free register */
+            //int nk;  /* number of elements in `k' */
+            //int np;  /* number of elements in `p' */ 
+            short nlocvars;  /* number of elements in `locvars' */
+            int nactvar;  /* number of active local variables */ //活着的locals个数
+            //upvaldesc upvalues[LUAI_MAXUPVALUES];  /* upvalues */  
+            //unsigned short actvar[LUAI_MAXVARS];  /* declared-variable stack */ //已声明的变量栈
+        }
+        FuncState fs = new FuncState() {
+            f = new Proto(),
+        };
         public override void EnterAddsubExp([NotNull] LuaParser.AddsubExpContext context)
         {
             base.EnterAddsubExp(context);
@@ -485,15 +526,26 @@ namespace zlua.Parser
         {
             base.ExitIfelseStat(context);
         }
-
+        /// <summary>
+        /// 'local' namelist ('=' explist)? #localassignStat
+        /// </summary>
+        /// <param name="context"></param>
         public override void ExitLocalassignStat([NotNull] LuaParser.LocalassignStatContext context)
         {
-            base.ExitLocalassignStat(context);
+            var namelist = context.namelist().NAME();
+            bool no_equal = context.GetToken(2, 0) == null;
+           // local a,b,c 只声明不赋值，根据有没有=判断，freereg+=n，names加入符号表
+           // local a,b,c=1 右侧不足，同上
+            // local a,b=1,2,3,4 截断
+            //if(context.GetToken())
+            //for (int i = 0; i < ; i++) {
+
+            //}
         }
 
         public override void ExitLocalfunctiondefStat([NotNull] LuaParser.LocalfunctiondefStatContext context)
         {
-            base.ExitLocalfunctiondefStat(context);
+
         }
 
         public override void ExitMuldivExp([NotNull] LuaParser.MuldivExpContext context)
