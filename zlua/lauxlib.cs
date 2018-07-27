@@ -8,6 +8,8 @@ using zlua.TypeModel;
 using Antlr4.Runtime;
 using Antlr4.Runtime.Tree;
 using System.IO;
+using p = zlua.Parser;
+using zlua.AntlrGen;
 /// <summary>
 /// 辅助库
 /// </summary>
@@ -23,18 +25,17 @@ namespace zlua.AuxLib
 
         public static void LoadFile(this TThread L, string path)
         {
-            using (FileStream fs = new FileStream(path,
-                FileMode.Open, FileAccess.Read)) {
+            using (FileStream fs = new FileStream(path,FileMode.Open, FileAccess.Read)) {
                 AntlrInputStream inputStream = new AntlrInputStream(fs);
-                //LuaLexer lexer = new LuaLexer(inputStream);
-                //CommonTokenStream tokens = new CommonTokenStream(lexer);
-                //LuaParser parser = new LuaParser(tokens);
-                //var tree = parser.chunk();
-                //var walker = new ParseTreeWalker();
-                //var compiler = new Compiler();
-                //walker.Walk(compiler, tree);
-            }
-            //TODO导出一个proto
+                LuaLexer lexer = new LuaLexer(inputStream);
+                CommonTokenStream tokens = new CommonTokenStream(lexer);
+                LuaParser parser = new LuaParser(tokens);
+                var tree = parser.chunk();
+                var walker = new ParseTreeWalker();
+                var lp = new p.lparser();
+                walker.Walk(lp, tree);
+                Console.WriteLine(tree.ToStringTree());
+            }//TODO导出一个proto
 
             Proto proto = new Proto();
             Closure closure = new LuaClosure((TTable)L.globalsTable, 0, proto);

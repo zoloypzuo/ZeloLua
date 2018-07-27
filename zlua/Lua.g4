@@ -20,19 +20,19 @@ block
     ;
 
 stat
-    : ';'
-    | varlist '=' explist
-    | functioncall
-    | 'break'
-    | 'do' block 'end'
-    | 'while' exp 'do' block 'end'
-    | 'repeat' block 'until' exp
-    | 'if' exp 'then' block ('elseif' exp 'then' block)* ('else' block)? 'end'
-    | 'for' NAME '=' exp ',' exp (',' exp)? 'do' block 'end'
-    | 'for' namelist 'in' explist 'do' block 'end'
-    | 'function' funcname funcbody
-    | 'local' 'function' NAME funcbody
-    | 'local' namelist ('=' explist)?
+    : ';' #emptyStat
+    | varlist '=' explist #assignStat
+    | functioncall #functioncallStat
+    | 'break' #breakStat
+    | 'do' block 'end' #doendStat
+    | 'while' exp 'do' block 'end' #whileStat
+    | 'repeat' block 'until' exp #repeatStat
+    | 'if' exp 'then' block ('elseif' exp 'then' block)* ('else' block)? 'end' #ifelseStat
+    | 'for' NAME '=' exp ',' exp (',' exp)? 'do' block 'end' #forijkStat
+    | 'for' namelist 'in' explist 'do' block 'end' #forinStat
+    | 'function' funcname funcbody #functiondefStat
+    | 'local' 'function' NAME funcbody #localfunctiondefStat
+    | 'local' namelist ('=' explist)? #localassignStat
     ;
 
 retstat
@@ -56,23 +56,24 @@ explist
     ;
 
 exp
-    : 'nil' | 'false' | 'true'
-    | number
-    | string
-    | '...'
-    | functiondef
-    | prefixexp
-    | tableconstructor
-    | <assoc=right> exp operatorPower exp
-    | operatorUnary exp
-    | exp operatorMulDivMod exp
-    | exp operatorAddSub exp
-    | <assoc=right> exp operatorStrcat exp
-    | exp operatorComparison exp
-    | exp operatorAnd exp
-    | exp operatorOr exp
-    | exp operatorBitwise exp
+    : nilfalsetruevararg #nilfalsetruevarargExp 
+    | number #numberExp
+    | string #stringExp
+    | functiondef #functiondefExp
+    | prefixexp #prefixexpExp
+    | tableconstructor #tablectorExp
+    | <assoc=right> exp operatorPower exp #powExp
+    | operatorUnary exp #unmExp
+    | exp operatorMulDivMod exp #muldivExp
+    | exp operatorAddSub exp #addsubExp
+    | <assoc=right> exp operatorStrcat exp #concatExp
+    | exp operatorComparison exp #cmpExp
+    | exp operatorAnd exp #andExp
+    | exp operatorOr exp #orExp
+    | exp operatorBitwise exp #bitwiseExp
     ;
+
+nilfalsetruevararg: 'nil'|'false'|'true'|'...';
 
 prefixexp
     : varOrExp nameAndArgs*
@@ -83,7 +84,7 @@ functioncall
     ;
 
 varOrExp
-    : var | '(' exp ')'
+    : var | '(' exp ')'  //其实还是exp，左值也要返回右值的
     ;
 
 var
@@ -98,8 +99,10 @@ nameAndArgs
     : (':' NAME)? args  
     ;
 
-args
-    : '(' explist? ')' | tableconstructor | string  //arg list，一般的或一个表ctor或一个string
+args  //arg list，一般的或一个表ctor或一个string
+    : '(' explist? ')'  #normalArgs
+	| tableconstructor #tablectorArgs
+	| string  #stringArgs
     ;
 
 functiondef

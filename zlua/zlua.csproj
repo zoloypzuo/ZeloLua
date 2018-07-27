@@ -64,15 +64,18 @@
     <Compile Include="lvm.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="_parser_gen\LuaBaseListener.cs" />
+    <Compile Include="_parser_gen\LuaBaseVisitor.cs" />
+    <Compile Include="_parser_gen\LuaLexer.cs" />
+    <Compile Include="_parser_gen\LuaListener.cs" />
+    <Compile Include="_parser_gen\LuaParser.cs" />
+    <Compile Include="_parser_gen\LuaVisitor.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">
       <SubType>Designer</SubType>
     </None>
-    <Antlr4 Include="Lua.g4">
-      <Generator>MSBuild:Compile</Generator>
-      <CustomToolNamespace>zlua</CustomToolNamespace>
-    </Antlr4>
+    <None Include="Lua.g4" />
     <None Include="packages.config" />
     <None Include="test.lua" />
   </ItemGroup>
