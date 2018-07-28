@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using zlua.TypeModel;
 using zlua.VM;
+using zlua.ISA;
 /// <summary>
 /// 指令集
 /// </summary>

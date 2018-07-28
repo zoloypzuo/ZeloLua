@@ -8,6 +8,7 @@ using Antlr4.Runtime;
 using Antlr4.Runtime.Misc;
 using Antlr4.Runtime.Tree;
 using zlua.AntlrGen;
+using zlua.ISA;
 using zlua.TypeModel;
 namespace zlua.Parser
 {
@@ -16,13 +17,13 @@ namespace zlua.Parser
         /// <summary>
         /// 由chunk编译好的proto，返回给loadfile
         /// </summary>
-        public Proto P
+        public Proto ChunkProto
         {
             get
             {
-                Debug.Assert(fs.prev == null); //chunk没有父
-                Debug.Assert(fs.f.nUpvals == 0); //chunk没有upval（别忘了是5.1.4）
-                return fs.f;
+                Debug.Assert(fsStack.Count == 1); //chunk没有父
+                Debug.Assert(P.nUpvals == 0); //chunk没有upval（别忘了是5.1.4）
+                return P;
             }
         }
         /// <summary>
@@ -33,7 +34,7 @@ namespace zlua.Parser
         {
             public Proto f; //当前proto
             public Dictionary<string, TValue> k;
-            public FuncState prev; //父指针 /* enclosing function */
+            //public FuncState prev; //父指针 /* enclosing function */
             public TTable h;  /* table to find (and reuse) elements in `k' */
                               //struct LexState *ls;  /* lexical state */
                               //struct lua_State *L;  /* copy of the Lua state */
@@ -41,17 +42,27 @@ namespace zlua.Parser
             int pc;  /* next position to code (equivalent to `ncode') */
             int lasttarget;   /* `pc' of last `jump target' */ // 这里存放的是所有空悬,也就是没有确定好跳转位置的pc链表
             int jpc;  /* list of pending jumps to `pc' */
-            int freereg;  /* first free register */
+            public int freereg;  /* first free register */
             //int nk;  /* number of elements in `k' */
             //int np;  /* number of elements in `p' */ 
             short nlocvars;  /* number of elements in `locvars' */
             int nactvar;  /* number of active local variables */ //活着的locals个数
-            //upvaldesc upvalues[LUAI_MAXUPVALUES];  /* upvalues */  
-            //unsigned short actvar[LUAI_MAXVARS];  /* declared-variable stack */ //已声明的变量栈
+                                                                 //upvaldesc upvalues[LUAI_MAXUPVALUES];  /* upvalues */  
+                                                                 //unsigned short actvar[LUAI_MAXVARS];  /* declared-variable stack */ //已声明的变量栈
+            /// <summary>
+            /// 指向第一个指令数组的可用位置（名字换成next？）
+            /// </summary>
+            public int CurrPc { get => pc; }
         }
-        FuncState fs = new FuncState() {
-            f = new Proto(),
-        };
+        Stack<FuncState> fsStack=new Stack<FuncState>();
+        FuncState Fs { get => fsStack.Peek(); }
+        Proto P { get => Fs.f; }
+        public lparser()
+        {
+            fsStack.Push(new FuncState() {
+                f=new Proto(),
+            });  //压入chunk这个栈帧
+        }
         public override void EnterAddsubExp([NotNull] LuaParser.AddsubExpContext context)
         {
             base.EnterAddsubExp(context);
@@ -534,13 +545,18 @@ namespace zlua.Parser
         {
             var namelist = context.namelist().NAME();
             bool no_equal = context.GetToken(2, 0) == null;
-           // local a,b,c 只声明不赋值，根据有没有=判断，freereg+=n，names加入符号表
-           // local a,b,c=1 右侧不足，同上
+            // local a,b,c=1,2,3 左侧加符号表，加初始化指令；右侧要从某个地方（exp栈可能）拿到exp的位置，而且不知道指令类型TODO
+            // local a,b,c 只声明不赋值，根据有没有=判断，freereg+=n，names加入符号表
+            // local a,b,c=1 右侧不足，同上
             // local a,b=1,2,3,4 截断
-            //if(context.GetToken())
-            //for (int i = 0; i < ; i++) {
+            for (int i = 0; i < namelist.Length; i++) {
+                var lv=new LocVar() {
+                    var_name = namelist[i].GetText(),
+                    startpc = Fs.CurrPc,
+                };
+                P.locvars.Add(lv);
 
-            //}
+            }
         }
 
         public override void ExitLocalfunctiondefStat([NotNull] LuaParser.LocalfunctiondefStatContext context)
@@ -570,7 +586,22 @@ namespace zlua.Parser
 
         public override void ExitNilfalsetruevarargExp([NotNull] LuaParser.NilfalsetruevarargExpContext context)
         {
-            base.ExitNilfalsetruevarargExp(context);
+            switch (context.GetText()) {
+                case "nil":
+                    P.codes.Add(new Bytecode(Opcodes.LoadNil, Fs.freereg, Fs.freereg, 0));
+                    break;
+                case "false":
+                    P.codes.Add(new Bytecode(Opcodes.LoadBool, Fs.freereg, 0, 0));
+                    break;
+                case "true":
+                    P.codes.Add(new Bytecode(Opcodes.LoadBool, Fs.freereg, 1, 0));
+                    break;
+                case "vararg":
+                    //P.codes.Add(new Bytecode(Opcodes.VarArg,)) //《no frills》p51
+                    throw new NotImplementedException();
+                    break;
+            }
+            Fs.freereg++;
         }
 
         public override void ExitNormalArgs([NotNull] LuaParser.NormalArgsContext context)

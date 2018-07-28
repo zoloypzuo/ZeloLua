@@ -23,6 +23,9 @@ namespace zlua
         Number = 3,
         String = 4,
         Table = 5,
+        /// <summary>
+        /// C and Lua functions
+        /// </summary>
         Function = 6,
         Userdata = 7,
         Thread = 8,

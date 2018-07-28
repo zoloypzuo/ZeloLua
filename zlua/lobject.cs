@@ -231,7 +231,7 @@ namespace zlua.TypeModel
         /// <summary>
         /// luaO_rawequalObj
         /// </summary>
-                public override bool Equals(object obj)
+        public override bool Equals(object obj)
         {
             var other = obj as TValue;
             if (Type != other.Type) return false;
@@ -301,17 +301,33 @@ namespace zlua.TypeModel
     {
         //public Proto parent;
         public List<Proto> inner_funcs = new List<Proto>();
-        public List<TValue> k;
-        public List<Bytecode> codes;
-        public List<LocVar> locvars;
+        public List<TValue> k = new List<TValue>();
+        public List<Bytecode> codes = new List<Bytecode>();
+        public List<LocVar> locvars = new List<LocVar>();
         public bool isVararg;
         public int maxStacksize;
         public int nParams;
         public int nUpvals;
+        /// <summary>
+        /// List都new好了
+        /// </summary>
+        public Proto()
+        {
+
+        }
     }
     //TODO
     [Serializable]
-    public class LocVar { public string var_name; public int startpc; public int endpc; }
+    public class LocVar
+    {
+        public string var_name;
+        public int startpc;
+        public int endpc;
+        public override string ToString()
+        {
+            return String.Join(", ", var_name, startpc, endpc);
+        }
+    }
 
     //TODO
     public class TConst { double n; TString tstr; }
@@ -401,7 +417,7 @@ namespace zlua.TypeModel
         /// <summary>
         /// luaH_get
         /// </summary>
-                public TValue Get(TValue key)
+        public TValue Get(TValue key)
         {
             switch (key.Type) {
                 case LuaTypes.Nil: return TValue.NilObject;
@@ -422,7 +438,7 @@ namespace zlua.TypeModel
         /// else create a new pair and return the new tvalue
         /// TODO try to return void, because "new TValue" and set outside is not controlable. bad smell.
         /// </summary>
-                public TValue Set(TThread L, TValue key)
+        public TValue Set(TThread L, TValue key)
         {
             var tval = Get(key);
             if (tval != TValue.NilObject) return tval;
@@ -444,7 +460,7 @@ namespace zlua.TypeModel
         /// <summary>
         /// luaH_getnum
         /// </summary>
-                public TValue GetByInt(int key)
+        public TValue GetByInt(int key)
         {
             if (key - 1 < arrayPart.Count) return arrayPart[key - 1];
             else {
