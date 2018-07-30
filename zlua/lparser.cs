@@ -564,9 +564,11 @@ namespace zlua.Parser
         /// <param name="context"></param>
         public override void ExitLocalassignStat([NotNull] LuaParser.LocalassignStatContext context)
         {
+            //一次性补齐nil
             if (nNames > 0) {
-                P.codes.Add(new Bytecode(Opcodes.LoadNil, Fs.freereg, Fs.freereg + nNames, 0));
+                P.codes.Add(new Bytecode(Opcodes.LoadNil, Fs.freereg, Fs.freereg + nNames - 1, 0));
                 Fs.freereg++;
+                nNames = 0;
             }
         }
 
@@ -597,6 +599,8 @@ namespace zlua.Parser
 
         public override void ExitNilfalsetruevarargExp([NotNull] LuaParser.NilfalsetruevarargExpContext context)
         {
+            if (nNames == 0)
+                return;
             switch (context.GetText()) {
                 case "nil":
                     P.codes.Add(new Bytecode(Opcodes.LoadNil, Fs.freereg, Fs.freereg, 0));
@@ -613,6 +617,7 @@ namespace zlua.Parser
                     break;
             }
             Fs.freereg++;
+            nNames--;
         }
 
         public override void ExitNormalArgs([NotNull] LuaParser.NormalArgsContext context)
@@ -728,7 +733,10 @@ namespace zlua.Parser
 
         public override void ExitStringExp([NotNull] LuaParser.StringExpContext context)
         {
-            base.ExitStringExp(context);
+            if (nNames == 0) return;
+            P.codes.Add(new Bytecode(Opcodes.LoadK, Fs.freereg,P.k.Count));
+            P.k.Add((TValue)context.GetText().Trim(new char[]{ '\'','\"'})); //strip quotes on both sides 
+            nNames--;
         }
 
         public override void ExitTableconstructor([NotNull] LuaParser.TableconstructorContext context)
