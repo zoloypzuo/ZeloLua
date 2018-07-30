@@ -5,11 +5,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+/// <summary>
+/// lua标准库，src就十几行，用于定义和加载所有具体的标准库，项目尾声时处理
+/// </summary>
 namespace zlua.Stdlib
 {
     class lualib
     {
-        /* <lua_src> #define lua_assert(x)	((void)0)*/
-        public static void assert(bool x) => Debug.Assert(x);
     }
 }

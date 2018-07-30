@@ -10,12 +10,46 @@ using System.Diagnostics;
 using zlua;
 using zlua.Configuration;
 /// <summary>
-/// CSharp API
+/// CSharp API 这里因为过失没法回退，稍微要话十几分钟把所有index改为index2TValue(index)，TODO，反正lapi内部不用。
 /// </summary>
 namespace zlua.API
 {
     public static class lapi
     {
+        /// <summary>
+        /// get tvalue from stack, accept an signed index (which allows index that under 0), or pesudo index to index special variable like _G
+        /// 正数idx允许超界，返回nilObject，而负数不允许；
+        /// 伪索引包含：注册表，_G，C函数相关的两样东西：env和upvals，这点请阅读一下5.1 manual里C API处 3.4 CCLosure小节的笔记，总之是为了CClosure服务的
+        /// get env有一点困惑（他设置了L.env）但是无所谓，upvals数组同样是从1开始索引，超界返回nilObject（应该是个约定，正数索引都这样）
+        /// 实现策略】从lapi迁移到这里，封装了Stack为indexer，专门用这个函数，没有把L改为一般的方法，如果反悔了呢，而且性能一样的。至于indexer额外经过这一步，开销忽略不计；放屁。两个index计算方法不一样，坑自己啊。
+        /// indexe2adr的index要求必须在当前栈帧内，而且index是相对与当前栈帧索引的。
+        /// </summary>
+        public static TValue Index2TVal(this TThread L, int index)
+        {
+            if (index > 0) {
+                Debug.Assert(index <= L.topIndex - L.baseIndex); // check array boundary
+                int idx = L.baseIndex + (index - 1);
+                if (idx >= L.topIndex) return TValue.NilObject;
+                else return L[idx];
+            } else if (index > lua.RegisteyIndex) /* -10000 < index < 0*/ {
+                Debug.Assert(index != 0 && -index <= L.topIndex - L.baseIndex); // check array boundary
+                return L[L.topIndex + index];
+            } else {
+                switch (index) {
+                    case lua.RegisteyIndex: return L.globalState.registry;
+                    case lua.EnvIndex: {
+                            L.env.Table = (L[L.Ci.funcIndex].Cl as CSharpClosure).env;
+                            return L.env;
+                        }
+                    case lua.GlobalsIndex: return L.globalsTable;
+                    default: {
+                            CSharpClosure func = L[L.Ci.funcIndex].Cl as CSharpClosure;
+                            index = lua.GlobalsIndex - index;
+                            return index <= func.NUpvals ? func.upvals[index - 1] : TValue.NilObject;
+                        }
+                }
+            }
+        }
         #region push functions (C# -> L)
         // 这个push相当于x86的push指令，对于lua这种情况（C#当然不能像汇编一样随便访问内存），其实是设置top元素为push进去的元素而不是push一个新的TValue进去
         // 实现决策】重复使用top++让人有种1. 没封装好，用户不应该知道栈顶的约定 2. repeat yourself（包括index2TVal）；然而这是没办法的。lapi等很多传入L的文件/模块其实是对L这个类的扩展，但是又不得不像外部类一样编程
@@ -99,7 +133,7 @@ namespace zlua.API
         /// </summary>
         public static void PushValue(this TThread L, int index)
         {
-            L[L.topIndex++] = Index2TVal(L, index);
+            L[L.topIndex++].TVal = L[index];
         }
         #endregion
         #region access functions (L -> C#)
@@ -108,7 +142,7 @@ namespace zlua.API
         /// </summary>
         public static LuaTypes Type(this TThread L, int index)
         {
-            TValue o = Index2TVal(L, index);
+            TValue o = L[index];
             return (o == TValue.NilObject) ? LuaTypes.None : o.Type;
         }
         /// <summary>
@@ -122,14 +156,14 @@ namespace zlua.API
         /// <summary>
         /// lua_iscfunction
         /// </summary>
-        public static bool IsCSharpFunction(this TThread L, int index) => L.Index2TVal(index).IsCSharpFunction;
+        public static bool IsCSharpFunction(this TThread L, int index) => L[index].IsCSharpFunction;
         /// <summary>
-        /// lua_isnumber
+        /// lua_isnumber TODO
         /// </summary>
-        public static bool IsNumber(this TThread L, int index) => false;//TODO tonumber
-                                                                        /// <summary>
-                                                                        /// lua_isstring
-                                                                        /// </summary>
+        public static bool IsNumber(this TThread L, int index) => false;
+        /// <summary>
+        /// lua_isstring
+        /// </summary>
         public static bool IsString(this TThread L, int index)
         {
             var t = Type(L, index);
@@ -139,14 +173,14 @@ namespace zlua.API
         /// lua_isuserdata; `src check both light and full ud
         /// 没有引用】和src不一致，他把light 和full都算ud】
         /// </summary>
-        public static bool IsLightUserData(this TThread L, int index) => Index2TVal(L, index).Type == LuaTypes.LightUserdata;
+        public static bool IsLightUserData(this TThread L, int index) => L[index].Type == LuaTypes.LightUserdata;
         /// <summary>
         /// lua_rawequal； raw指不调用元方法__eq
         /// </summary>
         public static bool RawEqual(this TThread L, int index1, int index2)
         {
-            var o1 = Index2TVal(L, index1);
-            var o2 = Index2TVal(L, index2);
+            var o1 = L[index1];
+            var o2 = L[index2];
             return (o1 == TValue.NilObject || o2 == TValue.NilObject) ? false : o1.Equals(o2);
         }
         /// <summary>
@@ -155,8 +189,8 @@ namespace zlua.API
         /// </summary>
         public static bool Equal(this TThread L, int index1, int index2)
         {
-            var o1 = L.Index2TVal(index1);
-            var o2 = L.Index2TVal(index2);
+            var o1 = L[index1];
+            var o2 = L[index2];
             var either_nil = (o1 == TValue.NilObject || o2 == TValue.NilObject);
             return either_nil ? false : L.EqualObj(o1, o2);
         }
@@ -165,8 +199,8 @@ namespace zlua.API
         /// </summary>
         public static bool LessThan(this TThread L, int index1, int index2)
         {
-            var o1 = L.Index2TVal(index1);
-            var o2 = L.Index2TVal(index2);
+            var o1 = L[index1];
+            var o2 = L[index2];
             var either_nil = (o1 == TValue.NilObject || o2 == TValue.NilObject);
             return either_nil ? false : L.LessThan(o1, o2);
         }
@@ -175,7 +209,7 @@ namespace zlua.API
         /// </summary>
         public static double ToNumber(this TThread L, int index)
         {
-            TValue o = Index2TVal(L, index);
+            TValue o = L[index];
             bool canBeConvertedToNum;
             double num = (double)L.ToNumber(o, out canBeConvertedToNum);
             if (canBeConvertedToNum)
@@ -195,7 +229,7 @@ namespace zlua.API
         /// </summary>
         public static bool ToBoolean(this TThread L, int index)
         {
-            return !Index2TVal(L, index).IsFalse;
+            return !L[index].IsFalse;
         }
         /// <summary>
         /// lua_tolstring
@@ -246,7 +280,7 @@ namespace zlua.API
         /// </summary>
         public static void GetTable(this TThread L, int index)
         {
-            var t = L.Index2TVal(index);
+            var t = L[index];
             var top = L[L.topIndex - 1];
             L.GetTable(t, top, top);
         }
@@ -255,7 +289,7 @@ namespace zlua.API
         /// </summary>
         public static void GetField(this TThread L, int index, string key)
         {
-            var t = L.Index2TVal(index);
+            var t = L[index];
             //TODO luaV_gettable, metable table
         }
         /// <summary>
@@ -264,7 +298,7 @@ namespace zlua.API
         /// </summary>
         public static void RawGet(this TThread L, int index)
         {
-            TValue table = Index2TVal(L, index);
+            TValue table = L[index];
             Debug.Assert(table.IsTable);
             L[L.topIndex - 1].TVal = table.Table.Get(L[L.topIndex - 1]);
         }
@@ -276,23 +310,23 @@ namespace zlua.API
         /// </summary>
         public static void RawGetInt(this TThread L, int index, int n)
         {
-            TValue table = Index2TVal(L, index);
+            TValue table = L[index];
             Debug.Assert(table.IsTable);
-            L[L.topIndex++] = table.Table.GetByInt(n);
+            L[L.topIndex++].TVal = table.Table.GetByInt(n);
         }
         /// <summary>
         /// lua_createtable
         /// </summary>
         public static void CreateTable(this TThread L, int sizeArrayPart, int sizeHashTablePart)
         {
-            L[L.topIndex++] = (TValue)new TTable(sizeHashTablePart: sizeHashTablePart, sizeArrayPart: sizeArrayPart);
+            L[L.topIndex++].TVal = (TValue)new TTable(sizeHashTablePart: sizeHashTablePart, sizeArrayPart: sizeArrayPart);
         }
         /// <summary>
         /// lua_getmetable
         /// </summary>
         public static void GetMetatable(this TThread L, int index)
         {
-            var obj = L.Index2TVal(index);
+            var obj = L[index];
             TTable mt = null;
             switch (obj.Type) {
                 case LuaTypes.Table: mt = ((TTable)obj).metatable; break;
@@ -350,7 +384,7 @@ namespace zlua.API
             if (nRetvals == lua.MultiRet && L.topIndex >= L.Ci.topIndex) L.Ci.topIndex = L.topIndex;
         }
         /// <summary>
-        /// lua_call
+        /// lua_call 函数和args已经压栈，调用它
         /// </summary>
         public static void Call(this TThread L, int nArgs, int nRetvals)
         {
@@ -361,47 +395,16 @@ namespace zlua.API
         #endregion
         #region other functions
         /// <summary>
-        /// lua_gettop
+        /// lua_gettop; 实现策略】放弃。baseIndex改为private后
         /// </summary>
-        public static int GetTop(this TThread L) => L.topIndex - L.baseIndex;
+        public static int GetTop(this TThread L) => 0;// L.topIndex - L.baseIndex;
 
         public static TTable GetCurrEnv(this TThread L)
         {
             return null;
         }
 
-        /// <summary>
-        /// get tvalue from stack, accept an signed index (which allows index that under 0), or pesudo index to index special variable like _G
-        /// 正数idx允许超界，返回nilObject，而负数不允许；
-        /// 伪索引包含：注册表，_G，C函数相关的两样东西：env和upvals，这点请阅读一下5.1 manual里C API处 3.4 CCLosure小节的笔记，总之是为了CClosure服务的
-        /// get env有一点困惑（他设置了L.env）但是无所谓，upvals数组同样是从1开始索引，超界返回nilObject（应该是个约定，正数索引都这样）
-        /// </summary>
-        public static TValue Index2TVal(this TThread L, int index)
-        {
-            if (index > 0) {
-                Debug.Assert(index <= L.Ci.topIndex - L.baseIndex); // check array boundary
-                int idx = L.baseIndex + (index - 1);
-                if (idx >= L.topIndex) return TValue.NilObject;
-                else return L[idx];
-            } else if (index > lua.RegisteyIndex) /* -10000 < index < 0*/ {
-                Debug.Assert(index != 0 && -index <= L.topIndex - L.baseIndex); // check array boundary
-                return L[L.topIndex + index];
-            } else {
-                switch (index) {
-                    case lua.RegisteyIndex: return L.globalState.registry;
-                    case lua.EnvIndex: {
-                            L.env.Table = (L[L.Ci.funcIndex].Cl as CSharpClosure).env;
-                            return L.env;
-                        }
-                    case lua.GlobalsIndex: return L.globalsTable;
-                    default: {
-                            CSharpClosure func = L[L.Ci.funcIndex].Cl as CSharpClosure;
-                            index = lua.GlobalsIndex - index;
-                            return index <= func.NUpvals ? func.upvals[index - 1] : TValue.NilObject;
-                        }
-                }
-            }
-        }
+
         #endregion
 
     }

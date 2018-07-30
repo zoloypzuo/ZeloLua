@@ -54,7 +54,6 @@
     <Compile Include="ldo.cs" />
     <Compile Include="lfunc.cs" />
     <Compile Include="lparser.cs" />
-    <Compile Include="lstate.cs" />
     <Compile Include="ltm.cs" />
     <Compile Include="luaconf.cs" />
     <Compile Include="lualib.cs" />

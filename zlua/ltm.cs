@@ -22,7 +22,7 @@ namespace zlua.Metamethod
         /// <summary>
         /// luaT_gettmbyobj; get metamethod from `obj
         /// </summary>
-                public static TValue GetMetamethod(this TThread L, TValue obj, MetamethodTypes metamethodType)
+        public static TValue GetMetamethod(this TThread L, TValue obj, MetamethodTypes metamethodType)
         {
             TTable metatable;
             switch (obj.Type) {

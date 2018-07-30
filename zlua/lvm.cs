@@ -5,7 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using zlua.TypeModel;
 using zlua.ISA;
-using zlua.GlobalState;
 using System.Diagnostics;
 using zlua.API;
 using zlua.CallSystem;
@@ -16,20 +15,12 @@ using zlua.Metamethod;
 /// </summary>
 namespace zlua.VM
 {
-    public enum ThreadStatus
-    {
-        Yield = 1,
-        ErrRun = 2,
-        ErrSyntax = 3,
-        ErrMem = 4,
-        ErrErr = 5
-    }
     /// <summary>
-    /// 相比src，几乎没用。
+    /// 相比src，几乎没用，从L里脱离出来的，维护多个L共享的DS；没法internal，详见《internal规则》
     /// </summary>
     public class GlobalState
     {
-        public TValue registry;
+        public TValue registry = new TValue(new TTable(sizeHashTablePart: 2, sizeArrayPart: 0));
         public TThread mainThread;
         public TTable[] metaTableForBasicType = new TTable[(int)LuaTypes.Thread + 1];
         public TString[] metaMethodNames = new TString[(int)MetamethodTypes.N];
@@ -37,25 +28,24 @@ namespace zlua.VM
     public class TThread : TObject
     {
         #region fields
-        ThreadStatus status;
-        public List<TValue> Stack;
+        List<TValue> Stack;
         /// <summary>
-        /// lua栈遵循栈约定：top指向第一个可用位置，每次push时 top++ = value
+        /// lua栈遵循栈约定：top指向第一个可用位置，每次push时 top++ = value；几乎所有文件都要用，因为你用这个来维护栈这个行为
         /// </summary>
         public int topIndex;
         /// <summary>
-        /// 当前函数的base
+        /// 当前函数的base：Ido要使用，我希望他是private
         /// </summary>
-        public int baseIndex; // "base" is a C# keyword, ...
+        public int baseIndex;
         /// <summary>
-        /// 标记分配的大小
+        /// 标记分配的大小,topIndex永远<stackLastFree
         /// </summary>
-        public int stackLastFree;
+        public int StackLastFree { get => Stack.Count; }
         /// <summary>
-        /// 当前函数
+        /// 当前函数；ido和lvm用的都多，我希望迁移到ido
         /// </summary>
         public Callinfo Ci { get => ciStack.Peek(); }
-        public Stack<Callinfo> ciStack;
+        public Stack<Callinfo> ciStack; //ido用的多，希望迁移到ido
 
         /// <summary>
         /// consts
@@ -64,9 +54,9 @@ namespace zlua.VM
         /// <summary>
         /// _G
         /// </summary>
-        public TValue globalsTable;
+        public readonly TValue globalsTable = new TValue(new TTable(sizeHashTablePart: 2, sizeArrayPart: 0));
         /// <summary>
-        /// saved pc when call a function; index of instruction array
+        /// saved pc when call a function; index of instruction array；因为src用指针的原因，而zlua必须同时使用codes和pc来获取指令
         /// </summary>
         public int savedpc;
         public List<Bytecode> codes;
@@ -85,11 +75,7 @@ namespace zlua.VM
         /// </summary>
         public TThread()
         {
-            globalState = new GlobalState() {
-                mainThread = this,
-                registry = new TValue(new TTable(sizeHashTablePart: 2, sizeArrayPart: 0))
-            };
-            globalsTable = new TValue(new TTable(sizeHashTablePart: 2, sizeArrayPart: 0));
+            globalState = new GlobalState() { mainThread = this };
             const int BasicCiStackSize = 8;
             const int BasicStackSize = 40;
             ciStack = new Stack<Callinfo>(BasicCiStackSize);
@@ -115,7 +101,7 @@ namespace zlua.VM
             while (true) {
                 Bytecode instr = codes[pc++];
                 Debug.Assert(baseIndex == this.baseIndex && this.baseIndex == Ci.baseIndex);
-                Debug.Assert(baseIndex <= topIndex && topIndex <= Stack.Count);
+                Debug.Assert(baseIndex <= topIndex && topIndex < StackLastFree); //这里始终没有。
                 TValue ra = RA(instr);
                 switch (instr.Opcode) {
                     case Opcodes.Move:
@@ -357,6 +343,15 @@ namespace zlua.VM
             }
 
         }
+        /// <summary>
+        /// 让栈扩展到`size大小
+        /// </summary>
+        /// <param name="topIndex"></param>
+        internal void Alloc(int size)
+        {
+            for (int i = Stack.Count; i < size; i++)
+                Stack.Add(new TValue());
+        }
 
         #region get operands from instruction args
         /// <summary>
@@ -384,16 +379,16 @@ namespace zlua.VM
         /// luaV_tonumber; number直接返回，string如果能parse返回新的转成double的TValue，否则返回null
         /// src的参数n是没有必要的
         /// </summary>
-        public TValue ToNumber(TValue obj, out bool canBeConvertedToNum)
+        public TValue ToNumber(TValue obj, out bool convertibleToNum)
         {
-            canBeConvertedToNum = true;
+            convertibleToNum = true;
             if (obj.IsNumber) return obj;
             if (obj.IsString) {
-                double num = TValue.Str2Num((string)obj, out canBeConvertedToNum);
-                if (canBeConvertedToNum)
+                double num = TValue.Str2Num((string)obj, out convertibleToNum);
+                if (convertibleToNum)
                     return (TValue)num;
             }
-            canBeConvertedToNum = false;
+            convertibleToNum = false;
             return null;
         }
         /// <summary>
@@ -461,10 +456,15 @@ namespace zlua.VM
             if (lhs.IsString) return false;//TODO 字典序。或者你看标准库有没有
             else return false; //TODO 调用meta方法
         }
+       
+        /// <summary>
+        /// indexer是只读的，因为直接修改栈上变量是错误的行为。（改了的瞬间报出两个error）
+        /// </summary>
+        /// <param name="i"></param>
+        /// <returns></returns>
         public TValue this[int i]
         {
             get => Stack[i];
-            set => Stack[i] = value;
         }
         /// <summary>
         /// Arith; call metamethod

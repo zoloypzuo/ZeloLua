@@ -46,7 +46,7 @@ namespace zlua
         public static void DoFile(this TThread L, string path)
         {
             L.LoadFile(path);
-            lapi.Call(L, 0, 0);
+            lapi.Call(L, nArgs:0,nRetvals:0);
         }
         /// <summary>
         /// LUA_MULTRET, an option for lua_pcall and lua_call

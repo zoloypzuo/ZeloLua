@@ -15,7 +15,7 @@ using zlua.AntlrGen;
 /// </summary>
 namespace zlua.AuxLib
 {
-    static class lauxlib
+    public static class lauxlib
     {
         /// <summary>
         /// luaL_loadfile
@@ -39,9 +39,8 @@ namespace zlua.AuxLib
                 Console.WriteLine(tree.ToStringTree()); //虽然C#的根本没法看，留着呗
             }
             Proto proto = lp.ChunkProto;
-            Closure closure = new LuaClosure((TTable)L.globalsTable, 0, proto);
-            L[L.topIndex].Cl = closure;
-            L.topIndex++;
+            Closure closure = new LuaClosure(env:(TTable)L.globalsTable, nUpvals:0, p:proto);
+            L[L.topIndex++].Cl = closure; 
         }
         /// <summary>
         /// luaL_checkany

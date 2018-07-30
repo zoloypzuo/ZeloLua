@@ -1,12 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using zlua.TypeModel;
-using zlua.VM;
-using zlua.ISA;
 /// <summary>
 /// 指令集
 /// </summary>
@@ -21,7 +15,7 @@ namespace zlua.ISA
         Opcodes Opcode { get; set; }
     }
     /// <summary>
-    /// eaiser to use than `Bytecode
+    /// eaiser to use than `Bytecode 仅仅展示一下，说明字节码的坑爹（也没那么坑，rio都写好了）
     /// </summary>
     public class NonBytecode : IInstruction
     {

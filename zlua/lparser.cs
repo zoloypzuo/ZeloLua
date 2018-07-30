@@ -49,18 +49,23 @@ namespace zlua.Parser
             int nactvar;  /* number of active local variables */ //活着的locals个数
                                                                  //upvaldesc upvalues[LUAI_MAXUPVALUES];  /* upvalues */  
                                                                  //unsigned short actvar[LUAI_MAXVARS];  /* declared-variable stack */ //已声明的变量栈
-            /// <summary>
-            /// 指向第一个指令数组的可用位置（名字换成next？）
-            /// </summary>
+                                                                 /// <summary>
+                                                                 /// 指向第一个指令数组的可用位置（名字换成next？）
+                                                                 /// </summary>
             public int CurrPc { get => pc; }
         }
-        Stack<FuncState> fsStack=new Stack<FuncState>();
+        Stack<FuncState> fsStack = new Stack<FuncState>();
         FuncState Fs { get => fsStack.Peek(); }
         Proto P { get => Fs.f; }
+        /// <summary>
+        /// 非常不好的编程方式，但是我想不到其他办法。exp必须独立计算，因此我们从stat部分生成一些控制信号。
+        /// 左值的id个数
+        /// </summary>
+        int nNames = 0;
         public lparser()
         {
             fsStack.Push(new FuncState() {
-                f=new Proto(),
+                f = new Proto(),
             });  //压入chunk这个栈帧
         }
         public override void EnterAddsubExp([NotNull] LuaParser.AddsubExpContext context)
@@ -205,7 +210,23 @@ namespace zlua.Parser
 
         public override void EnterLocalassignStat([NotNull] LuaParser.LocalassignStatContext context)
         {
-            base.EnterLocalassignStat(context);
+            var namelist = context.namelist().NAME();
+            bool no_equal = context.GetToken(2, 0) == null;
+            // local a,b,c=1,2,3 左侧加符号表，加初始化指令；右侧要从某个地方（exp栈可能）拿到exp的位置，而且不知道指令类型TODO
+            // local a,b,c 只声明不赋值，根据有没有=判断，freereg+=n，names加入符号表
+            // local a,b,c=1 右侧不足，同上
+            // local a,b=1,2,3,4 截断
+
+            //初始化locvar
+            for (int i = 0; i < namelist.Length; i++) {
+                var lv = new LocVar() {
+                    var_name = namelist[i].GetText(),
+                    startpc = Fs.CurrPc,
+                };
+                P.locvars.Add(lv);
+
+            }
+            nNames = namelist.Length;
         }
 
         public override void EnterLocalfunctiondefStat([NotNull] LuaParser.LocalfunctiondefStatContext context)
@@ -543,19 +564,9 @@ namespace zlua.Parser
         /// <param name="context"></param>
         public override void ExitLocalassignStat([NotNull] LuaParser.LocalassignStatContext context)
         {
-            var namelist = context.namelist().NAME();
-            bool no_equal = context.GetToken(2, 0) == null;
-            // local a,b,c=1,2,3 左侧加符号表，加初始化指令；右侧要从某个地方（exp栈可能）拿到exp的位置，而且不知道指令类型TODO
-            // local a,b,c 只声明不赋值，根据有没有=判断，freereg+=n，names加入符号表
-            // local a,b,c=1 右侧不足，同上
-            // local a,b=1,2,3,4 截断
-            for (int i = 0; i < namelist.Length; i++) {
-                var lv=new LocVar() {
-                    var_name = namelist[i].GetText(),
-                    startpc = Fs.CurrPc,
-                };
-                P.locvars.Add(lv);
-
+            if (nNames > 0) {
+                P.codes.Add(new Bytecode(Opcodes.LoadNil, Fs.freereg, Fs.freereg + nNames, 0));
+                Fs.freereg++;
             }
         }
 
@@ -616,7 +627,8 @@ namespace zlua.Parser
 
         public override void ExitNumberExp([NotNull] LuaParser.NumberExpContext context)
         {
-            base.ExitNumberExp(context);
+            P.codes.Add(new Bytecode(Opcodes.LoadK, Fs.freereg++, P.k.Count));
+            P.k.Add((TValue)Double.Parse(context.GetText()));
         }
 
         public override void ExitOperatorAddSub([NotNull] LuaParser.OperatorAddSubContext context)
