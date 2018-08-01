@@ -305,7 +305,10 @@ namespace zlua.TypeModel
         public List<Bytecode> codes = new List<Bytecode>();
         public List<LocVar> locvars = new List<LocVar>();
         public bool isVararg;
-        public int maxStacksize;
+        /// <summary>
+        /// 暂时这样
+        /// </summary>
+        public int MaxStacksize {get=>codes.Count; }
         public int nParams;
         public int nUpvals;
         /// <summary>

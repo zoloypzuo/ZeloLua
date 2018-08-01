@@ -39,7 +39,6 @@ namespace zlua.VM.Tests
             });
             var p = new Proto() {
                 codes = codes,
-                maxStacksize = 15,
                 nParams = 0,
                 isVararg = false,
                 k = new List<TValue> {

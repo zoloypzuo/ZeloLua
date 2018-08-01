@@ -27,7 +27,7 @@ stat
     | 'do' block 'end' #doendStat
     | 'while' exp 'do' block 'end' #whileStat
     | 'repeat' block 'until' exp #repeatStat
-    | 'if' exp 'then' block ('elseif' exp 'then' block)* ('else' block)? 'end' #ifelseStat
+    | 'if' exp 'then' block (elseif='elseif' exp 'then' block)* (else='else' block)? 'end' #ifelseStat
     | 'for' NAME '=' exp ',' exp (',' exp)? 'do' block 'end' #forijkStat
     | 'for' namelist 'in' explist 'do' block 'end' #forinStat
     | 'function' funcname funcbody #functiondefStat
@@ -75,7 +75,7 @@ exp
 
 nilfalsetruevararg: 'nil'|'false'|'true'|'...';
 
-prefixexp
+prefixexp //exp，var或带括号的exp，并且，可以带args，此时变为函数调用exp
     : varOrExp nameAndArgs*
     ;
 

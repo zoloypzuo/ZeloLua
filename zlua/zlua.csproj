@@ -60,6 +60,7 @@
     <Compile Include="lopcodes.cs" />
     <Compile Include="lobject.cs" />
     <Compile Include="lua.cs" />
+    <Compile Include="lvisitor.cs" />
     <Compile Include="lvm.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

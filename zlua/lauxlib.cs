@@ -38,7 +38,7 @@ namespace zlua.AuxLib
                 walker.Walk(lp, tree);
                 Console.WriteLine(tree.ToStringTree()); //虽然C#的根本没法看，留着呗
             }
-            Proto proto = lp.ChunkProto;
+            Proto proto = lp.P;
             Closure closure = new LuaClosure(env:(TTable)L.globalsTable, nUpvals:0, p:proto);
             L[L.topIndex++].Cl = closure; 
         }

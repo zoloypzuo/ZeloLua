@@ -84,7 +84,7 @@ namespace zlua.CallSystem
                 Callinfo ci = new Callinfo() {
                     funcIndex = funcIndex,
                     baseIndex = _base,
-                    topIndex = L.baseIndex + p.maxStacksize,  //top存最大的栈帧大小，编译期确定
+                    topIndex = L.baseIndex + p.MaxStacksize,  //top存最大的栈帧大小，编译期确定
                     nRetvals = nRetvals
                 };
                 if (ci.topIndex >= L.StackLastFree)
