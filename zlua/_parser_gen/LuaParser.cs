@@ -19,7 +19,7 @@
 // Ambiguous reference in cref attribute
 #pragma warning disable 419
 
-namespace zlua.AntlrGen {
+namespace zlua.Gen {
 using Antlr4.Runtime;
 using Antlr4.Runtime.Atn;
 using Antlr4.Runtime.Misc;
@@ -34,48 +34,42 @@ public partial class LuaParser : Parser {
 		T__0=1, T__1=2, T__2=3, T__3=4, T__4=5, T__5=6, T__6=7, T__7=8, T__8=9, 
 		T__9=10, T__10=11, T__11=12, T__12=13, T__13=14, T__14=15, T__15=16, T__16=17, 
 		T__17=18, T__18=19, T__19=20, T__20=21, T__21=22, T__22=23, T__23=24, 
-		T__24=25, T__25=26, T__26=27, T__27=28, T__28=29, T__29=30, T__30=31, 
-		T__31=32, T__32=33, T__33=34, T__34=35, T__35=36, T__36=37, T__37=38, 
-		T__38=39, T__39=40, T__40=41, T__41=42, T__42=43, T__43=44, T__44=45, 
-		T__45=46, T__46=47, T__47=48, T__48=49, T__49=50, T__50=51, T__51=52, 
-		T__52=53, NAME=54, NORMALSTRING=55, CHARSTRING=56, LONGSTRING=57, INT=58, 
-		HEX=59, FLOAT=60, HEX_FLOAT=61, COMMENT=62, LINE_COMMENT=63, WS=64, SHEBANG=65;
+		T__24=25, T__25=26, T__26=27, NilKW=28, FalseKW=29, TrueKW=30, VarargKW=31, 
+		NotKW=32, LenKW=33, MinusKW=34, MulKW=35, DivKW=36, ModKW=37, AddKW=38, 
+		ConcatKW=39, LtKW=40, MtKW=41, LeKW=42, MeKW=43, NeKW=44, EqKW=45, AndKW=46, 
+		OrKW=47, NAME=48, NORMALSTRING=49, CHARSTRING=50, LONGSTRING=51, INT=52, 
+		HEX=53, FLOAT=54, COMMENT=55, LINE_COMMENT=56, WS=57, SHEBANG=58;
 	public const int
-		RULE_chunk = 0, RULE_block = 1, RULE_stat = 2, RULE_retstat = 3, RULE_funcname = 4, 
-		RULE_varlist = 5, RULE_namelist = 6, RULE_explist = 7, RULE_exp = 8, RULE_nilfalsetruevararg = 9, 
-		RULE_prefixexp = 10, RULE_functioncall = 11, RULE_varOrExp = 12, RULE_var = 13, 
-		RULE_varSuffix = 14, RULE_nameAndArgs = 15, RULE_args = 16, RULE_functiondef = 17, 
-		RULE_funcbody = 18, RULE_parlist = 19, RULE_tableconstructor = 20, RULE_fieldlist = 21, 
-		RULE_field = 22, RULE_fieldsep = 23, RULE_operatorOr = 24, RULE_operatorAnd = 25, 
-		RULE_operatorComparison = 26, RULE_operatorStrcat = 27, RULE_operatorAddSub = 28, 
-		RULE_operatorMulDivMod = 29, RULE_operatorBitwise = 30, RULE_operatorUnary = 31, 
-		RULE_operatorPower = 32, RULE_number = 33, RULE_string = 34;
+		RULE_chunk = 0, RULE_block = 1, RULE_retstat = 2, RULE_stat = 3, RULE_elseifBlock = 4, 
+		RULE_elseBlock = 5, RULE_funcname = 6, RULE_varlist = 7, RULE_namelist = 8, 
+		RULE_explist = 9, RULE_doc = 10, RULE_exp = 11, RULE_prefixexp = 12, RULE_functioncall = 13, 
+		RULE_varOrExp = 14, RULE_var = 15, RULE_varSuffix = 16, RULE_nameAndArgs = 17, 
+		RULE_args = 18, RULE_functiondef = 19, RULE_funcbody = 20, RULE_parlist = 21, 
+		RULE_tableconstructor = 22, RULE_fieldlist = 23, RULE_field = 24, RULE_fieldsep = 25, 
+		RULE_number = 26, RULE_string = 27;
 	public static readonly string[] ruleNames = {
-		"chunk", "block", "stat", "retstat", "funcname", "varlist", "namelist", 
-		"explist", "exp", "nilfalsetruevararg", "prefixexp", "functioncall", "varOrExp", 
-		"var", "varSuffix", "nameAndArgs", "args", "functiondef", "funcbody", 
-		"parlist", "tableconstructor", "fieldlist", "field", "fieldsep", "operatorOr", 
-		"operatorAnd", "operatorComparison", "operatorStrcat", "operatorAddSub", 
-		"operatorMulDivMod", "operatorBitwise", "operatorUnary", "operatorPower", 
+		"chunk", "block", "retstat", "stat", "elseifBlock", "elseBlock", "funcname", 
+		"varlist", "namelist", "explist", "doc", "exp", "prefixexp", "functioncall", 
+		"varOrExp", "var", "varSuffix", "nameAndArgs", "args", "functiondef", 
+		"funcbody", "parlist", "tableconstructor", "fieldlist", "field", "fieldsep", 
 		"number", "string"
 	};
 
 	private static readonly string[] _LiteralNames = {
-		null, "';'", "'='", "'break'", "'do'", "'end'", "'while'", "'repeat'", 
-		"'until'", "'if'", "'then'", "'elseif'", "'else'", "'for'", "','", "'in'", 
-		"'function'", "'local'", "'return'", "'.'", "':'", "'nil'", "'false'", 
-		"'true'", "'...'", "'('", "')'", "'['", "']'", "'{'", "'}'", "'or'", "'and'", 
-		"'<'", "'>'", "'<='", "'>='", "'~='", "'=='", "'..'", "'+'", "'-'", "'*'", 
-		"'/'", "'%'", "'//'", "'&'", "'|'", "'~'", "'<<'", "'>>'", "'not'", "'#'", 
-		"'^'"
+		null, "'return'", "';'", "'='", "'break'", "'do'", "'end'", "'while'", 
+		"'repeat'", "'until'", "'if'", "'then'", "'for'", "','", "'in'", "'function'", 
+		"'local'", "'elseif'", "'else'", "'.'", "':'", "'^'", "'('", "')'", "'['", 
+		"']'", "'{'", "'}'", "'nil'", "'false'", "'true'", "'...'", "'not'", "'#'", 
+		"'-'", "'*'", "'/'", "'%'", "'+'", "'..'", "'<'", "'>'", "'<='", "'>='", 
+		"'~='", "'=='", "'and'", "'or'"
 	};
 	private static readonly string[] _SymbolicNames = {
 		null, null, null, null, null, null, null, null, null, null, null, null, 
 		null, null, null, null, null, null, null, null, null, null, null, null, 
-		null, null, null, null, null, null, null, null, null, null, null, null, 
-		null, null, null, null, null, null, null, null, null, null, null, null, 
-		null, null, null, null, null, null, "NAME", "NORMALSTRING", "CHARSTRING", 
-		"LONGSTRING", "INT", "HEX", "FLOAT", "HEX_FLOAT", "COMMENT", "LINE_COMMENT", 
+		null, null, null, null, "NilKW", "FalseKW", "TrueKW", "VarargKW", "NotKW", 
+		"LenKW", "MinusKW", "MulKW", "DivKW", "ModKW", "AddKW", "ConcatKW", "LtKW", 
+		"MtKW", "LeKW", "MeKW", "NeKW", "EqKW", "AndKW", "OrKW", "NAME", "NORMALSTRING", 
+		"CHARSTRING", "LONGSTRING", "INT", "HEX", "FLOAT", "COMMENT", "LINE_COMMENT", 
 		"WS", "SHEBANG"
 	};
 	public static readonly IVocabulary DefaultVocabulary = new Vocabulary(_LiteralNames, _SymbolicNames);
@@ -138,14 +132,6 @@ public partial class LuaParser : Parser {
 		{
 		}
 		public override int RuleIndex { get { return RULE_chunk; } }
-		public override void EnterRule(IParseTreeListener listener) {
-			ILuaListener typedListener = listener as ILuaListener;
-			if (typedListener != null) typedListener.EnterChunk(this);
-		}
-		public override void ExitRule(IParseTreeListener listener) {
-			ILuaListener typedListener = listener as ILuaListener;
-			if (typedListener != null) typedListener.ExitChunk(this);
-		}
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			ILuaVisitor<TResult> typedVisitor = visitor as ILuaVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitChunk(this);
@@ -160,8 +146,8 @@ public partial class LuaParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 70; block();
-			State = 71; Match(Eof);
+			State = 56; block();
+			State = 57; Match(Eof);
 			}
 		}
 		catch (RecognitionException re) {
@@ -190,14 +176,6 @@ public partial class LuaParser : Parser {
 		{
 		}
 		public override int RuleIndex { get { return RULE_block; } }
-		public override void EnterRule(IParseTreeListener listener) {
-			ILuaListener typedListener = listener as ILuaListener;
-			if (typedListener != null) typedListener.EnterBlock(this);
-		}
-		public override void ExitRule(IParseTreeListener listener) {
-			ILuaListener typedListener = listener as ILuaListener;
-			if (typedListener != null) typedListener.ExitBlock(this);
-		}
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			ILuaVisitor<TResult> typedVisitor = visitor as ILuaVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitBlock(this);
@@ -213,25 +191,81 @@ public partial class LuaParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 76;
+			State = 62;
 			_errHandler.Sync(this);
 			_la = _input.La(1);
-			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__0) | (1L << T__2) | (1L << T__3) | (1L << T__5) | (1L << T__6) | (1L << T__8) | (1L << T__12) | (1L << T__15) | (1L << T__16) | (1L << T__24) | (1L << NAME))) != 0)) {
+			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__1) | (1L << T__3) | (1L << T__4) | (1L << T__6) | (1L << T__7) | (1L << T__9) | (1L << T__11) | (1L << T__14) | (1L << T__15) | (1L << T__21) | (1L << NAME))) != 0)) {
 				{
 				{
-				State = 73; stat();
+				State = 59; stat();
 				}
 				}
-				State = 78;
+				State = 64;
 				_errHandler.Sync(this);
 				_la = _input.La(1);
 			}
-			State = 80;
+			State = 66;
 			_errHandler.Sync(this);
 			_la = _input.La(1);
-			if (_la==T__17) {
+			if (_la==T__0) {
 				{
-				State = 79; retstat();
+				State = 65; retstat();
+				}
+			}
+
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			_errHandler.ReportError(this, re);
+			_errHandler.Recover(this, re);
+		}
+		finally {
+			ExitRule();
+		}
+		return _localctx;
+	}
+
+	public partial class RetstatContext : ParserRuleContext {
+		public ExplistContext explist() {
+			return GetRuleContext<ExplistContext>(0);
+		}
+		public RetstatContext(ParserRuleContext parent, int invokingState)
+			: base(parent, invokingState)
+		{
+		}
+		public override int RuleIndex { get { return RULE_retstat; } }
+		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
+			ILuaVisitor<TResult> typedVisitor = visitor as ILuaVisitor<TResult>;
+			if (typedVisitor != null) return typedVisitor.VisitRetstat(this);
+			else return visitor.VisitChildren(this);
+		}
+	}
+
+	[RuleVersion(0)]
+	public RetstatContext retstat() {
+		RetstatContext _localctx = new RetstatContext(_ctx, State);
+		EnterRule(_localctx, 4, RULE_retstat);
+		int _la;
+		try {
+			EnterOuterAlt(_localctx, 1);
+			{
+			State = 68; Match(T__0);
+			State = 70;
+			_errHandler.Sync(this);
+			_la = _input.La(1);
+			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__14) | (1L << T__21) | (1L << T__25) | (1L << NilKW) | (1L << FalseKW) | (1L << TrueKW) | (1L << VarargKW) | (1L << NotKW) | (1L << LenKW) | (1L << MinusKW) | (1L << NAME) | (1L << NORMALSTRING) | (1L << CHARSTRING) | (1L << LONGSTRING) | (1L << INT) | (1L << HEX) | (1L << FLOAT))) != 0)) {
+				{
+				State = 69; explist();
+				}
+			}
+
+			State = 73;
+			_errHandler.Sync(this);
+			_la = _input.La(1);
+			if (_la==T__1) {
+				{
+				State = 72; Match(T__1);
 				}
 			}
 
@@ -262,14 +296,6 @@ public partial class LuaParser : Parser {
 	}
 	public partial class EmptyStatContext : StatContext {
 		public EmptyStatContext(StatContext context) { CopyFrom(context); }
-		public override void EnterRule(IParseTreeListener listener) {
-			ILuaListener typedListener = listener as ILuaListener;
-			if (typedListener != null) typedListener.EnterEmptyStat(this);
-		}
-		public override void ExitRule(IParseTreeListener listener) {
-			ILuaListener typedListener = listener as ILuaListener;
-			if (typedListener != null) typedListener.ExitEmptyStat(this);
-		}
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			ILuaVisitor<TResult> typedVisitor = visitor as ILuaVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitEmptyStat(this);
@@ -284,14 +310,6 @@ public partial class LuaParser : Parser {
 			return GetRuleContext<ExplistContext>(0);
 		}
 		public AssignStatContext(StatContext context) { CopyFrom(context); }
-		public override void EnterRule(IParseTreeListener listener) {
-			ILuaListener typedListener = listener as ILuaListener;
-			if (typedListener != null) typedListener.EnterAssignStat(this);
-		}
-		public override void ExitRule(IParseTreeListener listener) {
-			ILuaListener typedListener = listener as ILuaListener;
-			if (typedListener != null) typedListener.ExitAssignStat(this);
-		}
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			ILuaVisitor<TResult> typedVisitor = visitor as ILuaVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitAssignStat(this);
@@ -303,14 +321,6 @@ public partial class LuaParser : Parser {
 			return GetRuleContext<FunctioncallContext>(0);
 		}
 		public FunctioncallStatContext(StatContext context) { CopyFrom(context); }
-		public override void EnterRule(IParseTreeListener listener) {
-			ILuaListener typedListener = listener as ILuaListener;
-			if (typedListener != null) typedListener.EnterFunctioncallStat(this);
-		}
-		public override void ExitRule(IParseTreeListener listener) {
-			ILuaListener typedListener = listener as ILuaListener;
-			if (typedListener != null) typedListener.ExitFunctioncallStat(this);
-		}
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			ILuaVisitor<TResult> typedVisitor = visitor as ILuaVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitFunctioncallStat(this);
@@ -319,14 +329,6 @@ public partial class LuaParser : Parser {
 	}
 	public partial class BreakStatContext : StatContext {
 		public BreakStatContext(StatContext context) { CopyFrom(context); }
-		public override void EnterRule(IParseTreeListener listener) {
-			ILuaListener typedListener = listener as ILuaListener;
-			if (typedListener != null) typedListener.EnterBreakStat(this);
-		}
-		public override void ExitRule(IParseTreeListener listener) {
-			ILuaListener typedListener = listener as ILuaListener;
-			if (typedListener != null) typedListener.ExitBreakStat(this);
-		}
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			ILuaVisitor<TResult> typedVisitor = visitor as ILuaVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitBreakStat(this);
@@ -338,14 +340,6 @@ public partial class LuaParser : Parser {
 			return GetRuleContext<BlockContext>(0);
 		}
 		public DoendStatContext(StatContext context) { CopyFrom(context); }
-		public override void EnterRule(IParseTreeListener listener) {
-			ILuaListener typedListener = listener as ILuaListener;
-			if (typedListener != null) typedListener.EnterDoendStat(this);
-		}
-		public override void ExitRule(IParseTreeListener listener) {
-			ILuaListener typedListener = listener as ILuaListener;
-			if (typedListener != null) typedListener.ExitDoendStat(this);
-		}
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			ILuaVisitor<TResult> typedVisitor = visitor as ILuaVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitDoendStat(this);
@@ -360,14 +354,6 @@ public partial class LuaParser : Parser {
 			return GetRuleContext<BlockContext>(0);
 		}
 		public WhileStatContext(StatContext context) { CopyFrom(context); }
-		public override void EnterRule(IParseTreeListener listener) {
-			ILuaListener typedListener = listener as ILuaListener;
-			if (typedListener != null) typedListener.EnterWhileStat(this);
-		}
-		public override void ExitRule(IParseTreeListener listener) {
-			ILuaListener typedListener = listener as ILuaListener;
-			if (typedListener != null) typedListener.ExitWhileStat(this);
-		}
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			ILuaVisitor<TResult> typedVisitor = visitor as ILuaVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitWhileStat(this);
@@ -382,14 +368,6 @@ public partial class LuaParser : Parser {
 			return GetRuleContext<ExpContext>(0);
 		}
 		public RepeatStatContext(StatContext context) { CopyFrom(context); }
-		public override void EnterRule(IParseTreeListener listener) {
-			ILuaListener typedListener = listener as ILuaListener;
-			if (typedListener != null) typedListener.EnterRepeatStat(this);
-		}
-		public override void ExitRule(IParseTreeListener listener) {
-			ILuaListener typedListener = listener as ILuaListener;
-			if (typedListener != null) typedListener.ExitRepeatStat(this);
-		}
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			ILuaVisitor<TResult> typedVisitor = visitor as ILuaVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitRepeatStat(this);
@@ -397,27 +375,22 @@ public partial class LuaParser : Parser {
 		}
 	}
 	public partial class IfelseStatContext : StatContext {
-		public ExpContext[] exp() {
-			return GetRuleContexts<ExpContext>();
+		public ExpContext exp() {
+			return GetRuleContext<ExpContext>(0);
 		}
-		public ExpContext exp(int i) {
-			return GetRuleContext<ExpContext>(i);
+		public BlockContext block() {
+			return GetRuleContext<BlockContext>(0);
 		}
-		public BlockContext[] block() {
-			return GetRuleContexts<BlockContext>();
+		public ElseifBlockContext[] elseifBlock() {
+			return GetRuleContexts<ElseifBlockContext>();
 		}
-		public BlockContext block(int i) {
-			return GetRuleContext<BlockContext>(i);
+		public ElseifBlockContext elseifBlock(int i) {
+			return GetRuleContext<ElseifBlockContext>(i);
+		}
+		public ElseBlockContext elseBlock() {
+			return GetRuleContext<ElseBlockContext>(0);
 		}
 		public IfelseStatContext(StatContext context) { CopyFrom(context); }
-		public override void EnterRule(IParseTreeListener listener) {
-			ILuaListener typedListener = listener as ILuaListener;
-			if (typedListener != null) typedListener.EnterIfelseStat(this);
-		}
-		public override void ExitRule(IParseTreeListener listener) {
-			ILuaListener typedListener = listener as ILuaListener;
-			if (typedListener != null) typedListener.ExitIfelseStat(this);
-		}
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			ILuaVisitor<TResult> typedVisitor = visitor as ILuaVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitIfelseStat(this);
@@ -436,14 +409,6 @@ public partial class LuaParser : Parser {
 			return GetRuleContext<BlockContext>(0);
 		}
 		public ForijkStatContext(StatContext context) { CopyFrom(context); }
-		public override void EnterRule(IParseTreeListener listener) {
-			ILuaListener typedListener = listener as ILuaListener;
-			if (typedListener != null) typedListener.EnterForijkStat(this);
-		}
-		public override void ExitRule(IParseTreeListener listener) {
-			ILuaListener typedListener = listener as ILuaListener;
-			if (typedListener != null) typedListener.ExitForijkStat(this);
-		}
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			ILuaVisitor<TResult> typedVisitor = visitor as ILuaVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitForijkStat(this);
@@ -461,14 +426,6 @@ public partial class LuaParser : Parser {
 			return GetRuleContext<BlockContext>(0);
 		}
 		public ForinStatContext(StatContext context) { CopyFrom(context); }
-		public override void EnterRule(IParseTreeListener listener) {
-			ILuaListener typedListener = listener as ILuaListener;
-			if (typedListener != null) typedListener.EnterForinStat(this);
-		}
-		public override void ExitRule(IParseTreeListener listener) {
-			ILuaListener typedListener = listener as ILuaListener;
-			if (typedListener != null) typedListener.ExitForinStat(this);
-		}
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			ILuaVisitor<TResult> typedVisitor = visitor as ILuaVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitForinStat(this);
@@ -483,14 +440,6 @@ public partial class LuaParser : Parser {
 			return GetRuleContext<FuncbodyContext>(0);
 		}
 		public FunctiondefStatContext(StatContext context) { CopyFrom(context); }
-		public override void EnterRule(IParseTreeListener listener) {
-			ILuaListener typedListener = listener as ILuaListener;
-			if (typedListener != null) typedListener.EnterFunctiondefStat(this);
-		}
-		public override void ExitRule(IParseTreeListener listener) {
-			ILuaListener typedListener = listener as ILuaListener;
-			if (typedListener != null) typedListener.ExitFunctiondefStat(this);
-		}
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			ILuaVisitor<TResult> typedVisitor = visitor as ILuaVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitFunctiondefStat(this);
@@ -503,14 +452,6 @@ public partial class LuaParser : Parser {
 			return GetRuleContext<FuncbodyContext>(0);
 		}
 		public LocalfunctiondefStatContext(StatContext context) { CopyFrom(context); }
-		public override void EnterRule(IParseTreeListener listener) {
-			ILuaListener typedListener = listener as ILuaListener;
-			if (typedListener != null) typedListener.EnterLocalfunctiondefStat(this);
-		}
-		public override void ExitRule(IParseTreeListener listener) {
-			ILuaListener typedListener = listener as ILuaListener;
-			if (typedListener != null) typedListener.ExitLocalfunctiondefStat(this);
-		}
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			ILuaVisitor<TResult> typedVisitor = visitor as ILuaVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitLocalfunctiondefStat(this);
@@ -525,14 +466,6 @@ public partial class LuaParser : Parser {
 			return GetRuleContext<ExplistContext>(0);
 		}
 		public LocalassignStatContext(StatContext context) { CopyFrom(context); }
-		public override void EnterRule(IParseTreeListener listener) {
-			ILuaListener typedListener = listener as ILuaListener;
-			if (typedListener != null) typedListener.EnterLocalassignStat(this);
-		}
-		public override void ExitRule(IParseTreeListener listener) {
-			ILuaListener typedListener = listener as ILuaListener;
-			if (typedListener != null) typedListener.ExitLocalassignStat(this);
-		}
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			ILuaVisitor<TResult> typedVisitor = visitor as ILuaVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitLocalassignStat(this);
@@ -543,17 +476,17 @@ public partial class LuaParser : Parser {
 	[RuleVersion(0)]
 	public StatContext stat() {
 		StatContext _localctx = new StatContext(_ctx, State);
-		EnterRule(_localctx, 4, RULE_stat);
+		EnterRule(_localctx, 6, RULE_stat);
 		int _la;
 		try {
-			State = 160;
+			State = 148;
 			_errHandler.Sync(this);
-			switch ( Interpreter.AdaptivePredict(_input,6,_ctx) ) {
+			switch ( Interpreter.AdaptivePredict(_input,8,_ctx) ) {
 			case 1:
 				_localctx = new EmptyStatContext(_localctx);
 				EnterOuterAlt(_localctx, 1);
 				{
-				State = 82; Match(T__0);
+				State = 75; Match(T__1);
 				}
 				break;
 
@@ -561,9 +494,9 @@ public partial class LuaParser : Parser {
 				_localctx = new AssignStatContext(_localctx);
 				EnterOuterAlt(_localctx, 2);
 				{
-				State = 83; varlist();
-				State = 84; Match(T__1);
-				State = 85; explist();
+				State = 76; varlist();
+				State = 77; Match(T__2);
+				State = 78; explist();
 				}
 				break;
 
@@ -571,7 +504,7 @@ public partial class LuaParser : Parser {
 				_localctx = new FunctioncallStatContext(_localctx);
 				EnterOuterAlt(_localctx, 3);
 				{
-				State = 87; functioncall();
+				State = 80; functioncall();
 				}
 				break;
 
@@ -579,7 +512,7 @@ public partial class LuaParser : Parser {
 				_localctx = new BreakStatContext(_localctx);
 				EnterOuterAlt(_localctx, 4);
 				{
-				State = 88; Match(T__2);
+				State = 81; Match(T__3);
 				}
 				break;
 
@@ -587,9 +520,9 @@ public partial class LuaParser : Parser {
 				_localctx = new DoendStatContext(_localctx);
 				EnterOuterAlt(_localctx, 5);
 				{
-				State = 89; Match(T__3);
-				State = 90; block();
-				State = 91; Match(T__4);
+				State = 82; Match(T__4);
+				State = 83; block();
+				State = 84; Match(T__5);
 				}
 				break;
 
@@ -597,11 +530,11 @@ public partial class LuaParser : Parser {
 				_localctx = new WhileStatContext(_localctx);
 				EnterOuterAlt(_localctx, 6);
 				{
-				State = 93; Match(T__5);
-				State = 94; exp(0);
-				State = 95; Match(T__3);
-				State = 96; block();
-				State = 97; Match(T__4);
+				State = 86; Match(T__6);
+				State = 87; exp(0);
+				State = 88; Match(T__4);
+				State = 89; block();
+				State = 90; Match(T__5);
 				}
 				break;
 
@@ -609,10 +542,10 @@ public partial class LuaParser : Parser {
 				_localctx = new RepeatStatContext(_localctx);
 				EnterOuterAlt(_localctx, 7);
 				{
-				State = 99; Match(T__6);
-				State = 100; block();
-				State = 101; Match(T__7);
-				State = 102; exp(0);
+				State = 92; Match(T__7);
+				State = 93; block();
+				State = 94; Match(T__8);
+				State = 95; exp(0);
 				}
 				break;
 
@@ -620,37 +553,33 @@ public partial class LuaParser : Parser {
 				_localctx = new IfelseStatContext(_localctx);
 				EnterOuterAlt(_localctx, 8);
 				{
-				State = 104; Match(T__8);
-				State = 105; exp(0);
-				State = 106; Match(T__9);
-				State = 107; block();
-				State = 115;
+				State = 97; Match(T__9);
+				State = 98; exp(0);
+				State = 99; Match(T__10);
+				State = 100; block();
+				State = 104;
 				_errHandler.Sync(this);
 				_la = _input.La(1);
-				while (_la==T__10) {
+				while (_la==T__16) {
 					{
 					{
-					State = 108; Match(T__10);
-					State = 109; exp(0);
-					State = 110; Match(T__9);
-					State = 111; block();
+					State = 101; elseifBlock();
 					}
 					}
-					State = 117;
+					State = 106;
 					_errHandler.Sync(this);
 					_la = _input.La(1);
 				}
-				State = 120;
+				State = 108;
 				_errHandler.Sync(this);
 				_la = _input.La(1);
-				if (_la==T__11) {
+				if (_la==T__17) {
 					{
-					State = 118; Match(T__11);
-					State = 119; block();
+					State = 107; elseBlock();
 					}
 				}
 
-				State = 122; Match(T__4);
+				State = 110; Match(T__5);
 				}
 				break;
 
@@ -658,25 +587,25 @@ public partial class LuaParser : Parser {
 				_localctx = new ForijkStatContext(_localctx);
 				EnterOuterAlt(_localctx, 9);
 				{
-				State = 124; Match(T__12);
-				State = 125; Match(NAME);
-				State = 126; Match(T__1);
-				State = 127; exp(0);
-				State = 128; Match(T__13);
-				State = 129; exp(0);
-				State = 132;
+				State = 112; Match(T__11);
+				State = 113; Match(NAME);
+				State = 114; Match(T__2);
+				State = 115; exp(0);
+				State = 116; Match(T__12);
+				State = 117; exp(0);
+				State = 120;
 				_errHandler.Sync(this);
 				_la = _input.La(1);
-				if (_la==T__13) {
+				if (_la==T__12) {
 					{
-					State = 130; Match(T__13);
-					State = 131; exp(0);
+					State = 118; Match(T__12);
+					State = 119; exp(0);
 					}
 				}
 
-				State = 134; Match(T__3);
-				State = 135; block();
-				State = 136; Match(T__4);
+				State = 122; Match(T__4);
+				State = 123; block();
+				State = 124; Match(T__5);
 				}
 				break;
 
@@ -684,13 +613,13 @@ public partial class LuaParser : Parser {
 				_localctx = new ForinStatContext(_localctx);
 				EnterOuterAlt(_localctx, 10);
 				{
-				State = 138; Match(T__12);
-				State = 139; namelist();
-				State = 140; Match(T__14);
-				State = 141; explist();
-				State = 142; Match(T__3);
-				State = 143; block();
-				State = 144; Match(T__4);
+				State = 126; Match(T__11);
+				State = 127; namelist();
+				State = 128; Match(T__13);
+				State = 129; explist();
+				State = 130; Match(T__4);
+				State = 131; block();
+				State = 132; Match(T__5);
 				}
 				break;
 
@@ -698,9 +627,9 @@ public partial class LuaParser : Parser {
 				_localctx = new FunctiondefStatContext(_localctx);
 				EnterOuterAlt(_localctx, 11);
 				{
-				State = 146; Match(T__15);
-				State = 147; funcname();
-				State = 148; funcbody();
+				State = 134; Match(T__14);
+				State = 135; funcname();
+				State = 136; funcbody();
 				}
 				break;
 
@@ -708,10 +637,10 @@ public partial class LuaParser : Parser {
 				_localctx = new LocalfunctiondefStatContext(_localctx);
 				EnterOuterAlt(_localctx, 12);
 				{
-				State = 150; Match(T__16);
-				State = 151; Match(T__15);
-				State = 152; Match(NAME);
-				State = 153; funcbody();
+				State = 138; Match(T__15);
+				State = 139; Match(T__14);
+				State = 140; Match(NAME);
+				State = 141; funcbody();
 				}
 				break;
 
@@ -719,15 +648,15 @@ public partial class LuaParser : Parser {
 				_localctx = new LocalassignStatContext(_localctx);
 				EnterOuterAlt(_localctx, 13);
 				{
-				State = 154; Match(T__16);
-				State = 155; namelist();
-				State = 158;
+				State = 142; Match(T__15);
+				State = 143; namelist();
+				State = 146;
 				_errHandler.Sync(this);
 				_la = _input.La(1);
-				if (_la==T__1) {
+				if (_la==T__2) {
 					{
-					State = 156; Match(T__1);
-					State = 157; explist();
+					State = 144; Match(T__2);
+					State = 145; explist();
 					}
 				}
 
@@ -746,57 +675,74 @@ public partial class LuaParser : Parser {
 		return _localctx;
 	}
 
-	public partial class RetstatContext : ParserRuleContext {
-		public ExplistContext explist() {
-			return GetRuleContext<ExplistContext>(0);
+	public partial class ElseifBlockContext : ParserRuleContext {
+		public ExpContext exp() {
+			return GetRuleContext<ExpContext>(0);
 		}
-		public RetstatContext(ParserRuleContext parent, int invokingState)
+		public BlockContext block() {
+			return GetRuleContext<BlockContext>(0);
+		}
+		public ElseifBlockContext(ParserRuleContext parent, int invokingState)
 			: base(parent, invokingState)
 		{
 		}
-		public override int RuleIndex { get { return RULE_retstat; } }
-		public override void EnterRule(IParseTreeListener listener) {
-			ILuaListener typedListener = listener as ILuaListener;
-			if (typedListener != null) typedListener.EnterRetstat(this);
-		}
-		public override void ExitRule(IParseTreeListener listener) {
-			ILuaListener typedListener = listener as ILuaListener;
-			if (typedListener != null) typedListener.ExitRetstat(this);
-		}
+		public override int RuleIndex { get { return RULE_elseifBlock; } }
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			ILuaVisitor<TResult> typedVisitor = visitor as ILuaVisitor<TResult>;
-			if (typedVisitor != null) return typedVisitor.VisitRetstat(this);
+			if (typedVisitor != null) return typedVisitor.VisitElseifBlock(this);
 			else return visitor.VisitChildren(this);
 		}
 	}
 
 	[RuleVersion(0)]
-	public RetstatContext retstat() {
-		RetstatContext _localctx = new RetstatContext(_ctx, State);
-		EnterRule(_localctx, 6, RULE_retstat);
-		int _la;
+	public ElseifBlockContext elseifBlock() {
+		ElseifBlockContext _localctx = new ElseifBlockContext(_ctx, State);
+		EnterRule(_localctx, 8, RULE_elseifBlock);
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 162; Match(T__17);
-			State = 164;
-			_errHandler.Sync(this);
-			_la = _input.La(1);
-			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__15) | (1L << T__20) | (1L << T__21) | (1L << T__22) | (1L << T__23) | (1L << T__24) | (1L << T__28) | (1L << T__40) | (1L << T__47) | (1L << T__50) | (1L << T__51) | (1L << NAME) | (1L << NORMALSTRING) | (1L << CHARSTRING) | (1L << LONGSTRING) | (1L << INT) | (1L << HEX) | (1L << FLOAT) | (1L << HEX_FLOAT))) != 0)) {
-				{
-				State = 163; explist();
-				}
+			State = 150; Match(T__16);
+			State = 151; exp(0);
+			State = 152; Match(T__10);
+			State = 153; block();
 			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			_errHandler.ReportError(this, re);
+			_errHandler.Recover(this, re);
+		}
+		finally {
+			ExitRule();
+		}
+		return _localctx;
+	}
 
-			State = 167;
-			_errHandler.Sync(this);
-			_la = _input.La(1);
-			if (_la==T__0) {
-				{
-				State = 166; Match(T__0);
-				}
-			}
+	public partial class ElseBlockContext : ParserRuleContext {
+		public BlockContext block() {
+			return GetRuleContext<BlockContext>(0);
+		}
+		public ElseBlockContext(ParserRuleContext parent, int invokingState)
+			: base(parent, invokingState)
+		{
+		}
+		public override int RuleIndex { get { return RULE_elseBlock; } }
+		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
+			ILuaVisitor<TResult> typedVisitor = visitor as ILuaVisitor<TResult>;
+			if (typedVisitor != null) return typedVisitor.VisitElseBlock(this);
+			else return visitor.VisitChildren(this);
+		}
+	}
 
+	[RuleVersion(0)]
+	public ElseBlockContext elseBlock() {
+		ElseBlockContext _localctx = new ElseBlockContext(_ctx, State);
+		EnterRule(_localctx, 10, RULE_elseBlock);
+		try {
+			EnterOuterAlt(_localctx, 1);
+			{
+			State = 155; Match(T__17);
+			State = 156; block();
 			}
 		}
 		catch (RecognitionException re) {
@@ -820,14 +766,6 @@ public partial class LuaParser : Parser {
 		{
 		}
 		public override int RuleIndex { get { return RULE_funcname; } }
-		public override void EnterRule(IParseTreeListener listener) {
-			ILuaListener typedListener = listener as ILuaListener;
-			if (typedListener != null) typedListener.EnterFuncname(this);
-		}
-		public override void ExitRule(IParseTreeListener listener) {
-			ILuaListener typedListener = listener as ILuaListener;
-			if (typedListener != null) typedListener.ExitFuncname(this);
-		}
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			ILuaVisitor<TResult> typedVisitor = visitor as ILuaVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitFuncname(this);
@@ -838,33 +776,33 @@ public partial class LuaParser : Parser {
 	[RuleVersion(0)]
 	public FuncnameContext funcname() {
 		FuncnameContext _localctx = new FuncnameContext(_ctx, State);
-		EnterRule(_localctx, 8, RULE_funcname);
+		EnterRule(_localctx, 12, RULE_funcname);
 		int _la;
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 169; Match(NAME);
-			State = 174;
+			State = 158; Match(NAME);
+			State = 163;
 			_errHandler.Sync(this);
 			_la = _input.La(1);
 			while (_la==T__18) {
 				{
 				{
-				State = 170; Match(T__18);
-				State = 171; Match(NAME);
+				State = 159; Match(T__18);
+				State = 160; Match(NAME);
 				}
 				}
-				State = 176;
+				State = 165;
 				_errHandler.Sync(this);
 				_la = _input.La(1);
 			}
-			State = 179;
+			State = 168;
 			_errHandler.Sync(this);
 			_la = _input.La(1);
 			if (_la==T__19) {
 				{
-				State = 177; Match(T__19);
-				State = 178; Match(NAME);
+				State = 166; Match(T__19);
+				State = 167; Match(NAME);
 				}
 			}
 
@@ -893,14 +831,6 @@ public partial class LuaParser : Parser {
 		{
 		}
 		public override int RuleIndex { get { return RULE_varlist; } }
-		public override void EnterRule(IParseTreeListener listener) {
-			ILuaListener typedListener = listener as ILuaListener;
-			if (typedListener != null) typedListener.EnterVarlist(this);
-		}
-		public override void ExitRule(IParseTreeListener listener) {
-			ILuaListener typedListener = listener as ILuaListener;
-			if (typedListener != null) typedListener.ExitVarlist(this);
-		}
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			ILuaVisitor<TResult> typedVisitor = visitor as ILuaVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitVarlist(this);
@@ -911,23 +841,23 @@ public partial class LuaParser : Parser {
 	[RuleVersion(0)]
 	public VarlistContext varlist() {
 		VarlistContext _localctx = new VarlistContext(_ctx, State);
-		EnterRule(_localctx, 10, RULE_varlist);
+		EnterRule(_localctx, 14, RULE_varlist);
 		int _la;
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 181; var();
-			State = 186;
+			State = 170; var();
+			State = 175;
 			_errHandler.Sync(this);
 			_la = _input.La(1);
-			while (_la==T__13) {
+			while (_la==T__12) {
 				{
 				{
-				State = 182; Match(T__13);
-				State = 183; var();
+				State = 171; Match(T__12);
+				State = 172; var();
 				}
 				}
-				State = 188;
+				State = 177;
 				_errHandler.Sync(this);
 				_la = _input.La(1);
 			}
@@ -954,14 +884,6 @@ public partial class LuaParser : Parser {
 		{
 		}
 		public override int RuleIndex { get { return RULE_namelist; } }
-		public override void EnterRule(IParseTreeListener listener) {
-			ILuaListener typedListener = listener as ILuaListener;
-			if (typedListener != null) typedListener.EnterNamelist(this);
-		}
-		public override void ExitRule(IParseTreeListener listener) {
-			ILuaListener typedListener = listener as ILuaListener;
-			if (typedListener != null) typedListener.ExitNamelist(this);
-		}
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			ILuaVisitor<TResult> typedVisitor = visitor as ILuaVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitNamelist(this);
@@ -972,25 +894,25 @@ public partial class LuaParser : Parser {
 	[RuleVersion(0)]
 	public NamelistContext namelist() {
 		NamelistContext _localctx = new NamelistContext(_ctx, State);
-		EnterRule(_localctx, 12, RULE_namelist);
+		EnterRule(_localctx, 16, RULE_namelist);
 		try {
 			int _alt;
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 189; Match(NAME);
-			State = 194;
+			State = 178; Match(NAME);
+			State = 183;
 			_errHandler.Sync(this);
 			_alt = Interpreter.AdaptivePredict(_input,12,_ctx);
 			while ( _alt!=2 && _alt!=global::Antlr4.Runtime.Atn.ATN.InvalidAltNumber ) {
 				if ( _alt==1 ) {
 					{
 					{
-					State = 190; Match(T__13);
-					State = 191; Match(NAME);
+					State = 179; Match(T__12);
+					State = 180; Match(NAME);
 					}
 					} 
 				}
-				State = 196;
+				State = 185;
 				_errHandler.Sync(this);
 				_alt = Interpreter.AdaptivePredict(_input,12,_ctx);
 			}
@@ -1019,14 +941,6 @@ public partial class LuaParser : Parser {
 		{
 		}
 		public override int RuleIndex { get { return RULE_explist; } }
-		public override void EnterRule(IParseTreeListener listener) {
-			ILuaListener typedListener = listener as ILuaListener;
-			if (typedListener != null) typedListener.EnterExplist(this);
-		}
-		public override void ExitRule(IParseTreeListener listener) {
-			ILuaListener typedListener = listener as ILuaListener;
-			if (typedListener != null) typedListener.ExitExplist(this);
-		}
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			ILuaVisitor<TResult> typedVisitor = visitor as ILuaVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitExplist(this);
@@ -1037,26 +951,61 @@ public partial class LuaParser : Parser {
 	[RuleVersion(0)]
 	public ExplistContext explist() {
 		ExplistContext _localctx = new ExplistContext(_ctx, State);
-		EnterRule(_localctx, 14, RULE_explist);
+		EnterRule(_localctx, 18, RULE_explist);
 		int _la;
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 197; exp(0);
-			State = 202;
+			State = 186; exp(0);
+			State = 191;
 			_errHandler.Sync(this);
 			_la = _input.La(1);
-			while (_la==T__13) {
+			while (_la==T__12) {
 				{
 				{
-				State = 198; Match(T__13);
-				State = 199; exp(0);
+				State = 187; Match(T__12);
+				State = 188; exp(0);
 				}
 				}
-				State = 204;
+				State = 193;
 				_errHandler.Sync(this);
 				_la = _input.La(1);
 			}
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			_errHandler.ReportError(this, re);
+			_errHandler.Recover(this, re);
+		}
+		finally {
+			ExitRule();
+		}
+		return _localctx;
+	}
+
+	public partial class DocContext : ParserRuleContext {
+		public ITerminalNode LONGSTRING() { return GetToken(LuaParser.LONGSTRING, 0); }
+		public DocContext(ParserRuleContext parent, int invokingState)
+			: base(parent, invokingState)
+		{
+		}
+		public override int RuleIndex { get { return RULE_doc; } }
+		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
+			ILuaVisitor<TResult> typedVisitor = visitor as ILuaVisitor<TResult>;
+			if (typedVisitor != null) return typedVisitor.VisitDoc(this);
+			else return visitor.VisitChildren(this);
+		}
+	}
+
+	[RuleVersion(0)]
+	public DocContext doc() {
+		DocContext _localctx = new DocContext(_ctx, State);
+		EnterRule(_localctx, 20, RULE_doc);
+		try {
+			EnterOuterAlt(_localctx, 1);
+			{
+			State = 194; Match(LONGSTRING);
 			}
 		}
 		catch (RecognitionException re) {
@@ -1083,18 +1032,8 @@ public partial class LuaParser : Parser {
 		}
 	}
 	public partial class NilfalsetruevarargExpContext : ExpContext {
-		public NilfalsetruevarargContext nilfalsetruevararg() {
-			return GetRuleContext<NilfalsetruevarargContext>(0);
-		}
+		public IToken nilfalsetruevararg;
 		public NilfalsetruevarargExpContext(ExpContext context) { CopyFrom(context); }
-		public override void EnterRule(IParseTreeListener listener) {
-			ILuaListener typedListener = listener as ILuaListener;
-			if (typedListener != null) typedListener.EnterNilfalsetruevarargExp(this);
-		}
-		public override void ExitRule(IParseTreeListener listener) {
-			ILuaListener typedListener = listener as ILuaListener;
-			if (typedListener != null) typedListener.ExitNilfalsetruevarargExp(this);
-		}
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			ILuaVisitor<TResult> typedVisitor = visitor as ILuaVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitNilfalsetruevarargExp(this);
@@ -1106,14 +1045,6 @@ public partial class LuaParser : Parser {
 			return GetRuleContext<NumberContext>(0);
 		}
 		public NumberExpContext(ExpContext context) { CopyFrom(context); }
-		public override void EnterRule(IParseTreeListener listener) {
-			ILuaListener typedListener = listener as ILuaListener;
-			if (typedListener != null) typedListener.EnterNumberExp(this);
-		}
-		public override void ExitRule(IParseTreeListener listener) {
-			ILuaListener typedListener = listener as ILuaListener;
-			if (typedListener != null) typedListener.ExitNumberExp(this);
-		}
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			ILuaVisitor<TResult> typedVisitor = visitor as ILuaVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitNumberExp(this);
@@ -1125,14 +1056,6 @@ public partial class LuaParser : Parser {
 			return GetRuleContext<StringContext>(0);
 		}
 		public StringExpContext(ExpContext context) { CopyFrom(context); }
-		public override void EnterRule(IParseTreeListener listener) {
-			ILuaListener typedListener = listener as ILuaListener;
-			if (typedListener != null) typedListener.EnterStringExp(this);
-		}
-		public override void ExitRule(IParseTreeListener listener) {
-			ILuaListener typedListener = listener as ILuaListener;
-			if (typedListener != null) typedListener.ExitStringExp(this);
-		}
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			ILuaVisitor<TResult> typedVisitor = visitor as ILuaVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitStringExp(this);
@@ -1144,14 +1067,6 @@ public partial class LuaParser : Parser {
 			return GetRuleContext<FunctiondefContext>(0);
 		}
 		public FunctiondefExpContext(ExpContext context) { CopyFrom(context); }
-		public override void EnterRule(IParseTreeListener listener) {
-			ILuaListener typedListener = listener as ILuaListener;
-			if (typedListener != null) typedListener.EnterFunctiondefExp(this);
-		}
-		public override void ExitRule(IParseTreeListener listener) {
-			ILuaListener typedListener = listener as ILuaListener;
-			if (typedListener != null) typedListener.ExitFunctiondefExp(this);
-		}
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			ILuaVisitor<TResult> typedVisitor = visitor as ILuaVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitFunctiondefExp(this);
@@ -1163,14 +1078,6 @@ public partial class LuaParser : Parser {
 			return GetRuleContext<PrefixexpContext>(0);
 		}
 		public PrefixexpExpContext(ExpContext context) { CopyFrom(context); }
-		public override void EnterRule(IParseTreeListener listener) {
-			ILuaListener typedListener = listener as ILuaListener;
-			if (typedListener != null) typedListener.EnterPrefixexpExp(this);
-		}
-		public override void ExitRule(IParseTreeListener listener) {
-			ILuaListener typedListener = listener as ILuaListener;
-			if (typedListener != null) typedListener.ExitPrefixexpExp(this);
-		}
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			ILuaVisitor<TResult> typedVisitor = visitor as ILuaVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitPrefixexpExp(this);
@@ -1182,14 +1089,6 @@ public partial class LuaParser : Parser {
 			return GetRuleContext<TableconstructorContext>(0);
 		}
 		public TablectorExpContext(ExpContext context) { CopyFrom(context); }
-		public override void EnterRule(IParseTreeListener listener) {
-			ILuaListener typedListener = listener as ILuaListener;
-			if (typedListener != null) typedListener.EnterTablectorExp(this);
-		}
-		public override void ExitRule(IParseTreeListener listener) {
-			ILuaListener typedListener = listener as ILuaListener;
-			if (typedListener != null) typedListener.ExitTablectorExp(this);
-		}
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			ILuaVisitor<TResult> typedVisitor = visitor as ILuaVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitTablectorExp(this);
@@ -1197,24 +1096,16 @@ public partial class LuaParser : Parser {
 		}
 	}
 	public partial class PowExpContext : ExpContext {
+		public ExpContext lhs;
+		public IToken operatorPower;
+		public ExpContext rhs;
 		public ExpContext[] exp() {
 			return GetRuleContexts<ExpContext>();
 		}
 		public ExpContext exp(int i) {
 			return GetRuleContext<ExpContext>(i);
 		}
-		public OperatorPowerContext operatorPower() {
-			return GetRuleContext<OperatorPowerContext>(0);
-		}
 		public PowExpContext(ExpContext context) { CopyFrom(context); }
-		public override void EnterRule(IParseTreeListener listener) {
-			ILuaListener typedListener = listener as ILuaListener;
-			if (typedListener != null) typedListener.EnterPowExp(this);
-		}
-		public override void ExitRule(IParseTreeListener listener) {
-			ILuaListener typedListener = listener as ILuaListener;
-			if (typedListener != null) typedListener.ExitPowExp(this);
-		}
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			ILuaVisitor<TResult> typedVisitor = visitor as ILuaVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitPowExp(this);
@@ -1222,21 +1113,11 @@ public partial class LuaParser : Parser {
 		}
 	}
 	public partial class UnmExpContext : ExpContext {
-		public OperatorUnaryContext operatorUnary() {
-			return GetRuleContext<OperatorUnaryContext>(0);
-		}
+		public IToken operatorUnary;
 		public ExpContext exp() {
 			return GetRuleContext<ExpContext>(0);
 		}
 		public UnmExpContext(ExpContext context) { CopyFrom(context); }
-		public override void EnterRule(IParseTreeListener listener) {
-			ILuaListener typedListener = listener as ILuaListener;
-			if (typedListener != null) typedListener.EnterUnmExp(this);
-		}
-		public override void ExitRule(IParseTreeListener listener) {
-			ILuaListener typedListener = listener as ILuaListener;
-			if (typedListener != null) typedListener.ExitUnmExp(this);
-		}
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			ILuaVisitor<TResult> typedVisitor = visitor as ILuaVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitUnmExp(this);
@@ -1244,24 +1125,16 @@ public partial class LuaParser : Parser {
 		}
 	}
 	public partial class MuldivExpContext : ExpContext {
+		public ExpContext lhs;
+		public IToken operatorMulDivMod;
+		public ExpContext rhs;
 		public ExpContext[] exp() {
 			return GetRuleContexts<ExpContext>();
 		}
 		public ExpContext exp(int i) {
 			return GetRuleContext<ExpContext>(i);
 		}
-		public OperatorMulDivModContext operatorMulDivMod() {
-			return GetRuleContext<OperatorMulDivModContext>(0);
-		}
 		public MuldivExpContext(ExpContext context) { CopyFrom(context); }
-		public override void EnterRule(IParseTreeListener listener) {
-			ILuaListener typedListener = listener as ILuaListener;
-			if (typedListener != null) typedListener.EnterMuldivExp(this);
-		}
-		public override void ExitRule(IParseTreeListener listener) {
-			ILuaListener typedListener = listener as ILuaListener;
-			if (typedListener != null) typedListener.ExitMuldivExp(this);
-		}
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			ILuaVisitor<TResult> typedVisitor = visitor as ILuaVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitMuldivExp(this);
@@ -1269,24 +1142,16 @@ public partial class LuaParser : Parser {
 		}
 	}
 	public partial class AddsubExpContext : ExpContext {
+		public ExpContext lhs;
+		public IToken operatorAddSub;
+		public ExpContext rhs;
 		public ExpContext[] exp() {
 			return GetRuleContexts<ExpContext>();
 		}
 		public ExpContext exp(int i) {
 			return GetRuleContext<ExpContext>(i);
 		}
-		public OperatorAddSubContext operatorAddSub() {
-			return GetRuleContext<OperatorAddSubContext>(0);
-		}
 		public AddsubExpContext(ExpContext context) { CopyFrom(context); }
-		public override void EnterRule(IParseTreeListener listener) {
-			ILuaListener typedListener = listener as ILuaListener;
-			if (typedListener != null) typedListener.EnterAddsubExp(this);
-		}
-		public override void ExitRule(IParseTreeListener listener) {
-			ILuaListener typedListener = listener as ILuaListener;
-			if (typedListener != null) typedListener.ExitAddsubExp(this);
-		}
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			ILuaVisitor<TResult> typedVisitor = visitor as ILuaVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitAddsubExp(this);
@@ -1294,24 +1159,16 @@ public partial class LuaParser : Parser {
 		}
 	}
 	public partial class ConcatExpContext : ExpContext {
+		public ExpContext lhs;
+		public IToken operatorStrcat;
+		public ExpContext rhs;
 		public ExpContext[] exp() {
 			return GetRuleContexts<ExpContext>();
 		}
 		public ExpContext exp(int i) {
 			return GetRuleContext<ExpContext>(i);
 		}
-		public OperatorStrcatContext operatorStrcat() {
-			return GetRuleContext<OperatorStrcatContext>(0);
-		}
 		public ConcatExpContext(ExpContext context) { CopyFrom(context); }
-		public override void EnterRule(IParseTreeListener listener) {
-			ILuaListener typedListener = listener as ILuaListener;
-			if (typedListener != null) typedListener.EnterConcatExp(this);
-		}
-		public override void ExitRule(IParseTreeListener listener) {
-			ILuaListener typedListener = listener as ILuaListener;
-			if (typedListener != null) typedListener.ExitConcatExp(this);
-		}
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			ILuaVisitor<TResult> typedVisitor = visitor as ILuaVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitConcatExp(this);
@@ -1319,24 +1176,16 @@ public partial class LuaParser : Parser {
 		}
 	}
 	public partial class CmpExpContext : ExpContext {
+		public ExpContext lhs;
+		public IToken operatorComparison;
+		public ExpContext rhs;
 		public ExpContext[] exp() {
 			return GetRuleContexts<ExpContext>();
 		}
 		public ExpContext exp(int i) {
 			return GetRuleContext<ExpContext>(i);
 		}
-		public OperatorComparisonContext operatorComparison() {
-			return GetRuleContext<OperatorComparisonContext>(0);
-		}
 		public CmpExpContext(ExpContext context) { CopyFrom(context); }
-		public override void EnterRule(IParseTreeListener listener) {
-			ILuaListener typedListener = listener as ILuaListener;
-			if (typedListener != null) typedListener.EnterCmpExp(this);
-		}
-		public override void ExitRule(IParseTreeListener listener) {
-			ILuaListener typedListener = listener as ILuaListener;
-			if (typedListener != null) typedListener.ExitCmpExp(this);
-		}
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			ILuaVisitor<TResult> typedVisitor = visitor as ILuaVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitCmpExp(this);
@@ -1344,24 +1193,16 @@ public partial class LuaParser : Parser {
 		}
 	}
 	public partial class AndExpContext : ExpContext {
+		public ExpContext lhs;
+		public IToken operatorAnd;
+		public ExpContext rhs;
 		public ExpContext[] exp() {
 			return GetRuleContexts<ExpContext>();
 		}
 		public ExpContext exp(int i) {
 			return GetRuleContext<ExpContext>(i);
 		}
-		public OperatorAndContext operatorAnd() {
-			return GetRuleContext<OperatorAndContext>(0);
-		}
 		public AndExpContext(ExpContext context) { CopyFrom(context); }
-		public override void EnterRule(IParseTreeListener listener) {
-			ILuaListener typedListener = listener as ILuaListener;
-			if (typedListener != null) typedListener.EnterAndExp(this);
-		}
-		public override void ExitRule(IParseTreeListener listener) {
-			ILuaListener typedListener = listener as ILuaListener;
-			if (typedListener != null) typedListener.ExitAndExp(this);
-		}
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			ILuaVisitor<TResult> typedVisitor = visitor as ILuaVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitAndExp(this);
@@ -1369,52 +1210,19 @@ public partial class LuaParser : Parser {
 		}
 	}
 	public partial class OrExpContext : ExpContext {
+		public ExpContext lhs;
+		public IToken operatorOr;
+		public ExpContext rhs;
 		public ExpContext[] exp() {
 			return GetRuleContexts<ExpContext>();
 		}
 		public ExpContext exp(int i) {
 			return GetRuleContext<ExpContext>(i);
 		}
-		public OperatorOrContext operatorOr() {
-			return GetRuleContext<OperatorOrContext>(0);
-		}
 		public OrExpContext(ExpContext context) { CopyFrom(context); }
-		public override void EnterRule(IParseTreeListener listener) {
-			ILuaListener typedListener = listener as ILuaListener;
-			if (typedListener != null) typedListener.EnterOrExp(this);
-		}
-		public override void ExitRule(IParseTreeListener listener) {
-			ILuaListener typedListener = listener as ILuaListener;
-			if (typedListener != null) typedListener.ExitOrExp(this);
-		}
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			ILuaVisitor<TResult> typedVisitor = visitor as ILuaVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitOrExp(this);
-			else return visitor.VisitChildren(this);
-		}
-	}
-	public partial class BitwiseExpContext : ExpContext {
-		public ExpContext[] exp() {
-			return GetRuleContexts<ExpContext>();
-		}
-		public ExpContext exp(int i) {
-			return GetRuleContext<ExpContext>(i);
-		}
-		public OperatorBitwiseContext operatorBitwise() {
-			return GetRuleContext<OperatorBitwiseContext>(0);
-		}
-		public BitwiseExpContext(ExpContext context) { CopyFrom(context); }
-		public override void EnterRule(IParseTreeListener listener) {
-			ILuaListener typedListener = listener as ILuaListener;
-			if (typedListener != null) typedListener.EnterBitwiseExp(this);
-		}
-		public override void ExitRule(IParseTreeListener listener) {
-			ILuaListener typedListener = listener as ILuaListener;
-			if (typedListener != null) typedListener.ExitBitwiseExp(this);
-		}
-		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
-			ILuaVisitor<TResult> typedVisitor = visitor as ILuaVisitor<TResult>;
-			if (typedVisitor != null) return typedVisitor.VisitBitwiseExp(this);
 			else return visitor.VisitChildren(this);
 		}
 	}
@@ -1429,36 +1237,48 @@ public partial class LuaParser : Parser {
 		int _parentState = State;
 		ExpContext _localctx = new ExpContext(_ctx, _parentState);
 		ExpContext _prevctx = _localctx;
-		int _startState = 16;
-		EnterRecursionRule(_localctx, 16, RULE_exp, _p);
+		int _startState = 22;
+		EnterRecursionRule(_localctx, 22, RULE_exp, _p);
+		int _la;
 		try {
 			int _alt;
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 215;
+			State = 205;
 			_errHandler.Sync(this);
 			switch (_input.La(1)) {
-			case T__20:
-			case T__21:
-			case T__22:
-			case T__23:
+			case NilKW:
+			case FalseKW:
+			case TrueKW:
+			case VarargKW:
 				{
 				_localctx = new NilfalsetruevarargExpContext(_localctx);
 				_ctx = _localctx;
 				_prevctx = _localctx;
 
-				State = 206; nilfalsetruevararg();
+				State = 197;
+				((NilfalsetruevarargExpContext)_localctx).nilfalsetruevararg = _input.Lt(1);
+				_la = _input.La(1);
+				if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << NilKW) | (1L << FalseKW) | (1L << TrueKW) | (1L << VarargKW))) != 0)) ) {
+					((NilfalsetruevarargExpContext)_localctx).nilfalsetruevararg = _errHandler.RecoverInline(this);
+				} else {
+					if (_input.La(1) == TokenConstants.Eof) {
+						matchedEOF = true;
+					}
+
+					_errHandler.ReportMatch(this);
+					Consume();
+				}
 				}
 				break;
 			case INT:
 			case HEX:
 			case FLOAT:
-			case HEX_FLOAT:
 				{
 				_localctx = new NumberExpContext(_localctx);
 				_ctx = _localctx;
 				_prevctx = _localctx;
-				State = 207; number();
+				State = 198; number();
 				}
 				break;
 			case NORMALSTRING:
@@ -1468,51 +1288,62 @@ public partial class LuaParser : Parser {
 				_localctx = new StringExpContext(_localctx);
 				_ctx = _localctx;
 				_prevctx = _localctx;
-				State = 208; @string();
+				State = 199; @string();
 				}
 				break;
-			case T__15:
+			case T__14:
 				{
 				_localctx = new FunctiondefExpContext(_localctx);
 				_ctx = _localctx;
 				_prevctx = _localctx;
-				State = 209; functiondef();
+				State = 200; functiondef();
 				}
 				break;
-			case T__24:
+			case T__21:
 			case NAME:
 				{
 				_localctx = new PrefixexpExpContext(_localctx);
 				_ctx = _localctx;
 				_prevctx = _localctx;
-				State = 210; prefixexp();
+				State = 201; prefixexp();
 				}
 				break;
-			case T__28:
+			case T__25:
 				{
 				_localctx = new TablectorExpContext(_localctx);
 				_ctx = _localctx;
 				_prevctx = _localctx;
-				State = 211; tableconstructor();
+				State = 202; tableconstructor();
 				}
 				break;
-			case T__40:
-			case T__47:
-			case T__50:
-			case T__51:
+			case NotKW:
+			case LenKW:
+			case MinusKW:
 				{
 				_localctx = new UnmExpContext(_localctx);
 				_ctx = _localctx;
 				_prevctx = _localctx;
-				State = 212; operatorUnary();
-				State = 213; exp(8);
+				State = 203;
+				((UnmExpContext)_localctx).operatorUnary = _input.Lt(1);
+				_la = _input.La(1);
+				if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << NotKW) | (1L << LenKW) | (1L << MinusKW))) != 0)) ) {
+					((UnmExpContext)_localctx).operatorUnary = _errHandler.RecoverInline(this);
+				} else {
+					if (_input.La(1) == TokenConstants.Eof) {
+						matchedEOF = true;
+					}
+
+					_errHandler.ReportMatch(this);
+					Consume();
+				}
+				State = 204; exp(7);
 				}
 				break;
 			default:
 				throw new NoViableAltException(this);
 			}
 			_ctx.stop = _input.Lt(-1);
-			State = 251;
+			State = 230;
 			_errHandler.Sync(this);
 			_alt = Interpreter.AdaptivePredict(_input,16,_ctx);
 			while ( _alt!=2 && _alt!=global::Antlr4.Runtime.Atn.ATN.InvalidAltNumber ) {
@@ -1520,100 +1351,132 @@ public partial class LuaParser : Parser {
 					if ( _parseListeners!=null ) TriggerExitRuleEvent();
 					_prevctx = _localctx;
 					{
-					State = 249;
+					State = 228;
 					_errHandler.Sync(this);
 					switch ( Interpreter.AdaptivePredict(_input,15,_ctx) ) {
 					case 1:
 						{
 						_localctx = new PowExpContext(new ExpContext(_parentctx, _parentState));
+						((PowExpContext)_localctx).lhs = _prevctx;
 						PushNewRecursionContext(_localctx, _startState, RULE_exp);
-						State = 217;
-						if (!(Precpred(_ctx, 9))) throw new FailedPredicateException(this, "Precpred(_ctx, 9)");
-						State = 218; operatorPower();
-						State = 219; exp(9);
+						State = 207;
+						if (!(Precpred(_ctx, 8))) throw new FailedPredicateException(this, "Precpred(_ctx, 8)");
+						State = 208; ((PowExpContext)_localctx).operatorPower = Match(T__20);
+						State = 209; ((PowExpContext)_localctx).rhs = exp(8);
 						}
 						break;
 
 					case 2:
 						{
 						_localctx = new MuldivExpContext(new ExpContext(_parentctx, _parentState));
+						((MuldivExpContext)_localctx).lhs = _prevctx;
 						PushNewRecursionContext(_localctx, _startState, RULE_exp);
-						State = 221;
-						if (!(Precpred(_ctx, 7))) throw new FailedPredicateException(this, "Precpred(_ctx, 7)");
-						State = 222; operatorMulDivMod();
-						State = 223; exp(8);
+						State = 210;
+						if (!(Precpred(_ctx, 6))) throw new FailedPredicateException(this, "Precpred(_ctx, 6)");
+						State = 211;
+						((MuldivExpContext)_localctx).operatorMulDivMod = _input.Lt(1);
+						_la = _input.La(1);
+						if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << MulKW) | (1L << DivKW) | (1L << ModKW))) != 0)) ) {
+							((MuldivExpContext)_localctx).operatorMulDivMod = _errHandler.RecoverInline(this);
+						} else {
+							if (_input.La(1) == TokenConstants.Eof) {
+								matchedEOF = true;
+							}
+
+							_errHandler.ReportMatch(this);
+							Consume();
+						}
+						State = 212; ((MuldivExpContext)_localctx).rhs = exp(7);
 						}
 						break;
 
 					case 3:
 						{
 						_localctx = new AddsubExpContext(new ExpContext(_parentctx, _parentState));
+						((AddsubExpContext)_localctx).lhs = _prevctx;
 						PushNewRecursionContext(_localctx, _startState, RULE_exp);
-						State = 225;
-						if (!(Precpred(_ctx, 6))) throw new FailedPredicateException(this, "Precpred(_ctx, 6)");
-						State = 226; operatorAddSub();
-						State = 227; exp(7);
+						State = 213;
+						if (!(Precpred(_ctx, 5))) throw new FailedPredicateException(this, "Precpred(_ctx, 5)");
+						State = 214;
+						((AddsubExpContext)_localctx).operatorAddSub = _input.Lt(1);
+						_la = _input.La(1);
+						if ( !(_la==MinusKW || _la==AddKW) ) {
+							((AddsubExpContext)_localctx).operatorAddSub = _errHandler.RecoverInline(this);
+						} else {
+							if (_input.La(1) == TokenConstants.Eof) {
+								matchedEOF = true;
+							}
+
+							_errHandler.ReportMatch(this);
+							Consume();
+						}
+						State = 215; ((AddsubExpContext)_localctx).rhs = exp(6);
 						}
 						break;
 
 					case 4:
 						{
 						_localctx = new ConcatExpContext(new ExpContext(_parentctx, _parentState));
+						((ConcatExpContext)_localctx).lhs = _prevctx;
 						PushNewRecursionContext(_localctx, _startState, RULE_exp);
-						State = 229;
-						if (!(Precpred(_ctx, 5))) throw new FailedPredicateException(this, "Precpred(_ctx, 5)");
-						State = 230; operatorStrcat();
-						State = 231; exp(5);
+						State = 216;
+						if (!(Precpred(_ctx, 4))) throw new FailedPredicateException(this, "Precpred(_ctx, 4)");
+						State = 217; ((ConcatExpContext)_localctx).operatorStrcat = Match(ConcatKW);
+						State = 218; ((ConcatExpContext)_localctx).rhs = exp(4);
 						}
 						break;
 
 					case 5:
 						{
 						_localctx = new CmpExpContext(new ExpContext(_parentctx, _parentState));
+						((CmpExpContext)_localctx).lhs = _prevctx;
 						PushNewRecursionContext(_localctx, _startState, RULE_exp);
-						State = 233;
-						if (!(Precpred(_ctx, 4))) throw new FailedPredicateException(this, "Precpred(_ctx, 4)");
-						State = 234; operatorComparison();
-						State = 235; exp(5);
+						State = 219;
+						if (!(Precpred(_ctx, 3))) throw new FailedPredicateException(this, "Precpred(_ctx, 3)");
+						State = 220;
+						((CmpExpContext)_localctx).operatorComparison = _input.Lt(1);
+						_la = _input.La(1);
+						if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << LtKW) | (1L << MtKW) | (1L << LeKW) | (1L << MeKW) | (1L << NeKW) | (1L << EqKW))) != 0)) ) {
+							((CmpExpContext)_localctx).operatorComparison = _errHandler.RecoverInline(this);
+						} else {
+							if (_input.La(1) == TokenConstants.Eof) {
+								matchedEOF = true;
+							}
+
+							_errHandler.ReportMatch(this);
+							Consume();
+						}
+						State = 221; ((CmpExpContext)_localctx).rhs = exp(4);
 						}
 						break;
 
 					case 6:
 						{
 						_localctx = new AndExpContext(new ExpContext(_parentctx, _parentState));
+						((AndExpContext)_localctx).lhs = _prevctx;
 						PushNewRecursionContext(_localctx, _startState, RULE_exp);
-						State = 237;
-						if (!(Precpred(_ctx, 3))) throw new FailedPredicateException(this, "Precpred(_ctx, 3)");
-						State = 238; operatorAnd();
-						State = 239; exp(4);
+						State = 222;
+						if (!(Precpred(_ctx, 2))) throw new FailedPredicateException(this, "Precpred(_ctx, 2)");
+						State = 223; ((AndExpContext)_localctx).operatorAnd = Match(AndKW);
+						State = 224; ((AndExpContext)_localctx).rhs = exp(3);
 						}
 						break;
 
 					case 7:
 						{
 						_localctx = new OrExpContext(new ExpContext(_parentctx, _parentState));
+						((OrExpContext)_localctx).lhs = _prevctx;
 						PushNewRecursionContext(_localctx, _startState, RULE_exp);
-						State = 241;
-						if (!(Precpred(_ctx, 2))) throw new FailedPredicateException(this, "Precpred(_ctx, 2)");
-						State = 242; operatorOr();
-						State = 243; exp(3);
-						}
-						break;
-
-					case 8:
-						{
-						_localctx = new BitwiseExpContext(new ExpContext(_parentctx, _parentState));
-						PushNewRecursionContext(_localctx, _startState, RULE_exp);
-						State = 245;
+						State = 225;
 						if (!(Precpred(_ctx, 1))) throw new FailedPredicateException(this, "Precpred(_ctx, 1)");
-						State = 246; operatorBitwise();
-						State = 247; exp(2);
+						State = 226; ((OrExpContext)_localctx).operatorOr = Match(OrKW);
+						State = 227; ((OrExpContext)_localctx).rhs = exp(2);
 						}
 						break;
 					}
 					} 
 				}
-				State = 253;
+				State = 232;
 				_errHandler.Sync(this);
 				_alt = Interpreter.AdaptivePredict(_input,16,_ctx);
 			}
@@ -1626,60 +1489,6 @@ public partial class LuaParser : Parser {
 		}
 		finally {
 			UnrollRecursionContexts(_parentctx);
-		}
-		return _localctx;
-	}
-
-	public partial class NilfalsetruevarargContext : ParserRuleContext {
-		public NilfalsetruevarargContext(ParserRuleContext parent, int invokingState)
-			: base(parent, invokingState)
-		{
-		}
-		public override int RuleIndex { get { return RULE_nilfalsetruevararg; } }
-		public override void EnterRule(IParseTreeListener listener) {
-			ILuaListener typedListener = listener as ILuaListener;
-			if (typedListener != null) typedListener.EnterNilfalsetruevararg(this);
-		}
-		public override void ExitRule(IParseTreeListener listener) {
-			ILuaListener typedListener = listener as ILuaListener;
-			if (typedListener != null) typedListener.ExitNilfalsetruevararg(this);
-		}
-		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
-			ILuaVisitor<TResult> typedVisitor = visitor as ILuaVisitor<TResult>;
-			if (typedVisitor != null) return typedVisitor.VisitNilfalsetruevararg(this);
-			else return visitor.VisitChildren(this);
-		}
-	}
-
-	[RuleVersion(0)]
-	public NilfalsetruevarargContext nilfalsetruevararg() {
-		NilfalsetruevarargContext _localctx = new NilfalsetruevarargContext(_ctx, State);
-		EnterRule(_localctx, 18, RULE_nilfalsetruevararg);
-		int _la;
-		try {
-			EnterOuterAlt(_localctx, 1);
-			{
-			State = 254;
-			_la = _input.La(1);
-			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__20) | (1L << T__21) | (1L << T__22) | (1L << T__23))) != 0)) ) {
-			_errHandler.RecoverInline(this);
-			} else {
-				if (_input.La(1) == TokenConstants.Eof) {
-					matchedEOF = true;
-				}
-
-				_errHandler.ReportMatch(this);
-				Consume();
-			}
-			}
-		}
-		catch (RecognitionException re) {
-			_localctx.exception = re;
-			_errHandler.ReportError(this, re);
-			_errHandler.Recover(this, re);
-		}
-		finally {
-			ExitRule();
 		}
 		return _localctx;
 	}
@@ -1699,14 +1508,6 @@ public partial class LuaParser : Parser {
 		{
 		}
 		public override int RuleIndex { get { return RULE_prefixexp; } }
-		public override void EnterRule(IParseTreeListener listener) {
-			ILuaListener typedListener = listener as ILuaListener;
-			if (typedListener != null) typedListener.EnterPrefixexp(this);
-		}
-		public override void ExitRule(IParseTreeListener listener) {
-			ILuaListener typedListener = listener as ILuaListener;
-			if (typedListener != null) typedListener.ExitPrefixexp(this);
-		}
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			ILuaVisitor<TResult> typedVisitor = visitor as ILuaVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitPrefixexp(this);
@@ -1717,24 +1518,24 @@ public partial class LuaParser : Parser {
 	[RuleVersion(0)]
 	public PrefixexpContext prefixexp() {
 		PrefixexpContext _localctx = new PrefixexpContext(_ctx, State);
-		EnterRule(_localctx, 20, RULE_prefixexp);
+		EnterRule(_localctx, 24, RULE_prefixexp);
 		try {
 			int _alt;
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 256; varOrExp();
-			State = 260;
+			State = 233; varOrExp();
+			State = 237;
 			_errHandler.Sync(this);
 			_alt = Interpreter.AdaptivePredict(_input,17,_ctx);
 			while ( _alt!=2 && _alt!=global::Antlr4.Runtime.Atn.ATN.InvalidAltNumber ) {
 				if ( _alt==1 ) {
 					{
 					{
-					State = 257; nameAndArgs();
+					State = 234; nameAndArgs();
 					}
 					} 
 				}
-				State = 262;
+				State = 239;
 				_errHandler.Sync(this);
 				_alt = Interpreter.AdaptivePredict(_input,17,_ctx);
 			}
@@ -1766,14 +1567,6 @@ public partial class LuaParser : Parser {
 		{
 		}
 		public override int RuleIndex { get { return RULE_functioncall; } }
-		public override void EnterRule(IParseTreeListener listener) {
-			ILuaListener typedListener = listener as ILuaListener;
-			if (typedListener != null) typedListener.EnterFunctioncall(this);
-		}
-		public override void ExitRule(IParseTreeListener listener) {
-			ILuaListener typedListener = listener as ILuaListener;
-			if (typedListener != null) typedListener.ExitFunctioncall(this);
-		}
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			ILuaVisitor<TResult> typedVisitor = visitor as ILuaVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitFunctioncall(this);
@@ -1784,13 +1577,13 @@ public partial class LuaParser : Parser {
 	[RuleVersion(0)]
 	public FunctioncallContext functioncall() {
 		FunctioncallContext _localctx = new FunctioncallContext(_ctx, State);
-		EnterRule(_localctx, 22, RULE_functioncall);
+		EnterRule(_localctx, 26, RULE_functioncall);
 		try {
 			int _alt;
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 263; varOrExp();
-			State = 265;
+			State = 240; varOrExp();
+			State = 242;
 			_errHandler.Sync(this);
 			_alt = 1;
 			do {
@@ -1798,14 +1591,14 @@ public partial class LuaParser : Parser {
 				case 1:
 					{
 					{
-					State = 264; nameAndArgs();
+					State = 241; nameAndArgs();
 					}
 					}
 					break;
 				default:
 					throw new NoViableAltException(this);
 				}
-				State = 267;
+				State = 244;
 				_errHandler.Sync(this);
 				_alt = Interpreter.AdaptivePredict(_input,18,_ctx);
 			} while ( _alt!=2 && _alt!=global::Antlr4.Runtime.Atn.ATN.InvalidAltNumber );
@@ -1834,14 +1627,6 @@ public partial class LuaParser : Parser {
 		{
 		}
 		public override int RuleIndex { get { return RULE_varOrExp; } }
-		public override void EnterRule(IParseTreeListener listener) {
-			ILuaListener typedListener = listener as ILuaListener;
-			if (typedListener != null) typedListener.EnterVarOrExp(this);
-		}
-		public override void ExitRule(IParseTreeListener listener) {
-			ILuaListener typedListener = listener as ILuaListener;
-			if (typedListener != null) typedListener.ExitVarOrExp(this);
-		}
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			ILuaVisitor<TResult> typedVisitor = visitor as ILuaVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitVarOrExp(this);
@@ -1852,24 +1637,24 @@ public partial class LuaParser : Parser {
 	[RuleVersion(0)]
 	public VarOrExpContext varOrExp() {
 		VarOrExpContext _localctx = new VarOrExpContext(_ctx, State);
-		EnterRule(_localctx, 24, RULE_varOrExp);
+		EnterRule(_localctx, 28, RULE_varOrExp);
 		try {
-			State = 274;
+			State = 251;
 			_errHandler.Sync(this);
 			switch ( Interpreter.AdaptivePredict(_input,19,_ctx) ) {
 			case 1:
 				EnterOuterAlt(_localctx, 1);
 				{
-				State = 269; var();
+				State = 246; var();
 				}
 				break;
 
 			case 2:
 				EnterOuterAlt(_localctx, 2);
 				{
-				State = 270; Match(T__24);
-				State = 271; exp(0);
-				State = 272; Match(T__25);
+				State = 247; Match(T__21);
+				State = 248; exp(0);
+				State = 249; Match(T__22);
 				}
 				break;
 			}
@@ -1901,14 +1686,6 @@ public partial class LuaParser : Parser {
 		{
 		}
 		public override int RuleIndex { get { return RULE_var; } }
-		public override void EnterRule(IParseTreeListener listener) {
-			ILuaListener typedListener = listener as ILuaListener;
-			if (typedListener != null) typedListener.EnterVar(this);
-		}
-		public override void ExitRule(IParseTreeListener listener) {
-			ILuaListener typedListener = listener as ILuaListener;
-			if (typedListener != null) typedListener.ExitVar(this);
-		}
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			ILuaVisitor<TResult> typedVisitor = visitor as ILuaVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitVar(this);
@@ -1919,42 +1696,42 @@ public partial class LuaParser : Parser {
 	[RuleVersion(0)]
 	public VarContext var() {
 		VarContext _localctx = new VarContext(_ctx, State);
-		EnterRule(_localctx, 26, RULE_var);
+		EnterRule(_localctx, 30, RULE_var);
 		try {
 			int _alt;
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 282;
+			State = 259;
 			_errHandler.Sync(this);
 			switch (_input.La(1)) {
 			case NAME:
 				{
-				State = 276; Match(NAME);
+				State = 253; Match(NAME);
 				}
 				break;
-			case T__24:
+			case T__21:
 				{
-				State = 277; Match(T__24);
-				State = 278; exp(0);
-				State = 279; Match(T__25);
-				State = 280; varSuffix();
+				State = 254; Match(T__21);
+				State = 255; exp(0);
+				State = 256; Match(T__22);
+				State = 257; varSuffix();
 				}
 				break;
 			default:
 				throw new NoViableAltException(this);
 			}
-			State = 287;
+			State = 264;
 			_errHandler.Sync(this);
 			_alt = Interpreter.AdaptivePredict(_input,21,_ctx);
 			while ( _alt!=2 && _alt!=global::Antlr4.Runtime.Atn.ATN.InvalidAltNumber ) {
 				if ( _alt==1 ) {
 					{
 					{
-					State = 284; varSuffix();
+					State = 261; varSuffix();
 					}
 					} 
 				}
-				State = 289;
+				State = 266;
 				_errHandler.Sync(this);
 				_alt = Interpreter.AdaptivePredict(_input,21,_ctx);
 			}
@@ -1987,14 +1764,6 @@ public partial class LuaParser : Parser {
 		{
 		}
 		public override int RuleIndex { get { return RULE_varSuffix; } }
-		public override void EnterRule(IParseTreeListener listener) {
-			ILuaListener typedListener = listener as ILuaListener;
-			if (typedListener != null) typedListener.EnterVarSuffix(this);
-		}
-		public override void ExitRule(IParseTreeListener listener) {
-			ILuaListener typedListener = listener as ILuaListener;
-			if (typedListener != null) typedListener.ExitVarSuffix(this);
-		}
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			ILuaVisitor<TResult> typedVisitor = visitor as ILuaVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitVarSuffix(this);
@@ -2005,38 +1774,38 @@ public partial class LuaParser : Parser {
 	[RuleVersion(0)]
 	public VarSuffixContext varSuffix() {
 		VarSuffixContext _localctx = new VarSuffixContext(_ctx, State);
-		EnterRule(_localctx, 28, RULE_varSuffix);
+		EnterRule(_localctx, 32, RULE_varSuffix);
 		int _la;
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 293;
+			State = 270;
 			_errHandler.Sync(this);
 			_la = _input.La(1);
-			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__19) | (1L << T__24) | (1L << T__28) | (1L << NORMALSTRING) | (1L << CHARSTRING) | (1L << LONGSTRING))) != 0)) {
+			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__19) | (1L << T__21) | (1L << T__25) | (1L << NORMALSTRING) | (1L << CHARSTRING) | (1L << LONGSTRING))) != 0)) {
 				{
 				{
-				State = 290; nameAndArgs();
+				State = 267; nameAndArgs();
 				}
 				}
-				State = 295;
+				State = 272;
 				_errHandler.Sync(this);
 				_la = _input.La(1);
 			}
-			State = 302;
+			State = 279;
 			_errHandler.Sync(this);
 			switch (_input.La(1)) {
-			case T__26:
+			case T__23:
 				{
-				State = 296; Match(T__26);
-				State = 297; exp(0);
-				State = 298; Match(T__27);
+				State = 273; Match(T__23);
+				State = 274; exp(0);
+				State = 275; Match(T__24);
 				}
 				break;
 			case T__18:
 				{
-				State = 300; Match(T__18);
-				State = 301; Match(NAME);
+				State = 277; Match(T__18);
+				State = 278; Match(NAME);
 				}
 				break;
 			default:
@@ -2065,14 +1834,6 @@ public partial class LuaParser : Parser {
 		{
 		}
 		public override int RuleIndex { get { return RULE_nameAndArgs; } }
-		public override void EnterRule(IParseTreeListener listener) {
-			ILuaListener typedListener = listener as ILuaListener;
-			if (typedListener != null) typedListener.EnterNameAndArgs(this);
-		}
-		public override void ExitRule(IParseTreeListener listener) {
-			ILuaListener typedListener = listener as ILuaListener;
-			if (typedListener != null) typedListener.ExitNameAndArgs(this);
-		}
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			ILuaVisitor<TResult> typedVisitor = visitor as ILuaVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitNameAndArgs(this);
@@ -2083,22 +1844,22 @@ public partial class LuaParser : Parser {
 	[RuleVersion(0)]
 	public NameAndArgsContext nameAndArgs() {
 		NameAndArgsContext _localctx = new NameAndArgsContext(_ctx, State);
-		EnterRule(_localctx, 30, RULE_nameAndArgs);
+		EnterRule(_localctx, 34, RULE_nameAndArgs);
 		int _la;
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 306;
+			State = 283;
 			_errHandler.Sync(this);
 			_la = _input.La(1);
 			if (_la==T__19) {
 				{
-				State = 304; Match(T__19);
-				State = 305; Match(NAME);
+				State = 281; Match(T__19);
+				State = 282; Match(NAME);
 				}
 			}
 
-			State = 308; args();
+			State = 285; args();
 			}
 		}
 		catch (RecognitionException re) {
@@ -2129,14 +1890,6 @@ public partial class LuaParser : Parser {
 			return GetRuleContext<ExplistContext>(0);
 		}
 		public NormalArgsContext(ArgsContext context) { CopyFrom(context); }
-		public override void EnterRule(IParseTreeListener listener) {
-			ILuaListener typedListener = listener as ILuaListener;
-			if (typedListener != null) typedListener.EnterNormalArgs(this);
-		}
-		public override void ExitRule(IParseTreeListener listener) {
-			ILuaListener typedListener = listener as ILuaListener;
-			if (typedListener != null) typedListener.ExitNormalArgs(this);
-		}
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			ILuaVisitor<TResult> typedVisitor = visitor as ILuaVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitNormalArgs(this);
@@ -2148,14 +1901,6 @@ public partial class LuaParser : Parser {
 			return GetRuleContext<TableconstructorContext>(0);
 		}
 		public TablectorArgsContext(ArgsContext context) { CopyFrom(context); }
-		public override void EnterRule(IParseTreeListener listener) {
-			ILuaListener typedListener = listener as ILuaListener;
-			if (typedListener != null) typedListener.EnterTablectorArgs(this);
-		}
-		public override void ExitRule(IParseTreeListener listener) {
-			ILuaListener typedListener = listener as ILuaListener;
-			if (typedListener != null) typedListener.ExitTablectorArgs(this);
-		}
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			ILuaVisitor<TResult> typedVisitor = visitor as ILuaVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitTablectorArgs(this);
@@ -2167,14 +1912,6 @@ public partial class LuaParser : Parser {
 			return GetRuleContext<StringContext>(0);
 		}
 		public StringArgsContext(ArgsContext context) { CopyFrom(context); }
-		public override void EnterRule(IParseTreeListener listener) {
-			ILuaListener typedListener = listener as ILuaListener;
-			if (typedListener != null) typedListener.EnterStringArgs(this);
-		}
-		public override void ExitRule(IParseTreeListener listener) {
-			ILuaListener typedListener = listener as ILuaListener;
-			if (typedListener != null) typedListener.ExitStringArgs(this);
-		}
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			ILuaVisitor<TResult> typedVisitor = visitor as ILuaVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitStringArgs(this);
@@ -2185,34 +1922,34 @@ public partial class LuaParser : Parser {
 	[RuleVersion(0)]
 	public ArgsContext args() {
 		ArgsContext _localctx = new ArgsContext(_ctx, State);
-		EnterRule(_localctx, 32, RULE_args);
+		EnterRule(_localctx, 36, RULE_args);
 		int _la;
 		try {
-			State = 317;
+			State = 294;
 			_errHandler.Sync(this);
 			switch (_input.La(1)) {
-			case T__24:
+			case T__21:
 				_localctx = new NormalArgsContext(_localctx);
 				EnterOuterAlt(_localctx, 1);
 				{
-				State = 310; Match(T__24);
-				State = 312;
+				State = 287; Match(T__21);
+				State = 289;
 				_errHandler.Sync(this);
 				_la = _input.La(1);
-				if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__15) | (1L << T__20) | (1L << T__21) | (1L << T__22) | (1L << T__23) | (1L << T__24) | (1L << T__28) | (1L << T__40) | (1L << T__47) | (1L << T__50) | (1L << T__51) | (1L << NAME) | (1L << NORMALSTRING) | (1L << CHARSTRING) | (1L << LONGSTRING) | (1L << INT) | (1L << HEX) | (1L << FLOAT) | (1L << HEX_FLOAT))) != 0)) {
+				if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__14) | (1L << T__21) | (1L << T__25) | (1L << NilKW) | (1L << FalseKW) | (1L << TrueKW) | (1L << VarargKW) | (1L << NotKW) | (1L << LenKW) | (1L << MinusKW) | (1L << NAME) | (1L << NORMALSTRING) | (1L << CHARSTRING) | (1L << LONGSTRING) | (1L << INT) | (1L << HEX) | (1L << FLOAT))) != 0)) {
 					{
-					State = 311; explist();
+					State = 288; explist();
 					}
 				}
 
-				State = 314; Match(T__25);
+				State = 291; Match(T__22);
 				}
 				break;
-			case T__28:
+			case T__25:
 				_localctx = new TablectorArgsContext(_localctx);
 				EnterOuterAlt(_localctx, 2);
 				{
-				State = 315; tableconstructor();
+				State = 292; tableconstructor();
 				}
 				break;
 			case NORMALSTRING:
@@ -2221,7 +1958,7 @@ public partial class LuaParser : Parser {
 				_localctx = new StringArgsContext(_localctx);
 				EnterOuterAlt(_localctx, 3);
 				{
-				State = 316; @string();
+				State = 293; @string();
 				}
 				break;
 			default:
@@ -2248,14 +1985,6 @@ public partial class LuaParser : Parser {
 		{
 		}
 		public override int RuleIndex { get { return RULE_functiondef; } }
-		public override void EnterRule(IParseTreeListener listener) {
-			ILuaListener typedListener = listener as ILuaListener;
-			if (typedListener != null) typedListener.EnterFunctiondef(this);
-		}
-		public override void ExitRule(IParseTreeListener listener) {
-			ILuaListener typedListener = listener as ILuaListener;
-			if (typedListener != null) typedListener.ExitFunctiondef(this);
-		}
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			ILuaVisitor<TResult> typedVisitor = visitor as ILuaVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitFunctiondef(this);
@@ -2266,12 +1995,12 @@ public partial class LuaParser : Parser {
 	[RuleVersion(0)]
 	public FunctiondefContext functiondef() {
 		FunctiondefContext _localctx = new FunctiondefContext(_ctx, State);
-		EnterRule(_localctx, 34, RULE_functiondef);
+		EnterRule(_localctx, 38, RULE_functiondef);
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 319; Match(T__15);
-			State = 320; funcbody();
+			State = 296; Match(T__14);
+			State = 297; funcbody();
 			}
 		}
 		catch (RecognitionException re) {
@@ -2297,14 +2026,6 @@ public partial class LuaParser : Parser {
 		{
 		}
 		public override int RuleIndex { get { return RULE_funcbody; } }
-		public override void EnterRule(IParseTreeListener listener) {
-			ILuaListener typedListener = listener as ILuaListener;
-			if (typedListener != null) typedListener.EnterFuncbody(this);
-		}
-		public override void ExitRule(IParseTreeListener listener) {
-			ILuaListener typedListener = listener as ILuaListener;
-			if (typedListener != null) typedListener.ExitFuncbody(this);
-		}
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			ILuaVisitor<TResult> typedVisitor = visitor as ILuaVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitFuncbody(this);
@@ -2315,24 +2036,24 @@ public partial class LuaParser : Parser {
 	[RuleVersion(0)]
 	public FuncbodyContext funcbody() {
 		FuncbodyContext _localctx = new FuncbodyContext(_ctx, State);
-		EnterRule(_localctx, 36, RULE_funcbody);
+		EnterRule(_localctx, 40, RULE_funcbody);
 		int _la;
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 322; Match(T__24);
-			State = 324;
+			State = 299; Match(T__21);
+			State = 301;
 			_errHandler.Sync(this);
 			_la = _input.La(1);
-			if (_la==T__23 || _la==NAME) {
+			if (_la==VarargKW || _la==NAME) {
 				{
-				State = 323; parlist();
+				State = 300; parlist();
 				}
 			}
 
-			State = 326; Match(T__25);
-			State = 327; block();
-			State = 328; Match(T__4);
+			State = 303; Match(T__22);
+			State = 304; block();
+			State = 305; Match(T__5);
 			}
 		}
 		catch (RecognitionException re) {
@@ -2355,14 +2076,6 @@ public partial class LuaParser : Parser {
 		{
 		}
 		public override int RuleIndex { get { return RULE_parlist; } }
-		public override void EnterRule(IParseTreeListener listener) {
-			ILuaListener typedListener = listener as ILuaListener;
-			if (typedListener != null) typedListener.EnterParlist(this);
-		}
-		public override void ExitRule(IParseTreeListener listener) {
-			ILuaListener typedListener = listener as ILuaListener;
-			if (typedListener != null) typedListener.ExitParlist(this);
-		}
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			ILuaVisitor<TResult> typedVisitor = visitor as ILuaVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitParlist(this);
@@ -2373,32 +2086,32 @@ public partial class LuaParser : Parser {
 	[RuleVersion(0)]
 	public ParlistContext parlist() {
 		ParlistContext _localctx = new ParlistContext(_ctx, State);
-		EnterRule(_localctx, 38, RULE_parlist);
+		EnterRule(_localctx, 42, RULE_parlist);
 		int _la;
 		try {
-			State = 336;
+			State = 313;
 			_errHandler.Sync(this);
 			switch (_input.La(1)) {
 			case NAME:
 				EnterOuterAlt(_localctx, 1);
 				{
-				State = 330; namelist();
-				State = 333;
+				State = 307; namelist();
+				State = 310;
 				_errHandler.Sync(this);
 				_la = _input.La(1);
-				if (_la==T__13) {
+				if (_la==T__12) {
 					{
-					State = 331; Match(T__13);
-					State = 332; Match(T__23);
+					State = 308; Match(T__12);
+					State = 309; Match(VarargKW);
 					}
 				}
 
 				}
 				break;
-			case T__23:
+			case VarargKW:
 				EnterOuterAlt(_localctx, 2);
 				{
-				State = 335; Match(T__23);
+				State = 312; Match(VarargKW);
 				}
 				break;
 			default:
@@ -2425,14 +2138,6 @@ public partial class LuaParser : Parser {
 		{
 		}
 		public override int RuleIndex { get { return RULE_tableconstructor; } }
-		public override void EnterRule(IParseTreeListener listener) {
-			ILuaListener typedListener = listener as ILuaListener;
-			if (typedListener != null) typedListener.EnterTableconstructor(this);
-		}
-		public override void ExitRule(IParseTreeListener listener) {
-			ILuaListener typedListener = listener as ILuaListener;
-			if (typedListener != null) typedListener.ExitTableconstructor(this);
-		}
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			ILuaVisitor<TResult> typedVisitor = visitor as ILuaVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitTableconstructor(this);
@@ -2443,22 +2148,22 @@ public partial class LuaParser : Parser {
 	[RuleVersion(0)]
 	public TableconstructorContext tableconstructor() {
 		TableconstructorContext _localctx = new TableconstructorContext(_ctx, State);
-		EnterRule(_localctx, 40, RULE_tableconstructor);
+		EnterRule(_localctx, 44, RULE_tableconstructor);
 		int _la;
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 338; Match(T__28);
-			State = 340;
+			State = 315; Match(T__25);
+			State = 317;
 			_errHandler.Sync(this);
 			_la = _input.La(1);
-			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__15) | (1L << T__20) | (1L << T__21) | (1L << T__22) | (1L << T__23) | (1L << T__24) | (1L << T__26) | (1L << T__28) | (1L << T__40) | (1L << T__47) | (1L << T__50) | (1L << T__51) | (1L << NAME) | (1L << NORMALSTRING) | (1L << CHARSTRING) | (1L << LONGSTRING) | (1L << INT) | (1L << HEX) | (1L << FLOAT) | (1L << HEX_FLOAT))) != 0)) {
+			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__14) | (1L << T__21) | (1L << T__23) | (1L << T__25) | (1L << NilKW) | (1L << FalseKW) | (1L << TrueKW) | (1L << VarargKW) | (1L << NotKW) | (1L << LenKW) | (1L << MinusKW) | (1L << NAME) | (1L << NORMALSTRING) | (1L << CHARSTRING) | (1L << LONGSTRING) | (1L << INT) | (1L << HEX) | (1L << FLOAT))) != 0)) {
 				{
-				State = 339; fieldlist();
+				State = 316; fieldlist();
 				}
 			}
 
-			State = 342; Match(T__29);
+			State = 319; Match(T__26);
 			}
 		}
 		catch (RecognitionException re) {
@@ -2490,14 +2195,6 @@ public partial class LuaParser : Parser {
 		{
 		}
 		public override int RuleIndex { get { return RULE_fieldlist; } }
-		public override void EnterRule(IParseTreeListener listener) {
-			ILuaListener typedListener = listener as ILuaListener;
-			if (typedListener != null) typedListener.EnterFieldlist(this);
-		}
-		public override void ExitRule(IParseTreeListener listener) {
-			ILuaListener typedListener = listener as ILuaListener;
-			if (typedListener != null) typedListener.ExitFieldlist(this);
-		}
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			ILuaVisitor<TResult> typedVisitor = visitor as ILuaVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitFieldlist(this);
@@ -2508,35 +2205,35 @@ public partial class LuaParser : Parser {
 	[RuleVersion(0)]
 	public FieldlistContext fieldlist() {
 		FieldlistContext _localctx = new FieldlistContext(_ctx, State);
-		EnterRule(_localctx, 42, RULE_fieldlist);
+		EnterRule(_localctx, 46, RULE_fieldlist);
 		int _la;
 		try {
 			int _alt;
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 344; field();
-			State = 350;
+			State = 321; field();
+			State = 327;
 			_errHandler.Sync(this);
 			_alt = Interpreter.AdaptivePredict(_input,31,_ctx);
 			while ( _alt!=2 && _alt!=global::Antlr4.Runtime.Atn.ATN.InvalidAltNumber ) {
 				if ( _alt==1 ) {
 					{
 					{
-					State = 345; fieldsep();
-					State = 346; field();
+					State = 322; fieldsep();
+					State = 323; field();
 					}
 					} 
 				}
-				State = 352;
+				State = 329;
 				_errHandler.Sync(this);
 				_alt = Interpreter.AdaptivePredict(_input,31,_ctx);
 			}
-			State = 354;
+			State = 331;
 			_errHandler.Sync(this);
 			_la = _input.La(1);
-			if (_la==T__0 || _la==T__13) {
+			if (_la==T__1 || _la==T__12) {
 				{
-				State = 353; fieldsep();
+				State = 330; fieldsep();
 				}
 			}
 
@@ -2566,14 +2263,6 @@ public partial class LuaParser : Parser {
 		{
 		}
 		public override int RuleIndex { get { return RULE_field; } }
-		public override void EnterRule(IParseTreeListener listener) {
-			ILuaListener typedListener = listener as ILuaListener;
-			if (typedListener != null) typedListener.EnterField(this);
-		}
-		public override void ExitRule(IParseTreeListener listener) {
-			ILuaListener typedListener = listener as ILuaListener;
-			if (typedListener != null) typedListener.ExitField(this);
-		}
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			ILuaVisitor<TResult> typedVisitor = visitor as ILuaVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitField(this);
@@ -2584,35 +2273,35 @@ public partial class LuaParser : Parser {
 	[RuleVersion(0)]
 	public FieldContext field() {
 		FieldContext _localctx = new FieldContext(_ctx, State);
-		EnterRule(_localctx, 44, RULE_field);
+		EnterRule(_localctx, 48, RULE_field);
 		try {
-			State = 366;
+			State = 343;
 			_errHandler.Sync(this);
 			switch ( Interpreter.AdaptivePredict(_input,33,_ctx) ) {
 			case 1:
 				EnterOuterAlt(_localctx, 1);
 				{
-				State = 356; Match(T__26);
-				State = 357; exp(0);
-				State = 358; Match(T__27);
-				State = 359; Match(T__1);
-				State = 360; exp(0);
+				State = 333; Match(T__23);
+				State = 334; exp(0);
+				State = 335; Match(T__24);
+				State = 336; Match(T__2);
+				State = 337; exp(0);
 				}
 				break;
 
 			case 2:
 				EnterOuterAlt(_localctx, 2);
 				{
-				State = 362; Match(NAME);
-				State = 363; Match(T__1);
-				State = 364; exp(0);
+				State = 339; Match(NAME);
+				State = 340; Match(T__2);
+				State = 341; exp(0);
 				}
 				break;
 
 			case 3:
 				EnterOuterAlt(_localctx, 3);
 				{
-				State = 365; exp(0);
+				State = 342; exp(0);
 				}
 				break;
 			}
@@ -2634,14 +2323,6 @@ public partial class LuaParser : Parser {
 		{
 		}
 		public override int RuleIndex { get { return RULE_fieldsep; } }
-		public override void EnterRule(IParseTreeListener listener) {
-			ILuaListener typedListener = listener as ILuaListener;
-			if (typedListener != null) typedListener.EnterFieldsep(this);
-		}
-		public override void ExitRule(IParseTreeListener listener) {
-			ILuaListener typedListener = listener as ILuaListener;
-			if (typedListener != null) typedListener.ExitFieldsep(this);
-		}
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			ILuaVisitor<TResult> typedVisitor = visitor as ILuaVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitFieldsep(this);
@@ -2652,14 +2333,14 @@ public partial class LuaParser : Parser {
 	[RuleVersion(0)]
 	public FieldsepContext fieldsep() {
 		FieldsepContext _localctx = new FieldsepContext(_ctx, State);
-		EnterRule(_localctx, 46, RULE_fieldsep);
+		EnterRule(_localctx, 50, RULE_fieldsep);
 		int _la;
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 368;
+			State = 345;
 			_la = _input.La(1);
-			if ( !(_la==T__0 || _la==T__13) ) {
+			if ( !(_la==T__1 || _la==T__12) ) {
 			_errHandler.RecoverInline(this);
 			} else {
 				if (_input.La(1) == TokenConstants.Eof) {
@@ -2669,444 +2350,6 @@ public partial class LuaParser : Parser {
 				_errHandler.ReportMatch(this);
 				Consume();
 			}
-			}
-		}
-		catch (RecognitionException re) {
-			_localctx.exception = re;
-			_errHandler.ReportError(this, re);
-			_errHandler.Recover(this, re);
-		}
-		finally {
-			ExitRule();
-		}
-		return _localctx;
-	}
-
-	public partial class OperatorOrContext : ParserRuleContext {
-		public OperatorOrContext(ParserRuleContext parent, int invokingState)
-			: base(parent, invokingState)
-		{
-		}
-		public override int RuleIndex { get { return RULE_operatorOr; } }
-		public override void EnterRule(IParseTreeListener listener) {
-			ILuaListener typedListener = listener as ILuaListener;
-			if (typedListener != null) typedListener.EnterOperatorOr(this);
-		}
-		public override void ExitRule(IParseTreeListener listener) {
-			ILuaListener typedListener = listener as ILuaListener;
-			if (typedListener != null) typedListener.ExitOperatorOr(this);
-		}
-		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
-			ILuaVisitor<TResult> typedVisitor = visitor as ILuaVisitor<TResult>;
-			if (typedVisitor != null) return typedVisitor.VisitOperatorOr(this);
-			else return visitor.VisitChildren(this);
-		}
-	}
-
-	[RuleVersion(0)]
-	public OperatorOrContext operatorOr() {
-		OperatorOrContext _localctx = new OperatorOrContext(_ctx, State);
-		EnterRule(_localctx, 48, RULE_operatorOr);
-		try {
-			EnterOuterAlt(_localctx, 1);
-			{
-			State = 370; Match(T__30);
-			}
-		}
-		catch (RecognitionException re) {
-			_localctx.exception = re;
-			_errHandler.ReportError(this, re);
-			_errHandler.Recover(this, re);
-		}
-		finally {
-			ExitRule();
-		}
-		return _localctx;
-	}
-
-	public partial class OperatorAndContext : ParserRuleContext {
-		public OperatorAndContext(ParserRuleContext parent, int invokingState)
-			: base(parent, invokingState)
-		{
-		}
-		public override int RuleIndex { get { return RULE_operatorAnd; } }
-		public override void EnterRule(IParseTreeListener listener) {
-			ILuaListener typedListener = listener as ILuaListener;
-			if (typedListener != null) typedListener.EnterOperatorAnd(this);
-		}
-		public override void ExitRule(IParseTreeListener listener) {
-			ILuaListener typedListener = listener as ILuaListener;
-			if (typedListener != null) typedListener.ExitOperatorAnd(this);
-		}
-		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
-			ILuaVisitor<TResult> typedVisitor = visitor as ILuaVisitor<TResult>;
-			if (typedVisitor != null) return typedVisitor.VisitOperatorAnd(this);
-			else return visitor.VisitChildren(this);
-		}
-	}
-
-	[RuleVersion(0)]
-	public OperatorAndContext operatorAnd() {
-		OperatorAndContext _localctx = new OperatorAndContext(_ctx, State);
-		EnterRule(_localctx, 50, RULE_operatorAnd);
-		try {
-			EnterOuterAlt(_localctx, 1);
-			{
-			State = 372; Match(T__31);
-			}
-		}
-		catch (RecognitionException re) {
-			_localctx.exception = re;
-			_errHandler.ReportError(this, re);
-			_errHandler.Recover(this, re);
-		}
-		finally {
-			ExitRule();
-		}
-		return _localctx;
-	}
-
-	public partial class OperatorComparisonContext : ParserRuleContext {
-		public OperatorComparisonContext(ParserRuleContext parent, int invokingState)
-			: base(parent, invokingState)
-		{
-		}
-		public override int RuleIndex { get { return RULE_operatorComparison; } }
-		public override void EnterRule(IParseTreeListener listener) {
-			ILuaListener typedListener = listener as ILuaListener;
-			if (typedListener != null) typedListener.EnterOperatorComparison(this);
-		}
-		public override void ExitRule(IParseTreeListener listener) {
-			ILuaListener typedListener = listener as ILuaListener;
-			if (typedListener != null) typedListener.ExitOperatorComparison(this);
-		}
-		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
-			ILuaVisitor<TResult> typedVisitor = visitor as ILuaVisitor<TResult>;
-			if (typedVisitor != null) return typedVisitor.VisitOperatorComparison(this);
-			else return visitor.VisitChildren(this);
-		}
-	}
-
-	[RuleVersion(0)]
-	public OperatorComparisonContext operatorComparison() {
-		OperatorComparisonContext _localctx = new OperatorComparisonContext(_ctx, State);
-		EnterRule(_localctx, 52, RULE_operatorComparison);
-		int _la;
-		try {
-			EnterOuterAlt(_localctx, 1);
-			{
-			State = 374;
-			_la = _input.La(1);
-			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__32) | (1L << T__33) | (1L << T__34) | (1L << T__35) | (1L << T__36) | (1L << T__37))) != 0)) ) {
-			_errHandler.RecoverInline(this);
-			} else {
-				if (_input.La(1) == TokenConstants.Eof) {
-					matchedEOF = true;
-				}
-
-				_errHandler.ReportMatch(this);
-				Consume();
-			}
-			}
-		}
-		catch (RecognitionException re) {
-			_localctx.exception = re;
-			_errHandler.ReportError(this, re);
-			_errHandler.Recover(this, re);
-		}
-		finally {
-			ExitRule();
-		}
-		return _localctx;
-	}
-
-	public partial class OperatorStrcatContext : ParserRuleContext {
-		public OperatorStrcatContext(ParserRuleContext parent, int invokingState)
-			: base(parent, invokingState)
-		{
-		}
-		public override int RuleIndex { get { return RULE_operatorStrcat; } }
-		public override void EnterRule(IParseTreeListener listener) {
-			ILuaListener typedListener = listener as ILuaListener;
-			if (typedListener != null) typedListener.EnterOperatorStrcat(this);
-		}
-		public override void ExitRule(IParseTreeListener listener) {
-			ILuaListener typedListener = listener as ILuaListener;
-			if (typedListener != null) typedListener.ExitOperatorStrcat(this);
-		}
-		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
-			ILuaVisitor<TResult> typedVisitor = visitor as ILuaVisitor<TResult>;
-			if (typedVisitor != null) return typedVisitor.VisitOperatorStrcat(this);
-			else return visitor.VisitChildren(this);
-		}
-	}
-
-	[RuleVersion(0)]
-	public OperatorStrcatContext operatorStrcat() {
-		OperatorStrcatContext _localctx = new OperatorStrcatContext(_ctx, State);
-		EnterRule(_localctx, 54, RULE_operatorStrcat);
-		try {
-			EnterOuterAlt(_localctx, 1);
-			{
-			State = 376; Match(T__38);
-			}
-		}
-		catch (RecognitionException re) {
-			_localctx.exception = re;
-			_errHandler.ReportError(this, re);
-			_errHandler.Recover(this, re);
-		}
-		finally {
-			ExitRule();
-		}
-		return _localctx;
-	}
-
-	public partial class OperatorAddSubContext : ParserRuleContext {
-		public OperatorAddSubContext(ParserRuleContext parent, int invokingState)
-			: base(parent, invokingState)
-		{
-		}
-		public override int RuleIndex { get { return RULE_operatorAddSub; } }
-		public override void EnterRule(IParseTreeListener listener) {
-			ILuaListener typedListener = listener as ILuaListener;
-			if (typedListener != null) typedListener.EnterOperatorAddSub(this);
-		}
-		public override void ExitRule(IParseTreeListener listener) {
-			ILuaListener typedListener = listener as ILuaListener;
-			if (typedListener != null) typedListener.ExitOperatorAddSub(this);
-		}
-		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
-			ILuaVisitor<TResult> typedVisitor = visitor as ILuaVisitor<TResult>;
-			if (typedVisitor != null) return typedVisitor.VisitOperatorAddSub(this);
-			else return visitor.VisitChildren(this);
-		}
-	}
-
-	[RuleVersion(0)]
-	public OperatorAddSubContext operatorAddSub() {
-		OperatorAddSubContext _localctx = new OperatorAddSubContext(_ctx, State);
-		EnterRule(_localctx, 56, RULE_operatorAddSub);
-		int _la;
-		try {
-			EnterOuterAlt(_localctx, 1);
-			{
-			State = 378;
-			_la = _input.La(1);
-			if ( !(_la==T__39 || _la==T__40) ) {
-			_errHandler.RecoverInline(this);
-			} else {
-				if (_input.La(1) == TokenConstants.Eof) {
-					matchedEOF = true;
-				}
-
-				_errHandler.ReportMatch(this);
-				Consume();
-			}
-			}
-		}
-		catch (RecognitionException re) {
-			_localctx.exception = re;
-			_errHandler.ReportError(this, re);
-			_errHandler.Recover(this, re);
-		}
-		finally {
-			ExitRule();
-		}
-		return _localctx;
-	}
-
-	public partial class OperatorMulDivModContext : ParserRuleContext {
-		public OperatorMulDivModContext(ParserRuleContext parent, int invokingState)
-			: base(parent, invokingState)
-		{
-		}
-		public override int RuleIndex { get { return RULE_operatorMulDivMod; } }
-		public override void EnterRule(IParseTreeListener listener) {
-			ILuaListener typedListener = listener as ILuaListener;
-			if (typedListener != null) typedListener.EnterOperatorMulDivMod(this);
-		}
-		public override void ExitRule(IParseTreeListener listener) {
-			ILuaListener typedListener = listener as ILuaListener;
-			if (typedListener != null) typedListener.ExitOperatorMulDivMod(this);
-		}
-		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
-			ILuaVisitor<TResult> typedVisitor = visitor as ILuaVisitor<TResult>;
-			if (typedVisitor != null) return typedVisitor.VisitOperatorMulDivMod(this);
-			else return visitor.VisitChildren(this);
-		}
-	}
-
-	[RuleVersion(0)]
-	public OperatorMulDivModContext operatorMulDivMod() {
-		OperatorMulDivModContext _localctx = new OperatorMulDivModContext(_ctx, State);
-		EnterRule(_localctx, 58, RULE_operatorMulDivMod);
-		int _la;
-		try {
-			EnterOuterAlt(_localctx, 1);
-			{
-			State = 380;
-			_la = _input.La(1);
-			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__41) | (1L << T__42) | (1L << T__43) | (1L << T__44))) != 0)) ) {
-			_errHandler.RecoverInline(this);
-			} else {
-				if (_input.La(1) == TokenConstants.Eof) {
-					matchedEOF = true;
-				}
-
-				_errHandler.ReportMatch(this);
-				Consume();
-			}
-			}
-		}
-		catch (RecognitionException re) {
-			_localctx.exception = re;
-			_errHandler.ReportError(this, re);
-			_errHandler.Recover(this, re);
-		}
-		finally {
-			ExitRule();
-		}
-		return _localctx;
-	}
-
-	public partial class OperatorBitwiseContext : ParserRuleContext {
-		public OperatorBitwiseContext(ParserRuleContext parent, int invokingState)
-			: base(parent, invokingState)
-		{
-		}
-		public override int RuleIndex { get { return RULE_operatorBitwise; } }
-		public override void EnterRule(IParseTreeListener listener) {
-			ILuaListener typedListener = listener as ILuaListener;
-			if (typedListener != null) typedListener.EnterOperatorBitwise(this);
-		}
-		public override void ExitRule(IParseTreeListener listener) {
-			ILuaListener typedListener = listener as ILuaListener;
-			if (typedListener != null) typedListener.ExitOperatorBitwise(this);
-		}
-		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
-			ILuaVisitor<TResult> typedVisitor = visitor as ILuaVisitor<TResult>;
-			if (typedVisitor != null) return typedVisitor.VisitOperatorBitwise(this);
-			else return visitor.VisitChildren(this);
-		}
-	}
-
-	[RuleVersion(0)]
-	public OperatorBitwiseContext operatorBitwise() {
-		OperatorBitwiseContext _localctx = new OperatorBitwiseContext(_ctx, State);
-		EnterRule(_localctx, 60, RULE_operatorBitwise);
-		int _la;
-		try {
-			EnterOuterAlt(_localctx, 1);
-			{
-			State = 382;
-			_la = _input.La(1);
-			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__45) | (1L << T__46) | (1L << T__47) | (1L << T__48) | (1L << T__49))) != 0)) ) {
-			_errHandler.RecoverInline(this);
-			} else {
-				if (_input.La(1) == TokenConstants.Eof) {
-					matchedEOF = true;
-				}
-
-				_errHandler.ReportMatch(this);
-				Consume();
-			}
-			}
-		}
-		catch (RecognitionException re) {
-			_localctx.exception = re;
-			_errHandler.ReportError(this, re);
-			_errHandler.Recover(this, re);
-		}
-		finally {
-			ExitRule();
-		}
-		return _localctx;
-	}
-
-	public partial class OperatorUnaryContext : ParserRuleContext {
-		public OperatorUnaryContext(ParserRuleContext parent, int invokingState)
-			: base(parent, invokingState)
-		{
-		}
-		public override int RuleIndex { get { return RULE_operatorUnary; } }
-		public override void EnterRule(IParseTreeListener listener) {
-			ILuaListener typedListener = listener as ILuaListener;
-			if (typedListener != null) typedListener.EnterOperatorUnary(this);
-		}
-		public override void ExitRule(IParseTreeListener listener) {
-			ILuaListener typedListener = listener as ILuaListener;
-			if (typedListener != null) typedListener.ExitOperatorUnary(this);
-		}
-		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
-			ILuaVisitor<TResult> typedVisitor = visitor as ILuaVisitor<TResult>;
-			if (typedVisitor != null) return typedVisitor.VisitOperatorUnary(this);
-			else return visitor.VisitChildren(this);
-		}
-	}
-
-	[RuleVersion(0)]
-	public OperatorUnaryContext operatorUnary() {
-		OperatorUnaryContext _localctx = new OperatorUnaryContext(_ctx, State);
-		EnterRule(_localctx, 62, RULE_operatorUnary);
-		int _la;
-		try {
-			EnterOuterAlt(_localctx, 1);
-			{
-			State = 384;
-			_la = _input.La(1);
-			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__40) | (1L << T__47) | (1L << T__50) | (1L << T__51))) != 0)) ) {
-			_errHandler.RecoverInline(this);
-			} else {
-				if (_input.La(1) == TokenConstants.Eof) {
-					matchedEOF = true;
-				}
-
-				_errHandler.ReportMatch(this);
-				Consume();
-			}
-			}
-		}
-		catch (RecognitionException re) {
-			_localctx.exception = re;
-			_errHandler.ReportError(this, re);
-			_errHandler.Recover(this, re);
-		}
-		finally {
-			ExitRule();
-		}
-		return _localctx;
-	}
-
-	public partial class OperatorPowerContext : ParserRuleContext {
-		public OperatorPowerContext(ParserRuleContext parent, int invokingState)
-			: base(parent, invokingState)
-		{
-		}
-		public override int RuleIndex { get { return RULE_operatorPower; } }
-		public override void EnterRule(IParseTreeListener listener) {
-			ILuaListener typedListener = listener as ILuaListener;
-			if (typedListener != null) typedListener.EnterOperatorPower(this);
-		}
-		public override void ExitRule(IParseTreeListener listener) {
-			ILuaListener typedListener = listener as ILuaListener;
-			if (typedListener != null) typedListener.ExitOperatorPower(this);
-		}
-		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
-			ILuaVisitor<TResult> typedVisitor = visitor as ILuaVisitor<TResult>;
-			if (typedVisitor != null) return typedVisitor.VisitOperatorPower(this);
-			else return visitor.VisitChildren(this);
-		}
-	}
-
-	[RuleVersion(0)]
-	public OperatorPowerContext operatorPower() {
-		OperatorPowerContext _localctx = new OperatorPowerContext(_ctx, State);
-		EnterRule(_localctx, 64, RULE_operatorPower);
-		try {
-			EnterOuterAlt(_localctx, 1);
-			{
-			State = 386; Match(T__52);
 			}
 		}
 		catch (RecognitionException re) {
@@ -3124,20 +2367,11 @@ public partial class LuaParser : Parser {
 		public ITerminalNode INT() { return GetToken(LuaParser.INT, 0); }
 		public ITerminalNode HEX() { return GetToken(LuaParser.HEX, 0); }
 		public ITerminalNode FLOAT() { return GetToken(LuaParser.FLOAT, 0); }
-		public ITerminalNode HEX_FLOAT() { return GetToken(LuaParser.HEX_FLOAT, 0); }
 		public NumberContext(ParserRuleContext parent, int invokingState)
 			: base(parent, invokingState)
 		{
 		}
 		public override int RuleIndex { get { return RULE_number; } }
-		public override void EnterRule(IParseTreeListener listener) {
-			ILuaListener typedListener = listener as ILuaListener;
-			if (typedListener != null) typedListener.EnterNumber(this);
-		}
-		public override void ExitRule(IParseTreeListener listener) {
-			ILuaListener typedListener = listener as ILuaListener;
-			if (typedListener != null) typedListener.ExitNumber(this);
-		}
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			ILuaVisitor<TResult> typedVisitor = visitor as ILuaVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitNumber(this);
@@ -3148,14 +2382,14 @@ public partial class LuaParser : Parser {
 	[RuleVersion(0)]
 	public NumberContext number() {
 		NumberContext _localctx = new NumberContext(_ctx, State);
-		EnterRule(_localctx, 66, RULE_number);
+		EnterRule(_localctx, 52, RULE_number);
 		int _la;
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 388;
+			State = 347;
 			_la = _input.La(1);
-			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << INT) | (1L << HEX) | (1L << FLOAT) | (1L << HEX_FLOAT))) != 0)) ) {
+			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << INT) | (1L << HEX) | (1L << FLOAT))) != 0)) ) {
 			_errHandler.RecoverInline(this);
 			} else {
 				if (_input.La(1) == TokenConstants.Eof) {
@@ -3187,14 +2421,6 @@ public partial class LuaParser : Parser {
 		{
 		}
 		public override int RuleIndex { get { return RULE_string; } }
-		public override void EnterRule(IParseTreeListener listener) {
-			ILuaListener typedListener = listener as ILuaListener;
-			if (typedListener != null) typedListener.EnterString(this);
-		}
-		public override void ExitRule(IParseTreeListener listener) {
-			ILuaListener typedListener = listener as ILuaListener;
-			if (typedListener != null) typedListener.ExitString(this);
-		}
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			ILuaVisitor<TResult> typedVisitor = visitor as ILuaVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitString(this);
@@ -3205,12 +2431,12 @@ public partial class LuaParser : Parser {
 	[RuleVersion(0)]
 	public StringContext @string() {
 		StringContext _localctx = new StringContext(_ctx, State);
-		EnterRule(_localctx, 68, RULE_string);
+		EnterRule(_localctx, 54, RULE_string);
 		int _la;
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 390;
+			State = 349;
 			_la = _input.La(1);
 			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << NORMALSTRING) | (1L << CHARSTRING) | (1L << LONGSTRING))) != 0)) ) {
 			_errHandler.RecoverInline(this);
@@ -3237,192 +2463,174 @@ public partial class LuaParser : Parser {
 
 	public override bool Sempred(RuleContext _localctx, int ruleIndex, int predIndex) {
 		switch (ruleIndex) {
-		case 8: return exp_sempred((ExpContext)_localctx, predIndex);
+		case 11: return exp_sempred((ExpContext)_localctx, predIndex);
 		}
 		return true;
 	}
 	private bool exp_sempred(ExpContext _localctx, int predIndex) {
 		switch (predIndex) {
-		case 0: return Precpred(_ctx, 9);
+		case 0: return Precpred(_ctx, 8);
 
-		case 1: return Precpred(_ctx, 7);
+		case 1: return Precpred(_ctx, 6);
 
-		case 2: return Precpred(_ctx, 6);
+		case 2: return Precpred(_ctx, 5);
 
-		case 3: return Precpred(_ctx, 5);
+		case 3: return Precpred(_ctx, 4);
 
-		case 4: return Precpred(_ctx, 4);
+		case 4: return Precpred(_ctx, 3);
 
-		case 5: return Precpred(_ctx, 3);
+		case 5: return Precpred(_ctx, 2);
 
-		case 6: return Precpred(_ctx, 2);
-
-		case 7: return Precpred(_ctx, 1);
+		case 6: return Precpred(_ctx, 1);
 		}
 		return true;
 	}
 
 	public static readonly string _serializedATN =
-		"\x3\xAF6F\x8320\x479D\xB75C\x4880\x1605\x191C\xAB37\x3\x43\x18B\x4\x2"+
-		"\t\x2\x4\x3\t\x3\x4\x4\t\x4\x4\x5\t\x5\x4\x6\t\x6\x4\a\t\a\x4\b\t\b\x4"+
-		"\t\t\t\x4\n\t\n\x4\v\t\v\x4\f\t\f\x4\r\t\r\x4\xE\t\xE\x4\xF\t\xF\x4\x10"+
-		"\t\x10\x4\x11\t\x11\x4\x12\t\x12\x4\x13\t\x13\x4\x14\t\x14\x4\x15\t\x15"+
+		"\x3\xAF6F\x8320\x479D\xB75C\x4880\x1605\x191C\xAB37\x3<\x162\x4\x2\t\x2"+
+		"\x4\x3\t\x3\x4\x4\t\x4\x4\x5\t\x5\x4\x6\t\x6\x4\a\t\a\x4\b\t\b\x4\t\t"+
+		"\t\x4\n\t\n\x4\v\t\v\x4\f\t\f\x4\r\t\r\x4\xE\t\xE\x4\xF\t\xF\x4\x10\t"+
+		"\x10\x4\x11\t\x11\x4\x12\t\x12\x4\x13\t\x13\x4\x14\t\x14\x4\x15\t\x15"+
 		"\x4\x16\t\x16\x4\x17\t\x17\x4\x18\t\x18\x4\x19\t\x19\x4\x1A\t\x1A\x4\x1B"+
-		"\t\x1B\x4\x1C\t\x1C\x4\x1D\t\x1D\x4\x1E\t\x1E\x4\x1F\t\x1F\x4 \t \x4!"+
-		"\t!\x4\"\t\"\x4#\t#\x4$\t$\x3\x2\x3\x2\x3\x2\x3\x3\a\x3M\n\x3\f\x3\xE"+
-		"\x3P\v\x3\x3\x3\x5\x3S\n\x3\x3\x4\x3\x4\x3\x4\x3\x4\x3\x4\x3\x4\x3\x4"+
-		"\x3\x4\x3\x4\x3\x4\x3\x4\x3\x4\x3\x4\x3\x4\x3\x4\x3\x4\x3\x4\x3\x4\x3"+
-		"\x4\x3\x4\x3\x4\x3\x4\x3\x4\x3\x4\x3\x4\x3\x4\x3\x4\x3\x4\x3\x4\x3\x4"+
-		"\x3\x4\a\x4t\n\x4\f\x4\xE\x4w\v\x4\x3\x4\x3\x4\x5\x4{\n\x4\x3\x4\x3\x4"+
-		"\x3\x4\x3\x4\x3\x4\x3\x4\x3\x4\x3\x4\x3\x4\x3\x4\x5\x4\x87\n\x4\x3\x4"+
-		"\x3\x4\x3\x4\x3\x4\x3\x4\x3\x4\x3\x4\x3\x4\x3\x4\x3\x4\x3\x4\x3\x4\x3"+
-		"\x4\x3\x4\x3\x4\x3\x4\x3\x4\x3\x4\x3\x4\x3\x4\x3\x4\x3\x4\x3\x4\x3\x4"+
-		"\x5\x4\xA1\n\x4\x5\x4\xA3\n\x4\x3\x5\x3\x5\x5\x5\xA7\n\x5\x3\x5\x5\x5"+
-		"\xAA\n\x5\x3\x6\x3\x6\x3\x6\a\x6\xAF\n\x6\f\x6\xE\x6\xB2\v\x6\x3\x6\x3"+
-		"\x6\x5\x6\xB6\n\x6\x3\a\x3\a\x3\a\a\a\xBB\n\a\f\a\xE\a\xBE\v\a\x3\b\x3"+
-		"\b\x3\b\a\b\xC3\n\b\f\b\xE\b\xC6\v\b\x3\t\x3\t\x3\t\a\t\xCB\n\t\f\t\xE"+
-		"\t\xCE\v\t\x3\n\x3\n\x3\n\x3\n\x3\n\x3\n\x3\n\x3\n\x3\n\x3\n\x5\n\xDA"+
-		"\n\n\x3\n\x3\n\x3\n\x3\n\x3\n\x3\n\x3\n\x3\n\x3\n\x3\n\x3\n\x3\n\x3\n"+
-		"\x3\n\x3\n\x3\n\x3\n\x3\n\x3\n\x3\n\x3\n\x3\n\x3\n\x3\n\x3\n\x3\n\x3\n"+
-		"\x3\n\x3\n\x3\n\x3\n\x3\n\a\n\xFC\n\n\f\n\xE\n\xFF\v\n\x3\v\x3\v\x3\f"+
-		"\x3\f\a\f\x105\n\f\f\f\xE\f\x108\v\f\x3\r\x3\r\x6\r\x10C\n\r\r\r\xE\r"+
-		"\x10D\x3\xE\x3\xE\x3\xE\x3\xE\x3\xE\x5\xE\x115\n\xE\x3\xF\x3\xF\x3\xF"+
-		"\x3\xF\x3\xF\x3\xF\x5\xF\x11D\n\xF\x3\xF\a\xF\x120\n\xF\f\xF\xE\xF\x123"+
-		"\v\xF\x3\x10\a\x10\x126\n\x10\f\x10\xE\x10\x129\v\x10\x3\x10\x3\x10\x3"+
-		"\x10\x3\x10\x3\x10\x3\x10\x5\x10\x131\n\x10\x3\x11\x3\x11\x5\x11\x135"+
-		"\n\x11\x3\x11\x3\x11\x3\x12\x3\x12\x5\x12\x13B\n\x12\x3\x12\x3\x12\x3"+
-		"\x12\x5\x12\x140\n\x12\x3\x13\x3\x13\x3\x13\x3\x14\x3\x14\x5\x14\x147"+
-		"\n\x14\x3\x14\x3\x14\x3\x14\x3\x14\x3\x15\x3\x15\x3\x15\x5\x15\x150\n"+
-		"\x15\x3\x15\x5\x15\x153\n\x15\x3\x16\x3\x16\x5\x16\x157\n\x16\x3\x16\x3"+
-		"\x16\x3\x17\x3\x17\x3\x17\x3\x17\a\x17\x15F\n\x17\f\x17\xE\x17\x162\v"+
-		"\x17\x3\x17\x5\x17\x165\n\x17\x3\x18\x3\x18\x3\x18\x3\x18\x3\x18\x3\x18"+
-		"\x3\x18\x3\x18\x3\x18\x3\x18\x5\x18\x171\n\x18\x3\x19\x3\x19\x3\x1A\x3"+
-		"\x1A\x3\x1B\x3\x1B\x3\x1C\x3\x1C\x3\x1D\x3\x1D\x3\x1E\x3\x1E\x3\x1F\x3"+
-		"\x1F\x3 \x3 \x3!\x3!\x3\"\x3\"\x3#\x3#\x3$\x3$\x3$\x2\x2\x3\x12%\x2\x2"+
-		"\x4\x2\x6\x2\b\x2\n\x2\f\x2\xE\x2\x10\x2\x12\x2\x14\x2\x16\x2\x18\x2\x1A"+
-		"\x2\x1C\x2\x1E\x2 \x2\"\x2$\x2&\x2(\x2*\x2,\x2.\x2\x30\x2\x32\x2\x34\x2"+
-		"\x36\x2\x38\x2:\x2<\x2>\x2@\x2\x42\x2\x44\x2\x46\x2\x2\v\x3\x2\x17\x1A"+
-		"\x4\x2\x3\x3\x10\x10\x3\x2#(\x3\x2*+\x3\x2,/\x3\x2\x30\x34\x5\x2++\x32"+
-		"\x32\x35\x36\x3\x2<?\x3\x2\x39;\x1A1\x2H\x3\x2\x2\x2\x4N\x3\x2\x2\x2\x6"+
-		"\xA2\x3\x2\x2\x2\b\xA4\x3\x2\x2\x2\n\xAB\x3\x2\x2\x2\f\xB7\x3\x2\x2\x2"+
-		"\xE\xBF\x3\x2\x2\x2\x10\xC7\x3\x2\x2\x2\x12\xD9\x3\x2\x2\x2\x14\x100\x3"+
-		"\x2\x2\x2\x16\x102\x3\x2\x2\x2\x18\x109\x3\x2\x2\x2\x1A\x114\x3\x2\x2"+
-		"\x2\x1C\x11C\x3\x2\x2\x2\x1E\x127\x3\x2\x2\x2 \x134\x3\x2\x2\x2\"\x13F"+
-		"\x3\x2\x2\x2$\x141\x3\x2\x2\x2&\x144\x3\x2\x2\x2(\x152\x3\x2\x2\x2*\x154"+
-		"\x3\x2\x2\x2,\x15A\x3\x2\x2\x2.\x170\x3\x2\x2\x2\x30\x172\x3\x2\x2\x2"+
-		"\x32\x174\x3\x2\x2\x2\x34\x176\x3\x2\x2\x2\x36\x178\x3\x2\x2\x2\x38\x17A"+
-		"\x3\x2\x2\x2:\x17C\x3\x2\x2\x2<\x17E\x3\x2\x2\x2>\x180\x3\x2\x2\x2@\x182"+
-		"\x3\x2\x2\x2\x42\x184\x3\x2\x2\x2\x44\x186\x3\x2\x2\x2\x46\x188\x3\x2"+
-		"\x2\x2HI\x5\x4\x3\x2IJ\a\x2\x2\x3J\x3\x3\x2\x2\x2KM\x5\x6\x4\x2LK\x3\x2"+
-		"\x2\x2MP\x3\x2\x2\x2NL\x3\x2\x2\x2NO\x3\x2\x2\x2OR\x3\x2\x2\x2PN\x3\x2"+
-		"\x2\x2QS\x5\b\x5\x2RQ\x3\x2\x2\x2RS\x3\x2\x2\x2S\x5\x3\x2\x2\x2T\xA3\a"+
-		"\x3\x2\x2UV\x5\f\a\x2VW\a\x4\x2\x2WX\x5\x10\t\x2X\xA3\x3\x2\x2\x2Y\xA3"+
-		"\x5\x18\r\x2Z\xA3\a\x5\x2\x2[\\\a\x6\x2\x2\\]\x5\x4\x3\x2]^\a\a\x2\x2"+
-		"^\xA3\x3\x2\x2\x2_`\a\b\x2\x2`\x61\x5\x12\n\x2\x61\x62\a\x6\x2\x2\x62"+
-		"\x63\x5\x4\x3\x2\x63\x64\a\a\x2\x2\x64\xA3\x3\x2\x2\x2\x65\x66\a\t\x2"+
-		"\x2\x66g\x5\x4\x3\x2gh\a\n\x2\x2hi\x5\x12\n\x2i\xA3\x3\x2\x2\x2jk\a\v"+
-		"\x2\x2kl\x5\x12\n\x2lm\a\f\x2\x2mu\x5\x4\x3\x2no\a\r\x2\x2op\x5\x12\n"+
-		"\x2pq\a\f\x2\x2qr\x5\x4\x3\x2rt\x3\x2\x2\x2sn\x3\x2\x2\x2tw\x3\x2\x2\x2"+
-		"us\x3\x2\x2\x2uv\x3\x2\x2\x2vz\x3\x2\x2\x2wu\x3\x2\x2\x2xy\a\xE\x2\x2"+
-		"y{\x5\x4\x3\x2zx\x3\x2\x2\x2z{\x3\x2\x2\x2{|\x3\x2\x2\x2|}\a\a\x2\x2}"+
-		"\xA3\x3\x2\x2\x2~\x7F\a\xF\x2\x2\x7F\x80\a\x38\x2\x2\x80\x81\a\x4\x2\x2"+
-		"\x81\x82\x5\x12\n\x2\x82\x83\a\x10\x2\x2\x83\x86\x5\x12\n\x2\x84\x85\a"+
-		"\x10\x2\x2\x85\x87\x5\x12\n\x2\x86\x84\x3\x2\x2\x2\x86\x87\x3\x2\x2\x2"+
-		"\x87\x88\x3\x2\x2\x2\x88\x89\a\x6\x2\x2\x89\x8A\x5\x4\x3\x2\x8A\x8B\a"+
-		"\a\x2\x2\x8B\xA3\x3\x2\x2\x2\x8C\x8D\a\xF\x2\x2\x8D\x8E\x5\xE\b\x2\x8E"+
-		"\x8F\a\x11\x2\x2\x8F\x90\x5\x10\t\x2\x90\x91\a\x6\x2\x2\x91\x92\x5\x4"+
-		"\x3\x2\x92\x93\a\a\x2\x2\x93\xA3\x3\x2\x2\x2\x94\x95\a\x12\x2\x2\x95\x96"+
-		"\x5\n\x6\x2\x96\x97\x5&\x14\x2\x97\xA3\x3\x2\x2\x2\x98\x99\a\x13\x2\x2"+
-		"\x99\x9A\a\x12\x2\x2\x9A\x9B\a\x38\x2\x2\x9B\xA3\x5&\x14\x2\x9C\x9D\a"+
-		"\x13\x2\x2\x9D\xA0\x5\xE\b\x2\x9E\x9F\a\x4\x2\x2\x9F\xA1\x5\x10\t\x2\xA0"+
-		"\x9E\x3\x2\x2\x2\xA0\xA1\x3\x2\x2\x2\xA1\xA3\x3\x2\x2\x2\xA2T\x3\x2\x2"+
-		"\x2\xA2U\x3\x2\x2\x2\xA2Y\x3\x2\x2\x2\xA2Z\x3\x2\x2\x2\xA2[\x3\x2\x2\x2"+
-		"\xA2_\x3\x2\x2\x2\xA2\x65\x3\x2\x2\x2\xA2j\x3\x2\x2\x2\xA2~\x3\x2\x2\x2"+
-		"\xA2\x8C\x3\x2\x2\x2\xA2\x94\x3\x2\x2\x2\xA2\x98\x3\x2\x2\x2\xA2\x9C\x3"+
-		"\x2\x2\x2\xA3\a\x3\x2\x2\x2\xA4\xA6\a\x14\x2\x2\xA5\xA7\x5\x10\t\x2\xA6"+
-		"\xA5\x3\x2\x2\x2\xA6\xA7\x3\x2\x2\x2\xA7\xA9\x3\x2\x2\x2\xA8\xAA\a\x3"+
-		"\x2\x2\xA9\xA8\x3\x2\x2\x2\xA9\xAA\x3\x2\x2\x2\xAA\t\x3\x2\x2\x2\xAB\xB0"+
-		"\a\x38\x2\x2\xAC\xAD\a\x15\x2\x2\xAD\xAF\a\x38\x2\x2\xAE\xAC\x3\x2\x2"+
-		"\x2\xAF\xB2\x3\x2\x2\x2\xB0\xAE\x3\x2\x2\x2\xB0\xB1\x3\x2\x2\x2\xB1\xB5"+
-		"\x3\x2\x2\x2\xB2\xB0\x3\x2\x2\x2\xB3\xB4\a\x16\x2\x2\xB4\xB6\a\x38\x2"+
-		"\x2\xB5\xB3\x3\x2\x2\x2\xB5\xB6\x3\x2\x2\x2\xB6\v\x3\x2\x2\x2\xB7\xBC"+
-		"\x5\x1C\xF\x2\xB8\xB9\a\x10\x2\x2\xB9\xBB\x5\x1C\xF\x2\xBA\xB8\x3\x2\x2"+
-		"\x2\xBB\xBE\x3\x2\x2\x2\xBC\xBA\x3\x2\x2\x2\xBC\xBD\x3\x2\x2\x2\xBD\r"+
-		"\x3\x2\x2\x2\xBE\xBC\x3\x2\x2\x2\xBF\xC4\a\x38\x2\x2\xC0\xC1\a\x10\x2"+
-		"\x2\xC1\xC3\a\x38\x2\x2\xC2\xC0\x3\x2\x2\x2\xC3\xC6\x3\x2\x2\x2\xC4\xC2"+
-		"\x3\x2\x2\x2\xC4\xC5\x3\x2\x2\x2\xC5\xF\x3\x2\x2\x2\xC6\xC4\x3\x2\x2\x2"+
-		"\xC7\xCC\x5\x12\n\x2\xC8\xC9\a\x10\x2\x2\xC9\xCB\x5\x12\n\x2\xCA\xC8\x3"+
-		"\x2\x2\x2\xCB\xCE\x3\x2\x2\x2\xCC\xCA\x3\x2\x2\x2\xCC\xCD\x3\x2\x2\x2"+
-		"\xCD\x11\x3\x2\x2\x2\xCE\xCC\x3\x2\x2\x2\xCF\xD0\b\n\x1\x2\xD0\xDA\x5"+
-		"\x14\v\x2\xD1\xDA\x5\x44#\x2\xD2\xDA\x5\x46$\x2\xD3\xDA\x5$\x13\x2\xD4"+
-		"\xDA\x5\x16\f\x2\xD5\xDA\x5*\x16\x2\xD6\xD7\x5@!\x2\xD7\xD8\x5\x12\n\n"+
-		"\xD8\xDA\x3\x2\x2\x2\xD9\xCF\x3\x2\x2\x2\xD9\xD1\x3\x2\x2\x2\xD9\xD2\x3"+
-		"\x2\x2\x2\xD9\xD3\x3\x2\x2\x2\xD9\xD4\x3\x2\x2\x2\xD9\xD5\x3\x2\x2\x2"+
-		"\xD9\xD6\x3\x2\x2\x2\xDA\xFD\x3\x2\x2\x2\xDB\xDC\f\v\x2\x2\xDC\xDD\x5"+
-		"\x42\"\x2\xDD\xDE\x5\x12\n\v\xDE\xFC\x3\x2\x2\x2\xDF\xE0\f\t\x2\x2\xE0"+
-		"\xE1\x5<\x1F\x2\xE1\xE2\x5\x12\n\n\xE2\xFC\x3\x2\x2\x2\xE3\xE4\f\b\x2"+
-		"\x2\xE4\xE5\x5:\x1E\x2\xE5\xE6\x5\x12\n\t\xE6\xFC\x3\x2\x2\x2\xE7\xE8"+
-		"\f\a\x2\x2\xE8\xE9\x5\x38\x1D\x2\xE9\xEA\x5\x12\n\a\xEA\xFC\x3\x2\x2\x2"+
-		"\xEB\xEC\f\x6\x2\x2\xEC\xED\x5\x36\x1C\x2\xED\xEE\x5\x12\n\a\xEE\xFC\x3"+
-		"\x2\x2\x2\xEF\xF0\f\x5\x2\x2\xF0\xF1\x5\x34\x1B\x2\xF1\xF2\x5\x12\n\x6"+
-		"\xF2\xFC\x3\x2\x2\x2\xF3\xF4\f\x4\x2\x2\xF4\xF5\x5\x32\x1A\x2\xF5\xF6"+
-		"\x5\x12\n\x5\xF6\xFC\x3\x2\x2\x2\xF7\xF8\f\x3\x2\x2\xF8\xF9\x5> \x2\xF9"+
-		"\xFA\x5\x12\n\x4\xFA\xFC\x3\x2\x2\x2\xFB\xDB\x3\x2\x2\x2\xFB\xDF\x3\x2"+
-		"\x2\x2\xFB\xE3\x3\x2\x2\x2\xFB\xE7\x3\x2\x2\x2\xFB\xEB\x3\x2\x2\x2\xFB"+
-		"\xEF\x3\x2\x2\x2\xFB\xF3\x3\x2\x2\x2\xFB\xF7\x3\x2\x2\x2\xFC\xFF\x3\x2"+
-		"\x2\x2\xFD\xFB\x3\x2\x2\x2\xFD\xFE\x3\x2\x2\x2\xFE\x13\x3\x2\x2\x2\xFF"+
-		"\xFD\x3\x2\x2\x2\x100\x101\t\x2\x2\x2\x101\x15\x3\x2\x2\x2\x102\x106\x5"+
-		"\x1A\xE\x2\x103\x105\x5 \x11\x2\x104\x103\x3\x2\x2\x2\x105\x108\x3\x2"+
-		"\x2\x2\x106\x104\x3\x2\x2\x2\x106\x107\x3\x2\x2\x2\x107\x17\x3\x2\x2\x2"+
-		"\x108\x106\x3\x2\x2\x2\x109\x10B\x5\x1A\xE\x2\x10A\x10C\x5 \x11\x2\x10B"+
-		"\x10A\x3\x2\x2\x2\x10C\x10D\x3\x2\x2\x2\x10D\x10B\x3\x2\x2\x2\x10D\x10E"+
-		"\x3\x2\x2\x2\x10E\x19\x3\x2\x2\x2\x10F\x115\x5\x1C\xF\x2\x110\x111\a\x1B"+
-		"\x2\x2\x111\x112\x5\x12\n\x2\x112\x113\a\x1C\x2\x2\x113\x115\x3\x2\x2"+
-		"\x2\x114\x10F\x3\x2\x2\x2\x114\x110\x3\x2\x2\x2\x115\x1B\x3\x2\x2\x2\x116"+
-		"\x11D\a\x38\x2\x2\x117\x118\a\x1B\x2\x2\x118\x119\x5\x12\n\x2\x119\x11A"+
-		"\a\x1C\x2\x2\x11A\x11B\x5\x1E\x10\x2\x11B\x11D\x3\x2\x2\x2\x11C\x116\x3"+
-		"\x2\x2\x2\x11C\x117\x3\x2\x2\x2\x11D\x121\x3\x2\x2\x2\x11E\x120\x5\x1E"+
-		"\x10\x2\x11F\x11E\x3\x2\x2\x2\x120\x123\x3\x2\x2\x2\x121\x11F\x3\x2\x2"+
-		"\x2\x121\x122\x3\x2\x2\x2\x122\x1D\x3\x2\x2\x2\x123\x121\x3\x2\x2\x2\x124"+
-		"\x126\x5 \x11\x2\x125\x124\x3\x2\x2\x2\x126\x129\x3\x2\x2\x2\x127\x125"+
-		"\x3\x2\x2\x2\x127\x128\x3\x2\x2\x2\x128\x130\x3\x2\x2\x2\x129\x127\x3"+
-		"\x2\x2\x2\x12A\x12B\a\x1D\x2\x2\x12B\x12C\x5\x12\n\x2\x12C\x12D\a\x1E"+
-		"\x2\x2\x12D\x131\x3\x2\x2\x2\x12E\x12F\a\x15\x2\x2\x12F\x131\a\x38\x2"+
-		"\x2\x130\x12A\x3\x2\x2\x2\x130\x12E\x3\x2\x2\x2\x131\x1F\x3\x2\x2\x2\x132"+
-		"\x133\a\x16\x2\x2\x133\x135\a\x38\x2\x2\x134\x132\x3\x2\x2\x2\x134\x135"+
-		"\x3\x2\x2\x2\x135\x136\x3\x2\x2\x2\x136\x137\x5\"\x12\x2\x137!\x3\x2\x2"+
-		"\x2\x138\x13A\a\x1B\x2\x2\x139\x13B\x5\x10\t\x2\x13A\x139\x3\x2\x2\x2"+
-		"\x13A\x13B\x3\x2\x2\x2\x13B\x13C\x3\x2\x2\x2\x13C\x140\a\x1C\x2\x2\x13D"+
-		"\x140\x5*\x16\x2\x13E\x140\x5\x46$\x2\x13F\x138\x3\x2\x2\x2\x13F\x13D"+
-		"\x3\x2\x2\x2\x13F\x13E\x3\x2\x2\x2\x140#\x3\x2\x2\x2\x141\x142\a\x12\x2"+
-		"\x2\x142\x143\x5&\x14\x2\x143%\x3\x2\x2\x2\x144\x146\a\x1B\x2\x2\x145"+
-		"\x147\x5(\x15\x2\x146\x145\x3\x2\x2\x2\x146\x147\x3\x2\x2\x2\x147\x148"+
-		"\x3\x2\x2\x2\x148\x149\a\x1C\x2\x2\x149\x14A\x5\x4\x3\x2\x14A\x14B\a\a"+
-		"\x2\x2\x14B\'\x3\x2\x2\x2\x14C\x14F\x5\xE\b\x2\x14D\x14E\a\x10\x2\x2\x14E"+
-		"\x150\a\x1A\x2\x2\x14F\x14D\x3\x2\x2\x2\x14F\x150\x3\x2\x2\x2\x150\x153"+
-		"\x3\x2\x2\x2\x151\x153\a\x1A\x2\x2\x152\x14C\x3\x2\x2\x2\x152\x151\x3"+
-		"\x2\x2\x2\x153)\x3\x2\x2\x2\x154\x156\a\x1F\x2\x2\x155\x157\x5,\x17\x2"+
-		"\x156\x155\x3\x2\x2\x2\x156\x157\x3\x2\x2\x2\x157\x158\x3\x2\x2\x2\x158"+
-		"\x159\a \x2\x2\x159+\x3\x2\x2\x2\x15A\x160\x5.\x18\x2\x15B\x15C\x5\x30"+
-		"\x19\x2\x15C\x15D\x5.\x18\x2\x15D\x15F\x3\x2\x2\x2\x15E\x15B\x3\x2\x2"+
-		"\x2\x15F\x162\x3\x2\x2\x2\x160\x15E\x3\x2\x2\x2\x160\x161\x3\x2\x2\x2"+
-		"\x161\x164\x3\x2\x2\x2\x162\x160\x3\x2\x2\x2\x163\x165\x5\x30\x19\x2\x164"+
-		"\x163\x3\x2\x2\x2\x164\x165\x3\x2\x2\x2\x165-\x3\x2\x2\x2\x166\x167\a"+
-		"\x1D\x2\x2\x167\x168\x5\x12\n\x2\x168\x169\a\x1E\x2\x2\x169\x16A\a\x4"+
-		"\x2\x2\x16A\x16B\x5\x12\n\x2\x16B\x171\x3\x2\x2\x2\x16C\x16D\a\x38\x2"+
-		"\x2\x16D\x16E\a\x4\x2\x2\x16E\x171\x5\x12\n\x2\x16F\x171\x5\x12\n\x2\x170"+
-		"\x166\x3\x2\x2\x2\x170\x16C\x3\x2\x2\x2\x170\x16F\x3\x2\x2\x2\x171/\x3"+
-		"\x2\x2\x2\x172\x173\t\x3\x2\x2\x173\x31\x3\x2\x2\x2\x174\x175\a!\x2\x2"+
-		"\x175\x33\x3\x2\x2\x2\x176\x177\a\"\x2\x2\x177\x35\x3\x2\x2\x2\x178\x179"+
-		"\t\x4\x2\x2\x179\x37\x3\x2\x2\x2\x17A\x17B\a)\x2\x2\x17B\x39\x3\x2\x2"+
-		"\x2\x17C\x17D\t\x5\x2\x2\x17D;\x3\x2\x2\x2\x17E\x17F\t\x6\x2\x2\x17F="+
-		"\x3\x2\x2\x2\x180\x181\t\a\x2\x2\x181?\x3\x2\x2\x2\x182\x183\t\b\x2\x2"+
-		"\x183\x41\x3\x2\x2\x2\x184\x185\a\x37\x2\x2\x185\x43\x3\x2\x2\x2\x186"+
-		"\x187\t\t\x2\x2\x187\x45\x3\x2\x2\x2\x188\x189\t\n\x2\x2\x189G\x3\x2\x2"+
-		"\x2$NRuz\x86\xA0\xA2\xA6\xA9\xB0\xB5\xBC\xC4\xCC\xD9\xFB\xFD\x106\x10D"+
-		"\x114\x11C\x121\x127\x130\x134\x13A\x13F\x146\x14F\x152\x156\x160\x164"+
-		"\x170";
+		"\t\x1B\x4\x1C\t\x1C\x4\x1D\t\x1D\x3\x2\x3\x2\x3\x2\x3\x3\a\x3?\n\x3\f"+
+		"\x3\xE\x3\x42\v\x3\x3\x3\x5\x3\x45\n\x3\x3\x4\x3\x4\x5\x4I\n\x4\x3\x4"+
+		"\x5\x4L\n\x4\x3\x5\x3\x5\x3\x5\x3\x5\x3\x5\x3\x5\x3\x5\x3\x5\x3\x5\x3"+
+		"\x5\x3\x5\x3\x5\x3\x5\x3\x5\x3\x5\x3\x5\x3\x5\x3\x5\x3\x5\x3\x5\x3\x5"+
+		"\x3\x5\x3\x5\x3\x5\x3\x5\x3\x5\x3\x5\a\x5i\n\x5\f\x5\xE\x5l\v\x5\x3\x5"+
+		"\x5\x5o\n\x5\x3\x5\x3\x5\x3\x5\x3\x5\x3\x5\x3\x5\x3\x5\x3\x5\x3\x5\x3"+
+		"\x5\x5\x5{\n\x5\x3\x5\x3\x5\x3\x5\x3\x5\x3\x5\x3\x5\x3\x5\x3\x5\x3\x5"+
+		"\x3\x5\x3\x5\x3\x5\x3\x5\x3\x5\x3\x5\x3\x5\x3\x5\x3\x5\x3\x5\x3\x5\x3"+
+		"\x5\x3\x5\x3\x5\x3\x5\x5\x5\x95\n\x5\x5\x5\x97\n\x5\x3\x6\x3\x6\x3\x6"+
+		"\x3\x6\x3\x6\x3\a\x3\a\x3\a\x3\b\x3\b\x3\b\a\b\xA4\n\b\f\b\xE\b\xA7\v"+
+		"\b\x3\b\x3\b\x5\b\xAB\n\b\x3\t\x3\t\x3\t\a\t\xB0\n\t\f\t\xE\t\xB3\v\t"+
+		"\x3\n\x3\n\x3\n\a\n\xB8\n\n\f\n\xE\n\xBB\v\n\x3\v\x3\v\x3\v\a\v\xC0\n"+
+		"\v\f\v\xE\v\xC3\v\v\x3\f\x3\f\x3\r\x3\r\x3\r\x3\r\x3\r\x3\r\x3\r\x3\r"+
+		"\x3\r\x5\r\xD0\n\r\x3\r\x3\r\x3\r\x3\r\x3\r\x3\r\x3\r\x3\r\x3\r\x3\r\x3"+
+		"\r\x3\r\x3\r\x3\r\x3\r\x3\r\x3\r\x3\r\x3\r\x3\r\x3\r\a\r\xE7\n\r\f\r\xE"+
+		"\r\xEA\v\r\x3\xE\x3\xE\a\xE\xEE\n\xE\f\xE\xE\xE\xF1\v\xE\x3\xF\x3\xF\x6"+
+		"\xF\xF5\n\xF\r\xF\xE\xF\xF6\x3\x10\x3\x10\x3\x10\x3\x10\x3\x10\x5\x10"+
+		"\xFE\n\x10\x3\x11\x3\x11\x3\x11\x3\x11\x3\x11\x3\x11\x5\x11\x106\n\x11"+
+		"\x3\x11\a\x11\x109\n\x11\f\x11\xE\x11\x10C\v\x11\x3\x12\a\x12\x10F\n\x12"+
+		"\f\x12\xE\x12\x112\v\x12\x3\x12\x3\x12\x3\x12\x3\x12\x3\x12\x3\x12\x5"+
+		"\x12\x11A\n\x12\x3\x13\x3\x13\x5\x13\x11E\n\x13\x3\x13\x3\x13\x3\x14\x3"+
+		"\x14\x5\x14\x124\n\x14\x3\x14\x3\x14\x3\x14\x5\x14\x129\n\x14\x3\x15\x3"+
+		"\x15\x3\x15\x3\x16\x3\x16\x5\x16\x130\n\x16\x3\x16\x3\x16\x3\x16\x3\x16"+
+		"\x3\x17\x3\x17\x3\x17\x5\x17\x139\n\x17\x3\x17\x5\x17\x13C\n\x17\x3\x18"+
+		"\x3\x18\x5\x18\x140\n\x18\x3\x18\x3\x18\x3\x19\x3\x19\x3\x19\x3\x19\a"+
+		"\x19\x148\n\x19\f\x19\xE\x19\x14B\v\x19\x3\x19\x5\x19\x14E\n\x19\x3\x1A"+
+		"\x3\x1A\x3\x1A\x3\x1A\x3\x1A\x3\x1A\x3\x1A\x3\x1A\x3\x1A\x3\x1A\x5\x1A"+
+		"\x15A\n\x1A\x3\x1B\x3\x1B\x3\x1C\x3\x1C\x3\x1D\x3\x1D\x3\x1D\x2\x2\x3"+
+		"\x18\x1E\x2\x2\x4\x2\x6\x2\b\x2\n\x2\f\x2\xE\x2\x10\x2\x12\x2\x14\x2\x16"+
+		"\x2\x18\x2\x1A\x2\x1C\x2\x1E\x2 \x2\"\x2$\x2&\x2(\x2*\x2,\x2.\x2\x30\x2"+
+		"\x32\x2\x34\x2\x36\x2\x38\x2\x2\n\x3\x2\x1E!\x3\x2\"$\x3\x2%\'\x4\x2$"+
+		"$((\x3\x2*/\x4\x2\x4\x4\xF\xF\x3\x2\x36\x38\x3\x2\x33\x35\x17E\x2:\x3"+
+		"\x2\x2\x2\x4@\x3\x2\x2\x2\x6\x46\x3\x2\x2\x2\b\x96\x3\x2\x2\x2\n\x98\x3"+
+		"\x2\x2\x2\f\x9D\x3\x2\x2\x2\xE\xA0\x3\x2\x2\x2\x10\xAC\x3\x2\x2\x2\x12"+
+		"\xB4\x3\x2\x2\x2\x14\xBC\x3\x2\x2\x2\x16\xC4\x3\x2\x2\x2\x18\xCF\x3\x2"+
+		"\x2\x2\x1A\xEB\x3\x2\x2\x2\x1C\xF2\x3\x2\x2\x2\x1E\xFD\x3\x2\x2\x2 \x105"+
+		"\x3\x2\x2\x2\"\x110\x3\x2\x2\x2$\x11D\x3\x2\x2\x2&\x128\x3\x2\x2\x2(\x12A"+
+		"\x3\x2\x2\x2*\x12D\x3\x2\x2\x2,\x13B\x3\x2\x2\x2.\x13D\x3\x2\x2\x2\x30"+
+		"\x143\x3\x2\x2\x2\x32\x159\x3\x2\x2\x2\x34\x15B\x3\x2\x2\x2\x36\x15D\x3"+
+		"\x2\x2\x2\x38\x15F\x3\x2\x2\x2:;\x5\x4\x3\x2;<\a\x2\x2\x3<\x3\x3\x2\x2"+
+		"\x2=?\x5\b\x5\x2>=\x3\x2\x2\x2?\x42\x3\x2\x2\x2@>\x3\x2\x2\x2@\x41\x3"+
+		"\x2\x2\x2\x41\x44\x3\x2\x2\x2\x42@\x3\x2\x2\x2\x43\x45\x5\x6\x4\x2\x44"+
+		"\x43\x3\x2\x2\x2\x44\x45\x3\x2\x2\x2\x45\x5\x3\x2\x2\x2\x46H\a\x3\x2\x2"+
+		"GI\x5\x14\v\x2HG\x3\x2\x2\x2HI\x3\x2\x2\x2IK\x3\x2\x2\x2JL\a\x4\x2\x2"+
+		"KJ\x3\x2\x2\x2KL\x3\x2\x2\x2L\a\x3\x2\x2\x2M\x97\a\x4\x2\x2NO\x5\x10\t"+
+		"\x2OP\a\x5\x2\x2PQ\x5\x14\v\x2Q\x97\x3\x2\x2\x2R\x97\x5\x1C\xF\x2S\x97"+
+		"\a\x6\x2\x2TU\a\a\x2\x2UV\x5\x4\x3\x2VW\a\b\x2\x2W\x97\x3\x2\x2\x2XY\a"+
+		"\t\x2\x2YZ\x5\x18\r\x2Z[\a\a\x2\x2[\\\x5\x4\x3\x2\\]\a\b\x2\x2]\x97\x3"+
+		"\x2\x2\x2^_\a\n\x2\x2_`\x5\x4\x3\x2`\x61\a\v\x2\x2\x61\x62\x5\x18\r\x2"+
+		"\x62\x97\x3\x2\x2\x2\x63\x64\a\f\x2\x2\x64\x65\x5\x18\r\x2\x65\x66\a\r"+
+		"\x2\x2\x66j\x5\x4\x3\x2gi\x5\n\x6\x2hg\x3\x2\x2\x2il\x3\x2\x2\x2jh\x3"+
+		"\x2\x2\x2jk\x3\x2\x2\x2kn\x3\x2\x2\x2lj\x3\x2\x2\x2mo\x5\f\a\x2nm\x3\x2"+
+		"\x2\x2no\x3\x2\x2\x2op\x3\x2\x2\x2pq\a\b\x2\x2q\x97\x3\x2\x2\x2rs\a\xE"+
+		"\x2\x2st\a\x32\x2\x2tu\a\x5\x2\x2uv\x5\x18\r\x2vw\a\xF\x2\x2wz\x5\x18"+
+		"\r\x2xy\a\xF\x2\x2y{\x5\x18\r\x2zx\x3\x2\x2\x2z{\x3\x2\x2\x2{|\x3\x2\x2"+
+		"\x2|}\a\a\x2\x2}~\x5\x4\x3\x2~\x7F\a\b\x2\x2\x7F\x97\x3\x2\x2\x2\x80\x81"+
+		"\a\xE\x2\x2\x81\x82\x5\x12\n\x2\x82\x83\a\x10\x2\x2\x83\x84\x5\x14\v\x2"+
+		"\x84\x85\a\a\x2\x2\x85\x86\x5\x4\x3\x2\x86\x87\a\b\x2\x2\x87\x97\x3\x2"+
+		"\x2\x2\x88\x89\a\x11\x2\x2\x89\x8A\x5\xE\b\x2\x8A\x8B\x5*\x16\x2\x8B\x97"+
+		"\x3\x2\x2\x2\x8C\x8D\a\x12\x2\x2\x8D\x8E\a\x11\x2\x2\x8E\x8F\a\x32\x2"+
+		"\x2\x8F\x97\x5*\x16\x2\x90\x91\a\x12\x2\x2\x91\x94\x5\x12\n\x2\x92\x93"+
+		"\a\x5\x2\x2\x93\x95\x5\x14\v\x2\x94\x92\x3\x2\x2\x2\x94\x95\x3\x2\x2\x2"+
+		"\x95\x97\x3\x2\x2\x2\x96M\x3\x2\x2\x2\x96N\x3\x2\x2\x2\x96R\x3\x2\x2\x2"+
+		"\x96S\x3\x2\x2\x2\x96T\x3\x2\x2\x2\x96X\x3\x2\x2\x2\x96^\x3\x2\x2\x2\x96"+
+		"\x63\x3\x2\x2\x2\x96r\x3\x2\x2\x2\x96\x80\x3\x2\x2\x2\x96\x88\x3\x2\x2"+
+		"\x2\x96\x8C\x3\x2\x2\x2\x96\x90\x3\x2\x2\x2\x97\t\x3\x2\x2\x2\x98\x99"+
+		"\a\x13\x2\x2\x99\x9A\x5\x18\r\x2\x9A\x9B\a\r\x2\x2\x9B\x9C\x5\x4\x3\x2"+
+		"\x9C\v\x3\x2\x2\x2\x9D\x9E\a\x14\x2\x2\x9E\x9F\x5\x4\x3\x2\x9F\r\x3\x2"+
+		"\x2\x2\xA0\xA5\a\x32\x2\x2\xA1\xA2\a\x15\x2\x2\xA2\xA4\a\x32\x2\x2\xA3"+
+		"\xA1\x3\x2\x2\x2\xA4\xA7\x3\x2\x2\x2\xA5\xA3\x3\x2\x2\x2\xA5\xA6\x3\x2"+
+		"\x2\x2\xA6\xAA\x3\x2\x2\x2\xA7\xA5\x3\x2\x2\x2\xA8\xA9\a\x16\x2\x2\xA9"+
+		"\xAB\a\x32\x2\x2\xAA\xA8\x3\x2\x2\x2\xAA\xAB\x3\x2\x2\x2\xAB\xF\x3\x2"+
+		"\x2\x2\xAC\xB1\x5 \x11\x2\xAD\xAE\a\xF\x2\x2\xAE\xB0\x5 \x11\x2\xAF\xAD"+
+		"\x3\x2\x2\x2\xB0\xB3\x3\x2\x2\x2\xB1\xAF\x3\x2\x2\x2\xB1\xB2\x3\x2\x2"+
+		"\x2\xB2\x11\x3\x2\x2\x2\xB3\xB1\x3\x2\x2\x2\xB4\xB9\a\x32\x2\x2\xB5\xB6"+
+		"\a\xF\x2\x2\xB6\xB8\a\x32\x2\x2\xB7\xB5\x3\x2\x2\x2\xB8\xBB\x3\x2\x2\x2"+
+		"\xB9\xB7\x3\x2\x2\x2\xB9\xBA\x3\x2\x2\x2\xBA\x13\x3\x2\x2\x2\xBB\xB9\x3"+
+		"\x2\x2\x2\xBC\xC1\x5\x18\r\x2\xBD\xBE\a\xF\x2\x2\xBE\xC0\x5\x18\r\x2\xBF"+
+		"\xBD\x3\x2\x2\x2\xC0\xC3\x3\x2\x2\x2\xC1\xBF\x3\x2\x2\x2\xC1\xC2\x3\x2"+
+		"\x2\x2\xC2\x15\x3\x2\x2\x2\xC3\xC1\x3\x2\x2\x2\xC4\xC5\a\x35\x2\x2\xC5"+
+		"\x17\x3\x2\x2\x2\xC6\xC7\b\r\x1\x2\xC7\xD0\t\x2\x2\x2\xC8\xD0\x5\x36\x1C"+
+		"\x2\xC9\xD0\x5\x38\x1D\x2\xCA\xD0\x5(\x15\x2\xCB\xD0\x5\x1A\xE\x2\xCC"+
+		"\xD0\x5.\x18\x2\xCD\xCE\t\x3\x2\x2\xCE\xD0\x5\x18\r\t\xCF\xC6\x3\x2\x2"+
+		"\x2\xCF\xC8\x3\x2\x2\x2\xCF\xC9\x3\x2\x2\x2\xCF\xCA\x3\x2\x2\x2\xCF\xCB"+
+		"\x3\x2\x2\x2\xCF\xCC\x3\x2\x2\x2\xCF\xCD\x3\x2\x2\x2\xD0\xE8\x3\x2\x2"+
+		"\x2\xD1\xD2\f\n\x2\x2\xD2\xD3\a\x17\x2\x2\xD3\xE7\x5\x18\r\n\xD4\xD5\f"+
+		"\b\x2\x2\xD5\xD6\t\x4\x2\x2\xD6\xE7\x5\x18\r\t\xD7\xD8\f\a\x2\x2\xD8\xD9"+
+		"\t\x5\x2\x2\xD9\xE7\x5\x18\r\b\xDA\xDB\f\x6\x2\x2\xDB\xDC\a)\x2\x2\xDC"+
+		"\xE7\x5\x18\r\x6\xDD\xDE\f\x5\x2\x2\xDE\xDF\t\x6\x2\x2\xDF\xE7\x5\x18"+
+		"\r\x6\xE0\xE1\f\x4\x2\x2\xE1\xE2\a\x30\x2\x2\xE2\xE7\x5\x18\r\x5\xE3\xE4"+
+		"\f\x3\x2\x2\xE4\xE5\a\x31\x2\x2\xE5\xE7\x5\x18\r\x4\xE6\xD1\x3\x2\x2\x2"+
+		"\xE6\xD4\x3\x2\x2\x2\xE6\xD7\x3\x2\x2\x2\xE6\xDA\x3\x2\x2\x2\xE6\xDD\x3"+
+		"\x2\x2\x2\xE6\xE0\x3\x2\x2\x2\xE6\xE3\x3\x2\x2\x2\xE7\xEA\x3\x2\x2\x2"+
+		"\xE8\xE6\x3\x2\x2\x2\xE8\xE9\x3\x2\x2\x2\xE9\x19\x3\x2\x2\x2\xEA\xE8\x3"+
+		"\x2\x2\x2\xEB\xEF\x5\x1E\x10\x2\xEC\xEE\x5$\x13\x2\xED\xEC\x3\x2\x2\x2"+
+		"\xEE\xF1\x3\x2\x2\x2\xEF\xED\x3\x2\x2\x2\xEF\xF0\x3\x2\x2\x2\xF0\x1B\x3"+
+		"\x2\x2\x2\xF1\xEF\x3\x2\x2\x2\xF2\xF4\x5\x1E\x10\x2\xF3\xF5\x5$\x13\x2"+
+		"\xF4\xF3\x3\x2\x2\x2\xF5\xF6\x3\x2\x2\x2\xF6\xF4\x3\x2\x2\x2\xF6\xF7\x3"+
+		"\x2\x2\x2\xF7\x1D\x3\x2\x2\x2\xF8\xFE\x5 \x11\x2\xF9\xFA\a\x18\x2\x2\xFA"+
+		"\xFB\x5\x18\r\x2\xFB\xFC\a\x19\x2\x2\xFC\xFE\x3\x2\x2\x2\xFD\xF8\x3\x2"+
+		"\x2\x2\xFD\xF9\x3\x2\x2\x2\xFE\x1F\x3\x2\x2\x2\xFF\x106\a\x32\x2\x2\x100"+
+		"\x101\a\x18\x2\x2\x101\x102\x5\x18\r\x2\x102\x103\a\x19\x2\x2\x103\x104"+
+		"\x5\"\x12\x2\x104\x106\x3\x2\x2\x2\x105\xFF\x3\x2\x2\x2\x105\x100\x3\x2"+
+		"\x2\x2\x106\x10A\x3\x2\x2\x2\x107\x109\x5\"\x12\x2\x108\x107\x3\x2\x2"+
+		"\x2\x109\x10C\x3\x2\x2\x2\x10A\x108\x3\x2\x2\x2\x10A\x10B\x3\x2\x2\x2"+
+		"\x10B!\x3\x2\x2\x2\x10C\x10A\x3\x2\x2\x2\x10D\x10F\x5$\x13\x2\x10E\x10D"+
+		"\x3\x2\x2\x2\x10F\x112\x3\x2\x2\x2\x110\x10E\x3\x2\x2\x2\x110\x111\x3"+
+		"\x2\x2\x2\x111\x119\x3\x2\x2\x2\x112\x110\x3\x2\x2\x2\x113\x114\a\x1A"+
+		"\x2\x2\x114\x115\x5\x18\r\x2\x115\x116\a\x1B\x2\x2\x116\x11A\x3\x2\x2"+
+		"\x2\x117\x118\a\x15\x2\x2\x118\x11A\a\x32\x2\x2\x119\x113\x3\x2\x2\x2"+
+		"\x119\x117\x3\x2\x2\x2\x11A#\x3\x2\x2\x2\x11B\x11C\a\x16\x2\x2\x11C\x11E"+
+		"\a\x32\x2\x2\x11D\x11B\x3\x2\x2\x2\x11D\x11E\x3\x2\x2\x2\x11E\x11F\x3"+
+		"\x2\x2\x2\x11F\x120\x5&\x14\x2\x120%\x3\x2\x2\x2\x121\x123\a\x18\x2\x2"+
+		"\x122\x124\x5\x14\v\x2\x123\x122\x3\x2\x2\x2\x123\x124\x3\x2\x2\x2\x124"+
+		"\x125\x3\x2\x2\x2\x125\x129\a\x19\x2\x2\x126\x129\x5.\x18\x2\x127\x129"+
+		"\x5\x38\x1D\x2\x128\x121\x3\x2\x2\x2\x128\x126\x3\x2\x2\x2\x128\x127\x3"+
+		"\x2\x2\x2\x129\'\x3\x2\x2\x2\x12A\x12B\a\x11\x2\x2\x12B\x12C\x5*\x16\x2"+
+		"\x12C)\x3\x2\x2\x2\x12D\x12F\a\x18\x2\x2\x12E\x130\x5,\x17\x2\x12F\x12E"+
+		"\x3\x2\x2\x2\x12F\x130\x3\x2\x2\x2\x130\x131\x3\x2\x2\x2\x131\x132\a\x19"+
+		"\x2\x2\x132\x133\x5\x4\x3\x2\x133\x134\a\b\x2\x2\x134+\x3\x2\x2\x2\x135"+
+		"\x138\x5\x12\n\x2\x136\x137\a\xF\x2\x2\x137\x139\a!\x2\x2\x138\x136\x3"+
+		"\x2\x2\x2\x138\x139\x3\x2\x2\x2\x139\x13C\x3\x2\x2\x2\x13A\x13C\a!\x2"+
+		"\x2\x13B\x135\x3\x2\x2\x2\x13B\x13A\x3\x2\x2\x2\x13C-\x3\x2\x2\x2\x13D"+
+		"\x13F\a\x1C\x2\x2\x13E\x140\x5\x30\x19\x2\x13F\x13E\x3\x2\x2\x2\x13F\x140"+
+		"\x3\x2\x2\x2\x140\x141\x3\x2\x2\x2\x141\x142\a\x1D\x2\x2\x142/\x3\x2\x2"+
+		"\x2\x143\x149\x5\x32\x1A\x2\x144\x145\x5\x34\x1B\x2\x145\x146\x5\x32\x1A"+
+		"\x2\x146\x148\x3\x2\x2\x2\x147\x144\x3\x2\x2\x2\x148\x14B\x3\x2\x2\x2"+
+		"\x149\x147\x3\x2\x2\x2\x149\x14A\x3\x2\x2\x2\x14A\x14D\x3\x2\x2\x2\x14B"+
+		"\x149\x3\x2\x2\x2\x14C\x14E\x5\x34\x1B\x2\x14D\x14C\x3\x2\x2\x2\x14D\x14E"+
+		"\x3\x2\x2\x2\x14E\x31\x3\x2\x2\x2\x14F\x150\a\x1A\x2\x2\x150\x151\x5\x18"+
+		"\r\x2\x151\x152\a\x1B\x2\x2\x152\x153\a\x5\x2\x2\x153\x154\x5\x18\r\x2"+
+		"\x154\x15A\x3\x2\x2\x2\x155\x156\a\x32\x2\x2\x156\x157\a\x5\x2\x2\x157"+
+		"\x15A\x5\x18\r\x2\x158\x15A\x5\x18\r\x2\x159\x14F\x3\x2\x2\x2\x159\x155"+
+		"\x3\x2\x2\x2\x159\x158\x3\x2\x2\x2\x15A\x33\x3\x2\x2\x2\x15B\x15C\t\a"+
+		"\x2\x2\x15C\x35\x3\x2\x2\x2\x15D\x15E\t\b\x2\x2\x15E\x37\x3\x2\x2\x2\x15F"+
+		"\x160\t\t\x2\x2\x160\x39\x3\x2\x2\x2$@\x44HKjnz\x94\x96\xA5\xAA\xB1\xB9"+
+		"\xC1\xCF\xE6\xE8\xEF\xF6\xFD\x105\x10A\x110\x119\x11D\x123\x128\x12F\x138"+
+		"\x13B\x13F\x149\x14D\x159";
 	public static readonly ATN _ATN =
 		new ATNDeserializer().Deserialize(_serializedATN.ToCharArray());
 }
-} // namespace zlua.AntlrGen
+} // namespace zlua.Gen

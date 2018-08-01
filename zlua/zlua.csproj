@@ -60,14 +60,11 @@
     <Compile Include="lopcodes.cs" />
     <Compile Include="lobject.cs" />
     <Compile Include="lua.cs" />
-    <Compile Include="lvisitor.cs" />
     <Compile Include="lvm.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="_parser_gen\LuaBaseListener.cs" />
     <Compile Include="_parser_gen\LuaBaseVisitor.cs" />
     <Compile Include="_parser_gen\LuaLexer.cs" />
-    <Compile Include="_parser_gen\LuaListener.cs" />
     <Compile Include="_parser_gen\LuaParser.cs" />
     <Compile Include="_parser_gen\LuaVisitor.cs" />
   </ItemGroup>
@@ -75,7 +72,11 @@
     <None Include="App.config">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Lua.g4" />
+    <None Include="Lua.g4">
+      <Listener>False</Listener>
+      <CustomToolNamespace>zlua.Gen</CustomToolNamespace>
+      <Abstract>True</Abstract>
+    </None>
     <None Include="packages.config" />
     <None Include="test.lua" />
   </ItemGroup>

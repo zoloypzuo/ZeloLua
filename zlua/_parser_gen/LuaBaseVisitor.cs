@@ -19,7 +19,7 @@
 // Ambiguous reference in cref attribute
 #pragma warning disable 419
 
-namespace zlua.AntlrGen {
+namespace zlua.Gen {
 using Antlr4.Runtime.Misc;
 using Antlr4.Runtime.Tree;
 using IToken = Antlr4.Runtime.IToken;
@@ -359,18 +359,6 @@ public partial class LuaBaseVisitor<Result> : AbstractParseTreeVisitor<Result>, 
 	public virtual Result VisitOrExp([NotNull] LuaParser.OrExpContext context) { return VisitChildren(context); }
 
 	/// <summary>
-	/// Visit a parse tree produced by the <c>bitwiseExp</c>
-	/// labeled alternative in <see cref="LuaParser.exp"/>.
-	/// <para>
-	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
-	/// on <paramref name="context"/>.
-	/// </para>
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	/// <return>The visitor result.</return>
-	public virtual Result VisitBitwiseExp([NotNull] LuaParser.BitwiseExpContext context) { return VisitChildren(context); }
-
-	/// <summary>
 	/// Visit a parse tree produced by the <c>normalArgs</c>
 	/// labeled alternative in <see cref="LuaParser.args"/>.
 	/// <para>
@@ -429,6 +417,17 @@ public partial class LuaBaseVisitor<Result> : AbstractParseTreeVisitor<Result>, 
 	public virtual Result VisitBlock([NotNull] LuaParser.BlockContext context) { return VisitChildren(context); }
 
 	/// <summary>
+	/// Visit a parse tree produced by <see cref="LuaParser.retstat"/>.
+	/// <para>
+	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
+	/// on <paramref name="context"/>.
+	/// </para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	public virtual Result VisitRetstat([NotNull] LuaParser.RetstatContext context) { return VisitChildren(context); }
+
+	/// <summary>
 	/// Visit a parse tree produced by <see cref="LuaParser.stat"/>.
 	/// <para>
 	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
@@ -440,7 +439,7 @@ public partial class LuaBaseVisitor<Result> : AbstractParseTreeVisitor<Result>, 
 	public virtual Result VisitStat([NotNull] LuaParser.StatContext context) { return VisitChildren(context); }
 
 	/// <summary>
-	/// Visit a parse tree produced by <see cref="LuaParser.retstat"/>.
+	/// Visit a parse tree produced by <see cref="LuaParser.elseifBlock"/>.
 	/// <para>
 	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
 	/// on <paramref name="context"/>.
@@ -448,7 +447,18 @@ public partial class LuaBaseVisitor<Result> : AbstractParseTreeVisitor<Result>, 
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
-	public virtual Result VisitRetstat([NotNull] LuaParser.RetstatContext context) { return VisitChildren(context); }
+	public virtual Result VisitElseifBlock([NotNull] LuaParser.ElseifBlockContext context) { return VisitChildren(context); }
+
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="LuaParser.elseBlock"/>.
+	/// <para>
+	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
+	/// on <paramref name="context"/>.
+	/// </para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	public virtual Result VisitElseBlock([NotNull] LuaParser.ElseBlockContext context) { return VisitChildren(context); }
 
 	/// <summary>
 	/// Visit a parse tree produced by <see cref="LuaParser.funcname"/>.
@@ -495,6 +505,17 @@ public partial class LuaBaseVisitor<Result> : AbstractParseTreeVisitor<Result>, 
 	public virtual Result VisitExplist([NotNull] LuaParser.ExplistContext context) { return VisitChildren(context); }
 
 	/// <summary>
+	/// Visit a parse tree produced by <see cref="LuaParser.doc"/>.
+	/// <para>
+	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
+	/// on <paramref name="context"/>.
+	/// </para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	public virtual Result VisitDoc([NotNull] LuaParser.DocContext context) { return VisitChildren(context); }
+
+	/// <summary>
 	/// Visit a parse tree produced by <see cref="LuaParser.exp"/>.
 	/// <para>
 	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
@@ -504,17 +525,6 @@ public partial class LuaBaseVisitor<Result> : AbstractParseTreeVisitor<Result>, 
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
 	public virtual Result VisitExp([NotNull] LuaParser.ExpContext context) { return VisitChildren(context); }
-
-	/// <summary>
-	/// Visit a parse tree produced by <see cref="LuaParser.nilfalsetruevararg"/>.
-	/// <para>
-	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
-	/// on <paramref name="context"/>.
-	/// </para>
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	/// <return>The visitor result.</return>
-	public virtual Result VisitNilfalsetruevararg([NotNull] LuaParser.NilfalsetruevarargContext context) { return VisitChildren(context); }
 
 	/// <summary>
 	/// Visit a parse tree produced by <see cref="LuaParser.prefixexp"/>.
@@ -671,105 +681,6 @@ public partial class LuaBaseVisitor<Result> : AbstractParseTreeVisitor<Result>, 
 	public virtual Result VisitFieldsep([NotNull] LuaParser.FieldsepContext context) { return VisitChildren(context); }
 
 	/// <summary>
-	/// Visit a parse tree produced by <see cref="LuaParser.operatorOr"/>.
-	/// <para>
-	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
-	/// on <paramref name="context"/>.
-	/// </para>
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	/// <return>The visitor result.</return>
-	public virtual Result VisitOperatorOr([NotNull] LuaParser.OperatorOrContext context) { return VisitChildren(context); }
-
-	/// <summary>
-	/// Visit a parse tree produced by <see cref="LuaParser.operatorAnd"/>.
-	/// <para>
-	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
-	/// on <paramref name="context"/>.
-	/// </para>
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	/// <return>The visitor result.</return>
-	public virtual Result VisitOperatorAnd([NotNull] LuaParser.OperatorAndContext context) { return VisitChildren(context); }
-
-	/// <summary>
-	/// Visit a parse tree produced by <see cref="LuaParser.operatorComparison"/>.
-	/// <para>
-	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
-	/// on <paramref name="context"/>.
-	/// </para>
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	/// <return>The visitor result.</return>
-	public virtual Result VisitOperatorComparison([NotNull] LuaParser.OperatorComparisonContext context) { return VisitChildren(context); }
-
-	/// <summary>
-	/// Visit a parse tree produced by <see cref="LuaParser.operatorStrcat"/>.
-	/// <para>
-	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
-	/// on <paramref name="context"/>.
-	/// </para>
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	/// <return>The visitor result.</return>
-	public virtual Result VisitOperatorStrcat([NotNull] LuaParser.OperatorStrcatContext context) { return VisitChildren(context); }
-
-	/// <summary>
-	/// Visit a parse tree produced by <see cref="LuaParser.operatorAddSub"/>.
-	/// <para>
-	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
-	/// on <paramref name="context"/>.
-	/// </para>
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	/// <return>The visitor result.</return>
-	public virtual Result VisitOperatorAddSub([NotNull] LuaParser.OperatorAddSubContext context) { return VisitChildren(context); }
-
-	/// <summary>
-	/// Visit a parse tree produced by <see cref="LuaParser.operatorMulDivMod"/>.
-	/// <para>
-	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
-	/// on <paramref name="context"/>.
-	/// </para>
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	/// <return>The visitor result.</return>
-	public virtual Result VisitOperatorMulDivMod([NotNull] LuaParser.OperatorMulDivModContext context) { return VisitChildren(context); }
-
-	/// <summary>
-	/// Visit a parse tree produced by <see cref="LuaParser.operatorBitwise"/>.
-	/// <para>
-	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
-	/// on <paramref name="context"/>.
-	/// </para>
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	/// <return>The visitor result.</return>
-	public virtual Result VisitOperatorBitwise([NotNull] LuaParser.OperatorBitwiseContext context) { return VisitChildren(context); }
-
-	/// <summary>
-	/// Visit a parse tree produced by <see cref="LuaParser.operatorUnary"/>.
-	/// <para>
-	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
-	/// on <paramref name="context"/>.
-	/// </para>
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	/// <return>The visitor result.</return>
-	public virtual Result VisitOperatorUnary([NotNull] LuaParser.OperatorUnaryContext context) { return VisitChildren(context); }
-
-	/// <summary>
-	/// Visit a parse tree produced by <see cref="LuaParser.operatorPower"/>.
-	/// <para>
-	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
-	/// on <paramref name="context"/>.
-	/// </para>
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	/// <return>The visitor result.</return>
-	public virtual Result VisitOperatorPower([NotNull] LuaParser.OperatorPowerContext context) { return VisitChildren(context); }
-
-	/// <summary>
 	/// Visit a parse tree produced by <see cref="LuaParser.number"/>.
 	/// <para>
 	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
@@ -791,4 +702,4 @@ public partial class LuaBaseVisitor<Result> : AbstractParseTreeVisitor<Result>, 
 	/// <return>The visitor result.</return>
 	public virtual Result VisitString([NotNull] LuaParser.StringContext context) { return VisitChildren(context); }
 }
-} // namespace zlua.AntlrGen
+} // namespace zlua.Gen

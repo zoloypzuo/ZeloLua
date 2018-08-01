@@ -9,7 +9,7 @@ using Antlr4.Runtime;
 using Antlr4.Runtime.Tree;
 using System.IO;
 using p = zlua.Parser; // 防止名字冲突，大概不需要把
-using zlua.AntlrGen;
+using zlua.Gen;
 /// <summary>
 /// 辅助库
 /// </summary>
@@ -35,8 +35,7 @@ namespace zlua.AuxLib
                 parser = new LuaParser(tokens);
                 var tree = parser.chunk();
                 var walker = new ParseTreeWalker();
-                walker.Walk(lp, tree);
-                Console.WriteLine(tree.ToStringTree()); //虽然C#的根本没法看，留着呗
+                lp.Visit(tree);
             }
             Proto proto = lp.P;
             Closure closure = new LuaClosure(env:(TTable)L.globalsTable, nUpvals:0, p:proto);

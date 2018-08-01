@@ -7,13 +7,15 @@ using System.Threading.Tasks;
 using Antlr4.Runtime;
 using Antlr4.Runtime.Misc;
 using Antlr4.Runtime.Tree;
-using zlua.AntlrGen;
+using zlua.Gen;
 using zlua.ISA;
 using zlua.TypeModel;
 namespace zlua.Parser
 {
-    public class lparser : LuaBaseListener
+    public class lparser : LuaBaseVisitor<int>
     {
+        #region 辅助parse的数据结构和函数s
+
         /// <summary>
         /// 编译时函数块是一个同质的嵌套结构，因此是一个标准的Stack<T>，所以T=FuncState
         /// 其实只要Stack<Proto>就可以了，但是我们把需要的东西包裹起来,这里用单链表实现一个栈（可以改进）
@@ -59,43 +61,62 @@ namespace zlua.Parser
         {
             fsStack.Push(new FuncState()); //压入chunk这个栈帧
         }
-        public override void EnterAddsubExp([NotNull] LuaParser.AddsubExpContext context) { }
-        public override void EnterAndExp([NotNull] LuaParser.AndExpContext context) { }
-        public override void EnterArgs([NotNull] LuaParser.ArgsContext context) { }
-        public override void EnterAssignStat([NotNull] LuaParser.AssignStatContext context) { }
-        public override void EnterBitwiseExp([NotNull] LuaParser.BitwiseExpContext context) { }
-        public override void EnterBlock([NotNull] LuaParser.BlockContext context) { }
-        public override void EnterBreakStat([NotNull] LuaParser.BreakStatContext context) { }
-        public override void EnterChunk([NotNull] LuaParser.ChunkContext context) { }
-        public override void EnterCmpExp([NotNull] LuaParser.CmpExpContext context) { }
-        public override void EnterConcatExp([NotNull] LuaParser.ConcatExpContext context) { }
-        public override void EnterDoendStat([NotNull] LuaParser.DoendStatContext context) { }
-        public override void EnterEmptyStat([NotNull] LuaParser.EmptyStatContext context) { }
-        public override void EnterEveryRule([NotNull] ParserRuleContext context) { }
-        public override void EnterExp([NotNull] LuaParser.ExpContext context)
-        {
 
-        }
-        public override void EnterExplist([NotNull] LuaParser.ExplistContext context) { }
-        public override void EnterField([NotNull] LuaParser.FieldContext context) { }
-        public override void EnterFieldlist([NotNull] LuaParser.FieldlistContext context) { }
-        public override void EnterFieldsep([NotNull] LuaParser.FieldsepContext context) { }
-        public override void EnterForijkStat([NotNull] LuaParser.ForijkStatContext context) { }
-        public override void EnterForinStat([NotNull] LuaParser.ForinStatContext context) { }
-        public override void EnterFuncbody([NotNull] LuaParser.FuncbodyContext context) { }
-        public override void EnterFuncname([NotNull] LuaParser.FuncnameContext context) { }
-        public override void EnterFunctioncall([NotNull] LuaParser.FunctioncallContext context) { }
-        public override void EnterFunctioncallStat([NotNull] LuaParser.FunctioncallStatContext context) { }
-        public override void EnterFunctiondef([NotNull] LuaParser.FunctiondefContext context) { }
-        public override void EnterFunctiondefExp([NotNull] LuaParser.FunctiondefExpContext context)
+        int nLabels = 0;
+        int nTemps = 0;
+        #endregion
+        #region 自动生成的部分
+        public override int VisitCmpExp([NotNull] LuaParser.CmpExpContext context)
         {
-
-            //准备新的FS
-            EnterNewFunc();
+            switch (context.operatorComparison.Type) {
+                case LuaLexer.LtKW:
+                    Console.WriteLine( "Lt " + (nTemps++) + Visit(context.exp(0)) + Visit(context.exp(1)));
+                    Console.WriteLine( "Jmp " + "foo");
+                    break;
+                case    LuaLexer.MtKW:
+                    Console.WriteLine( "Lt " + (nTemps++) + Visit(context.exp(1)) + Visit(context.exp(0)));
+                    Console.WriteLine( "Jmp " + "foo");
+                    break;
+                default:
+                    break;
+            }
+            return  nTemps;
         }
-        public override void EnterFunctiondefStat([NotNull] LuaParser.FunctiondefStatContext context) { }
-        public override void EnterIfelseStat([NotNull] LuaParser.IfelseStatContext context) { }
-        public override void EnterLocalassignStat([NotNull] LuaParser.LocalassignStatContext context)
+
+        public override int VisitIfelseStat([NotNull] LuaParser.IfelseStatContext context)
+        {
+            Visit(context.exp());
+            Visit(context.block());
+            Console.WriteLine("L" + nLabels + ":");
+            foreach (var item in context.elseifBlock()) {
+                Visit(item);
+                Console.WriteLine("L" + nLabels + ":");
+            }
+            Visit(context.elseBlock());
+            Console.WriteLine("L" + nLabels + ":");
+            return -1;
+        }
+
+        public override int VisitNumberExp([NotNull] LuaParser.NumberExpContext context)
+        {
+            P.codes.Add(new Bytecode(Opcodes.LoadK, Fs.freereg++, P.k.Count));
+            P.k.Add((TValue)Double.Parse(context.GetText()));
+            return -1;
+        }
+
+        public override int VisitUnmExp([NotNull] LuaParser.UnmExpContext context)
+        {
+            switch (context.operatorUnary.Type) {
+                case LuaLexer.NotKW:
+                    Console.WriteLine( "Not" + Visit(context.exp()));
+                    break;
+                default:
+                    break;
+            }
+            return -1;
+        }
+
+        public override int VisitLocalassignStat([NotNull] LuaParser.LocalassignStatContext context)
         {
             var namelist = context.namelist().NAME();
             bool no_equal = context.GetToken(2, 0) == null;
@@ -112,156 +133,39 @@ namespace zlua.Parser
                 P.locvars.Add(lv);
             }
             nNames = namelist.Length;
+            return - 1;
         }
-        public override void EnterLocalfunctiondefStat([NotNull] LuaParser.LocalfunctiondefStatContext context) { }
-        public override void EnterMuldivExp([NotNull] LuaParser.MuldivExpContext context) { }
-        public override void EnterNameAndArgs([NotNull] LuaParser.NameAndArgsContext context) { }
-        public override void EnterNamelist([NotNull] LuaParser.NamelistContext context) { }
-        public override void EnterNilfalsetruevararg([NotNull] LuaParser.NilfalsetruevarargContext context) { }
-        public override void EnterNilfalsetruevarargExp([NotNull] LuaParser.NilfalsetruevarargExpContext context) { }
-        public override void EnterNormalArgs([NotNull] LuaParser.NormalArgsContext context) { }
-        public override void EnterNumber([NotNull] LuaParser.NumberContext context) { }
-        public override void EnterNumberExp([NotNull] LuaParser.NumberExpContext context) { }
-        public override void EnterOperatorAddSub([NotNull] LuaParser.OperatorAddSubContext context) { }
-        public override void EnterOperatorAnd([NotNull] LuaParser.OperatorAndContext context) { }
-        public override void EnterOperatorBitwise([NotNull] LuaParser.OperatorBitwiseContext context) { }
-        public override void EnterOperatorComparison([NotNull] LuaParser.OperatorComparisonContext context) { }
-        public override void EnterOperatorMulDivMod([NotNull] LuaParser.OperatorMulDivModContext context) { }
-        public override void EnterOperatorOr([NotNull] LuaParser.OperatorOrContext context) { }
-        public override void EnterOperatorPower([NotNull] LuaParser.OperatorPowerContext context) { }
-        public override void EnterOperatorStrcat([NotNull] LuaParser.OperatorStrcatContext context) { }
-        public override void EnterOperatorUnary([NotNull] LuaParser.OperatorUnaryContext context) { }
-        public override void EnterOrExp([NotNull] LuaParser.OrExpContext context) { }
-        public override void EnterParlist([NotNull] LuaParser.ParlistContext context) { }
-        public override void EnterPowExp([NotNull] LuaParser.PowExpContext context) { }
-        public override void EnterPrefixexp([NotNull] LuaParser.PrefixexpContext context) { }
-        public override void EnterPrefixexpExp([NotNull] LuaParser.PrefixexpExpContext context) { }
-        public override void EnterRepeatStat([NotNull] LuaParser.RepeatStatContext context) { }
-        public override void EnterRetstat([NotNull] LuaParser.RetstatContext context) { }
-        public override void EnterStat([NotNull] LuaParser.StatContext context) { }
-        public override void EnterString([NotNull] LuaParser.StringContext context) { }
-        public override void EnterStringArgs([NotNull] LuaParser.StringArgsContext context) { }
-        public override void EnterStringExp([NotNull] LuaParser.StringExpContext context) { }
-        public override void EnterTableconstructor([NotNull] LuaParser.TableconstructorContext context) { }
-        public override void EnterTablectorArgs([NotNull] LuaParser.TablectorArgsContext context) { }
-        public override void EnterTablectorExp([NotNull] LuaParser.TablectorExpContext context) { }
-        public override void EnterUnmExp([NotNull] LuaParser.UnmExpContext context) { }
-        public override void EnterVar([NotNull] LuaParser.VarContext context) { }
-        public override void EnterVarlist([NotNull] LuaParser.VarlistContext context) { }
-        public override void EnterVarOrExp([NotNull] LuaParser.VarOrExpContext context) { }
-        public override void EnterVarSuffix([NotNull] LuaParser.VarSuffixContext context) { }
-        public override void EnterWhileStat([NotNull] LuaParser.WhileStatContext context) { }
-        public override void ExitAddsubExp([NotNull] LuaParser.AddsubExpContext context) { }
-        public override void ExitAndExp([NotNull] LuaParser.AndExpContext context) { }
-        public override void ExitArgs([NotNull] LuaParser.ArgsContext context) { }
-        public override void ExitAssignStat([NotNull] LuaParser.AssignStatContext context) { }
-        public override void ExitBitwiseExp([NotNull] LuaParser.BitwiseExpContext context) { }
-        public override void ExitBlock([NotNull] LuaParser.BlockContext context) { }
-        public override void ExitBreakStat([NotNull] LuaParser.BreakStatContext context) { }
-        public override void ExitChunk([NotNull] LuaParser.ChunkContext context) { }
-        public override void ExitCmpExp([NotNull] LuaParser.CmpExpContext context) { }
-        public override void ExitConcatExp([NotNull] LuaParser.ConcatExpContext context) { }
-        public override void ExitDoendStat([NotNull] LuaParser.DoendStatContext context) { }
-        public override void ExitEmptyStat([NotNull] LuaParser.EmptyStatContext context) { }
-        public override void ExitEveryRule([NotNull] ParserRuleContext context) { }
-        public override void ExitExp([NotNull] LuaParser.ExpContext context)
+        public override int VisitFunctiondef([NotNull] LuaParser.FunctiondefContext context)
         {
-            if (nNames == 0)
-                return;
-            nNames--;
+            EnterNewFunc();
+            return -1;
         }
-        public override void ExitExplist([NotNull] LuaParser.ExplistContext context) { }
-        public override void ExitField([NotNull] LuaParser.FieldContext context) { }
-        public override void ExitFieldlist([NotNull] LuaParser.FieldlistContext context) { }
-        public override void ExitFieldsep([NotNull] LuaParser.FieldsepContext context) { }
-        public override void ExitForijkStat([NotNull] LuaParser.ForijkStatContext context) { }
-        public override void ExitForinStat([NotNull] LuaParser.ForinStatContext context) { }
-        public override void ExitFuncbody([NotNull] LuaParser.FuncbodyContext context) { }
-        public override void ExitFuncname([NotNull] LuaParser.FuncnameContext context) { }
-        public override void ExitFunctioncall([NotNull] LuaParser.FunctioncallContext context) { }
-        public override void ExitFunctioncallStat([NotNull] LuaParser.FunctioncallStatContext context) { }
-        public override void ExitFunctiondef([NotNull] LuaParser.FunctiondefContext context) { }
-        public override void ExitFunctiondefExp([NotNull] LuaParser.FunctiondefExpContext context) { }
-        public override void ExitFunctiondefStat([NotNull] LuaParser.FunctiondefStatContext context) { }
-        public override void ExitIfelseStat([NotNull] LuaParser.IfelseStatContext context) { }
-        public override void ExitLocalassignStat([NotNull] LuaParser.LocalassignStatContext context)
+        public override int VisitNilfalsetruevarargExp([NotNull] LuaParser.NilfalsetruevarargExpContext context)
         {
-            //一次性补齐nil
-            if (nNames != 0) {
-                P.codes.Add(new Bytecode(Opcodes.LoadNil, Fs.freereg, Fs.freereg + nNames - 1, 0));
-                Fs.freereg++;
-                nNames = 0;
-            }
-            Debug.Assert(nNames == 0); //每次结束nNames应消耗完
-        }
-        public override void ExitLocalfunctiondefStat([NotNull] LuaParser.LocalfunctiondefStatContext context)
-        {
-        }
-        public override void ExitMuldivExp([NotNull] LuaParser.MuldivExpContext context) { }
-        public override void ExitNameAndArgs([NotNull] LuaParser.NameAndArgsContext context) { }
-        public override void ExitNamelist([NotNull] LuaParser.NamelistContext context) { }
-        public override void ExitNilfalsetruevararg([NotNull] LuaParser.NilfalsetruevarargContext context) { }
-        public override void ExitNilfalsetruevarargExp([NotNull] LuaParser.NilfalsetruevarargExpContext context)
-        {
-            switch (context.GetText()) {
-                case "nil":
+            switch (context.nilfalsetruevararg.Type) {
+                case LuaLexer.NilKW:
                     P.codes.Add(new Bytecode(Opcodes.LoadNil, Fs.freereg, Fs.freereg, 0));
                     break;
-                case "false":
+                case LuaLexer.FalseKW:
                     P.codes.Add(new Bytecode(Opcodes.LoadBool, Fs.freereg, 0, 0));
                     break;
-                case "true":
+                case LuaLexer.TrueKW:
                     P.codes.Add(new Bytecode(Opcodes.LoadBool, Fs.freereg, 1, 0));
                     break;
-                case "vararg":
+                case LuaLexer.VarargKW:
                     //P.codes.Add(new Bytecode(Opcodes.VarArg,)) //《no frills》p51
                     throw new NotImplementedException();
                     break;
             }
             Fs.freereg++;
+            return -1;
         }
-        public override void ExitNormalArgs([NotNull] LuaParser.NormalArgsContext context) { }
-        public override void ExitNumber([NotNull] LuaParser.NumberContext context) { }
-        public override void ExitNumberExp([NotNull] LuaParser.NumberExpContext context)
-        {
-            P.codes.Add(new Bytecode(Opcodes.LoadK, Fs.freereg++, P.k.Count));
-            P.k.Add((TValue)Double.Parse(context.GetText()));
-        }
-        public override void ExitOperatorAddSub([NotNull] LuaParser.OperatorAddSubContext context) { }
-        public override void ExitOperatorAnd([NotNull] LuaParser.OperatorAndContext context) { }
-        public override void ExitOperatorBitwise([NotNull] LuaParser.OperatorBitwiseContext context) { }
-        public override void ExitOperatorComparison([NotNull] LuaParser.OperatorComparisonContext context) { }
-        public override void ExitOperatorMulDivMod([NotNull] LuaParser.OperatorMulDivModContext context) { }
-        public override void ExitOperatorOr([NotNull] LuaParser.OperatorOrContext context) { }
-        public override void ExitOperatorPower([NotNull] LuaParser.OperatorPowerContext context) { }
-        public override void ExitOperatorStrcat([NotNull] LuaParser.OperatorStrcatContext context) { }
-        public override void ExitOperatorUnary([NotNull] LuaParser.OperatorUnaryContext context) { }
-        public override void ExitOrExp([NotNull] LuaParser.OrExpContext context) { }
-        public override void ExitParlist([NotNull] LuaParser.ParlistContext context) { }
-        public override void ExitPowExp([NotNull] LuaParser.PowExpContext context) { }
-        public override void ExitPrefixexp([NotNull] LuaParser.PrefixexpContext context) { }
-        public override void ExitPrefixexpExp([NotNull] LuaParser.PrefixexpExpContext context) { }
-        public override void ExitRepeatStat([NotNull] LuaParser.RepeatStatContext context) { }
-        public override void ExitRetstat([NotNull] LuaParser.RetstatContext context) { }
-        public override void ExitStat([NotNull] LuaParser.StatContext context) { }
-        public override void ExitString([NotNull] LuaParser.StringContext context) { }
-        public override void ExitStringArgs([NotNull] LuaParser.StringArgsContext context) { }
-        public override void ExitStringExp([NotNull] LuaParser.StringExpContext context)
+        public override int VisitStringExp([NotNull] LuaParser.StringExpContext context)
         {
             P.codes.Add(new Bytecode(Opcodes.LoadK, Fs.freereg, P.k.Count));
             P.k.Add((TValue)context.GetText().Trim(new char[] { '\'', '\"' })); //strip quotes on both sides
+            return -1;
         }
-        public override void ExitTableconstructor([NotNull] LuaParser.TableconstructorContext context) { }
-        public override void ExitTablectorArgs([NotNull] LuaParser.TablectorArgsContext context) { }
-        public override void ExitTablectorExp([NotNull] LuaParser.TablectorExpContext context) { }
-        public override void ExitUnmExp([NotNull] LuaParser.UnmExpContext context) { }
-        public override void ExitVar([NotNull] LuaParser.VarContext context) { }
-        public override void ExitVarlist([NotNull] LuaParser.VarlistContext context) { }
-        public override void ExitVarOrExp([NotNull] LuaParser.VarOrExpContext context) { }
-        public override void ExitVarSuffix([NotNull] LuaParser.VarSuffixContext context) { }
-        public override void ExitWhileStat([NotNull] LuaParser.WhileStatContext context) { }
-        public override void VisitErrorNode([NotNull] IErrorNode node) { }
-        [DebuggerStepThrough]
-        public override void VisitTerminal([NotNull] ITerminalNode node) { }
+        #endregion
     }
 }
