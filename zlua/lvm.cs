@@ -318,13 +318,13 @@ namespace zlua.VM
                         continue;
                     case Opcodes.Close:
                         continue;
-                    case Opcodes.Closure: { /*用Proto简单new一个LuaClosure，提前执行下面的指令初始化upvals*/
+                    case Opcodes.Closure: { /*用Proto简单new一个LuaClosure，提前执行之后的指令s来初始化upvals*/
                             Proto p = cl.p.inner_funcs[instr.Bx];
                             LuaClosure ncl = new LuaClosure(cl.env, p.nUpvals, p);
                             // 后面一定跟着一些getUpval或mov指令用来初始化upvals，分情况讨论，把这些指令在这个周期就执行掉
                             for (int j = 0; j < p.nUpvals; j++, pc++) { /*从父函数的upvals直接取upvals*/
                                 var next_instr = codes[pc];
-                                if (next_instr.Opcode == Opcodes.GetUpVal)
+                                if (next_instr.Opcode == Opcodes.GetUpVal) 
                                     ncl.upvals[j] = cl.upvals[codes[pc].B];
                                 else { /*否则得用复杂的方法确定upval的位置*/
                                     Debug.Assert(codes[pc].Opcode == Opcodes.Move);

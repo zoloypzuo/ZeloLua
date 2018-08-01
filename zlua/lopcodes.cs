@@ -229,5 +229,8 @@ namespace zlua.ISA
         Closure,
         /* 特殊，最后补上即可*/
         VarArg,
+        /*自定增加的指令*/
+        LoadN, //loadN和loadS替代LoadK
+        LoadS,
     }
 }

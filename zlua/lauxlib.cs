@@ -27,7 +27,7 @@ namespace zlua.AuxLib
             LuaLexer lexer; //*传递给lexer
             CommonTokenStream tokens; //lexer分析好token流
             LuaParser parser; //*由token流生成AST
-            p.lparser lp = new p.lparser(); //Listener遍历AST返回Proto
+            p.LParser lp = new p.LParser(); //Listener遍历AST返回Proto
             using (FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read)) {
                 inputStream = new AntlrInputStream(fs);
                 lexer = new LuaLexer(inputStream);
@@ -37,7 +37,7 @@ namespace zlua.AuxLib
                 var walker = new ParseTreeWalker();
                 lp.Visit(tree);
             }
-            Proto proto = lp.P;
+            Proto proto = lp.CurrP;
             Closure closure = new LuaClosure(env:(TTable)L.globalsTable, nUpvals:0, p:proto);
             L[L.topIndex++].Cl = closure; 
         }

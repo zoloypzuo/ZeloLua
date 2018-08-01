@@ -304,6 +304,8 @@ namespace zlua.TypeModel
         public List<TValue> k = new List<TValue>();
         public List<Bytecode> codes = new List<Bytecode>();
         public List<LocVar> locvars = new List<LocVar>();
+        public List<string> strs = new List<string>();
+        public List<double> ns = new List<double>();
         public bool isVararg;
         /// <summary>
         /// 暂时这样
@@ -332,8 +334,6 @@ namespace zlua.TypeModel
         }
     }
 
-    //TODO
-    public class TConst { double n; TString tstr; }
 
     public class Closure : TObject
     {
