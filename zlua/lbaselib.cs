@@ -10,12 +10,11 @@ using zlua.VM;
 /// </summary>
 namespace zlua.BaseLib
 {
-    static class lbaselib
+    static class LBaselib
     {
         /// <summary>
         /// luaB_assert
         /// </summary>
-        
         public static void Assert(this TThread L) { /*TODO */; }
         public static void DoFile(this TThread L) { }
     }

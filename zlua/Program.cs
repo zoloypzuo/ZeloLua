@@ -15,7 +15,7 @@ namespace zlua
         {
             
             var path = @"..\..\" + "test.lua";
-            lua.DoFile(new TThread(), path);
+            Lua.DoFile(new TThread(), path);
         }
     }
 }

@@ -52,7 +52,6 @@
     <Compile Include="lauxlib.cs" />
     <Compile Include="lbaselib.cs" />
     <Compile Include="ldo.cs" />
-    <Compile Include="lfunc.cs" />
     <Compile Include="lparser.cs" />
     <Compile Include="ltm.cs" />
     <Compile Include="luaconf.cs" />

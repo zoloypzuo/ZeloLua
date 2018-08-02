@@ -12,48 +12,53 @@ using zlua.ISA;
 using zlua.TypeModel;
 namespace zlua.Parser
 {
+    /// <summary>
+    /// 见鬼了异常，因为有些分支根本不可能走到
+    /// </summary>
+    class GodDamnException : Exception { }
+    /// <summary>
+    /// 错误的操作数类型，我们用opcode作为提示
+    /// </summary>
+    class OprdTypeException : Exception
+    {
+        public OprdTypeException(Opcodes opcode) : base(opcode.ToString() + "错误的操作数") { }
+    }
     public enum ResultTypes
     {
         RegIndex,
-        N,
-        S,
+        NIndex,
+        SIndex,
+        B,
+        Nil,
         None, //没有返回值，比如语句
     }
     /// <summary>
     /// return type of `Visit* methods，递归时要获取结果，比如构建表达式；需要Reg
-    /// 设计策略】通过ctor一次初始化，之后只读
+    /// 设计策略】通过ctor一次初始化，之后只读；
+    /// 一开时设计成包含了double，string，bool，现在用一个int。非常省。设计思路改为，任何常量都会加入常量池，但是只有一份，因为会复用，
+    /// Visit*返回index来通信，bool在uniton语义下其实可以和int合并（TValue中也是）但是不。相比于原来，如果1+2，1，2不会加入常量池（这是没办法的，你写了就知道，你传index那么中间的literal必须也加入常量池）
     /// </summary>
-    public struct Result
+    public class Result //你可以试试class还是struct好。
     {
-        public int RegIndex { get; private set; }
-        public double N { get; private set; }
-        public string S { get; private set; }
+        public int Index { get; private set; }
+        public bool B { get; private set; }
         public ResultTypes ResultType { get; private set; }
-        public Result(int regIndex)
+        public Result(int index, ResultTypes resultType)
         {
-            this.RegIndex = regIndex;
-            ResultType = ResultTypes.RegIndex;
-            N = default(double);
-            S = default(string);
+            Index = index;
+            ResultType = ResultType;
         }
-        public Result(double n)
+        public Result()
         {
-            this.N = n;
-            ResultType = ResultTypes.N;
-            RegIndex = default(int);
-            S = default(string);
-        }
-        public Result(string s)
-        {
-            this.S = s;
-            ResultType = ResultTypes.RegIndex;
-            RegIndex = default(int);
-            N = default(double);
+
         }
         /// <summary>
         /// 单例，表示没有返回值，比如语句
         /// </summary>
-        public static readonly Result Void = new Result() { ResultType = ResultTypes.None };
+        public static readonly Result Void = new Result { ResultType = ResultTypes.None };
+        public static readonly Result Nil = new Result { ResultType = ResultTypes.Nil };
+        public static readonly Result True = new Result { ResultType = ResultTypes.B, B = true };
+        public static readonly Result False = new Result { ResultType = ResultTypes.B, B = false };
     }
 
     public class LParser : LuaBaseVisitor<Result>
@@ -64,7 +69,7 @@ namespace zlua.Parser
         /// </summary>
         public class FuncState
         {
-            public Proto p = new Proto(); //当前proto
+            public Proto p;
             /// <summary>
             /// first free register index
             /// </summary>
@@ -78,8 +83,7 @@ namespace zlua.Parser
             /// 反向索引局部变量名的左值；重复声明直接覆盖，所以不用管
             /// </summary>
             public Dictionary<string, int> localName2RegIndex = new Dictionary<string, int>();
-            public Dictionary<double, int> n2NsIndex = new Dictionary<double, int>();
-            public Dictionary<string, int> s2StrsIndex = new Dictionary<string, int>();
+
             public FuncState()
             {
 
@@ -103,8 +107,12 @@ namespace zlua.Parser
             Debug.Assert(currFs.prev != null, "");
             currFs = currFs.prev;
         }
-        FuncState currFs = new FuncState(); //push chunk 
-        public Proto CurrP { get => currFs.p; }
+        FuncState currFs;
+        Proto CurrP { get => currFs.p; }
+        int FreeRegIndex { get => FreeRegIndex; set => FreeRegIndex = value; }
+        public ChunkProto ChunkProto { get; } = new ChunkProto();
+        public Dictionary<double, int> n2NsIndex = new Dictionary<double, int>();
+        public Dictionary<string, int> s2StrsIndex = new Dictionary<string, int>();
         #endregion
         #region  处理scope
         /// <summary>
@@ -128,13 +136,51 @@ namespace zlua.Parser
                     fs = fs.prev;
                 }
             }
-            
+
+        }
+        #endregion
+        #region 其他辅助函数
+        /// <summary>
+        /// 添加新指令
+        /// </summary>
+        /// <param name="bytecode"></param>
+        void Emit(Bytecode bytecode)
+        {
+            CurrP.codes.Add(bytecode);
+        }
+        /// <summary>
+        /// 增加新n常量，返回index（可能新分配，可能是复用的）
+        /// </summary>
+        /// <param name="n"></param>
+        int AppendN(double n)
+        {
+            if (!n2NsIndex.ContainsKey(n)) {  //常量池里没有再新加，这样复用
+                int index = ChunkProto.ns.Count;
+                n2NsIndex.Add(n, index);
+                ChunkProto.ns.Add(n);
+                return index;
+            }
+            return n2NsIndex[n];
+        }
+        /// <summary>
+        /// 增加新s常量
+        /// </summary>
+        /// <param name="s"></param>
+        int AppendS(string s)
+        {
+            if (!s2StrsIndex.ContainsKey(s)) {
+                int index = ChunkProto.strs.Count;
+                s2StrsIndex.Add(s, index);
+                ChunkProto.strs.Add(s);
+                return index;
+            }
+            return s2StrsIndex[s];
         }
         #endregion
         int nLabels = 0;
         public LParser()
         {
-
+            currFs = new FuncState() { p = ChunkProto };
         }
         #endregion
         #region 自动生成的部分
@@ -168,73 +214,224 @@ namespace zlua.Parser
         //    Console.WriteLine("L" + nLabels + ":");
         //    return -1;
         //}
-
+        #region literal，最简单的部分，一切都从这里开始
+        /// <summary>
+        /// 纯数字literal
+        /// </summary>
+        /// <param name="context"></param>
+        /// <returns></returns>
         public override Result VisitNumberExp([NotNull] LuaParser.NumberExpContext context)
         {
             double n = Double.Parse(context.GetText());
-            currFs.n2NsIndex.Add(n, CurrP.ns.Count);
-            CurrP.ns.Add(n);
-            return new Result(n);
+            return new Result(AppendN(n), ResultTypes.NIndex);
         }
-
-        public override Result VisitUnmExp([NotNull] LuaParser.UnmExpContext context)
+        /// <summary>
+        /// string literal
+        /// </summary>
+        /// <param name="context"></param>
+        /// <returns></returns>
+        public override Result VisitStringExp([NotNull] LuaParser.StringExpContext context)
         {
-            switch (context.operatorUnary.Type) {
-                case LuaLexer.NotKW:
-                    //Console.WriteLine("Not" + Visit(context.exp()));
-                    break;
-                default:
-                    break;
-            }
-            return -1;
-        }
-
-        public override Result VisitLocalassignStat([NotNull] LuaParser.LocalassignStatContext context)
-        {
-            var namelist = context.namelist().NAME();
-            bool no_equal = context.GetToken(2, 0) == null;
-            // local a,b,c=1,2,3 左侧加符号表，加初始化指令；右侧要从某个地方（exp栈可能）拿到exp的位置，而且不知道指令类型TODO
-            // local a,b,c 只声明不赋值，根据有没有=判断，freereg+=n，names加入符号表
-            // local a,b,c=1 右侧不足，同上
-            // local a,b=1,2,3,4 截断
-            //初始化locvar
-            for (int i = 0; i < namelist.Length; i++) {
-                var lv = new LocVar() {
-                    var_name = namelist[i].GetText(),
-                    startpc = Fs.CurrPc,
-                };
-                CurrP.locvars.Add(lv);
-            }
-            nNames = namelist.Length;
-            return -1;
-        }
-        public override Result VisitFunctiondef([NotNull] LuaParser.FunctiondefContext context)
-        {
-            EnterNewFunc();
-            return -1;
+            var s = context.GetText().Trim(new char[] { '\'', '\"' });//strip quotes on both sides
+            return new Result(AppendS(s), ResultTypes.SIndex);
         }
         public override Result VisitNilfalsetruevarargExp([NotNull] LuaParser.NilfalsetruevarargExpContext context)
         {
             switch (context.nilfalsetruevararg.Type) {
-                case LuaLexer.NilKW:
-                    break;
-                case LuaLexer.FalseKW:
-                    break;
-                case LuaLexer.TrueKW:
-                    break;
+                case LuaLexer.NilKW: return Result.Nil;
+                case LuaLexer.FalseKW: return Result.False;
+                case LuaLexer.TrueKW: return Result.True;
                 case LuaLexer.VarargKW:
                     throw new NotImplementedException();
-                    break;
+                default:
+                    throw new GodDamnException();
             }
-            Fs.freeRegIndex++;
-            return -1;
         }
-        public override Result VisitStringExp([NotNull] LuaParser.StringExpContext context)
+        #endregion
+        #region 算术运算    
+        //| <assoc=right> lhs=exp operatorPower='^' rhs=exp #powExp                              完成
+        //| operatorUnary=('not' | '#' | '-' /*| '~' not in 5.1*/) exp #unmExp                   完成
+        //| lhs=exp operatorMulDivMod=('*' | '/' | '%' /*| '//' not in 5.1*/) rhs=exp #muldivExp 完成
+        //| lhs=exp operatorAddSub=('+' | '-') rhs=exp #addsubExp                                完成
+        //| <assoc=right> lhs=exp operatorStrcat='..' rhs=exp #concatExp                         要单独写，str
+        //| lhs=exp operatorComparison=('<' | '>' | '<=' | '>=' | '~=' | '==') rhs=exp #cmpExp   要单独写，和转移有关
+        //| lhs=exp operatorAnd='and' rhs=exp #andExp                                            同上
+        //| lhs=exp operatorOr='or' rhs=exp #orExp                                               同上
+
+        /// <summary>
+        /// - # not，单目运算的oprd类型特殊，还是得一个一个处理
+        /// </summary>
+        /// <param name="context"></param>
+        /// <returns></returns>
+        public override Result VisitUnmExp([NotNull] LuaParser.UnmExpContext context)
         {
-            CurrP.codes.Add(new Bytecode(Opcodes.LoadK, Fs.freeRegIndex, CurrP.k.Count));
-            CurrP.k.Add((TValue)context.GetText().Trim(new char[] { '\'', '\"' })); //strip quotes on both sides
-            return -1;
+            var result = Visit(context.exp());
+            switch (context.operatorUnary.Type) {
+                case LuaLexer.NotKW:
+                    switch (result.ResultType) {
+                        case ResultTypes.RegIndex:
+                            //新分配reg，RA= not RB，c永远是0，不用
+                            Emit(new Bytecode(Opcodes.Not, FreeRegIndex, result.Index, 0));
+                            return new Result(FreeRegIndex++, ResultTypes.RegIndex);
+                        case ResultTypes.NIndex:
+                            return Result.False; //接下来是返回常量的not结果，
+                        case ResultTypes.SIndex:
+                            return Result.False;
+                        case ResultTypes.B:
+                            return result.B ? Result.False : Result.True;
+                        case ResultTypes.Nil:
+                            return Result.True;
+                        default:
+                            throw new GodDamnException();
+                    }
+                case LuaLexer.LenKW:
+                    //len针对字符串和表，而且可以有元方法（exp不可能有元方法，因此代码生成不用管）
+                    //string我们仍然编译时计算，但是表就不了，因为这样要在result里加一个类型，然而只有这种情况，不值得
+                    switch (result.ResultType) {
+                        case ResultTypes.RegIndex:
+                            //新分配，RA=#RB，RC永远不用
+                            Emit(new Bytecode(
+                                Opcodes.Len, FreeRegIndex, result.Index, 0));
+                            return new Result(FreeRegIndex++, ResultTypes.RegIndex);
+                        case ResultTypes.SIndex:
+                            var s = ChunkProto.strs[result.Index];
+                            return new Result(AppendN(s.Length), ResultTypes.NIndex);
+                        default:
+                            throw new OprdTypeException(Opcodes.Len);//#1，#nil，#false
+                    }
+                case LuaLexer.MinusKW:
+                    //-针对number
+                    switch (result.ResultType) {
+                        case ResultTypes.RegIndex:
+                            //同not指令的格式
+                            Emit(new Bytecode(Opcodes.Unm, FreeRegIndex, 0));
+                            return new Result(FreeRegIndex++, ResultTypes.RegIndex);
+                        case ResultTypes.NIndex:
+                            var n = ChunkProto.ns[result.Index];
+                            return new Result(AppendN(n), ResultTypes.NIndex);
+                        default:
+                            throw new OprdTypeException(Opcodes.Unm);
+                    }
+                default:
+                    throw new GodDamnException();
+            }
         }
+        /// <summary>
+        /// 一个通用的处理算术运算的函数
+        /// 按lhs和rhs的类型分类讨论，lhs和rhs可能是name或num，共四种情况，其他的是异常
+        /// Func用于真实的算术运算，opcode用于生成指令，lhs和rhs替代了传入context，因为不能修改生成的代码（否则你会后悔的，重新生成就火葬场了），ANLR也没法对所有binary op提取父类（接口），因为alternative用来区别优先级了
+        /// </summary>
+        /// <param name="context"></param>
+        /// <param name="binaryOp"></param>
+        /// <returns></returns>
+        Result VisitBinaryExp(Func<double, double, double> binaryOp, Opcodes opcode,
+            Result lhs, Result rhs)
+        {
+            switch (lhs.ResultType) {
+                case ResultTypes.RegIndex:
+                    switch (rhs.ResultType) {
+                        case ResultTypes.RegIndex: //a ^ b
+                            Emit(new Bytecode(Opcodes.Move, FreeRegIndex++, lhs.Index, 0));
+                            Emit(new Bytecode(Opcodes.Move, FreeRegIndex, rhs.Index, 0));
+                            Emit(new Bytecode(opcode, FreeRegIndex, lhs.Index, rhs.Index));
+                            return new Result(FreeRegIndex++, ResultTypes.RegIndex); //不要因为两句话相同而合并，这里就像是分类讨论一样，正确性和可读性最重要
+                        case ResultTypes.NIndex: //a ^ 1
+                            Emit(new Bytecode(Opcodes.Move, FreeRegIndex++, lhs.Index, 0));
+                            Emit(new Bytecode(Opcodes.LoadN, FreeRegIndex, rhs.Index));
+                            Emit(new Bytecode(opcode, FreeRegIndex, lhs.Index, rhs.Index));
+                            return new Result(FreeRegIndex++, ResultTypes.RegIndex);
+                        default:
+                            break;
+                    }
+                    break;
+                case ResultTypes.NIndex:
+                    switch (rhs.ResultType) {
+                        case ResultTypes.RegIndex: //1 ^ a
+                            Emit(new Bytecode(Opcodes.LoadN, FreeRegIndex++, lhs.Index));
+                            Emit(new Bytecode(Opcodes.Move, FreeRegIndex, rhs.Index, 0));
+                            Emit(new Bytecode(opcode, FreeRegIndex, lhs.Index, rhs.Index));
+                            return new Result(FreeRegIndex++, ResultTypes.RegIndex);
+                        case ResultTypes.NIndex: // 3 ^ 2
+                            var l = ChunkProto.ns[lhs.Index];
+                            var r = ChunkProto.ns[lhs.Index];
+                            return new Result(AppendN(binaryOp(l, r)), ResultTypes.NIndex);
+                        default:
+                            break;
+                    }
+                    break;
+                default:
+                    throw new OprdTypeException(opcode); //这里就粗粒度一些，我也不细到lhs还是rhs。管他呢
+            }
+            throw new GodDamnException();
+        }
+        /// <summary>
+        /// ^
+        /// </summary>
+        /// <param name="context"></param>
+        /// <returns></returns>
+        public override Result VisitPowExp([NotNull] LuaParser.PowExpContext context)
+        {
+            var lhs = Visit(context.lhs); // lhs result
+            var rhs = Visit(context.rhs);
+            return VisitBinaryExp(Math.Pow, Opcodes.Pow, lhs, rhs);
+        }
+        public override Result VisitMuldivExp([NotNull] LuaParser.MuldivExpContext context)
+        {
+            var lhs = Visit(context.lhs);
+            var rhs = Visit(context.rhs);
+            switch (context.operatorMulDivMod.Type) {
+                case LuaLexer.MulKW:
+                    return VisitBinaryExp((x, y) => x * y, Opcodes.Mul, lhs, rhs);
+                case LuaLexer.DivKW:
+                    return VisitBinaryExp((x, y) => x / y, Opcodes.Div, lhs, rhs);
+                case LuaLexer.ModKW:
+                    return VisitBinaryExp((x, y) => x % y, Opcodes.Mod, lhs, rhs);
+                default:
+                    throw new GodDamnException();
+            }
+        }
+        public override Result VisitAddsubExp([NotNull] LuaParser.AddsubExpContext context)
+        {
+            var lhs = Visit(context.lhs);
+            var rhs = Visit(context.rhs);
+            switch (context.operatorAddSub.Type) {
+                case LuaLexer.AddKW:
+                    return VisitBinaryExp((x, y) => x + y, Opcodes.Add, lhs, rhs);
+                case LuaLexer.MinusKW:
+                    return VisitBinaryExp((x, y) => x - y, Opcodes.Sub, lhs, rhs);
+                default:
+                    throw new GodDamnException();
+            }
+        }
+        
+        #endregion
+
+        //public override Result VisitLocalassignStat([NotNull] LuaParser.LocalassignStatContext context)
+        //{
+        //    var namelist = context.namelist().NAME();
+        //    bool no_equal = context.GetToken(2, 0) == null;
+        //    // local a,b,c=1,2,3 左侧加符号表，加初始化指令；右侧要从某个地方（exp栈可能）拿到exp的位置，而且不知道指令类型TODO
+        //    // local a,b,c 只声明不赋值，根据有没有=判断，freereg+=n，names加入符号表
+        //    // local a,b,c=1 右侧不足，同上
+        //    // local a,b=1,2,3,4 截断
+        //    //初始化locvar
+        //    for (int i = 0; i < namelist.Length; i++) {
+        //        var lv = new LocVar() {
+        //            var_name = namelist[i].GetText(),
+        //            startpc = Fs.CurrPc,
+        //        };
+        //        CurrP.locvars.Add(lv);
+        //    }
+        //    nNames = namelist.Length;
+        //    return -1;
+        //}
+        //public override Result VisitFunctiondef([NotNull] LuaParser.FunctiondefContext context)
+        //{
+        //    EnterNewFunc();
+        //    return -1;
+        //}
+
+
         #endregion
     }
 }

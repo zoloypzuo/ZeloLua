@@ -8,7 +8,6 @@ using zlua.ISA;
 using System.Diagnostics;
 using zlua.API;
 using zlua.CallSystem;
-using zlua.FuncAux;
 using zlua.Metamethod;
 /// <summary>
 /// 虚拟机
@@ -52,13 +51,18 @@ namespace zlua.VM
         /// </summary>
         public List<TValue> k;
         /// <summary>
+        /// str和n的常量池，暂时存放ChunkProto的strs和ns，这样改了之后只有loadchunk时才会加载常量池，而且一个chunk只有一个全局常量池
+        /// </summary>
+        public List<string> strs;
+        public List<double> ns;
+        /// <summary>
         /// _G
         /// </summary>
         public readonly TValue globalsTable = new TValue(new TTable(sizeHashTablePart: 2, sizeArrayPart: 0));
         /// <summary>
         /// saved pc when call a function; index of instruction array；因为src用指针的原因，而zlua必须同时使用codes和pc来获取指令
         /// </summary>
-        public int savedpc;
+        public int pc;
         public List<Bytecode> codes;
         public int nCSharpCalls;
         public GlobalState globalState;
@@ -94,21 +98,25 @@ namespace zlua.VM
         {
             reentry:
             Debug.Assert(this[Ci.funcIndex].IsLuaFunction);
-            int pc = savedpc;
             LuaClosure cl = this[Ci.funcIndex].Cl as LuaClosure;
-            int baseIndex = this.baseIndex;
             List<TValue> k = cl.p.k;
             while (true) {
                 Bytecode instr = codes[pc++];
-                Debug.Assert(baseIndex == this.baseIndex && this.baseIndex == Ci.baseIndex);
+                Debug.Assert(baseIndex == Ci.baseIndex);
                 Debug.Assert(baseIndex <= topIndex && topIndex < StackLastFree); //这里始终没有。
                 TValue ra = RA(instr);
                 switch (instr.Opcode) {
                     case Opcodes.Move:
                         ra.TVal = RB(instr);
                         continue;
-                    case Opcodes.LoadK:
+                    case Opcodes.LoadK: //loadk要一步一步删除
                         ra.TVal = KBx(instr);
+                        continue;
+                    case Opcodes.LoadN:
+                        ra.N = ns[instr.Bx];
+                        continue;
+                    case Opcodes.LoadS:
+                        ra.Str = strs[instr.Bx];
                         continue;
                     case Opcodes.LoadBool:
                         ra.B = Convert.ToBoolean(instr.B);
@@ -277,16 +285,14 @@ namespace zlua.VM
                             int b = instr.B;
                             int n_retvals = instr.C - 1;
                             if (b != 0) topIndex = this.baseIndex + instr.A + b;
-                            savedpc = pc;
-                            switch (ldo.PreCall(this, this.baseIndex + instr.A, n_retvals)) {
-                                case ldo.PCRLUA: {
+                            switch (LDo.PreCall(this, this.baseIndex + instr.A, n_retvals)) {
+                                case LDo.PCRLUA: {
                                         level++;
                                         goto reentry;
                                     }
-                                case ldo.PCRC:
+                                case LDo.PCRC:
                                     if (n_retvals >= 0)
                                         topIndex = Ci.topIndex;
-                                    this.baseIndex = this.baseIndex; //TODO???
                                     continue;
                                 default:
                                     return;
@@ -297,8 +303,7 @@ namespace zlua.VM
                     case Opcodes.Return: {
                             int b = instr.B;
                             if (b != 0) topIndex = this.baseIndex + instr.A + b - 1;
-                            savedpc = pc;
-                            int i = ldo.PosCall(this, instr.A);
+                            int i = LDo.PosCall(this, instr.A);
                             if (--level == 0) /* chunk executed, return*/
                                 return;
                             else { /*continue the execution*/
@@ -321,16 +326,16 @@ namespace zlua.VM
                     case Opcodes.Closure: { /*用Proto简单new一个LuaClosure，提前执行之后的指令s来初始化upvals*/
                             Proto p = cl.p.inner_funcs[instr.Bx];
                             LuaClosure ncl = new LuaClosure(cl.env, p.nUpvals, p);
-                            // 后面一定跟着一些getUpval或mov指令用来初始化upvals，分情况讨论，把这些指令在这个周期就执行掉
-                            for (int j = 0; j < p.nUpvals; j++, pc++) { /*从父函数的upvals直接取upvals*/
-                                var next_instr = codes[pc];
-                                if (next_instr.Opcode == Opcodes.GetUpVal) 
-                                    ncl.upvals[j] = cl.upvals[codes[pc].B];
-                                else { /*否则得用复杂的方法确定upval的位置*/
-                                    Debug.Assert(codes[pc].Opcode == Opcodes.Move);
-                                    ncl.upvals[j] = lfunc.FindUpval(this, this.baseIndex + next_instr.B);
-                                }
-                            }
+                            //// 后面一定跟着一些getUpval或mov指令用来初始化upvals，分情况讨论，把这些指令在这个周期就执行掉
+                            //for (int j = 0; j < p.nUpvals; j++, pc++) { /*从父函数的upvals直接取upvals*/
+                            //    var next_instr = codes[pc];
+                            //    if (next_instr.Opcode == Opcodes.GetUpVal) 
+                            //        ncl.upvals[j] = cl.upvals[codes[pc].B];
+                            //    else { /*否则得用复杂的方法确定upval的位置*/
+                            //        Debug.Assert(codes[pc].Opcode == Opcodes.Move);
+                            //        //ncl.upvals[j] = lfunc.FindUpval(this, this.baseIndex + next_instr.B);
+                            //    }
+                            //}
                             ra.Cl = ncl as Closure;
                             continue;
                         }
@@ -480,9 +485,9 @@ namespace zlua.VM
         bool CallBinaryMetamethod(TValue lhs, TValue rhs, TValue result, MetamethodTypes metamethodType)
         {
             result = null;
-            TValue metamethod = ltm.GetMetamethod(this, lhs, metamethodType);
+            TValue metamethod = LTm.GetMetamethod(this, lhs, metamethodType);
             if (metamethod.IsNil)
-                metamethod = ltm.GetMetamethod(this, rhs, metamethodType);
+                metamethod = LTm.GetMetamethod(this, rhs, metamethodType);
             if (metamethod.IsNil)
                 return false;
             result.TVal = CallMetamethod(metamethod, lhs, rhs);
@@ -497,7 +502,7 @@ namespace zlua.VM
             this[topIndex++].TVal = metamethod;
             this[topIndex++].TVal = lhs;
             this[topIndex++].TVal = rhs;
-            ldo.Call(this, topIndex - 3, 1);
+            LDo.Call(this, topIndex - 3, 1);
             return this[--topIndex]; //TODO call做了什么，result放在哪里
         }
         #endregion

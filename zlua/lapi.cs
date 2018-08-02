@@ -14,7 +14,7 @@ using zlua.Configuration;
 /// </summary>
 namespace zlua.API
 {
-    public static class lapi
+    public static class LApi
     {
         /// <summary>
         /// get tvalue from stack, accept an signed index (which allows index that under 0), or pesudo index to index special variable like _G
@@ -31,20 +31,20 @@ namespace zlua.API
                 int idx = L.baseIndex + (index - 1);
                 if (idx >= L.topIndex) return TValue.NilObject;
                 else return L[idx];
-            } else if (index > lua.RegisteyIndex) /* -10000 < index < 0*/ {
+            } else if (index > Lua.RegisteyIndex) /* -10000 < index < 0*/ {
                 Debug.Assert(index != 0 && -index <= L.topIndex - L.baseIndex); // check array boundary
                 return L[L.topIndex + index];
             } else {
                 switch (index) {
-                    case lua.RegisteyIndex: return L.globalState.registry;
-                    case lua.EnvIndex: {
+                    case Lua.RegisteyIndex: return L.globalState.registry;
+                    case Lua.EnvIndex: {
                             L.env.Table = (L[L.Ci.funcIndex].Cl as CSharpClosure).env;
                             return L.env;
                         }
-                    case lua.GlobalsIndex: return L.globalsTable;
+                    case Lua.GlobalsIndex: return L.globalsTable;
                     default: {
                             CSharpClosure func = L[L.Ci.funcIndex].Cl as CSharpClosure;
-                            index = lua.GlobalsIndex - index;
+                            index = Lua.GlobalsIndex - index;
                             return index <= func.NUpvals ? func.upvals[index - 1] : TValue.NilObject;
                         }
                 }
@@ -103,7 +103,7 @@ namespace zlua.API
         /// <summary>
         /// lua_pushcclosure
         /// </summary>
-        public static void PushCShapClosure(this TThread L, lua.CSharpFunction func, int n)
+        public static void PushCShapClosure(this TThread L, Lua.CSharpFunction func, int n)
         {
             //TODO
         }
@@ -222,7 +222,7 @@ namespace zlua.API
         /// </summary>
         public static int ToInteger(this TThread L, int index)
         {
-            return luaconf.Double2Integer(ToNumber(L, index));
+            return LuaConf.Double2Integer(ToNumber(L, index));
         }
         /// <summary>
         /// lua_toboolean
@@ -248,7 +248,7 @@ namespace zlua.API
         /// <summary>
         /// lua_tocfunction
         /// </summary>
-        public static lua.CSharpFunction ToCSharpFunction(this TThread L, int index)
+        public static Lua.CSharpFunction ToCSharpFunction(this TThread L, int index)
         {
             return null;
         }
@@ -377,20 +377,21 @@ namespace zlua.API
         #endregion
         #region load and call functions (run Lua code)
         /// <summary>
-        /// adjustresults
+        /// adjustresults；多返回值时ci的top向L的top靠齐
         /// </summary>
         static void AdjustRetvals(this TThread L, int nRetvals)
         {
-            if (nRetvals == lua.MultiRet && L.topIndex >= L.Ci.topIndex) L.Ci.topIndex = L.topIndex;
+            if (nRetvals == Lua.MultiRet && L.topIndex >= L.Ci.topIndex) L.Ci.topIndex = L.topIndex;
         }
         /// <summary>
-        /// lua_call 函数和args已经压栈，调用它
+        /// lua_call 函数和args已经压栈，调用它；是一次C发起的调用
+        /// 名字重复了，不好。而且签名是一样的。
         /// </summary>
-        public static void Call(this TThread L, int nArgs, int nRetvals)
+        public static void Call( TThread L, int nArgs, int nRetvals)
         {
             int funcIndex = L.topIndex - (nArgs + 1);
-            ldo.Call(L, funcIndex, nRetvals); //TODO 名字重复了，不好。而且签名是一样的。
-            //AdjustRetvals(L, nRetvals);
+            LDo.Call(L, funcIndex, nRetvals);  
+            AdjustRetvals(L, nRetvals);
         }
         #endregion
         #region other functions

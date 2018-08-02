@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace zlua.Configuration
 {
     using TNumber = Double;
-    public static class luaconf
+    internal static class LuaConf
     {
         public const int MaxCalls = 200;
         public const int MaxRegs = 200;

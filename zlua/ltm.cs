@@ -10,7 +10,7 @@ using zlua.VM;
 /// </summary>
 namespace zlua.Metamethod
 {
-    static class ltm
+    static class LTm  //src称为tagged method，不喜欢。。
     {
         public static readonly string[] names = new string[] {
             "__index", "__newindex",

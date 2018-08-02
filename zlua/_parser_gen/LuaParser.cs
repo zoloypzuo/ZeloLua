@@ -19,15 +19,14 @@
 // Ambiguous reference in cref attribute
 #pragma warning disable 419
 
-namespace zlua.Gen {
-using Antlr4.Runtime;
-using Antlr4.Runtime.Atn;
-using Antlr4.Runtime.Misc;
-using Antlr4.Runtime.Tree;
-using System.Collections.Generic;
-using DFA = Antlr4.Runtime.Dfa.DFA;
+namespace zlua.Gen
+{
+    using Antlr4.Runtime;
+    using Antlr4.Runtime.Atn;
+    using Antlr4.Runtime.Misc;
+    using Antlr4.Runtime.Tree;
 
-[System.CodeDom.Compiler.GeneratedCode("ANTLR", "4.6.5-beta001")]
+    [System.CodeDom.Compiler.GeneratedCode("ANTLR", "4.6.5-beta001")]
 [System.CLSCompliant(false)]
 public partial class LuaParser : Parser {
 	public const int

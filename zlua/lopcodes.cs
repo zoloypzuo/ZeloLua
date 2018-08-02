@@ -14,31 +14,6 @@ namespace zlua.ISA
         int Bx { get; set; }
         Opcodes Opcode { get; set; }
     }
-    /// <summary>
-    /// eaiser to use than `Bytecode 仅仅展示一下，说明字节码的坑爹（也没那么坑，rio都写好了）
-    /// </summary>
-    public class NonBytecode : IInstruction
-    {
-        public int A { get; set; }
-        public int B { get; set; }
-        public int C { get; set; }
-        public int Bx { get; set; }
-        public Opcodes Opcode { get; set; }
-        public NonBytecode(Opcodes op, int a, int b, int c)
-        {
-            Opcode = op;
-            A = a;
-            B = b;
-            C = c;
-        }
-        public NonBytecode(Opcodes op, int a, int bx)
-        {
-            Opcode = op;
-            A = a;
-            Bx = bx;
-        }
-    }
-
 
     /// <summary>
     /// byte code instruction

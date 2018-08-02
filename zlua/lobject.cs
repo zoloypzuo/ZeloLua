@@ -122,7 +122,10 @@ namespace zlua.TypeModel
             set
             {
                 Type = LuaTypes.String;
-                tobj = (TString)value;
+                var tstr = tobj as TString;  //这里尽量复用TValue上的TString对象，因为只是个Wrapper
+                if (tstr != null)tstr.str = value;
+                else
+                    tobj = (TString)value;
             }
         }
         public Closure Cl
@@ -205,8 +208,8 @@ namespace zlua.TypeModel
         public bool IsUserdata { get => Type == LuaTypes.Userdata; }
         public bool IsThread { get => Type == LuaTypes.Thread; }
         public bool IsLightUserdata { get => Type == LuaTypes.LightUserdata; }
-        public bool IsCSharpFunction { get => Type == LuaTypes.Function && (tobj as Closure).IsCharp; }
-        public bool IsLuaFunction { get => Type == LuaTypes.Function && !(tobj as Closure).IsCharp; }
+        public bool IsCSharpFunction { get => Type == LuaTypes.Function && (tobj as Closure) is CSharpClosure; }
+        public bool IsLuaFunction { get => Type == LuaTypes.Function && (tobj as Closure) is LuaClosure; }
         public bool IsFunction { get => Type == LuaTypes.Function; }
         #endregion
         #region other functions
@@ -304,13 +307,12 @@ namespace zlua.TypeModel
         public List<TValue> k = new List<TValue>();
         public List<Bytecode> codes = new List<Bytecode>();
         public List<LocVar> locvars = new List<LocVar>();
-        public List<string> strs = new List<string>();
-        public List<double> ns = new List<double>();
+
         public bool isVararg;
         /// <summary>
         /// 暂时这样
         /// </summary>
-        public int MaxStacksize {get=>codes.Count; }
+        public int MaxStacksize { get => codes.Count; }
         public int nParams;
         public int nUpvals;
         /// <summary>
@@ -320,6 +322,11 @@ namespace zlua.TypeModel
         {
 
         }
+    }
+    public class ChunkProto : Proto
+    {
+        public List<string> strs = new List<string>();
+        public List<double> ns = new List<double>();
     }
     //TODO
     [Serializable]
@@ -337,12 +344,10 @@ namespace zlua.TypeModel
 
     public class Closure : TObject
     {
-        public bool IsCharp;
         public TTable env;
         public Closure(TTable env)
         {
             this.env = env;
-            this.IsCharp = false;
         }
     }
     public class LuaClosure : Closure
@@ -362,7 +367,7 @@ namespace zlua.TypeModel
     }
     public class CSharpClosure : Closure
     {
-        public lua.CSharpFunction f;
+        public Lua.CSharpFunction f;
         public List<TValue> upvals;
         public int NUpvals { get => upvals.Count; }
         public CSharpClosure() : base(null)
@@ -378,7 +383,7 @@ namespace zlua.TypeModel
     {
 
         public TString(string str) { this.str = str; }
-        string str;
+        public string str; //可以设置str，这样复用TString对象，因为只是个warpper，
         public override string ToString() { return str.ToString(); } // for debugging
         public override bool Equals(object obj)
         {
@@ -447,7 +452,7 @@ namespace zlua.TypeModel
             if (tval != TValue.NilObject) return tval;
             else {
                 Debug.Assert(key.IsNil, "table index is nil");
-                Debug.Assert(key.IsNumber && luaconf.IsNaN((double)key), "table index is NaN");
+                Debug.Assert(key.IsNumber && LuaConf.IsNaN((double)key), "table index is NaN");
                 var new_val = new TValue();
                 hashTablePart[key] = new_val;
                 return new_val;

@@ -66,7 +66,7 @@ namespace zlua.VM.Tests
             Closure closure = new LuaClosure((TTable)L.globalsTable, 0, p);
             L[L.topIndex].Cl = closure;
             L.topIndex++;
-            lapi.Call(L, 0, 0);
+            LApi.Call(L, 0, 0);
         }
 
         [TestMethod()]

@@ -36,7 +36,7 @@ namespace zlua
     /// <summary>
     /// lua接口
     /// </summary>
-    public static class lua
+    public static class Lua
     {
         public const string Version = "zlua 1.0, based on lua 5.1.4";
         /// <summary>
@@ -46,7 +46,7 @@ namespace zlua
         public static void DoFile(this TThread L, string path)
         {
             L.LoadFile(path);
-            lapi.Call(L, nArgs:0,nRetvals:0);
+            LApi.Call(L, nArgs:0,nRetvals:0);
         }
         /// <summary>
         /// LUA_MULTRET, an option for lua_pcall and lua_call

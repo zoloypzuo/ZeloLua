@@ -1,25 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using zlua.VM;
+﻿using zlua.VM;
 using zlua.TypeModel;
 using Antlr4.Runtime;
 using Antlr4.Runtime.Tree;
 using System.IO;
 using p = zlua.Parser; // 防止名字冲突，大概不需要把
 using zlua.Gen;
+using System;
 /// <summary>
 /// 辅助库
 /// </summary>
 namespace zlua.AuxLib
 {
-    public static class lauxlib
+    public static class LAuxlib
     {
         /// <summary>
-        /// luaL_loadfile
-        /// 实现决策】我们简化src实现方式，src中经过了三个复杂的函数到fparser内才判断文件是字节码还是text，然后。。。，所以实现中这里就做完了
+        /// luaL_loadfile lua_load（更简单），核心逻辑是编译到proto，然后加upval作为closure压栈
+        /// 实现决策】没有upval
         /// </summary>
         public static void LoadFile(this TThread L, string path)
         {
@@ -37,34 +33,27 @@ namespace zlua.AuxLib
                 var walker = new ParseTreeWalker();
                 lp.Visit(tree);
             }
-            Proto proto = lp.CurrP;
-            Closure closure = new LuaClosure(env:(TTable)L.globalsTable, nUpvals:0, p:proto);
-            L[L.topIndex++].Cl = closure; 
+            Proto proto = lp.ChunkProto;
+            L.ns = lp.ChunkProto.ns;  //初始化k
+            L.strs = lp.ChunkProto.strs;
+            Closure closure = new LuaClosure(env: (TTable)L.globalsTable, nUpvals: 0, p: proto);
+            L[L.topIndex++].Cl = closure;
         }
         /// <summary>
-        /// luaL_checkany
+        /// 和loadfile一样
         /// </summary>
-        public static void CheckAny(this TThread L, int n_arg)
+        /// <param name="L"></param>
+        /// <param name="code"></param>
+        public static void LoadString(this TThread L, string code)
         {
+            AntlrInputStream inputStream; //输入流传递给antlr的输入流
+            inputStream = new AntlrInputStream(code); //知道可以。就行了。
+            throw new NotImplementedException();
         }
         /// <summary>
         /// lua_CFunction
         /// </summary>
         public delegate void CSharpFunction(TThread L);
-        /// <summary>
-        /// lua_Reader
-        /// </summary>
-        public delegate string Reader(TThread L, object ud, int size);
-        /// <summary>
-        /// 
-        /// </summary>
-        public delegate void Writer(TThread L, object p, int size, object ud);
-        /// <summary>
-        /// lua_call
-        /// </summary>
-        public static void Call(TThread L, int n_args, int n_retvals)
-        {
 
-        }
     }
 }

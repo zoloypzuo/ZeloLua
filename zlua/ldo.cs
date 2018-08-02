@@ -14,15 +14,15 @@ using zlua.Metamethod;
 /// </summary>
 namespace zlua.CallSystem
 {
-    delegate void ProtectedFunc(TThread L, object ud);
-    static class ldo
+    internal static class LDo
     {
 
         /// <summary>
         /// luaD_call; call `func, `func can be either CSharp or Lua; when call `func, arguments are
         /// right after `func on the stack of `L; when returns, return values start at the original position
         /// of `func 翻译一下】调用func，c或lua，arg和ret协议如上，
-        /// 因为太难了，还是中文说明】这个call是从lapi开始的call，lapi计算出funcIndex，这条线是算一次C call，在Thread里也存了counter
+        /// 因为太难了，还是中文说明】从C调用一个函数（划重点），相比api里那个重要一点。这里我简单地保证C SO
+        /// 这个call是从lapi开始的call，lapi计算出funcIndex，这条线是算一次C call，在Thread里也存了counter
         /// lua的call指令只使用precall，因为后面跟着goto reentry，而这里要主动调用一次execute开始执行；precall处理C或lua，我们先走lua
         /// lapi和这里ldo的Call只是签名形式不一样；说是ccall是因为这个必须是c api发起的call，因为lua call只调用precall
         /// 实现决策】禁用this，因为与lapi的签名一致，ldo这里是zlua的内部，所以。。弃车保帅
@@ -30,10 +30,10 @@ namespace zlua.CallSystem
         public static void Call(TThread L, int funcIndex, int nRetvals)
         {
             ++L.nCSharpCalls;
-            if (L.nCSharpCalls >= luaconf.MaxCalls)
+            if (L.nCSharpCalls >= LuaConf.MaxCalls)
                 throw new Exception("CSharp stack overflow");
-            PreCall(L, funcIndex, nRetvals);
-            L.Execute(1);
+            if (PreCall(L, funcIndex, nRetvals) == PCRLUA)
+                L.Execute(1);
             --L.nCSharpCalls;
         }
         /// <summary>
@@ -41,7 +41,7 @@ namespace zlua.CallSystem
         /// </summary>
         static TValue TryMetaCall(this TThread L, int funcIndex)
         {
-            TValue metamethod = ltm.GetMetamethod(L, L[funcIndex], MetamethodTypes.Call);
+            TValue metamethod = LTm.GetMetamethod(L, L[funcIndex], MetamethodTypes.Call);
             Debug.Assert(metamethod.IsFunction);
             /* Open a hole inside the stack at `func' */
             for (int i = L.topIndex; i > funcIndex; i--)
@@ -57,6 +57,7 @@ namespace zlua.CallSystem
 
         /// <summary>
         /// luaD_precall, TODO save pc to caller CallInfo, create new CallInfo for callee
+        /// 首先
         /// 中文说明】call指令实现；所以即调用新韩淑，因此保存数据，push栈帧
         /// </summary>
         public static int PreCall(this TThread L, int funcIndex, int nRetvals)
@@ -65,9 +66,9 @@ namespace zlua.CallSystem
             TValue func = L[funcIndex];
             if (!func.IsFunction)
                 func = TryMetaCall(L, funcIndex);
-            L.Ci.savedpc = L.savedpc;// 保存PC
-            LuaClosure cl = func.Cl as LuaClosure;
-            if (!cl.IsCharp) {  /* Lua function? prepare its call */
+            L.Ci.savedpc = L.pc;// 保存PC
+            if (func.Cl is LuaClosure) {  /* Lua function? prepare its call */
+                LuaClosure cl = func.Cl as LuaClosure;
                 int _base; //新的base，算完再更新L的base
                 Proto p = cl.p;
                 if (!p.isVararg) {  /* no varargs? */
@@ -79,7 +80,7 @@ namespace zlua.CallSystem
                 } else {  /* vararg function */
                     //否则要从top减掉nparam，算出新base，TODO处理vararg
                     int nargs = (L.topIndex - funcIndex) - 1;
-                    _base = AdjustVararg(L, p, nargs);
+                    _base = AdjustVararg(L, p, nargs); //复杂
                 }
                 Callinfo ci = new Callinfo() {
                     funcIndex = funcIndex,
@@ -89,23 +90,23 @@ namespace zlua.CallSystem
                 };
                 if (ci.topIndex >= L.StackLastFree)
                     L.Alloc(ci.topIndex + 1);
-                Debug.Assert(ci.topIndex < L.StackLastFree);
+                Debug.Assert(ci.topIndex <= L.StackLastFree);
                 L.baseIndex = _base; //更新base
                 //更新pc和k
-                L.savedpc = 0;
+                L.pc = 0;
                 L.codes = p.codes;
-                L.k = p.k;
+                //L.k = p.k;
                 L.ciStack.Push(ci);
                 for (int st = L.topIndex; st < ci.topIndex; st++) //st是stacktop
                     L[st].SetNil();
-                //L.topIndex = ci.topIndex;  //为什么。这样不就不对了。必要的话删掉
+                //L.topIndex = ci.topIndex;  //为什么。这样不就不对了。必要的话删掉，我个人的感觉，ci的top是栈帧上限。l的top是当前栈顶
                 return PCRLUA;
             } else {  /* if is a C function, call it */
                 //这里根本不对。也没讲清楚yield是干嘛的。一般来说直接按协议调用即可，为什么这么烦。
                 int n;
                 Callinfo ci = new Callinfo();
                 L.baseIndex = ci.baseIndex = ci.funcIndex + 1;
-                ci.topIndex = L.topIndex + lua.MinStackSizeForCSharpFunction;
+                ci.topIndex = L.topIndex + Lua.MinStackSizeForCSharpFunction;
                 Debug.Assert(ci.topIndex <= L.StackLastFree);
                 // 期待返回多少个返回值
                 ci.nRetvals = nRetvals;
@@ -131,7 +132,7 @@ namespace zlua.CallSystem
             int resultIndex = ci.funcIndex;
             int wanted = ci.nRetvals;
             L.baseIndex = L.Ci.baseIndex;
-            L.savedpc = L.Ci.savedpc;
+            L.pc = L.Ci.savedpc;
             /* 返回值压栈, 补nil到wanted个返回值*/
             int i;
             for (i = wanted; i != 0 && firstResultIndex < L.topIndex; i--) {
@@ -141,7 +142,7 @@ namespace zlua.CallSystem
                 L[resultIndex++].SetNil();
             }
             L.topIndex = resultIndex; //恢复top
-            return wanted - lua.MultiRet; /* 0 if wanted == LUA_MULTRET */
+            return wanted - Lua.MultiRet; /* 0 if wanted == LUA_MULTRET */
         }
         /// <summary>
         /// adjust_varargs 根据函数的参数数量调整base和top指针位置
@@ -154,36 +155,15 @@ namespace zlua.CallSystem
         /// <summary>
         /// luaD_checkstack
         /// </summary>
-        public static void CheckStack()
-        {
-
-        }
+        public static void CheckStack() { }
         /// <summary>
         /// savestack; 嗯，就这么简单
         /// </summary>
-        public static int SaveStack(this TThread L, int index)
-        {
-            return index;
-        }
+        public static int SaveStack(this TThread L, int index) => index;
         /// <summary>
         /// restorestack;
         /// </summary>
-        public static TValue RestoreStack(this TThread L, int index)
-        {
-            return L[index];
-        }
-        /// <summary>
-        /// f_parser; ud is SParser(so it is bad smell); 
-        /// read from SParser( which contains lua source code), 
-        /// read the first char to determine if it is bytecode file or text file, 
-        /// then use undump or parser to transform the file to Proto, then make the Proto to Closure and push it 
-        /// called] luaD_protectedparser
-        /// 实现决策】已经归并入loadfile，被其替代
-        /// </summary>
-                        //public static void FParser(this TThread L, object ud)
-        //{
-        //    // TODO 目前当然是parse
+        public static TValue RestoreStack(this TThread L, int index) => L[index];
 
-        //}
     }
 }
