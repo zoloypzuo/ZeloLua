@@ -18,7 +18,6 @@ namespace zlua.TypeModel
     /// 实现决策】Value完全展开，不用structLayout，因为不能一致，TObject是class，不能用
     /// light ud没了解足够，先不管
     /// </summary>
-    [Serializable]
     public class TValue
     {
         #region value fields
@@ -303,33 +302,31 @@ namespace zlua.TypeModel
     public class Proto : TObject
     {
         //public Proto parent;
-        public List<Proto> inner_funcs = new List<Proto>();
-        public List<TValue> k = new List<TValue>();
-        public List<Bytecode> codes = new List<Bytecode>();
-        public List<LocVar> locvars = new List<LocVar>();
+        internal List<Proto> inner_funcs = new List<Proto>();
+        internal List<TValue> k = new List<TValue>();
+        internal List<Bytecode> codes = new List<Bytecode>();
+        internal List<LocVar> locvars = new List<LocVar>();
 
-        public bool isVararg;
+        internal bool isVararg;
         /// <summary>
         /// 暂时这样
         /// </summary>
-        public int MaxStacksize { get => codes.Count; }
-        public int nParams;
-        public int nUpvals;
+        internal int MaxStacksize { get => codes.Count; }
+        internal int nParams;
+        internal int nUpvals;
         /// <summary>
         /// List都new好了
         /// </summary>
-        public Proto()
+        internal Proto()
         {
 
         }
     }
     public class ChunkProto : Proto
     {
-        public List<string> strs = new List<string>();
-        public List<double> ns = new List<double>();
+        internal List<string> strs = new List<string>();
+        internal List<double> ns = new List<double>();
     }
-    //TODO
-    [Serializable]
     public class LocVar
     {
         public string var_name;
@@ -341,7 +338,6 @@ namespace zlua.TypeModel
         }
     }
 
-
     public class Closure : TObject
     {
         public TTable env;
@@ -350,7 +346,7 @@ namespace zlua.TypeModel
             this.env = env;
         }
     }
-    public class LuaClosure : Closure
+    internal class LuaClosure : Closure
     {
         public Proto p;
         public List<Upval> upvals;
@@ -365,7 +361,7 @@ namespace zlua.TypeModel
             upvals = new List<Upval>(nUpvals);
         }
     }
-    public class CSharpClosure : Closure
+    internal class CSharpClosure : Closure
     {
         public Lua.CSharpFunction f;
         public List<TValue> upvals;
@@ -378,7 +374,6 @@ namespace zlua.TypeModel
     /// <summary>
     /// the string type of lua, just warpper of C# string
     /// </summary>
-    [Serializable]
     public class TString : TObject
     {
 
@@ -400,8 +395,7 @@ namespace zlua.TypeModel
     /// <summary>
     /// GCObject; base class of all reference type objects in lua
     /// </summary>
-    [Serializable]
-    public class TObject
+    public abstract class TObject
     {
     }
     //TODO
@@ -522,7 +516,6 @@ namespace zlua.TypeModel
 
         public IEnumerator GetEnumerator() => this.GetEnumerator();
     }
-    //TODO
     public class Upval : TObject
     {
         public TValue val;

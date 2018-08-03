@@ -23,7 +23,7 @@ namespace zlua.Parser
     {
         public OprdTypeException(Opcodes opcode) : base(opcode.ToString() + "错误的操作数") { }
     }
-    public enum ResultTypes
+    enum ResultTypes
     {
         RegIndex,
         NIndex,
@@ -38,7 +38,7 @@ namespace zlua.Parser
     /// 一开时设计成包含了double，string，bool，现在用一个int。非常省。设计思路改为，任何常量都会加入常量池，但是只有一份，因为会复用，
     /// Visit*返回index来通信，bool在uniton语义下其实可以和int合并（TValue中也是）但是不。相比于原来，如果1+2，1，2不会加入常量池（这是没办法的，你写了就知道，你传index那么中间的literal必须也加入常量池）
     /// </summary>
-    public class Result //你可以试试class还是struct好。
+    class Result //你可以试试class还是struct好。
     {
         public int Index { get; private set; }
         public bool B { get; private set; }
@@ -61,13 +61,13 @@ namespace zlua.Parser
         public static readonly Result False = new Result { ResultType = ResultTypes.B, B = false };
     }
 
-    public class LParser : LuaBaseVisitor<Result>
+    class LParser : LuaBaseVisitor<Result>
     {
         #region 辅助parse的数据结构和函数s
         /// <summary>
         /// 当前正在编译的函数块的编译期信息；编译时函数块s是一个同质的嵌套结构,这里用单链表实现一个栈
         /// </summary>
-        public class FuncState
+        class FuncState
         {
             public Proto p;
             /// <summary>
@@ -235,6 +235,11 @@ namespace zlua.Parser
             var s = context.GetText().Trim(new char[] { '\'', '\"' });//strip quotes on both sides
             return new Result(AppendS(s), ResultTypes.SIndex);
         }
+        /// <summary>
+        /// nil, false, true, vararg
+        /// </summary>
+        /// <param name="context"></param>
+        /// <returns></returns>
         public override Result VisitNilfalsetruevarargExp([NotNull] LuaParser.NilfalsetruevarargExpContext context)
         {
             switch (context.nilfalsetruevararg.Type) {
@@ -253,10 +258,8 @@ namespace zlua.Parser
         //| operatorUnary=('not' | '#' | '-' /*| '~' not in 5.1*/) exp #unmExp                   完成
         //| lhs=exp operatorMulDivMod=('*' | '/' | '%' /*| '//' not in 5.1*/) rhs=exp #muldivExp 完成
         //| lhs=exp operatorAddSub=('+' | '-') rhs=exp #addsubExp                                完成
-        //| <assoc=right> lhs=exp operatorStrcat='..' rhs=exp #concatExp                         要单独写，str
-        //| lhs=exp operatorComparison=('<' | '>' | '<=' | '>=' | '~=' | '==') rhs=exp #cmpExp   要单独写，和转移有关
-        //| lhs=exp operatorAnd='and' rhs=exp #andExp                                            同上
-        //| lhs=exp operatorOr='or' rhs=exp #orExp                                               同上
+        //| <assoc=right> lhs=exp operatorStrcat='..' rhs=exp #concatExp                         要单独写，str，完成
+
 
         /// <summary>
         /// - # not，单目运算的oprd类型特殊，还是得一个一个处理
@@ -319,7 +322,9 @@ namespace zlua.Parser
         /// <summary>
         /// 一个通用的处理算术运算的函数
         /// 按lhs和rhs的类型分类讨论，lhs和rhs可能是name或num，共四种情况，其他的是异常
-        /// Func用于真实的算术运算，opcode用于生成指令，lhs和rhs替代了传入context，因为不能修改生成的代码（否则你会后悔的，重新生成就火葬场了），ANLR也没法对所有binary op提取父类（接口），因为alternative用来区别优先级了
+        /// Func用于真实的算术运算，opcode用于生成指令，lhs和rhs替代了传入context，因为不能修改生成的代码（否则你会后悔的，重新生成就火葬场了）
+        /// ，ANLR也没法对所有binary op提取父类（接口），因为alternative用来区别优先级了
+        /// 针对的是double，因此concat单独实现
         /// </summary>
         /// <param name="context"></param>
         /// <param name="binaryOp"></param>
@@ -329,7 +334,7 @@ namespace zlua.Parser
         {
             switch (lhs.ResultType) {
                 case ResultTypes.RegIndex:
-                    switch (rhs.ResultType) {
+                    switch (rhs.ResultType) {//这里确实可以简化，因为nindex和regindex共用的index，所以大概的逻辑是lhs是n生成loadn否则mov regindex；参考concat
                         case ResultTypes.RegIndex: //a ^ b
                             Emit(new Bytecode(Opcodes.Move, FreeRegIndex++, lhs.Index, 0));
                             Emit(new Bytecode(Opcodes.Move, FreeRegIndex, rhs.Index, 0));
@@ -375,6 +380,11 @@ namespace zlua.Parser
             var rhs = Visit(context.rhs);
             return VisitBinaryExp(Math.Pow, Opcodes.Pow, lhs, rhs);
         }
+        /// <summary>
+        /// */
+        /// </summary>
+        /// <param name="context"></param>
+        /// <returns></returns>
         public override Result VisitMuldivExp([NotNull] LuaParser.MuldivExpContext context)
         {
             var lhs = Visit(context.lhs);
@@ -390,6 +400,11 @@ namespace zlua.Parser
                     throw new GodDamnException();
             }
         }
+        /// <summary>
+        /// +-
+        /// </summary>
+        /// <param name="context"></param>
+        /// <returns></returns>
         public override Result VisitAddsubExp([NotNull] LuaParser.AddsubExpContext context)
         {
             var lhs = Visit(context.lhs);
@@ -403,9 +418,46 @@ namespace zlua.Parser
                     throw new GodDamnException();
             }
         }
-        
+        /// <summary>
+        /// ..
+        /// </summary>
+        /// <param name="context"></param>
+        /// <returns></returns>
+        public override Result VisitConcatExp([NotNull] LuaParser.ConcatExpContext context)
+        {
+            //这里在设计上repeat了，但是很难做好。oprd的type有double和str两种，分别有常量池，
+            //你要区分类型，那么传入一个bool，就是控制耦合，然后会有几处?:运算符，而且挺难懂的。不如手写第二遍。
+            //至于if else的写法，上面是switch，这个ifelse版已经好一些了，试图去简化条件，或者优化条件是比较得不偿失的
+            var lhs = Visit(context.lhs);
+            var rhs = Visit(context.rhs);
+            if (lhs.ResultType == ResultTypes.SIndex && rhs.ResultType == ResultTypes.SIndex) {
+                var l = ChunkProto.strs[lhs.Index];
+                var r = ChunkProto.strs[rhs.Index];
+                return new Result(AppendS(l + r), ResultTypes.SIndex);
+            } else if (lhs.ResultType == ResultTypes.RegIndex && rhs.ResultType == ResultTypes.SIndex) {
+                Emit(new Bytecode(Opcodes.Move, FreeRegIndex++, lhs.Index, 0));
+                Emit(new Bytecode(Opcodes.LoadS, FreeRegIndex, rhs.Index));
+                Emit(new Bytecode(Opcodes.Concat, FreeRegIndex, lhs.Index, rhs.Index));
+                return new Result(FreeRegIndex++, ResultTypes.RegIndex);
+            } else if (lhs.ResultType == ResultTypes.SIndex && rhs.ResultType == ResultTypes.RegIndex) {
+                Emit(new Bytecode(Opcodes.LoadS, FreeRegIndex++, lhs.Index, 0));
+                Emit(new Bytecode(Opcodes.Move, FreeRegIndex, rhs.Index));
+                Emit(new Bytecode(Opcodes.Concat, FreeRegIndex, lhs.Index, rhs.Index));
+                return new Result(FreeRegIndex++, ResultTypes.RegIndex);
+            } else if (lhs.ResultType == ResultTypes.RegIndex && rhs.ResultType == ResultTypes.RegIndex) {
+                Emit(new Bytecode(Opcodes.Move, FreeRegIndex++, lhs.Index, 0));
+                Emit(new Bytecode(Opcodes.Move, FreeRegIndex, rhs.Index));
+                Emit(new Bytecode(Opcodes.Concat, FreeRegIndex, lhs.Index, rhs.Index));
+                return new Result(FreeRegIndex++, ResultTypes.RegIndex);
+            } else
+                throw new OprdTypeException(Opcodes.Concat);
+        }
         #endregion
-
+        #region 逻辑与关系运算
+        //| lhs=exp operatorComparison=('<' | '>' | '<=' | '>=' | '~=' | '==') rhs=exp #cmpExp   要单独写，和转移有关
+        //| lhs=exp operatorAnd='and' rhs=exp #andExp                                            同上
+        //| lhs=exp operatorOr='or' rhs=exp #orExp                                               同上
+        #endregion
         //public override Result VisitLocalassignStat([NotNull] LuaParser.LocalassignStatContext context)
         //{
         //    var namelist = context.namelist().NAME();

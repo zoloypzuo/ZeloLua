@@ -9,52 +9,55 @@ using System.Diagnostics;
 using zlua.API;
 using zlua.CallSystem;
 using zlua.Metamethod;
+using System.Runtime.Serialization;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
 /// <summary>
 /// 虚拟机
 /// </summary>
 namespace zlua.VM
 {
-    /// <summary>
-    /// 相比src，几乎没用，从L里脱离出来的，维护多个L共享的DS；没法internal，详见《internal规则》
-    /// </summary>
-    public class GlobalState
+    class GlobalState
     {
         public TValue registry = new TValue(new TTable(sizeHashTablePart: 2, sizeArrayPart: 0));
-        public TThread mainThread;
-        public TTable[] metaTableForBasicType = new TTable[(int)LuaTypes.Thread + 1];
-        public TString[] metaMethodNames = new TString[(int)MetamethodTypes.N];
+        //internal TThread mainThread;
+        internal TTable[] metaTableForBasicType = new TTable[(int)LuaTypes.Thread + 1];
+        internal TString[] metaMethodNames = new TString[(int)MetamethodTypes.N];
     }
     public class TThread : TObject
     {
+        /// <summary>
+        /// 相比src，几乎没用，从L里脱离出来的，维护多个L共享的DS；没法internal，详见《internal规则》
+        /// </summary>
         #region fields
-        List<TValue> Stack;
+        internal List<TValue> Stack;
         /// <summary>
         /// lua栈遵循栈约定：top指向第一个可用位置，每次push时 top++ = value；几乎所有文件都要用，因为你用这个来维护栈这个行为
         /// </summary>
-        public int topIndex;
+        internal int topIndex;
         /// <summary>
         /// 当前函数的base：Ido要使用，我希望他是private
         /// </summary>
-        public int baseIndex;
+        internal int baseIndex;
         /// <summary>
         /// 标记分配的大小,topIndex永远<stackLastFree
         /// </summary>
-        public int StackLastFree { get => Stack.Count; }
+        internal int StackLastFree { get => Stack.Count; }
         /// <summary>
         /// 当前函数；ido和lvm用的都多，我希望迁移到ido
         /// </summary>
-        public Callinfo Ci { get => ciStack.Peek(); }
-        public Stack<Callinfo> ciStack; //ido用的多，希望迁移到ido
+        internal Callinfo Ci { get => ciStack.Peek(); }
+        internal Stack<Callinfo> ciStack; //ido用的多，希望迁移到ido
 
         /// <summary>
         /// consts
         /// </summary>
-        public List<TValue> k;
+        internal List<TValue> k;
         /// <summary>
         /// str和n的常量池，暂时存放ChunkProto的strs和ns，这样改了之后只有loadchunk时才会加载常量池，而且一个chunk只有一个全局常量池
         /// </summary>
-        public List<string> strs;
-        public List<double> ns;
+        internal List<string> strs;
+        internal List<double> ns;
         /// <summary>
         /// _G
         /// </summary>
@@ -62,16 +65,14 @@ namespace zlua.VM
         /// <summary>
         /// saved pc when call a function; index of instruction array；因为src用指针的原因，而zlua必须同时使用codes和pc来获取指令
         /// </summary>
-        public int pc;
-        public List<Bytecode> codes;
-        public int nCSharpCalls;
-        public GlobalState globalState;
+        internal int pc;
+        internal List<Bytecode> codes;
+        internal int nCSharpCalls;
+        internal /*static readonly*/ GlobalState globalState = new GlobalState(); //注册表是一个L一个吗？
         /// <summary>
         /// "temp place for env", 仅被index2adr调用;除此之外，thread通过分支创建时，和父thread共享环境（然而并没有看到引用）
         /// </summary>
-        public TValue env;
-        short nCcalls;  /* number of nested C calls */
-        short baseCcalls;  /* nested C calls when resuming coroutine */
+        internal TValue env;
         #endregion
 
         /// <summary>
@@ -79,7 +80,6 @@ namespace zlua.VM
         /// </summary>
         public TThread()
         {
-            globalState = new GlobalState() { mainThread = this };
             const int BasicCiStackSize = 8;
             const int BasicStackSize = 40;
             ciStack = new Stack<Callinfo>(BasicCiStackSize);
@@ -348,6 +348,49 @@ namespace zlua.VM
             }
 
         }
+        void Test()
+        {
+            var L = new TThread();
+            var codes = Bytecode.Gen(new uint[]
+            {
+                0x00000007, 0x00000002, 0x00004007, 0x00800002, 0x00008007, 0x00010001,
+                0x0000C007, 0x00018001, 0x00014007, 0x00020001, 0x0001C007, 0x00000003,
+                0x00000042, 0x00800082, 0x000100C1, 0x00018101, 0x00020141, 0x0100018A,
+                0x000101C1, 0x00024201, 0x010041A2, 0x000241C1, 0x00028201, 0x85C3024C,
+                0x82424057, 0x00800282, 0x000002C2, 0x00000324, 0x00034307, 0x00034305,
+                0x00010341, 0x00024381, 0x0180831C
+            });
+            var p = new Proto() {
+                codes = codes,
+                nParams = 0,
+                isVararg = false,
+                k = new List<TValue> {
+                    (TValue)(TString)"a",
+                    (TValue)(TString)"a1",
+                    (TValue)(TString)"a2",
+                    (TValue)(TString)"b",
+                    (TValue)1,
+                    (TValue)(TString)"b1",
+                    (TValue)1.2,
+                    (TValue)(TString)"c",
+                    (TValue)(TString)"lalala",
+                    (TValue)2,
+                    (TValue)3,
+                    (TValue)(TString)"1",
+                    (TValue)(TString)"2",
+                    (TValue)(TString)"add"
+                },
+                inner_funcs = new List<Proto> { new Proto() }
+            };
+            IFormatter formatter = new BinaryFormatter();
+            Stream stream = new FileStream("MyFile.bin", FileMode.Create, FileAccess.Write, FileShare.None);
+            formatter.Serialize(stream, p);
+            stream.Close();
+            Closure closure = new LuaClosure((TTable)L.globalsTable, 0, p);
+            L[L.topIndex].Cl = closure;
+            L.topIndex++;
+            LApi.Call(L, 0, 0);
+        }
         /// <summary>
         /// 让栈扩展到`size大小
         /// </summary>
@@ -461,7 +504,7 @@ namespace zlua.VM
             if (lhs.IsString) return false;//TODO 字典序。或者你看标准库有没有
             else return false; //TODO 调用meta方法
         }
-       
+
         /// <summary>
         /// indexer是只读的，因为直接修改栈上变量是错误的行为。（改了的瞬间报出两个error）
         /// </summary>

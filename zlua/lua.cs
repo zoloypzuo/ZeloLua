@@ -14,7 +14,7 @@ namespace zlua
     /// <summary>
     /// differ from clua: const int... => enum
     /// </summary>
-    public enum LuaTypes
+    internal enum LuaTypes
     {
         None = -1,
         Nil = 0,
@@ -46,7 +46,7 @@ namespace zlua
         public static void DoFile(this TThread L, string path)
         {
             L.LoadFile(path);
-            LApi.Call(L, nArgs:0,nRetvals:0);
+            LApi.Call(L, nArgs: 0, nRetvals: 0);
         }
         /// <summary>
         /// LUA_MULTRET, an option for lua_pcall and lua_call
