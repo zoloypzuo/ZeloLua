@@ -327,7 +327,7 @@ namespace zlua.TypeModel
         internal List<string> strs = new List<string>();
         internal List<double> ns = new List<double>();
     }
-    public class LocVar
+     class LocVar
     {
         public string var_name;
         public int startpc;
@@ -346,7 +346,7 @@ namespace zlua.TypeModel
             this.env = env;
         }
     }
-    internal class LuaClosure : Closure
+     class LuaClosure : Closure
     {
         public Proto p;
         public List<Upval> upvals;
@@ -361,7 +361,7 @@ namespace zlua.TypeModel
             upvals = new List<Upval>(nUpvals);
         }
     }
-    internal class CSharpClosure : Closure
+     class CSharpClosure : Closure
     {
         public Lua.CSharpFunction f;
         public List<TValue> upvals;

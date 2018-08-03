@@ -8,13 +8,12 @@ using System.Threading.Tasks;
 /// </summary>
 namespace zlua.Configuration
 {
-    using TNumber = Double;
-    internal static class LuaConf
+    public static class LuaConf
     {
         public const int MaxCalls = 200;
         public const int MaxRegs = 200;
         public const int MaxUpVals = 60;
-        public static bool IsNaN(TNumber a) => !(a != a);
+        public static bool IsNaN(double a) => !(a != a);
         /// <summary>
         /// lua_number2integer, lua_number2int; 四舍五入
         /// </summary>

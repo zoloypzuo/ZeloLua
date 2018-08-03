@@ -56,9 +56,7 @@
     <Otherwise />
   </Choose>
   <ItemGroup>
-    <Compile Include="InstructionTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TThreadTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

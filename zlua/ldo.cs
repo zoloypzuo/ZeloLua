@@ -14,7 +14,7 @@ using zlua.Metamethod;
 /// </summary>
 namespace zlua.CallSystem
 {
-    internal static class LDo
+     static class LDo
     {
 
         /// <summary>

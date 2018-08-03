@@ -10,7 +10,7 @@ using zlua.VM;
 /// </summary>
 namespace zlua.BaseLib
 {
-    static class LBaselib
+    public static class LBaselib
     {
         /// <summary>
         /// luaB_assert

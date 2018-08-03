@@ -14,7 +14,7 @@ namespace zlua
     /// <summary>
     /// differ from clua: const int... => enum
     /// </summary>
-    internal enum LuaTypes
+    public enum LuaTypes
     {
         None = -1,
         Nil = 0,

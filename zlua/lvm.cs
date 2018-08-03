@@ -555,7 +555,7 @@ namespace zlua.VM
     /// <summary>
     /// 栈帧信息，或者说是一次调用的信息
     /// </summary>
-    public class Callinfo
+    class Callinfo
     {
         public int funcIndex;
         public int baseIndex; // = func+1

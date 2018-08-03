@@ -156,6 +156,7 @@ namespace zlua.ISA
                " Bx: " + Bx.ToString();
         }
         #endregion
+        #region Test
         class Assert
         {
             internal static void AreEqual<T>(T v1, T v2)
@@ -188,7 +189,6 @@ namespace zlua.ISA
             Assert.AreEqual<UInt32>(0x00010341, (uint)new Bytecode(Opcodes.LoadK, 13, 4));
             Assert.AreEqual<UInt32>(0x00024381, (uint)new Bytecode(Opcodes.LoadK, 14, 9));
         }
-        [TestMethod()]
         public void CreateOprd3()
         {
 
@@ -211,9 +211,9 @@ namespace zlua.ISA
 
 
         }
-        void A()
+        void TestA()
         {
-            Assert.AreEqual<Int32>(0, (new Bytecode(Opcodes.LoadBool, 0, 0, 0)).A);
+            Assert.AreEqual<Int32>(0, new Bytecode(Opcodes.LoadBool, 0, 0, 0).A);
             Assert.AreEqual<Int32>(0, new Bytecode(Opcodes.LoadBool, 0, 1, 0).A);
             Assert.AreEqual<Int32>(1, new Bytecode(Opcodes.LoadBool, 1, 0, 0).A);
             Assert.AreEqual<Int32>(2, new Bytecode(Opcodes.LoadBool, 2, 1, 0).A);
@@ -225,7 +225,7 @@ namespace zlua.ISA
             Assert.AreEqual<Int32>(11, new Bytecode(Opcodes.LoadBool, 11, 0, 0).A);
             Assert.AreEqual<Int32>(12, new Bytecode(Opcodes.Call, 12, 3, 2).A);
         }
-        void B()
+        void TestB()
         {
             Assert.AreEqual<Int32>(0, new Bytecode(Opcodes.LoadBool, 0, 0, 0).B);
             Assert.AreEqual<Int32>(1, new Bytecode(Opcodes.LoadBool, 0, 1, 0).B);
@@ -239,7 +239,7 @@ namespace zlua.ISA
             Assert.AreEqual<Int32>(0, new Bytecode(Opcodes.LoadBool, 11, 0, 0).B);
             Assert.AreEqual<Int32>(3, new Bytecode(Opcodes.Call, 12, 3, 2).B);
         }
-        void C()
+        void TestC()
         {
             Assert.AreEqual<Int32>(0, new Bytecode(Opcodes.LoadBool, 0, 0, 0).C);
             Assert.AreEqual<Int32>(0, new Bytecode(Opcodes.LoadBool, 0, 1, 0).C);
@@ -253,7 +253,7 @@ namespace zlua.ISA
             Assert.AreEqual<Int32>(0, new Bytecode(Opcodes.LoadBool, 11, 0, 0).C);
             Assert.AreEqual<Int32>(2, new Bytecode(Opcodes.Call, 12, 3, 2).C);
         }
-        void Bx()
+        void TestBx()
         {
             Assert.AreEqual<Int32>(0, new Bytecode(Opcodes.SetGlobal, 0, 0).Bx);
             Assert.AreEqual<Int32>(1, new Bytecode(Opcodes.SetGlobal, 0, 1).Bx);
@@ -278,9 +278,11 @@ namespace zlua.ISA
             Assert.AreEqual<Int32>(4, new Bytecode(Opcodes.LoadK, 13, 4).Bx);
             Assert.AreEqual<Int32>(9, new Bytecode(Opcodes.LoadK, 14, 9).Bx);
         }
+        #endregion
+
     }
 
-    public enum Opcodes
+    enum Opcodes
     {
         /* mov类*/
         Move,
