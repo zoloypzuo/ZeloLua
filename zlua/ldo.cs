@@ -14,7 +14,7 @@ using zlua.Metamethod;
 /// </summary>
 namespace zlua.CallSystem
 {
-     static class LDo
+    static class LDo
     {
 
         /// <summary>
@@ -106,7 +106,8 @@ namespace zlua.CallSystem
                 int n;
                 Callinfo ci = new Callinfo();
                 L.baseIndex = ci.baseIndex = ci.funcIndex + 1;
-                ci.topIndex = L.topIndex + Lua.MinStackSizeForCSharpFunction;
+                const int MinStackSizeForCSharpFunction = 20;
+                ci.topIndex = L.topIndex + MinStackSizeForCSharpFunction;
                 Debug.Assert(ci.topIndex <= L.StackLastFree);
                 // 期待返回多少个返回值
                 ci.nRetvals = nRetvals;

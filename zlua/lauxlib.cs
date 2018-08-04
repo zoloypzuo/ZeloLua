@@ -6,6 +6,7 @@ using System.IO;
 using p = zlua.Parser; // 防止名字冲突，大概不需要把
 using zlua.Gen;
 using System;
+using System.Collections.Generic;
 /// <summary>
 /// 辅助库
 /// </summary>
@@ -34,8 +35,15 @@ namespace zlua.AuxLib
                 lp.Visit(tree);
             }
             Proto proto = lp.ChunkProto;
-            L.ns = lp.ChunkProto.ns;  //初始化k
-            L.strs = lp.ChunkProto.strs;
+            //初始化k
+            L.ns = new List<TValue>();
+            foreach (var item in lp.ChunkProto.ns) {
+                L.ns.Add((TValue)item);
+            }
+            L.strs = new List<TValue>();
+            foreach (var item in lp.ChunkProto.strs) {
+                L.strs.Add((TValue)item);
+            }
             Closure closure = new LuaClosure(env: (TTable)L.globalsTable, nUpvals: 0, p: proto);
             L[L.topIndex++].Cl = closure;
         }

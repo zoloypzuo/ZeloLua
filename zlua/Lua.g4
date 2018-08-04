@@ -99,7 +99,7 @@ functioncall: varOrExp nameAndArgs+;
 
 varOrExp: var | '(' exp ')' ; //其实还是exp，左值也要返回右值的
 
-var: (NAME | '(' exp ')' varSuffix) varSuffix*;
+var: (NAME | '(' exp ')' varSuffix) varSuffix*; //左值，name或者表字段
 
 varSuffix: nameAndArgs* ('[' exp ']' | '.' NAME);
 

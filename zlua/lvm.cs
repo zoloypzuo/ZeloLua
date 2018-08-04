@@ -12,6 +12,7 @@ using zlua.Metamethod;
 using System.Runtime.Serialization;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
+using zlua.Configuration;
 /// <summary>
 /// 虚拟机
 /// </summary>
@@ -24,7 +25,7 @@ namespace zlua.VM
         internal TTable[] metaTableForBasicType = new TTable[(int)LuaTypes.Thread + 1];
         internal TString[] metaMethodNames = new TString[(int)MetamethodTypes.N];
     }
-    public class TThread : TObject
+    public class TThread : TObject, ITest
     {
         /// <summary>
         /// 相比src，几乎没用，从L里脱离出来的，维护多个L共享的DS；没法internal，详见《internal规则》
@@ -54,10 +55,13 @@ namespace zlua.VM
         /// </summary>
         internal List<TValue> k;
         /// <summary>
-        /// str和n的常量池，暂时存放ChunkProto的strs和ns，这样改了之后只有loadchunk时才会加载常量池，而且一个chunk只有一个全局常量池
+        /// str和n的常量池，暂时存放ChunkProto的strs和ns，这样改了之后只有loadchunk时才会加载常量池，
+        /// 而且一个chunk只有一个全局常量池
+        /// 常量会被转为TValue，因为runtime需要TValue（你不用TValue就会出很多问题，之前搞错了就是这样：你以为只存double就行
+        /// ，但是他调用元方法的函数要传入TValue，你怎么办，事实上一整条调用链上都是TValue。
         /// </summary>
-        internal List<string> strs;
-        internal List<double> ns;
+        internal List<TValue> strs;
+        internal List<TValue> ns;
         /// <summary>
         /// _G
         /// </summary>
@@ -106,23 +110,23 @@ namespace zlua.VM
                 Debug.Assert(baseIndex <= topIndex && topIndex < StackLastFree); //这里始终没有。
                 TValue ra = RA(instr);
                 switch (instr.Opcode) {
-                    case Opcodes.Move:
+                    case Op.Move:
                         ra.TVal = RB(instr);
                         continue;
-                    case Opcodes.LoadK: //loadk要一步一步删除
+                    case Op.LoadK: //loadk要一步一步删除
                         ra.TVal = KBx(instr);
                         continue;
-                    case Opcodes.LoadN:
-                        ra.N = ns[instr.Bx];
+                    case Op.LoadN:
+                        ra.N = (double)ns[instr.Bx];
                         continue;
-                    case Opcodes.LoadS:
-                        ra.Str = strs[instr.Bx];
+                    case Op.LoadS:
+                        ra.Str = (string)strs[instr.Bx];
                         continue;
-                    case Opcodes.LoadBool:
+                    case Op.LoadBool:
                         ra.B = Convert.ToBoolean(instr.B);
                         if (Convert.ToBoolean(instr.C)) pc++;
                         continue;
-                    case Opcodes.LoadNil: {
+                    case Op.LoadNil: {
                             int a = instr.A;
                             int b = instr.B;
                             do {
@@ -130,111 +134,72 @@ namespace zlua.VM
                             } while (b >= a);
                             continue;
                         }
-                    case Opcodes.GetUpVal: {
+                    case Op.GetUpVal: {
                             int b = instr.B;
                             ra.TVal = cl.upvals[b].val;
                             continue;
                         }
-                    case Opcodes.GetGlobal: {
+                    case Op.GetGlobal: {
                             TValue rb = KBx(instr);
                             Debug.Assert(rb.IsString);
                             GetTable((TValue)cl.env, rb, ra);
                             continue;
                         }
-                    case Opcodes.GetTable:
-                        GetTable(RB(instr), RKC(instr), ra);
+                    case Op.GetTable:
+                        throw new NotImplementedException();
+                        //GetTable(RB(instr), RKC(instr), ra);
                         continue;
-                    case Opcodes.SetGlobal:
+                    case Op.SetGlobal:
                         Debug.Assert(KBx(instr).IsString);
                         SetTable((TValue)cl.env, KBx(instr), ra);
                         continue;
-                    case Opcodes.SetUpval: {
+                    case Op.SetUpval: {
                             Upval upval = cl.upvals[instr.B];
                             upval.val.TVal = ra;
                             continue;
                         }
-                    case Opcodes.SetTable:
-                        SetTable(ra, RKB(instr), RKC(instr));
+                    case Op.SetTable:
+                        throw new NotImplementedException();
+                        //SetTable(ra, RKB(instr), RKC(instr));
                         continue;
-                    case Opcodes.NewTable: {
+                    case Op.NewTable: {
                             int b = instr.B;
                             int c = instr.C;
                             ra.Table = new TTable(c, b);
                             continue;
                         }
-                    case Opcodes.Self: {
+                    case Op.Self: {
                             TValue rb = RB(instr);
                             R(instr.A + 1).TVal = rb;
-                            GetTable(rb, RKC(instr), ra);
+                            throw new NotImplementedException();
+                            //GetTable(rb, RKC(instr), ra);
                             continue;
                         }
-                    case Opcodes.Add: {
-                            TValue rb = RKB(instr);
-                            TValue rc = RKC(instr);
-                            double nb = (double)ToNumber(rb, out bool b);
-                            double nc = (double)ToNumber(rc, out bool c);
-                            if (b && c) ra.N = nb + nc;
-                            else
-                                if (!CallBinaryMetamethod(rb, rc, ra, MetamethodTypes.Add))
-                                throw new ArithmeticException("operands cannot be added");
+                    case Op.Add: {
+                            Arith(instr, LuaConf.Add, MetamethodTypes.Add);
                             continue;
                         }
-                    case Opcodes.Sub: {
-                            TValue rb = RKB(instr);
-                            TValue rc = RKC(instr);
-                            double nb = (double)ToNumber(rb, out bool b);
-                            double nc = (double)ToNumber(rc, out bool c);
-                            if (b && c) ra.N = nb - nc;
-                            else
-                                if (!CallBinaryMetamethod(rb, rc, ra, MetamethodTypes.Sub))
-                                throw new ArithmeticException("operands cannot be subtracted");
+                    case Op.Sub: {
+                            Arith(instr, LuaConf.Sub, MetamethodTypes.Sub);
                             continue;
                         }
-                    case Opcodes.Mul: {
-                            TValue rb = RKB(instr);
-                            TValue rc = RKC(instr);
-                            double nb = (double)ToNumber(rb, out bool b);
-                            double nc = (double)ToNumber(rc, out bool c);
-                            if (b && c) ra.N = nb * nc;
-                            else
-                                if (!CallBinaryMetamethod(rb, rc, ra, MetamethodTypes.Mul))
-                                throw new ArithmeticException("operands cannot be multiplied");
+                    case Op.Mul: {
+                            Arith(instr, LuaConf.Mul, MetamethodTypes.Mul);
                             continue;
                         }
-                    case Opcodes.Div: {
-                            TValue rb = RKB(instr);
-                            TValue rc = RKC(instr);
-                            double nb = (double)ToNumber(rb, out bool b);
-                            double nc = (double)ToNumber(rc, out bool c);
-                            if (b && c) ra.N = nb / nc;
-                            else
-                                if (!CallBinaryMetamethod(rb, rc, ra, MetamethodTypes.Div))
-                                throw new ArithmeticException("operands cannot be divided");
+                    case Op.Div: {
+                            Arith(instr, LuaConf.Div, MetamethodTypes.Div);
                             continue;
                         }
-                    case Opcodes.Mod: {
-                            TValue rb = RKB(instr);
-                            TValue rc = RKC(instr);
-                            double nb = (double)ToNumber(rb, out bool b);
-                            double nc = (double)ToNumber(rc, out bool c);
-                            if (b && c) ra.N = nb % nc;
-                            else
-                                if (!CallBinaryMetamethod(rb, rc, ra, MetamethodTypes.Mod))
-                                throw new ArithmeticException("operands cannot be moded");
+                    case Op.Mod: {
+                            Arith(instr, LuaConf.Div, MetamethodTypes.Mod);
                             continue;
                         }
-                    case Opcodes.Pow: {
-                            TValue rb = RKB(instr);
-                            TValue rc = RKC(instr);
-                            double nb = (double)ToNumber(rb, out bool b);
-                            double nc = (double)ToNumber(rc, out bool c);
-                            if (b && c) ra.N = Math.Pow(nb, nc);
-                            else
-                                if (!CallBinaryMetamethod(rb, rc, ra, MetamethodTypes.Pow))
-                                throw new ArithmeticException("operands cannot be powered");
+                    case Op.Pow: {
+                            Arith(instr, LuaConf.Pow, MetamethodTypes.Pow);
                             continue;
                         }
-                    case Opcodes.Unm: {
+                    case Op.Unm: {
                             TValue rb = RB(instr);
                             double nb = (double)ToNumber(rb, out bool b);
                             if (b) ra.N = -nb;
@@ -243,10 +208,11 @@ namespace zlua.VM
                                 throw new ArithmeticException("operand cannot be unmed");
                             continue;
                         }
-                    case Opcodes.Not:
+                    case Op.Not:
+                        throw new NotImplementedException();
                         ra.B = RB(instr).IsFalse; //TODO  /* next assignment may change this value */
                         continue;
-                    case Opcodes.Len: {
+                    case Op.Len: {
                             TValue rb = RB(instr);
                             switch (rb.Type) {
                                 case LuaTypes.Table:
@@ -262,26 +228,26 @@ namespace zlua.VM
                             }
                             continue;
                         }
-                    case Opcodes.Concat: {
+                    case Op.Concat: { // RA = String.Join(RB~RC)
                             int b = instr.B;
                             int c = instr.C;
                             Concat(c - b + 1, c);
                             RA(instr).TVal = this[this.baseIndex + b];
                             continue;
                         }
-                    case Opcodes.Jmp:
+                    case Op.Jmp:
                         continue;
-                    case Opcodes.Eq:
+                    case Op.Eq:
                         continue;
-                    case Opcodes.Lt:
+                    case Op.Lt:
                         continue;
-                    case Opcodes.Le:
+                    case Op.Le:
                         continue;
-                    case Opcodes.Test:
+                    case Op.Test:
                         continue;
-                    case Opcodes.Testset:
+                    case Op.Testset:
                         continue;
-                    case Opcodes.Call: {
+                    case Op.Call: {
                             int b = instr.B;
                             int n_retvals = instr.C - 1;
                             if (b != 0) topIndex = this.baseIndex + instr.A + b;
@@ -298,9 +264,9 @@ namespace zlua.VM
                                     return;
                             }
                         }
-                    case Opcodes.TailCall:
+                    case Op.TailCall:
                         continue;
-                    case Opcodes.Return: {
+                    case Op.Return: {
                             int b = instr.B;
                             if (b != 0) topIndex = this.baseIndex + instr.A + b - 1;
                             int i = LDo.PosCall(this, instr.A);
@@ -313,18 +279,18 @@ namespace zlua.VM
                             }
                             continue;
                         }
-                    case Opcodes.ForLoop:
+                    case Op.ForLoop:
                         continue;
-                    case Opcodes.ForPrep:
+                    case Op.ForPrep:
                         continue;
-                    case Opcodes.TForLoop:
+                    case Op.TForLoop:
                         continue;
-                    case Opcodes.SetList:
+                    case Op.SetList:
                         continue;
-                    case Opcodes.Close:
+                    case Op.Close:
                         continue;
-                    case Opcodes.Closure: { /*用Proto简单new一个LuaClosure，提前执行之后的指令s来初始化upvals*/
-                            Proto p = cl.p.inner_funcs[instr.Bx];
+                    case Op.Closure: { /*用Proto简单new一个LuaClosure，提前执行之后的指令s来初始化upvals*/
+                            Proto p = cl.p.pp[instr.Bx];
                             LuaClosure ncl = new LuaClosure(cl.env, p.nUpvals, p);
                             //// 后面一定跟着一些getUpval或mov指令用来初始化upvals，分情况讨论，把这些指令在这个周期就执行掉
                             //for (int j = 0; j < p.nUpvals; j++, pc++) { /*从父函数的upvals直接取upvals*/
@@ -340,7 +306,7 @@ namespace zlua.VM
                             continue;
                         }
 
-                    case Opcodes.VarArg:
+                    case Op.VarArg:
                         continue;
                     default:
                         continue;
@@ -348,7 +314,20 @@ namespace zlua.VM
             }
 
         }
-        void Test()
+        void Arith(Bytecode instr, Func<double, double, double> func, MetamethodTypes mtType)
+        {
+            TValue ra = RA(instr); //重算一遍
+            TValue rb = RNB(instr);
+            TValue rc = RNC(instr);
+            double nb = (double)ToNumber(rb, out bool b); //Tonumber把str转换成double，我分离两种k之后，这里其实没用了
+            double nc = (double)ToNumber(rc, out bool c); //我也不希望可以随便把str转换成double
+            if (b && c) ra.N = func(nb, nc);
+            else if (!CallBinaryMetamethod(rb, rc, ra, mtType))
+                throw new OprdTypeException(instr.Opcode);
+            else
+                throw new GodDamnException();
+        }
+        public void Test()
         {
             var L = new TThread();
             var codes = Bytecode.Gen(new uint[]
@@ -380,7 +359,7 @@ namespace zlua.VM
                     (TValue)(TString)"2",
                     (TValue)(TString)"add"
                 },
-                inner_funcs = new List<Proto> { new Proto() }
+                pp = new List<Proto> { new Proto() }
             };
             IFormatter formatter = new BinaryFormatter();
             Stream stream = new FileStream("MyFile.bin", FileMode.Create, FileAccess.Write, FileShare.None);
@@ -413,13 +392,20 @@ namespace zlua.VM
         TValue RB(Bytecode i) => Stack[baseIndex + i.B];
         [DebuggerStepThroughAttribute]
         TValue RC(Bytecode i) => Stack[baseIndex + i.C];
-
         [DebuggerStepThroughAttribute]
-        TValue RKB(Bytecode i) => Bytecode.IsK(i.B) ? k[Bytecode.IndexK(i.B)] : RB(i);
+        TValue KBx(Bytecode i)
+        {
+            throw new NotImplementedException(); //大概是要返回strs
+            //k[i.Bx]; 
+        }
         [DebuggerStepThroughAttribute]
-        TValue RKC(Bytecode i) => Bytecode.IsK(i.C) ? k[Bytecode.IndexK(i.C)] : RC(i);
+        TValue RNB(Bytecode i) => Bytecode.IsK(i.B) ? ns[Bytecode.IndexK(i.B)] : RB(i);
         [DebuggerStepThroughAttribute]
-        TValue KBx(Bytecode i) => k[i.Bx];
+        TValue RNC(Bytecode i) => Bytecode.IsK(i.C) ? ns[Bytecode.IndexK(i.C)] : RC(i);
+        [DebuggerStepThroughAttribute]
+        TValue RSB(Bytecode i) => Bytecode.IsK(i.B) ? strs[Bytecode.IndexK(i.B)] : RB(i);
+        [DebuggerStepThroughAttribute]
+        TValue RSC(Bytecode i) => Bytecode.IsK(i.C) ? strs[Bytecode.IndexK(i.C)] : RC(i);
         #endregion
         #region other things
 
@@ -454,7 +440,7 @@ namespace zlua.VM
             return false;
         }
         /// <summary>
-        /// luaV_concat
+        /// luaV_concat, RA = String.Join(RB~RC)
         /// </summary>
         public void Concat(int total, int last)
         {

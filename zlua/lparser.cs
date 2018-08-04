@@ -1,31 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Antlr4.Runtime;
 using Antlr4.Runtime.Misc;
 using Antlr4.Runtime.Tree;
+using zlua.Configuration;
 using zlua.Gen;
 using zlua.ISA;
 using zlua.TypeModel;
 namespace zlua.Parser
 {
-    /// <summary>
-    /// 见鬼了异常，因为有些分支根本不可能走到
-    /// </summary>
-    class GodDamnException : Exception { }
-    /// <summary>
-    /// 错误的操作数类型，我们用opcode作为提示
-    /// </summary>
-    class OprdTypeException : Exception
+
+    enum RetType
     {
-        public OprdTypeException(Opcodes opcode) : base(opcode.ToString() + "错误的操作数") { }
-    }
-    enum ResultTypes
-    {
-        RegIndex,
+        Name,
         NIndex,
         SIndex,
         B,
@@ -38,36 +25,80 @@ namespace zlua.Parser
     /// 一开时设计成包含了double，string，bool，现在用一个int。非常省。设计思路改为，任何常量都会加入常量池，但是只有一份，因为会复用，
     /// Visit*返回index来通信，bool在uniton语义下其实可以和int合并（TValue中也是）但是不。相比于原来，如果1+2，1，2不会加入常量池（这是没办法的，你写了就知道，你传index那么中间的literal必须也加入常量池）
     /// </summary>
-    class Result //你可以试试class还是struct好。
+    class Ret //你可以试试class还是struct好。
     {
-        public int Index { get; private set; }
+        public string Name { get; private set; }
+        public int KIndex { get; private set; }
         public bool B { get; private set; }
-        public ResultTypes ResultType { get; private set; }
-        public Result(int index, ResultTypes resultType)
+        public RetType RetType { get; private set; }
+        public Ret(int index, RetType retType)
         {
-            Index = index;
-            ResultType = ResultType;
+            KIndex = index;
+            RetType = RetType;
         }
-        public Result()
+        public Ret(string name)
+        {
+            Name = name;
+            RetType = RetType.Name;
+        }
+        public Ret()
         {
 
         }
         /// <summary>
         /// 单例，表示没有返回值，比如语句
         /// </summary>
-        public static readonly Result Void = new Result { ResultType = ResultTypes.None };
-        public static readonly Result Nil = new Result { ResultType = ResultTypes.Nil };
-        public static readonly Result True = new Result { ResultType = ResultTypes.B, B = true };
-        public static readonly Result False = new Result { ResultType = ResultTypes.B, B = false };
+        public static readonly Ret Void = new Ret { RetType = RetType.None };
+        public static readonly Ret Nil = new Ret { RetType = RetType.Nil };
+        public static readonly Ret True = new Ret { RetType = RetType.B, B = true };
+        public static readonly Ret False = new Ret { RetType = RetType.B, B = false };
     }
 
-    class LParser : LuaBaseVisitor<Result>
+    class LParser : LuaBaseVisitor<Ret>
     {
         #region 辅助parse的数据结构和函数s
+        class BlockStack
+        {
+            Stack<Block> blocks = new Stack<Block>();
+            public Block Top { get => blocks.Peek(); }
+            /// <summary>
+            /// 传入chunkprot看起来比较奇怪。是因为第一个必须栈底必须是一个FuncBlock带一个ChunkProto，
+            /// 不这样的话要提供一个返回chunkproto的property，更奇怪
+            /// </summary>
+            /// <param name="chunkProto"></param>
+            public BlockStack(ChunkProto chunkProto)
+            {
+                blocks.Push(new FuncBlock() { p = chunkProto });
+            }
+            public void EnterNewBlock()
+            {
+                blocks.Push(new Block());
+            }
+            public void EnterNewFuncBlock()
+            {
+                var top = blocks.Peek();
+                var newFb = new FuncBlock();
+                Debug.Assert(top is FuncBlock);
+                (top as FuncBlock).p.pp.Add(newFb.p);
+                blocks.Push(newFb);
+            }
+            public void ExitBlock() { blocks.Pop(); }
+        }
         /// <summary>
-        /// 当前正在编译的函数块的编译期信息；编译时函数块s是一个同质的嵌套结构,这里用单链表实现一个栈
+        /// 作用域处理的基本单位。do end是一个块，func也是一个块，while，if else，for也是一个块
+        /// 直接作为单链表栈的对象来使用。就像学数据结构时的C单链表Node对象一样
         /// </summary>
-        class FuncState
+        class Block
+        {
+            /// <summary>
+            /// 反向索引局部变量名的左值；重复声明直接覆盖，所以不用管
+            /// </summary>
+            public Dictionary<string, int> localName2RegIndex = new Dictionary<string, int>();
+        }
+        /// <summary>
+        /// 当前正在编译的函数块的编译期信息
+        /// </summary>
+        class FuncBlock : Block
         {
             public Proto p;
             /// <summary>
@@ -78,43 +109,19 @@ namespace zlua.Parser
             /// 指向第一个指令数组的第一个可用位置
             /// </summary>
             public int CurrPc { get => p.codes.Count; }
-            public FuncState prev;
-            /// <summary>
-            /// 反向索引局部变量名的左值；重复声明直接覆盖，所以不用管
-            /// </summary>
-            public Dictionary<string, int> localName2RegIndex = new Dictionary<string, int>();
-
-            public FuncState()
-            {
-
-            }
         }
-        #region 处理FS
-        /// <summary>
-        /// 进入新函数块
-        /// </summary>
-        void EnterNewFunc()
-        {
-            var new_fs = new FuncState();
-            currFs.p.inner_funcs.Add(new_fs.p);
-            currFs = new_fs;
-        }
-        /// <summary>
-        /// 离开当前函数块
-        /// </summary>
-        void ExitCurrFunc()
-        {
-            Debug.Assert(currFs.prev != null, "");
-            currFs = currFs.prev;
-        }
-        FuncState currFs;
-        Proto CurrP { get => currFs.p; }
-        int FreeRegIndex { get => FreeRegIndex; set => FreeRegIndex = value; }
-        public ChunkProto ChunkProto { get; } = new ChunkProto();
-        public Dictionary<double, int> n2NsIndex = new Dictionary<double, int>();
-        public Dictionary<string, int> s2StrsIndex = new Dictionary<string, int>();
-        #endregion
         #region  处理scope
+        BlockStack blockStack;
+        Block CurrBlock { get => blockStack.Top; }
+        FuncBlock CurrFB { get => blockStack.Top as FuncBlock; }
+        Proto CurrP { get => CurrFB.p; }
+        int FreeRegIndex { get => CurrFB.freeRegIndex; set => CurrFB.freeRegIndex = value; }
+        int CurrPc { get => CurrFB.CurrPc; }
+        internal ChunkProto ChunkProto { get; } = new ChunkProto();
+        internal List<string> Strs { get => ChunkProto.strs; }
+        internal List<double> Ns { get => ChunkProto.ns; }
+        Dictionary<double, int> n2NsIndex = new Dictionary<double, int>();
+        Dictionary<string, int> s2StrsIndex = new Dictionary<string, int>();
         /// <summary>
         /// name通过scope映射到lvalue（龙书第二章重点），因此还要有反向索引表
         /// </summary>
@@ -122,21 +129,25 @@ namespace zlua.Parser
         /// <returns></returns>
         int Name2RegIndex(string name)
         {
-            if (currFs.localName2RegIndex.ContainsKey(name)) /*name is local*/
-                return currFs.localName2RegIndex[name];
+            if (CurrFB.localName2RegIndex.ContainsKey(name)) /*name is local*/
+                return CurrFB.localName2RegIndex[name];
             else {
                 /*name is not local to all functions from current function to the chunk, so it is global*/
                 return name.GetHashCode(); //暂时这样。事实上先check uv再。
                 /*name is upval?*/
                 throw new NotImplementedException();//TODO
-                var fs = currFs;
-                while (fs != null) {
-                    if (fs.localName2RegIndex.ContainsKey(name))
-                        return fs.localName2RegIndex[name];
-                    fs = fs.prev;
-                }
+                //var fs = CurrFB;
+                //while (fs != null) {
+                //    if (fs.localName2RegIndex.ContainsKey(name))
+                //        return fs.localName2RegIndex[name];
+                //    fs = fs.prev;
+                //}
             }
 
+        }
+        public LParser()
+        {
+            blockStack = new BlockStack(ChunkProto);
         }
         #endregion
         #region 其他辅助函数
@@ -155,9 +166,9 @@ namespace zlua.Parser
         int AppendN(double n)
         {
             if (!n2NsIndex.ContainsKey(n)) {  //常量池里没有再新加，这样复用
-                int index = ChunkProto.ns.Count;
+                int index = Ns.Count;
                 n2NsIndex.Add(n, index);
-                ChunkProto.ns.Add(n);
+                Ns.Add(n);
                 return index;
             }
             return n2NsIndex[n];
@@ -169,19 +180,15 @@ namespace zlua.Parser
         int AppendS(string s)
         {
             if (!s2StrsIndex.ContainsKey(s)) {
-                int index = ChunkProto.strs.Count;
+                int index = Strs.Count;
                 s2StrsIndex.Add(s, index);
-                ChunkProto.strs.Add(s);
+                Strs.Add(s);
                 return index;
             }
             return s2StrsIndex[s];
         }
         #endregion
-        int nLabels = 0;
-        public LParser()
-        {
-            currFs = new FuncState() { p = ChunkProto };
-        }
+
         #endregion
         #region 自动生成的部分
         //public override Result VisitCmpExp([NotNull] LuaParser.CmpExpContext context)
@@ -220,32 +227,32 @@ namespace zlua.Parser
         /// </summary>
         /// <param name="context"></param>
         /// <returns></returns>
-        public override Result VisitNumberExp([NotNull] LuaParser.NumberExpContext context)
+        public override Ret VisitNumberExp([NotNull] LuaParser.NumberExpContext context)
         {
             double n = Double.Parse(context.GetText());
-            return new Result(AppendN(n), ResultTypes.NIndex);
+            return new Ret(AppendN(n), RetType.NIndex);
         }
         /// <summary>
         /// string literal
         /// </summary>
         /// <param name="context"></param>
         /// <returns></returns>
-        public override Result VisitStringExp([NotNull] LuaParser.StringExpContext context)
+        public override Ret VisitStringExp([NotNull] LuaParser.StringExpContext context)
         {
             var s = context.GetText().Trim(new char[] { '\'', '\"' });//strip quotes on both sides
-            return new Result(AppendS(s), ResultTypes.SIndex);
+            return new Ret(AppendS(s), RetType.SIndex);
         }
         /// <summary>
         /// nil, false, true, vararg
         /// </summary>
         /// <param name="context"></param>
         /// <returns></returns>
-        public override Result VisitNilfalsetruevarargExp([NotNull] LuaParser.NilfalsetruevarargExpContext context)
+        public override Ret VisitNilfalsetruevarargExp([NotNull] LuaParser.NilfalsetruevarargExpContext context)
         {
             switch (context.nilfalsetruevararg.Type) {
-                case LuaLexer.NilKW: return Result.Nil;
-                case LuaLexer.FalseKW: return Result.False;
-                case LuaLexer.TrueKW: return Result.True;
+                case LuaLexer.NilKW: return Ret.Nil;
+                case LuaLexer.FalseKW: return Ret.False;
+                case LuaLexer.TrueKW: return Ret.True;
                 case LuaLexer.VarargKW:
                     throw new NotImplementedException();
                 default:
@@ -266,54 +273,53 @@ namespace zlua.Parser
         /// </summary>
         /// <param name="context"></param>
         /// <returns></returns>
-        public override Result VisitUnmExp([NotNull] LuaParser.UnmExpContext context)
+        public override Ret VisitUnmExp([NotNull] LuaParser.UnmExpContext context)
         {
             var result = Visit(context.exp());
             switch (context.operatorUnary.Type) {
                 case LuaLexer.NotKW:
-                    switch (result.ResultType) {
-                        case ResultTypes.RegIndex:
-                            //新分配reg，RA= not RB，c永远是0，不用
-                            Emit(new Bytecode(Opcodes.Not, FreeRegIndex, result.Index, 0));
-                            return new Result(FreeRegIndex++, ResultTypes.RegIndex);
-                        case ResultTypes.NIndex:
-                            return Result.False; //接下来是返回常量的not结果，
-                        case ResultTypes.SIndex:
-                            return Result.False;
-                        case ResultTypes.B:
-                            return result.B ? Result.False : Result.True;
-                        case ResultTypes.Nil:
-                            return Result.True;
+                    switch (result.RetType) {
+                        case RetType.Name:
+                            FreeRegIndex--; //pop one oprd
+                            Emit(Bytecode.RaRb(Op.Not, FreeRegIndex, result.KIndex));
+                            return new Ret(FreeRegIndex++, RetType.Name); //push result
+                        case RetType.NIndex:
+                            return Ret.False; //接下来是返回常量的not结果，
+                        case RetType.SIndex:
+                            return Ret.False;
+                        case RetType.B:
+                            return result.B ? Ret.False : Ret.True;
+                        case RetType.Nil:
+                            return Ret.True;
                         default:
                             throw new GodDamnException();
                     }
                 case LuaLexer.LenKW:
                     //len针对字符串和表，而且可以有元方法（exp不可能有元方法，因此代码生成不用管）
-                    //string我们仍然编译时计算，但是表就不了，因为这样要在result里加一个类型，然而只有这种情况，不值得
-                    switch (result.ResultType) {
-                        case ResultTypes.RegIndex:
-                            //新分配，RA=#RB，RC永远不用
-                            Emit(new Bytecode(
-                                Opcodes.Len, FreeRegIndex, result.Index, 0));
-                            return new Result(FreeRegIndex++, ResultTypes.RegIndex);
-                        case ResultTypes.SIndex:
-                            var s = ChunkProto.strs[result.Index];
-                            return new Result(AppendN(s.Length), ResultTypes.NIndex);
+                    //string我们仍然编译时计算，但是表就不了，因为这样要在result里加一个类型，然而只有这种情况，不值得（事实上很难做）
+                    switch (result.RetType) {
+                        case RetType.Name:
+                            FreeRegIndex--;
+                            Emit(Bytecode.RaRb(Op.Len, FreeRegIndex, result.KIndex));
+                            return new Ret(FreeRegIndex++, RetType.Name);
+                        case RetType.SIndex:
+                            var s = Strs[result.KIndex];
+                            return new Ret(AppendN(s.Length), RetType.NIndex);
                         default:
-                            throw new OprdTypeException(Opcodes.Len);//#1，#nil，#false
+                            throw new OprdTypeException(Op.Len);//#1，#nil，#false
                     }
                 case LuaLexer.MinusKW:
                     //-针对number
-                    switch (result.ResultType) {
-                        case ResultTypes.RegIndex:
-                            //同not指令的格式
-                            Emit(new Bytecode(Opcodes.Unm, FreeRegIndex, 0));
-                            return new Result(FreeRegIndex++, ResultTypes.RegIndex);
-                        case ResultTypes.NIndex:
-                            var n = ChunkProto.ns[result.Index];
-                            return new Result(AppendN(n), ResultTypes.NIndex);
+                    switch (result.RetType) {
+                        case RetType.Name:
+                            FreeRegIndex--;
+                            Emit(Bytecode.RaRb(Op.Unm, FreeRegIndex, 0));
+                            return new Ret(FreeRegIndex++, RetType.Name);
+                        case RetType.NIndex:
+                            var n = Ns[result.KIndex];
+                            return new Ret(AppendN(n), RetType.NIndex);
                         default:
-                            throw new OprdTypeException(Opcodes.Unm);
+                            throw new OprdTypeException(Op.Unm);
                     }
                 default:
                     throw new GodDamnException();
@@ -329,37 +335,35 @@ namespace zlua.Parser
         /// <param name="context"></param>
         /// <param name="binaryOp"></param>
         /// <returns></returns>
-        Result VisitBinaryExp(Func<double, double, double> binaryOp, Opcodes opcode,
-            Result lhs, Result rhs)
+        Ret VisitBinaryExp(Func<double, double, double> binaryOp, Op opcode,
+            Ret lhs, Ret rhs)
         {
-            switch (lhs.ResultType) {
-                case ResultTypes.RegIndex:
-                    switch (rhs.ResultType) {//这里确实可以简化，因为nindex和regindex共用的index，所以大概的逻辑是lhs是n生成loadn否则mov regindex；参考concat
-                        case ResultTypes.RegIndex: //a ^ b
-                            Emit(new Bytecode(Opcodes.Move, FreeRegIndex++, lhs.Index, 0));
-                            Emit(new Bytecode(Opcodes.Move, FreeRegIndex, rhs.Index, 0));
-                            Emit(new Bytecode(opcode, FreeRegIndex, lhs.Index, rhs.Index));
-                            return new Result(FreeRegIndex++, ResultTypes.RegIndex); //不要因为两句话相同而合并，这里就像是分类讨论一样，正确性和可读性最重要
-                        case ResultTypes.NIndex: //a ^ 1
-                            Emit(new Bytecode(Opcodes.Move, FreeRegIndex++, lhs.Index, 0));
-                            Emit(new Bytecode(Opcodes.LoadN, FreeRegIndex, rhs.Index));
-                            Emit(new Bytecode(opcode, FreeRegIndex, lhs.Index, rhs.Index));
-                            return new Result(FreeRegIndex++, ResultTypes.RegIndex);
+            switch (lhs.RetType) {
+                case RetType.Name:
+                    switch (rhs.RetType) {//这里确实可以简化，因为nindex和regindex共用的index，所以大概的逻辑是lhs是n生成loadn否则mov regindex；参考concat
+                        case RetType.Name: //a ^ b
+                            FreeRegIndex--; //push 2 oprds
+                            FreeRegIndex--;
+                            Emit(Bytecode.RaRKbRkc(opcode, FreeRegIndex, false, Name2RegIndex(lhs.Name), false, Name2RegIndex(rhs.Name)));
+                            return new Ret(FreeRegIndex++, RetType.Name); //不要因为两句话相同而合并，这里就像是分类讨论一样，正确性和可读性最重要
+                        case RetType.NIndex: //a ^ 1
+                            FreeRegIndex--; //push 1 oprd
+                            Emit(Bytecode.RaRKbRkc(opcode, FreeRegIndex, false, Name2RegIndex(lhs.Name), true, rhs.KIndex));
+                            return new Ret(FreeRegIndex++, RetType.Name);
                         default:
                             break;
                     }
                     break;
-                case ResultTypes.NIndex:
-                    switch (rhs.ResultType) {
-                        case ResultTypes.RegIndex: //1 ^ a
-                            Emit(new Bytecode(Opcodes.LoadN, FreeRegIndex++, lhs.Index));
-                            Emit(new Bytecode(Opcodes.Move, FreeRegIndex, rhs.Index, 0));
-                            Emit(new Bytecode(opcode, FreeRegIndex, lhs.Index, rhs.Index));
-                            return new Result(FreeRegIndex++, ResultTypes.RegIndex);
-                        case ResultTypes.NIndex: // 3 ^ 2
-                            var l = ChunkProto.ns[lhs.Index];
-                            var r = ChunkProto.ns[lhs.Index];
-                            return new Result(AppendN(binaryOp(l, r)), ResultTypes.NIndex);
+                case RetType.NIndex:
+                    switch (rhs.RetType) {
+                        case RetType.Name: //1 ^ a
+                            FreeRegIndex--; //push 1 oprd
+                            Emit(Bytecode.RaRKbRkc(opcode, FreeRegIndex, true, lhs.KIndex, false, Name2RegIndex(rhs.Name)));
+                            return new Ret(FreeRegIndex++, RetType.Name);
+                        case RetType.NIndex: // 3 ^ 2
+                            var l = Ns[lhs.KIndex];
+                            var r = Ns[lhs.KIndex];
+                            return new Ret(AppendN(binaryOp(l, r)), RetType.NIndex);
                         default:
                             break;
                     }
@@ -374,28 +378,28 @@ namespace zlua.Parser
         /// </summary>
         /// <param name="context"></param>
         /// <returns></returns>
-        public override Result VisitPowExp([NotNull] LuaParser.PowExpContext context)
+        public override Ret VisitPowExp([NotNull] LuaParser.PowExpContext context)
         {
             var lhs = Visit(context.lhs); // lhs result
             var rhs = Visit(context.rhs);
-            return VisitBinaryExp(Math.Pow, Opcodes.Pow, lhs, rhs);
+            return VisitBinaryExp(LuaConf.Pow, Op.Pow, lhs, rhs);
         }
         /// <summary>
         /// */
         /// </summary>
         /// <param name="context"></param>
         /// <returns></returns>
-        public override Result VisitMuldivExp([NotNull] LuaParser.MuldivExpContext context)
+        public override Ret VisitMuldivExp([NotNull] LuaParser.MuldivExpContext context)
         {
             var lhs = Visit(context.lhs);
             var rhs = Visit(context.rhs);
             switch (context.operatorMulDivMod.Type) {
                 case LuaLexer.MulKW:
-                    return VisitBinaryExp((x, y) => x * y, Opcodes.Mul, lhs, rhs);
+                    return VisitBinaryExp(LuaConf.Mul, Op.Mul, lhs, rhs);
                 case LuaLexer.DivKW:
-                    return VisitBinaryExp((x, y) => x / y, Opcodes.Div, lhs, rhs);
+                    return VisitBinaryExp(LuaConf.Div, Op.Div, lhs, rhs);
                 case LuaLexer.ModKW:
-                    return VisitBinaryExp((x, y) => x % y, Opcodes.Mod, lhs, rhs);
+                    return VisitBinaryExp(LuaConf.Mod, Op.Mod, lhs, rhs);
                 default:
                     throw new GodDamnException();
             }
@@ -405,15 +409,15 @@ namespace zlua.Parser
         /// </summary>
         /// <param name="context"></param>
         /// <returns></returns>
-        public override Result VisitAddsubExp([NotNull] LuaParser.AddsubExpContext context)
+        public override Ret VisitAddsubExp([NotNull] LuaParser.AddsubExpContext context)
         {
             var lhs = Visit(context.lhs);
             var rhs = Visit(context.rhs);
             switch (context.operatorAddSub.Type) {
                 case LuaLexer.AddKW:
-                    return VisitBinaryExp((x, y) => x + y, Opcodes.Add, lhs, rhs);
+                    return VisitBinaryExp(LuaConf.Add, Op.Add, lhs, rhs);
                 case LuaLexer.MinusKW:
-                    return VisitBinaryExp((x, y) => x - y, Opcodes.Sub, lhs, rhs);
+                    return VisitBinaryExp(LuaConf.Sub, Op.Sub, lhs, rhs);
                 default:
                     throw new GodDamnException();
             }
@@ -423,40 +427,56 @@ namespace zlua.Parser
         /// </summary>
         /// <param name="context"></param>
         /// <returns></returns>
-        public override Result VisitConcatExp([NotNull] LuaParser.ConcatExpContext context)
+        public override Ret VisitConcatExp([NotNull] LuaParser.ConcatExpContext context)
         {
+            //结论】没法和double的arith混在一起，这里用了第二种写法，效果差不多
             //这里在设计上repeat了，但是很难做好。oprd的type有double和str两种，分别有常量池，
             //你要区分类型，那么传入一个bool，就是控制耦合，然后会有几处?:运算符，而且挺难懂的。不如手写第二遍。
             //至于if else的写法，上面是switch，这个ifelse版已经好一些了，试图去简化条件，或者优化条件是比较得不偿失的
+            throw new NotImplementedException(); //这里是暂时做不好的。concat和loadnil一样，RA=String.Join(RB~RC)
             var lhs = Visit(context.lhs);
             var rhs = Visit(context.rhs);
-            if (lhs.ResultType == ResultTypes.SIndex && rhs.ResultType == ResultTypes.SIndex) {
-                var l = ChunkProto.strs[lhs.Index];
-                var r = ChunkProto.strs[rhs.Index];
-                return new Result(AppendS(l + r), ResultTypes.SIndex);
-            } else if (lhs.ResultType == ResultTypes.RegIndex && rhs.ResultType == ResultTypes.SIndex) {
-                Emit(new Bytecode(Opcodes.Move, FreeRegIndex++, lhs.Index, 0));
-                Emit(new Bytecode(Opcodes.LoadS, FreeRegIndex, rhs.Index));
-                Emit(new Bytecode(Opcodes.Concat, FreeRegIndex, lhs.Index, rhs.Index));
-                return new Result(FreeRegIndex++, ResultTypes.RegIndex);
-            } else if (lhs.ResultType == ResultTypes.SIndex && rhs.ResultType == ResultTypes.RegIndex) {
-                Emit(new Bytecode(Opcodes.LoadS, FreeRegIndex++, lhs.Index, 0));
-                Emit(new Bytecode(Opcodes.Move, FreeRegIndex, rhs.Index));
-                Emit(new Bytecode(Opcodes.Concat, FreeRegIndex, lhs.Index, rhs.Index));
-                return new Result(FreeRegIndex++, ResultTypes.RegIndex);
-            } else if (lhs.ResultType == ResultTypes.RegIndex && rhs.ResultType == ResultTypes.RegIndex) {
-                Emit(new Bytecode(Opcodes.Move, FreeRegIndex++, lhs.Index, 0));
-                Emit(new Bytecode(Opcodes.Move, FreeRegIndex, rhs.Index));
-                Emit(new Bytecode(Opcodes.Concat, FreeRegIndex, lhs.Index, rhs.Index));
-                return new Result(FreeRegIndex++, ResultTypes.RegIndex);
+            if (lhs.RetType == RetType.SIndex && rhs.RetType == RetType.SIndex) {
+                var l = Strs[lhs.KIndex];
+                var r = Strs[rhs.KIndex];
+                return new Ret(AppendS(l + r), RetType.SIndex);
+            } else if (lhs.RetType == RetType.Name && rhs.RetType == RetType.SIndex) {
+                FreeRegIndex--;
+                //Emit(new Bytecode(Op.Concat, FreeRegIndex, lh, rhs.KIndex));
+                return new Ret(FreeRegIndex++, RetType.Name);
+            } else if (lhs.RetType == RetType.SIndex && rhs.RetType == RetType.Name) {
+                FreeRegIndex--;
+                Emit(new Bytecode(Op.Concat, FreeRegIndex, lhs.KIndex, rhs.KIndex));
+                return new Ret(FreeRegIndex++, RetType.Name);
+            } else if (lhs.RetType == RetType.Name && rhs.RetType == RetType.Name) {
+                FreeRegIndex--;
+                FreeRegIndex--;
+                Emit(new Bytecode(Op.Concat, FreeRegIndex, lhs.KIndex, rhs.KIndex));
+                return new Ret(FreeRegIndex++, RetType.Name);
             } else
-                throw new OprdTypeException(Opcodes.Concat);
+                throw new OprdTypeException(Op.Concat);
         }
         #endregion
         #region 逻辑与关系运算
         //| lhs=exp operatorComparison=('<' | '>' | '<=' | '>=' | '~=' | '==') rhs=exp #cmpExp   要单独写，和转移有关
         //| lhs=exp operatorAnd='and' rhs=exp #andExp                                            同上
         //| lhs=exp operatorOr='or' rhs=exp #orExp                                               同上
+        public override Ret VisitCmpExp([NotNull] LuaParser.CmpExpContext context)
+        {
+            var lhs = Visit(context.lhs);
+            var rhs = Visit(context.rhs);
+            throw new NotFiniteNumberException();
+            switch (context.operatorComparison.Type) {
+                case LuaLexer.LtKW:
+                case LuaLexer.MtKW:
+                case LuaLexer.LeKW:
+                case LuaLexer.MeKW:
+                case LuaLexer.NeKW:
+                case LuaLexer.EqKW:
+                default:
+                    throw new GodDamnException();
+            }
+        }
         #endregion
         //public override Result VisitLocalassignStat([NotNull] LuaParser.LocalassignStatContext context)
         //{

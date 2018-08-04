@@ -302,7 +302,7 @@ namespace zlua.TypeModel
     public class Proto : TObject
     {
         //public Proto parent;
-        internal List<Proto> inner_funcs = new List<Proto>();
+        internal List<Proto> pp = new List<Proto>();
         internal List<TValue> k = new List<TValue>();
         internal List<Bytecode> codes = new List<Bytecode>();
         internal List<LocVar> locvars = new List<LocVar>();
@@ -322,7 +322,7 @@ namespace zlua.TypeModel
 
         }
     }
-    public class ChunkProto : Proto
+     class ChunkProto : Proto
     {
         internal List<string> strs = new List<string>();
         internal List<double> ns = new List<double>();

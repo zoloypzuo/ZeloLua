@@ -13,7 +13,6 @@ namespace zlua
 
         public static void Main(string[] args)
         {
-            
             var path = @"..\..\" + "test.lua";
             Lua.DoFile(new TThread(), path);
         }

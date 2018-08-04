@@ -9,8 +9,41 @@ using zlua.API;
 using zlua.TypeModel;
 using zlua.VM;
 using zlua.AuxLib;
+using System.Diagnostics;
+using zlua.ISA;
 namespace zlua
 {
+    /// <summary>
+    /// 见鬼了异常，因为有些分支根本不可能走到，用于占位
+    /// </summary>
+    class GodDamnException : Exception { }
+    /// <summary>
+    /// 错误的操作数类型，我们用opcode作为提示
+    /// </summary>
+    class OprdTypeException : Exception
+    {
+        public OprdTypeException(Op opcode) : base(opcode.ToString() + "错误的操作数") { }
+    }
+    class Assert
+    {
+        /// <summary>
+        /// 替代单元测试的该函数，因为一般的没法。对于内部的类，仍然需要测试。
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="expected"></param>
+        /// <param name="actual"></param>
+        internal static void AreEqual<T>(T expected, T actual)
+        {
+            Debug.Assert(expected.Equals(actual));
+        }
+    }
+    interface ITest
+    {
+        /// <summary>
+        /// 在这个函数中测试所有Test*函数
+        /// </summary>
+        void Test();
+    }
     /// <summary>
     /// differ from clua: const int... => enum
     /// </summary>
@@ -49,17 +82,17 @@ namespace zlua
             LApi.Call(L, nArgs: 0, nRetvals: 0);
         }
         /// <summary>
-        /// LUA_MULTRET, an option for lua_pcall and lua_call
+        /// LUA_MULTRET, an option for lua_pcall and lua_call；两处引用。最好能删掉
         /// </summary>
         public const int MultiRet = -1;
-        #region pseudo indicdes
+        #region 伪索引（pseudo indicdes），预计会删掉。
         public const int RegisteyIndex = -10000;
         public const int EnvIndex = -10001;
         public const int GlobalsIndex = -10002;
         public static int UpvalIndex(int index) => GlobalsIndex - index;
         #endregion
-        public static void GetGlobal(this TThread L, TString s) => L.GetField(GlobalsIndex, (string)s); //没有引用】
+
         public delegate int CSharpFunction(TThread L);
-        public const int MinStackSizeForCSharpFunction = 20;
+
     }
 }
