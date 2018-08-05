@@ -305,7 +305,6 @@ namespace zlua.TypeModel
         internal List<Proto> pp = new List<Proto>();
         internal List<TValue> k = new List<TValue>();
         internal List<Bytecode> codes = new List<Bytecode>();
-        internal List<LocVar> locvars = new List<LocVar>();
 
         internal bool isVararg;
         /// <summary>
@@ -331,10 +330,9 @@ namespace zlua.TypeModel
     {
         public string var_name;
         public int startpc;
-        public int endpc;
         public override string ToString()
         {
-            return String.Join(", ", var_name, startpc, endpc);
+            return String.Join(", ", var_name, startpc);
         }
     }
 

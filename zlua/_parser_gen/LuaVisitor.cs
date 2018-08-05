@@ -41,7 +41,7 @@ namespace zlua.Gen
         /// </summary>
         /// <param name="context">The parse tree.</param>
         /// <return>The visitor result.</return>
-        [DebuggerStepThrough] Result VisitEmptyStat([NotNull] LuaParser.EmptyStatContext context);
+        Result VisitEmptyStat([NotNull] LuaParser.EmptyStatContext context);
 
         /// <summary>
         /// Visit a parse tree produced by the <c>assignStat</c>
@@ -49,7 +49,7 @@ namespace zlua.Gen
         /// </summary>
         /// <param name="context">The parse tree.</param>
         /// <return>The visitor result.</return>
-        [DebuggerStepThrough] Result VisitAssignStat([NotNull] LuaParser.AssignStatContext context);
+        Result VisitAssignStat([NotNull] LuaParser.AssignStatContext context);
 
         /// <summary>
         /// Visit a parse tree produced by the <c>functioncallStat</c>
@@ -57,7 +57,7 @@ namespace zlua.Gen
         /// </summary>
         /// <param name="context">The parse tree.</param>
         /// <return>The visitor result.</return>
-        [DebuggerStepThrough] Result VisitFunctioncallStat([NotNull] LuaParser.FunctioncallStatContext context);
+        Result VisitFunctioncallStat([NotNull] LuaParser.FunctioncallStatContext context);
 
         /// <summary>
         /// Visit a parse tree produced by the <c>breakStat</c>
@@ -65,7 +65,7 @@ namespace zlua.Gen
         /// </summary>
         /// <param name="context">The parse tree.</param>
         /// <return>The visitor result.</return>
-        [DebuggerStepThrough] Result VisitBreakStat([NotNull] LuaParser.BreakStatContext context);
+        Result VisitBreakStat([NotNull] LuaParser.BreakStatContext context);
 
         /// <summary>
         /// Visit a parse tree produced by the <c>doendStat</c>
@@ -73,7 +73,7 @@ namespace zlua.Gen
         /// </summary>
         /// <param name="context">The parse tree.</param>
         /// <return>The visitor result.</return>
-        [DebuggerStepThrough] Result VisitDoendStat([NotNull] LuaParser.DoendStatContext context);
+        Result VisitDoendStat([NotNull] LuaParser.DoendStatContext context);
 
         /// <summary>
         /// Visit a parse tree produced by the <c>whileStat</c>
@@ -81,7 +81,7 @@ namespace zlua.Gen
         /// </summary>
         /// <param name="context">The parse tree.</param>
         /// <return>The visitor result.</return>
-        [DebuggerStepThrough] Result VisitWhileStat([NotNull] LuaParser.WhileStatContext context);
+        Result VisitWhileStat([NotNull] LuaParser.WhileStatContext context);
 
         /// <summary>
         /// Visit a parse tree produced by the <c>repeatStat</c>
@@ -89,7 +89,7 @@ namespace zlua.Gen
         /// </summary>
         /// <param name="context">The parse tree.</param>
         /// <return>The visitor result.</return>
-        [DebuggerStepThrough] Result VisitRepeatStat([NotNull] LuaParser.RepeatStatContext context);
+        Result VisitRepeatStat([NotNull] LuaParser.RepeatStatContext context);
 
         /// <summary>
         /// Visit a parse tree produced by the <c>ifelseStat</c>
@@ -97,7 +97,7 @@ namespace zlua.Gen
         /// </summary>
         /// <param name="context">The parse tree.</param>
         /// <return>The visitor result.</return>
-        [DebuggerStepThrough] Result VisitIfelseStat([NotNull] LuaParser.IfelseStatContext context);
+        Result VisitIfelseStat([NotNull] LuaParser.IfelseStatContext context);
 
         /// <summary>
         /// Visit a parse tree produced by the <c>forijkStat</c>
@@ -105,7 +105,7 @@ namespace zlua.Gen
         /// </summary>
         /// <param name="context">The parse tree.</param>
         /// <return>The visitor result.</return>
-        [DebuggerStepThrough] Result VisitForijkStat([NotNull] LuaParser.ForijkStatContext context);
+        Result VisitForijkStat([NotNull] LuaParser.ForijkStatContext context);
 
         /// <summary>
         /// Visit a parse tree produced by the <c>forinStat</c>
@@ -113,7 +113,7 @@ namespace zlua.Gen
         /// </summary>
         /// <param name="context">The parse tree.</param>
         /// <return>The visitor result.</return>
-        [DebuggerStepThrough] Result VisitForinStat([NotNull] LuaParser.ForinStatContext context);
+        Result VisitForinStat([NotNull] LuaParser.ForinStatContext context);
 
         /// <summary>
         /// Visit a parse tree produced by the <c>functiondefStat</c>
@@ -121,7 +121,7 @@ namespace zlua.Gen
         /// </summary>
         /// <param name="context">The parse tree.</param>
         /// <return>The visitor result.</return>
-        [DebuggerStepThrough] Result VisitFunctiondefStat([NotNull] LuaParser.FunctiondefStatContext context);
+        Result VisitFunctiondefStat([NotNull] LuaParser.FunctiondefStatContext context);
 
         /// <summary>
         /// Visit a parse tree produced by the <c>localfunctiondefStat</c>
@@ -129,7 +129,7 @@ namespace zlua.Gen
         /// </summary>
         /// <param name="context">The parse tree.</param>
         /// <return>The visitor result.</return>
-        [DebuggerStepThrough] Result VisitLocalfunctiondefStat([NotNull] LuaParser.LocalfunctiondefStatContext context);
+        Result VisitLocalfunctiondefStat([NotNull] LuaParser.LocalfunctiondefStatContext context);
 
         /// <summary>
         /// Visit a parse tree produced by the <c>localassignStat</c>
@@ -137,7 +137,7 @@ namespace zlua.Gen
         /// </summary>
         /// <param name="context">The parse tree.</param>
         /// <return>The visitor result.</return>
-        [DebuggerStepThrough] Result VisitLocalassignStat([NotNull] LuaParser.LocalassignStatContext context);
+        Result VisitLocalassignStat([NotNull] LuaParser.LocalassignStatContext context);
 
         /// <summary>
         /// Visit a parse tree produced by the <c>nilfalsetruevarargExp</c>
@@ -145,7 +145,7 @@ namespace zlua.Gen
         /// </summary>
         /// <param name="context">The parse tree.</param>
         /// <return>The visitor result.</return>
-        [DebuggerStepThrough] Result VisitNilfalsetruevarargExp([NotNull] LuaParser.NilfalsetruevarargExpContext context);
+        Result VisitNilfalsetruevarargExp([NotNull] LuaParser.NilfalsetruevarargExpContext context);
 
         /// <summary>
         /// Visit a parse tree produced by the <c>numberExp</c>
@@ -153,7 +153,7 @@ namespace zlua.Gen
         /// </summary>
         /// <param name="context">The parse tree.</param>
         /// <return>The visitor result.</return>
-        [DebuggerStepThrough] Result VisitNumberExp([NotNull] LuaParser.NumberExpContext context);
+        Result VisitNumberExp([NotNull] LuaParser.NumberExpContext context);
 
         /// <summary>
         /// Visit a parse tree produced by the <c>stringExp</c>
@@ -161,7 +161,7 @@ namespace zlua.Gen
         /// </summary>
         /// <param name="context">The parse tree.</param>
         /// <return>The visitor result.</return>
-        [DebuggerStepThrough] Result VisitStringExp([NotNull] LuaParser.StringExpContext context);
+        Result VisitStringExp([NotNull] LuaParser.StringExpContext context);
 
         /// <summary>
         /// Visit a parse tree produced by the <c>functiondefExp</c>
@@ -169,7 +169,7 @@ namespace zlua.Gen
         /// </summary>
         /// <param name="context">The parse tree.</param>
         /// <return>The visitor result.</return>
-        [DebuggerStepThrough] Result VisitFunctiondefExp([NotNull] LuaParser.FunctiondefExpContext context);
+        Result VisitFunctiondefExp([NotNull] LuaParser.FunctiondefExpContext context);
 
         /// <summary>
         /// Visit a parse tree produced by the <c>prefixexpExp</c>
@@ -177,7 +177,7 @@ namespace zlua.Gen
         /// </summary>
         /// <param name="context">The parse tree.</param>
         /// <return>The visitor result.</return>
-        [DebuggerStepThrough] Result VisitPrefixexpExp([NotNull] LuaParser.PrefixexpExpContext context);
+        Result VisitPrefixexpExp([NotNull] LuaParser.PrefixexpExpContext context);
 
         /// <summary>
         /// Visit a parse tree produced by the <c>tablectorExp</c>
@@ -185,7 +185,7 @@ namespace zlua.Gen
         /// </summary>
         /// <param name="context">The parse tree.</param>
         /// <return>The visitor result.</return>
-        [DebuggerStepThrough] Result VisitTablectorExp([NotNull] LuaParser.TablectorExpContext context);
+        Result VisitTablectorExp([NotNull] LuaParser.TablectorExpContext context);
 
         /// <summary>
         /// Visit a parse tree produced by the <c>powExp</c>
@@ -193,7 +193,7 @@ namespace zlua.Gen
         /// </summary>
         /// <param name="context">The parse tree.</param>
         /// <return>The visitor result.</return>
-        [DebuggerStepThrough] Result VisitPowExp([NotNull] LuaParser.PowExpContext context);
+        Result VisitPowExp([NotNull] LuaParser.PowExpContext context);
 
         /// <summary>
         /// Visit a parse tree produced by the <c>unmExp</c>
@@ -201,7 +201,7 @@ namespace zlua.Gen
         /// </summary>
         /// <param name="context">The parse tree.</param>
         /// <return>The visitor result.</return>
-        [DebuggerStepThrough] Result VisitUnmExp([NotNull] LuaParser.UnmExpContext context);
+        Result VisitUnmExp([NotNull] LuaParser.UnmExpContext context);
 
         /// <summary>
         /// Visit a parse tree produced by the <c>muldivExp</c>
@@ -209,7 +209,7 @@ namespace zlua.Gen
         /// </summary>
         /// <param name="context">The parse tree.</param>
         /// <return>The visitor result.</return>
-        [DebuggerStepThrough] Result VisitMuldivExp([NotNull] LuaParser.MuldivExpContext context);
+        Result VisitMuldivExp([NotNull] LuaParser.MuldivExpContext context);
 
         /// <summary>
         /// Visit a parse tree produced by the <c>addsubExp</c>
@@ -217,7 +217,7 @@ namespace zlua.Gen
         /// </summary>
         /// <param name="context">The parse tree.</param>
         /// <return>The visitor result.</return>
-        [DebuggerStepThrough] Result VisitAddsubExp([NotNull] LuaParser.AddsubExpContext context);
+        Result VisitAddsubExp([NotNull] LuaParser.AddsubExpContext context);
 
         /// <summary>
         /// Visit a parse tree produced by the <c>concatExp</c>
@@ -225,7 +225,7 @@ namespace zlua.Gen
         /// </summary>
         /// <param name="context">The parse tree.</param>
         /// <return>The visitor result.</return>
-        [DebuggerStepThrough] Result VisitConcatExp([NotNull] LuaParser.ConcatExpContext context);
+        Result VisitConcatExp([NotNull] LuaParser.ConcatExpContext context);
 
         /// <summary>
         /// Visit a parse tree produced by the <c>cmpExp</c>
@@ -233,7 +233,7 @@ namespace zlua.Gen
         /// </summary>
         /// <param name="context">The parse tree.</param>
         /// <return>The visitor result.</return>
-        [DebuggerStepThrough] Result VisitCmpExp([NotNull] LuaParser.CmpExpContext context);
+        Result VisitCmpExp([NotNull] LuaParser.CmpExpContext context);
 
         /// <summary>
         /// Visit a parse tree produced by the <c>andExp</c>
@@ -241,7 +241,7 @@ namespace zlua.Gen
         /// </summary>
         /// <param name="context">The parse tree.</param>
         /// <return>The visitor result.</return>
-        [DebuggerStepThrough] Result VisitAndExp([NotNull] LuaParser.AndExpContext context);
+        Result VisitAndExp([NotNull] LuaParser.AndExpContext context);
 
         /// <summary>
         /// Visit a parse tree produced by the <c>orExp</c>
@@ -249,7 +249,7 @@ namespace zlua.Gen
         /// </summary>
         /// <param name="context">The parse tree.</param>
         /// <return>The visitor result.</return>
-        [DebuggerStepThrough] Result VisitOrExp([NotNull] LuaParser.OrExpContext context);
+        Result VisitOrExp([NotNull] LuaParser.OrExpContext context);
 
         /// <summary>
         /// Visit a parse tree produced by the <c>normalArgs</c>
@@ -257,7 +257,7 @@ namespace zlua.Gen
         /// </summary>
         /// <param name="context">The parse tree.</param>
         /// <return>The visitor result.</return>
-        [DebuggerStepThrough] Result VisitNormalArgs([NotNull] LuaParser.NormalArgsContext context);
+        Result VisitNormalArgs([NotNull] LuaParser.NormalArgsContext context);
 
         /// <summary>
         /// Visit a parse tree produced by the <c>tablectorArgs</c>
@@ -265,7 +265,7 @@ namespace zlua.Gen
         /// </summary>
         /// <param name="context">The parse tree.</param>
         /// <return>The visitor result.</return>
-        [DebuggerStepThrough] Result VisitTablectorArgs([NotNull] LuaParser.TablectorArgsContext context);
+        Result VisitTablectorArgs([NotNull] LuaParser.TablectorArgsContext context);
 
         /// <summary>
         /// Visit a parse tree produced by the <c>stringArgs</c>
@@ -273,202 +273,202 @@ namespace zlua.Gen
         /// </summary>
         /// <param name="context">The parse tree.</param>
         /// <return>The visitor result.</return>
-        [DebuggerStepThrough] Result VisitStringArgs([NotNull] LuaParser.StringArgsContext context);
+        Result VisitStringArgs([NotNull] LuaParser.StringArgsContext context);
 
         /// <summary>
         /// Visit a parse tree produced by <see cref="LuaParser.chunk"/>.
         /// </summary>
         /// <param name="context">The parse tree.</param>
         /// <return>The visitor result.</return>
-        [DebuggerStepThrough] Result VisitChunk([NotNull] LuaParser.ChunkContext context);
+        Result VisitChunk([NotNull] LuaParser.ChunkContext context);
 
         /// <summary>
         /// Visit a parse tree produced by <see cref="LuaParser.block"/>.
         /// </summary>
         /// <param name="context">The parse tree.</param>
         /// <return>The visitor result.</return>
-        [DebuggerStepThrough] Result VisitBlock([NotNull] LuaParser.BlockContext context);
+        Result VisitBlock([NotNull] LuaParser.BlockContext context);
 
         /// <summary>
         /// Visit a parse tree produced by <see cref="LuaParser.retstat"/>.
         /// </summary>
         /// <param name="context">The parse tree.</param>
         /// <return>The visitor result.</return>
-        [DebuggerStepThrough] Result VisitRetstat([NotNull] LuaParser.RetstatContext context);
+        Result VisitRetstat([NotNull] LuaParser.RetstatContext context);
 
         /// <summary>
         /// Visit a parse tree produced by <see cref="LuaParser.stat"/>.
         /// </summary>
         /// <param name="context">The parse tree.</param>
         /// <return>The visitor result.</return>
-        [DebuggerStepThrough] Result VisitStat([NotNull] LuaParser.StatContext context);
+        Result VisitStat([NotNull] LuaParser.StatContext context);
 
         /// <summary>
         /// Visit a parse tree produced by <see cref="LuaParser.elseifBlock"/>.
         /// </summary>
         /// <param name="context">The parse tree.</param>
         /// <return>The visitor result.</return>
-        [DebuggerStepThrough] Result VisitElseifBlock([NotNull] LuaParser.ElseifBlockContext context);
+        Result VisitElseifBlock([NotNull] LuaParser.ElseifBlockContext context);
 
         /// <summary>
         /// Visit a parse tree produced by <see cref="LuaParser.elseBlock"/>.
         /// </summary>
         /// <param name="context">The parse tree.</param>
         /// <return>The visitor result.</return>
-        [DebuggerStepThrough] Result VisitElseBlock([NotNull] LuaParser.ElseBlockContext context);
+        Result VisitElseBlock([NotNull] LuaParser.ElseBlockContext context);
 
         /// <summary>
         /// Visit a parse tree produced by <see cref="LuaParser.funcname"/>.
         /// </summary>
         /// <param name="context">The parse tree.</param>
         /// <return>The visitor result.</return>
-        [DebuggerStepThrough] Result VisitFuncname([NotNull] LuaParser.FuncnameContext context);
+        Result VisitFuncname([NotNull] LuaParser.FuncnameContext context);
 
         /// <summary>
         /// Visit a parse tree produced by <see cref="LuaParser.varlist"/>.
         /// </summary>
         /// <param name="context">The parse tree.</param>
         /// <return>The visitor result.</return>
-        [DebuggerStepThrough] Result VisitVarlist([NotNull] LuaParser.VarlistContext context);
+        Result VisitVarlist([NotNull] LuaParser.VarlistContext context);
 
         /// <summary>
         /// Visit a parse tree produced by <see cref="LuaParser.namelist"/>.
         /// </summary>
         /// <param name="context">The parse tree.</param>
         /// <return>The visitor result.</return>
-        [DebuggerStepThrough] Result VisitNamelist([NotNull] LuaParser.NamelistContext context);
+        Result VisitNamelist([NotNull] LuaParser.NamelistContext context);
 
         /// <summary>
         /// Visit a parse tree produced by <see cref="LuaParser.explist"/>.
         /// </summary>
         /// <param name="context">The parse tree.</param>
         /// <return>The visitor result.</return>
-        [DebuggerStepThrough] Result VisitExplist([NotNull] LuaParser.ExplistContext context);
+        Result VisitExplist([NotNull] LuaParser.ExplistContext context);
 
         /// <summary>
         /// Visit a parse tree produced by <see cref="LuaParser.doc"/>.
         /// </summary>
         /// <param name="context">The parse tree.</param>
         /// <return>The visitor result.</return>
-        [DebuggerStepThrough] Result VisitDoc([NotNull] LuaParser.DocContext context);
+        Result VisitDoc([NotNull] LuaParser.DocContext context);
 
         /// <summary>
         /// Visit a parse tree produced by <see cref="LuaParser.exp"/>.
         /// </summary>
         /// <param name="context">The parse tree.</param>
         /// <return>The visitor result.</return>
-        [DebuggerStepThrough] Result VisitExp([NotNull] LuaParser.ExpContext context);
+        Result VisitExp([NotNull] LuaParser.ExpContext context);
 
         /// <summary>
         /// Visit a parse tree produced by <see cref="LuaParser.prefixexp"/>.
         /// </summary>
         /// <param name="context">The parse tree.</param>
         /// <return>The visitor result.</return>
-        [DebuggerStepThrough] Result VisitPrefixexp([NotNull] LuaParser.PrefixexpContext context);
+        Result VisitPrefixexp([NotNull] LuaParser.PrefixexpContext context);
 
         /// <summary>
         /// Visit a parse tree produced by <see cref="LuaParser.functioncall"/>.
         /// </summary>
         /// <param name="context">The parse tree.</param>
         /// <return>The visitor result.</return>
-        [DebuggerStepThrough] Result VisitFunctioncall([NotNull] LuaParser.FunctioncallContext context);
+        Result VisitFunctioncall([NotNull] LuaParser.FunctioncallContext context);
 
         /// <summary>
         /// Visit a parse tree produced by <see cref="LuaParser.varOrExp"/>.
         /// </summary>
         /// <param name="context">The parse tree.</param>
         /// <return>The visitor result.</return>
-        [DebuggerStepThrough] Result VisitVarOrExp([NotNull] LuaParser.VarOrExpContext context);
+        Result VisitVarOrExp([NotNull] LuaParser.VarOrExpContext context);
 
         /// <summary>
         /// Visit a parse tree produced by <see cref="LuaParser.var"/>.
         /// </summary>
         /// <param name="context">The parse tree.</param>
         /// <return>The visitor result.</return>
-        [DebuggerStepThrough] Result VisitVar([NotNull] LuaParser.VarContext context);
+        Result VisitVar([NotNull] LuaParser.VarContext context);
 
         /// <summary>
         /// Visit a parse tree produced by <see cref="LuaParser.varSuffix"/>.
         /// </summary>
         /// <param name="context">The parse tree.</param>
         /// <return>The visitor result.</return>
-        [DebuggerStepThrough] Result VisitVarSuffix([NotNull] LuaParser.VarSuffixContext context);
+        Result VisitVarSuffix([NotNull] LuaParser.VarSuffixContext context);
 
         /// <summary>
         /// Visit a parse tree produced by <see cref="LuaParser.nameAndArgs"/>.
         /// </summary>
         /// <param name="context">The parse tree.</param>
         /// <return>The visitor result.</return>
-        [DebuggerStepThrough] Result VisitNameAndArgs([NotNull] LuaParser.NameAndArgsContext context);
+        Result VisitNameAndArgs([NotNull] LuaParser.NameAndArgsContext context);
 
         /// <summary>
         /// Visit a parse tree produced by <see cref="LuaParser.args"/>.
         /// </summary>
         /// <param name="context">The parse tree.</param>
         /// <return>The visitor result.</return>
-        [DebuggerStepThrough] Result VisitArgs([NotNull] LuaParser.ArgsContext context);
+        Result VisitArgs([NotNull] LuaParser.ArgsContext context);
 
         /// <summary>
         /// Visit a parse tree produced by <see cref="LuaParser.functiondef"/>.
         /// </summary>
         /// <param name="context">The parse tree.</param>
         /// <return>The visitor result.</return>
-        [DebuggerStepThrough] Result VisitFunctiondef([NotNull] LuaParser.FunctiondefContext context);
+        Result VisitFunctiondef([NotNull] LuaParser.FunctiondefContext context);
 
         /// <summary>
         /// Visit a parse tree produced by <see cref="LuaParser.funcbody"/>.
         /// </summary>
         /// <param name="context">The parse tree.</param>
         /// <return>The visitor result.</return>
-        [DebuggerStepThrough] Result VisitFuncbody([NotNull] LuaParser.FuncbodyContext context);
+        Result VisitFuncbody([NotNull] LuaParser.FuncbodyContext context);
 
         /// <summary>
         /// Visit a parse tree produced by <see cref="LuaParser.parlist"/>.
         /// </summary>
         /// <param name="context">The parse tree.</param>
         /// <return>The visitor result.</return>
-        [DebuggerStepThrough] Result VisitParlist([NotNull] LuaParser.ParlistContext context);
+        Result VisitParlist([NotNull] LuaParser.ParlistContext context);
 
         /// <summary>
         /// Visit a parse tree produced by <see cref="LuaParser.tableconstructor"/>.
         /// </summary>
         /// <param name="context">The parse tree.</param>
         /// <return>The visitor result.</return>
-        [DebuggerStepThrough] Result VisitTableconstructor([NotNull] LuaParser.TableconstructorContext context);
+        Result VisitTableconstructor([NotNull] LuaParser.TableconstructorContext context);
 
         /// <summary>
         /// Visit a parse tree produced by <see cref="LuaParser.fieldlist"/>.
         /// </summary>
         /// <param name="context">The parse tree.</param>
         /// <return>The visitor result.</return>
-        [DebuggerStepThrough] Result VisitFieldlist([NotNull] LuaParser.FieldlistContext context);
+        Result VisitFieldlist([NotNull] LuaParser.FieldlistContext context);
 
         /// <summary>
         /// Visit a parse tree produced by <see cref="LuaParser.field"/>.
         /// </summary>
         /// <param name="context">The parse tree.</param>
         /// <return>The visitor result.</return>
-        [DebuggerStepThrough] Result VisitField([NotNull] LuaParser.FieldContext context);
+        Result VisitField([NotNull] LuaParser.FieldContext context);
 
         /// <summary>
         /// Visit a parse tree produced by <see cref="LuaParser.fieldsep"/>.
         /// </summary>
         /// <param name="context">The parse tree.</param>
         /// <return>The visitor result.</return>
-        [DebuggerStepThrough] Result VisitFieldsep([NotNull] LuaParser.FieldsepContext context);
+        Result VisitFieldsep([NotNull] LuaParser.FieldsepContext context);
 
         /// <summary>
         /// Visit a parse tree produced by <see cref="LuaParser.number"/>.
         /// </summary>
         /// <param name="context">The parse tree.</param>
         /// <return>The visitor result.</return>
-        [DebuggerStepThrough] Result VisitNumber([NotNull] LuaParser.NumberContext context);
+        Result VisitNumber([NotNull] LuaParser.NumberContext context);
 
         /// <summary>
         /// Visit a parse tree produced by <see cref="LuaParser.string"/>.
         /// </summary>
         /// <param name="context">The parse tree.</param>
         /// <return>The visitor result.</return>
-        [DebuggerStepThrough] Result VisitString([NotNull] LuaParser.StringContext context);
+        Result VisitString([NotNull] LuaParser.StringContext context);
     }
 } // namespace zlua.Gen

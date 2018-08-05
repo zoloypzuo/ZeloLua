@@ -366,5 +366,6 @@ namespace zlua.ISA
         /*自定增加的指令*/
         LoadN, //loadN和loadS替代LoadK
         LoadS,
+        Ne, //不加lparser里没法实现
     }
 }
