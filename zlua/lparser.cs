@@ -433,7 +433,8 @@ namespace zlua.Parser
             //这里在设计上repeat了，但是很难做好。oprd的type有double和str两种，分别有常量池，
             //你要区分类型，那么传入一个bool，就是控制耦合，然后会有几处?:运算符，而且挺难懂的。不如手写第二遍。
             //至于if else的写法，上面是switch，这个ifelse版已经好一些了，试图去简化条件，或者优化条件是比较得不偿失的
-            throw new NotImplementedException(); //这里是暂时做不好的。concat和loadnil一样，RA=String.Join(RB~RC)
+            //这里是暂时做不好的。concat和loadnil一样，RA=String.Join(RB~RC)
+            //但是我放弃，改成基本的二元
             var lhs = Visit(context.lhs);
             var rhs = Visit(context.rhs);
             if (lhs.RetType == RetType.SIndex && rhs.RetType == RetType.SIndex) {
