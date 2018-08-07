@@ -24,7 +24,7 @@ stat
     | 'break' #breakStat
     | 'do' block 'end' #doendStat
     | 'while' exp 'do' block 'end' #whileStat
-    | 'repeat' block 'until' exp #repeatStat
+    //| 'repeat' block 'until' exp #repeatStat
     | 'if' exp 'then' block elseifBlock* elseBlock? 'end' #ifelseStat
     | 'for' NAME '=' exp ',' exp (',' exp)? 'do' block 'end' #forijkStat
     | 'for' namelist 'in' explist 'do' block 'end' #forinStat
@@ -36,8 +36,12 @@ elseifBlock:'elseif' exp 'then' block;
 
 elseBlock:'else' block;
 
-funcname: NAME ('.' NAME)* (':' NAME)?; //任意多次查表得到对象，然后调用方法；最简单的情况下，就是单独一个name
-    
+funcname: NAME tableOrFunc methodname; //任意多次查表得到对象，然后调用方法；最简单的情况下，就是单独一个name
+
+tableOrFunc:('.' NAME)*;
+
+methodname:(':' NAME)?;
+
 varlist: var (',' var)*;
 
 namelist: NAME (',' NAME)*;
@@ -93,9 +97,9 @@ EqKW:'=='; //equal
 AndKW:'and';
 OrKW:'or';
 
-prefixexp: varOrExp nameAndArgs*; //exp，var或带括号的exp，并且，可以带args，此时变为函数调用exp
+prefixexp: varOrExp nameAndArgs*; //var或带括号的exp；注意看下一条，如果有nameAndArgs就是函数调用。
 
-functioncall: varOrExp nameAndArgs+;
+functioncall: varOrExp nameAndArgs+; 
 
 varOrExp: var | '(' exp ')' ; //其实还是exp，左值也要返回右值的
 

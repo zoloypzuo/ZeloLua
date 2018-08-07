@@ -81,6 +81,11 @@ namespace zlua
             L.LoadFile(path);
             LApi.Call(L, nArgs: 0, nRetvals: 0);
         }
+        public static void DoString(this TThread L,string luaCode)
+        {
+            L.LoadString(luaCode);
+            LApi.Call(L, nArgs: 0, nRetvals: 0);
+        }
         /// <summary>
         /// LUA_MULTRET, an option for lua_pcall and lua_call；两处引用。最好能删掉
         /// </summary>

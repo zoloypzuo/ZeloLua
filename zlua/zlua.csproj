@@ -51,6 +51,7 @@
     <Compile Include="lapi.cs" />
     <Compile Include="lauxlib.cs" />
     <Compile Include="lbaselib.cs" />
+    <Compile Include="ldebug.cs" />
     <Compile Include="ldo.cs" />
     <Compile Include="lparser.cs" />
     <Compile Include="ltm.cs" />
@@ -74,10 +75,18 @@
     <None Include="Lua.g4">
       <Listener>False</Listener>
       <CustomToolNamespace>zlua.Gen</CustomToolNamespace>
-      <Abstract>True</Abstract>
+      <Abstract>False</Abstract>
     </None>
     <None Include="packages.config" />
     <None Include="test.lua" />
+    <AntlrTokens Include="_parser_gen\Lua.tokens">
+      <Generator>MSBuild:Compile</Generator>
+      <CustomToolNamespace>zlua._parser_gen</CustomToolNamespace>
+    </AntlrTokens>
+    <AntlrTokens Include="_parser_gen\LuaLexer.tokens">
+      <Generator>MSBuild:Compile</Generator>
+      <CustomToolNamespace>zlua._parser_gen</CustomToolNamespace>
+    </AntlrTokens>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

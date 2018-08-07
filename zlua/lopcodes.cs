@@ -7,24 +7,13 @@ using System.Diagnostics;
 namespace zlua.ISA
 {
     /// <summary>
-    /// 仅仅为了简洁地展示，并没有用这个接口
-    /// </summary>
-    interface IInstruction
-    {
-        int A { get; set; }
-        int B { get; set; }
-        int C { get; set; }
-        int Bx { get; set; }
-        Op Opcode { get; set; }
-    }
-
-    /// <summary>
-    /// byte code instruction，没有搞清楚sbx的问题。另外我删除了RK机制，不使用这种编码
+    /// byte code instruction，没有搞清楚sbx的问题。另外我删除了RK机制，不使用这种编码 => 真香
     /// </summary>
     [Serializable]
-    struct Bytecode : IInstruction, ITest
+    struct Bytecode : ITest
     {
         uint i;
+        #region ctor and factorys
         /// <summary>
         /// 实现决策】struct本身语义就是与int相等，因此只允许使用cast
         /// </summary>
@@ -55,13 +44,6 @@ namespace zlua.ISA
         /// bool中K是true，R是false
         /// 设计决策】没有办法提供很好的设计。所以只能提供这种简单的包装的辅助函数
         /// </summary>
-        /// <param name="opcode"></param>
-        /// <param name="a"></param>
-        /// <param name="isKorR1"></param>
-        /// <param name="b"></param>
-        /// <param name="isKorR2"></param>
-        /// <param name="c"></param>
-        /// <returns></returns>
         public static Bytecode RaRKbRkc(Op opcode, int a, bool isKorR1, int b, bool isKorR2, int c)
         {
             //检查opcode范围
@@ -74,19 +56,88 @@ namespace zlua.ISA
         /// <summary>
         /// loadnil, move, unm, not, len,  return, get/setupval
         /// </summary>
-        /// <param name="opcode"></param>
-        /// <param name="a"></param>
-        /// <param name="b"></param>
-        /// <returns></returns>
-        public static Bytecode RaRb(Op opcode,int a,int b)
+        public static Bytecode RaRb(Op opcode, int a, int b)
         {
             return new Bytecode(opcode, a, b, 0);
         }
-
+        /// <summary>
+        /// local a, b = 10; b = a
+        /// 1. 为函数调用，get/setTable，concat移动oprd，因为栈顺序重要
+        /// 2. 为函数返回值移动到局部变量
+        /// 3. 作为closure后的伪指令
+        /// </summary>
+        public static Bytecode Mov(int a, int b) => RaRb(Op.Move, a, b);
+        public static Bytecode LoadNil(int a, int b) => RaRb(Op.LoadNil, a, b);
+        public static Bytecode LoadN(int a, int bx) => new Bytecode(Op.LoadN,a, bx);
+        public static Bytecode LoadS(int a, int bx) => new Bytecode(Op.LoadS,a, bx);
+        /// <summary>
+        /// RA = B, if C then pc++
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
+        public static Bytecode LoadB(int a, bool b,bool c=false) => 
+            new Bytecode(Op.LoadBool, a, Convert.ToInt32(b),Convert.ToInt32(c));
+        public static Bytecode GetG(int a, int bx) => new Bytecode(Op.GetGlobal, a, bx);
+        public static Bytecode SetG(int a, int bx) => new Bytecode(Op.SetGlobal, a, bx);
+        public static Bytecode GetU(int a, int b) => RaRb(Op.GetUpVal, a, b);
+        public static Bytecode SetU(int a, int b) => RaRb(Op.SetUpval, a, b);
+        /// <summary>
+        /// 一个仅用于warp args的struct
+        /// </summary>
+        internal struct RK
+        {
+            public bool isK;
+            public int val;
+            public RK(bool isK,int val)
+            {
+                this.isK = isK;
+                this.val = val;
+            }
+        }
+        /// <summary>
+        /// RA = RB[RKC]
+        /// </summary>
+        public static Bytecode GetTable(int a, int b, RK rkc)
+        {
+            int c = rkc.val | (Convert.ToInt32(rkc.isK) << 8);
+            return new Bytecode(Op.GetTable, a, b, c);
+        }
+        /// <summary>
+        /// RA[RKB] = RKC
+        /// </summary>
+        public static Bytecode SetTable(int a, RK rkb, RK rkc)
+        {
+            int b = rkb.val | (Convert.ToInt32(rkb.isK) << 8);
+            int c = rkc.val | (Convert.ToInt32(rkc.isK) << 8);
+            return new Bytecode(Op.SetTable, a, b, c);
+        }
+        public static Bytecode Unm(int a, int b) => RaRb(Op.Unm, a, b);
+        public static Bytecode Not(int a, int b) => RaRb(Op.Not, a, b);
+        public static Bytecode Len(int a, int b) => RaRb(Op.Len, a, b);
+        /// <summary>
+        /// RA = String.Join(RB, ..., RC)
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <param name="c"></param>
+        /// <returns></returns>
+        public static Bytecode Concat(int a, int b, int c) => new Bytecode(Op.Concat, a, b, c);
+        public static Bytecode Jmp(int sbx) => new Bytecode(Op.Jmp, 0, sbx);
+        public static Bytecode Call(int a, int b, int c) => new Bytecode(Op.Call, a, b, c);
+        public static Bytecode Ret(int a, int b) => RaRb(Op.Return, a, b);
+        /// <summary>
+        /// RA, RA+1, ...,RA+B-2 = vararg 
+        /// </summary>
+        public static Bytecode Vararg(int a, int b) => RaRb(Op.VarArg, a, b);
+        /// <summary>
+        /// RA+1 = RB, RA = RB[RKC]: load function from table RB to RA, put table RB iteself at RA+1 as the first arg 
+        /// </summary>
+        public static Bytecode Self(int a, int b, int c) => new Bytecode(Op.Self, a, b, c);
+        #endregion
         public static explicit operator uint(Bytecode i) => i.i;
         public static explicit operator Bytecode(uint i) => new Bytecode(i);
         #region size and position of instruction arguments
-
         const int SizeC = 9;
         const int SizeB = 9;
         const int SizeBx = SizeC + SizeB;
@@ -98,60 +149,49 @@ namespace zlua.ISA
         const int PosC = PosA + SizeA;
         const int PosB = PosC + SizeC;
         const int PosBx = PosC;
-
         #endregion
-
         #region max size of instrucion arguments
-
-        const int max_argBx = (1 << SizeBx) - 1; // 1. "<<" is less prior to "-" 2. "1<<n" = 2**n 
-        const int MaxArgSignedBx = max_argBx >> 1;
-        const int max_argA = (1 << SizeA) - 1;
-        const int max_argB = (1 << SizeB) - 1;
-        const int max_argC = (1 << SizeC) - 1;
+        const int MaxArgBx = (1 << SizeBx) - 1; // 1. "<<" is less prior to "-" 2. "1<<n" = 2**n 
+        const int MaxArgSignedBx = MaxArgBx >> 1;
+        const int MaxArgA = (1 << SizeA) - 1;
+        const int MaxArgB = (1 << SizeB) - 1;
+        const int MaxArgC = (1 << SizeC) - 1;
         #endregion
         #region getter and setter of instruction
         static uint Mask1(int n, int pos) => (~((~(uint)0) << n)) << pos;
         static uint Mask0(int n, int pos) => ~Mask0(n, pos);
-
         int Get(int n, int pos)
         {
             var a = (i >> pos);
             var b = Mask1(n, 0);
             return (int)(a & b);
         }
-
         void Set(int x, int n, int pos)
         {
             var a = i & Mask0(n, pos);
             var b = ((uint)x << pos) & Mask1(n, pos); // "(uint)"是必要的。
             i = a | b;
         }
-
-
         public Op Opcode
         {
             get => (Op)Get(SizeOp, PosOp);
             set => Set((int)value, SizeOp, PosOp);
         }
-
         public int A
         {
             get => Get(SizeA, PosA);
             set => Set(value, SizeA, PosA);
         }
-
         public int B
         {
             get => Get(SizeB, PosB);
             set => Set(value, SizeB, PosB);
         }
-
         public int C
         {
             get => Get(SizeC, PosC);
             set => Set(value, SizeC, PosC);
         }
-
         public int Bx
         {
             get => Get(SizeBx, PosBx);
@@ -168,13 +208,14 @@ namespace zlua.ISA
         #endregion
         #region other things
         const int NOpcodes = (int)Op.VarArg + 1;
+        #region handle RK
         /// <summary>
         /// if x[7] (in bit) is 1, return true, and RKB returns KB
         /// </summary>
         /// <param name="x">B or C</param>
         public static bool IsK(int x) => (x & (1 << (SizeB - 1))) != 0;
         public static int IndexK(int x) => x & ~(1 << (SizeB - 1));
-        public static List<Bytecode> Gen(uint[] hexs)
+        internal static List<Bytecode> Gen(uint[] hexs)
         {
             var a = new List<Bytecode>();
             foreach (var item in hexs) {
@@ -182,6 +223,7 @@ namespace zlua.ISA
             }
             return a;
         }
+        #endregion
         public override string ToString()
         {
             return Opcode.ToString() + " A: " + A.ToString() +
@@ -350,7 +392,7 @@ namespace zlua.ISA
         Testset,
         /* 调用*/
         Call,
-        TailCall,
+        //TailCall,
         Return,
         /* 循环*/
         ForLoop,

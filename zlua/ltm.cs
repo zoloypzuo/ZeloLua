@@ -22,7 +22,7 @@ namespace zlua.Metamethod
         /// <summary>
         /// luaT_gettmbyobj; get metamethod from `obj，obj没有元表或没有该元方法返回nilobject；enum和string一一对应，这里从enum开始
         /// </summary>
-        public static TValue GetMetamethod(this TThread L, TValue obj, MetamethodTypes metamethodType)
+        public static TValue GetMetamethod(this TThread L, TValue obj, MMType metamethodType)
         {
             TTable metatable;
             switch (obj.Type) {
@@ -41,7 +41,7 @@ namespace zlua.Metamethod
                 TValue.NilObject;
         }
     }
-    enum MetamethodTypes
+    enum MMType
     {
         Index,
         NewIndex,

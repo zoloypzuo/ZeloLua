@@ -4,6 +4,7 @@ using System.Diagnostics;
 using Antlr4.Runtime.Misc;
 using Antlr4.Runtime.Tree;
 using zlua.Configuration;
+using System.Linq;
 using zlua.Gen;
 using zlua.ISA;
 using zlua.TypeModel;
@@ -13,24 +14,26 @@ namespace zlua.Parser
     enum RetType
     {
         Name,
+        RegIndex, //加回来了，我很可能错了
         NIndex,
         SIndex,
+        PIndex, //proto index
         B,
         Nil,
         None, //没有返回值，比如语句
     }
     /// <summary>
-    /// return type of `Visit* methods，递归时要获取结果，比如构建表达式；需要Reg
+    /// return type of `Visit* methods，递归时要获取结果，比如构建表达式
     /// 设计策略】通过ctor一次初始化，之后只读；
-    /// 一开时设计成包含了double，string，bool，现在用一个int。非常省。设计思路改为，任何常量都会加入常量池，但是只有一份，因为会复用，
-    /// Visit*返回index来通信，bool在uniton语义下其实可以和int合并（TValue中也是）但是不。相比于原来，如果1+2，1，2不会加入常量池（这是没办法的，你写了就知道，你传index那么中间的literal必须也加入常量池）
+    /// 任何常量都会加入常量池，但是只有一份，因为会复用，
+    /// bool在uniton语义下其实可以和int合并（TValue中也是）但是不。
     /// </summary>
     [DebuggerStepThroughAttribute]
     class Ret //你可以试试class还是struct好。
     {
         public string Name { get; private set; }
         public int KIndex { get; private set; }
-        public bool B { get; private set; }
+        public bool B { get; private set; } //可以优化到int里
         public RetType RetType { get; private set; }
         public Ret(int index, RetType retType)
         {
@@ -58,32 +61,59 @@ namespace zlua.Parser
     class LParser : LuaBaseVisitor<Ret>
     {
         #region 辅助parse的数据结构和函数s
+        /// <summary>
+        /// 一个管理“块栈”的结构，形象地，{[[{}]]}：最外层一定是func block；
+        /// 第二个栈标记了各个func block的indexes
+        /// block和func block必须维护两个栈否则你新建enclosed函数时找不到父函数
+        /// 注意这个和EBNF里那个"block"不是一样的，这里管scope，指do end块和func end块
+        /// stack不够自由。因为要处理local最为特殊情况，stack的foreach没法用
+        /// </summary>
         class BlockStack
         {
-            Stack<Block> blocks = new Stack<Block>();
-            public Block Top { get => blocks.Peek(); }
+            public List<Block> blockStack = new List<Block>();
+            public List<int> funcBlockIndexes = new List<int>();
+            public Block Top { get => blockStack.Last(); }
+            public FuncBlock FBTop
+            {
+                get
+                {
+                    var fbtop = blockStack[funcBlockIndexes.Last()] as FuncBlock;
+                    Debug.Assert(fbtop != null);
+                    return fbtop;
+                }
+            }
+            public ChunkProto ChunkProto { get; private set; } //set only in ctor once
+            public int _LastKProtoIndex { get => FBTop.p.pp.Count - 1; } //kproto[-1]的index，emit closure用
             /// <summary>
             /// 传入chunkprot看起来比较奇怪。是因为第一个必须栈底必须是一个FuncBlock带一个ChunkProto，
-            /// 不这样的话要提供一个返回chunkproto的property，更奇怪
+            /// 不这样的话要提供一个返回chunkproto的property，更奇怪 =>真香
             /// </summary>
             /// <param name="chunkProto"></param>
-            public BlockStack(ChunkProto chunkProto)
+            public BlockStack()
             {
-                blocks.Push(new FuncBlock() { p = chunkProto });
+                ChunkProto = new ChunkProto();
+                var chunk = new FuncBlock() { p = ChunkProto };
+                funcBlockIndexes.Add(blockStack.Count);
+                blockStack.Add(chunk);
             }
             public void EnterNewBlock()
             {
-                blocks.Push(new Block());
+                blockStack.Add(new Block());
             }
             public void EnterNewFuncBlock()
             {
-                var top = blocks.Peek();
-                var newFb = new FuncBlock();
-                Debug.Assert(top is FuncBlock);
-                (top as FuncBlock).p.pp.Add(newFb.p);
-                blocks.Push(newFb);
+                var newFb = new FuncBlock() { p = new Proto() };//这里分开new，因为第一次chunkproto是单独new的
+                FBTop.p.pp.Add(newFb.p);
+                funcBlockIndexes.Add(blockStack.Count);
+                blockStack.Add(newFb);
             }
-            public void ExitBlock() { blocks.Pop(); }
+            public void ExitBlock() { blockStack.RemoveAt(blockStack.Count - 1); }
+            public void ExitFuncBlock()
+            {
+                blockStack.RemoveAt(blockStack.Count - 1);
+                funcBlockIndexes.RemoveAt(funcBlockIndexes.Count - 1);
+            }
+
         }
         /// <summary>
         /// 作用域处理的基本单位。do end是一个块，func也是一个块，while，if else，for也是一个块
@@ -92,9 +122,9 @@ namespace zlua.Parser
         class Block
         {
             /// <summary>
-            /// 反向索引局部变量名的左值；重复声明直接覆盖，所以不用管；这个结构替代了LocVar。
+            /// 反向索引局部变量名的左值；重复声明直接覆盖，所以不用管；这个结构替代了LocVar，现在不需要startpc了，因为不允许重复声明（傻逼设计）
             /// </summary>
-            public Dictionary<string, Tuple<int, int>> localName2RegIndexAndStartPc = new Dictionary<string, Tuple<int, int>>();
+            public Dictionary<string, int> localName2RegIndex = new Dictionary<string, int>();
         }
         /// <summary>
         /// 当前正在编译的函数块的编译期信息
@@ -109,47 +139,59 @@ namespace zlua.Parser
             /// <summary>
             /// 指向第一个指令数组的第一个可用位置
             /// </summary>
-            public int CurrPc { get => p.codes.Count; }
+            public int _CurrPc { get => p.codes.Count; }
         }
         #region  处理scope
-        BlockStack blockStack;
-        Block CurrBlock { get => blockStack.Top; }
-        FuncBlock CurrFB { get => blockStack.Top as FuncBlock; }
-        Proto CurrP { get => CurrFB.p; }
-        int FreeRegIndex { get => CurrFB.freeRegIndex; set => CurrFB.freeRegIndex = value; }
-        int CurrPc { get => CurrFB.CurrPc; }
-        internal ChunkProto ChunkProto { get; } = new ChunkProto();
+        BlockStack Blocks { get; } = new BlockStack();
+        Block _CurrBlock { get => Blocks.Top; }
+        FuncBlock _CurrFB { get => Blocks.FBTop; }
+        Proto _CurrP { get => _CurrFB.p; }
+        int _FreeRegIndex { get => _CurrFB.freeRegIndex; set => _CurrFB.freeRegIndex = value; }
+        int _CurrPc { get => _CurrFB._CurrPc; }
+        internal ChunkProto ChunkProto { get => Blocks.ChunkProto; }
         internal List<string> Strs { get => ChunkProto.strs; }
         internal List<double> Ns { get => ChunkProto.ns; }
         Dictionary<double, int> n2NsIndex = new Dictionary<double, int>();
         Dictionary<string, int> s2StrsIndex = new Dictionary<string, int>();
+        internal enum NameType
+        {
+            /// <summary>
+            /// Name2RegIndex returns RegInex
+            /// </summary>
+            Local,
+            /// <summary>
+            /// Name2RegIndex returns SIndex
+            /// </summary>
+            Global,
+            /// <summary>
+            /// Name2RegIndex returns UIndex
+            /// </summary>
+            Upval
+        }
         /// <summary>
+        /// local直接返回其reg index，global返回str key 的SIndex，upval返回UIndex
+        /// 当然不应该直接emit加载指令，应该交给caller。eg a=1对upval会生成setupval，要你生成getupval当然是错的
         /// name通过scope映射到lvalue（龙书第二章重点），因此还要有反向索引表
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        int Name2RegIndex(string name)
+        int Name2RegIndex(string name, out NameType nameType)
         {
-            if (CurrFB.localName2RegIndexAndStartPc.ContainsKey(name)) /*name is local*/
-                return CurrBlock.localName2RegIndexAndStartPc[name].Item1;
-            else {
-                /*name is not local to all functions from current function to the chunk, so it is global*/
-                return name.GetHashCode(); //暂时这样。事实上先check uv再。
-                /*name is upval?*/
-                throw new NotImplementedException();//TODO
-                //var fs = CurrFB;
-                //while (fs != null) {
-                //    if (fs.localName2RegIndex.ContainsKey(name))
-                //        return fs.localName2RegIndex[name];
-                //    fs = fs.prev;
-                //}
+            var localFBIndex = Blocks.funcBlockIndexes.Last();
+            for (int i = Blocks.blockStack.Count - 1; i > localFBIndex - 1; i--) {
+                var a = Blocks.blockStack[i].localName2RegIndex;
+                if (a.ContainsKey(name)) {
+                    nameType = NameType.Local;
+                    return a[name].Item1;
+                }
             }
+            //现在不要管upval，基于一个简单的假设，不是local就是gloabl，也没有error
+            nameType = NameType.Global;
+            return AppendS(name);
+            /*name is not local to all functions from current function to the chunk, so it is global*/
+            /*name is upval?*/
+        }
 
-        }
-        public LParser()
-        {
-            blockStack = new BlockStack(ChunkProto);//初始化一个Chunk FuncBlock作为最初的块
-        }
         #endregion
         #region 其他辅助函数
         /// <summary>
@@ -158,10 +200,12 @@ namespace zlua.Parser
         /// <param name="bytecode"></param>
         void Emit(Bytecode bytecode)
         {
-            CurrP.codes.Add(bytecode);
+            _CurrP.codes.Add(bytecode);
         }
         /// <summary>
         /// 增加新n常量，返回index（可能新分配，可能是复用的）
+        /// 这里设计可能是有问题的，我假设C#的Parse能得到互相相等的double，
+        /// 如果不行，这个函数再传入一个getText的str作为key；但是这样是没error的，最差也就是所有的都是新常量，没有复用
         /// </summary>
         /// <param name="n"></param>
         int AppendN(double n)
@@ -253,9 +297,9 @@ namespace zlua.Parser
                 case LuaLexer.NotKW:
                     switch (result.RetType) {
                         case RetType.Name:
-                            FreeRegIndex--; //pop one oprd
-                            Emit(Bytecode.RaRb(Op.Not, FreeRegIndex, result.KIndex));
-                            return new Ret(FreeRegIndex++, RetType.Name); //push result
+                            _FreeRegIndex--; //pop one oprd
+                            Emit(Bytecode.RaRb(Op.Not, _FreeRegIndex, Name2RegIndex(result.Name, out NameType)));
+                            return new Ret(_FreeRegIndex++, RetType.Name); //push result
                         case RetType.NIndex:
                             return Ret.False; //接下来是返回常量的not结果，
                         case RetType.SIndex:
@@ -272,9 +316,9 @@ namespace zlua.Parser
                     //string我们仍然编译时计算，但是表就不了，因为这样要在result里加一个类型，然而只有这种情况，不值得（事实上很难做）
                     switch (result.RetType) {
                         case RetType.Name:
-                            FreeRegIndex--;
-                            Emit(Bytecode.RaRb(Op.Len, FreeRegIndex, result.KIndex));
-                            return new Ret(FreeRegIndex++, RetType.Name);
+                            _FreeRegIndex--;
+                            Emit(Bytecode.RaRb(Op.Len, _FreeRegIndex, result.KIndex));
+                            return new Ret(_FreeRegIndex++, RetType.Name);
                         case RetType.SIndex:
                             var s = Strs[result.KIndex];
                             return new Ret(AppendN(s.Length), RetType.NIndex);
@@ -285,9 +329,9 @@ namespace zlua.Parser
                     //-针对number
                     switch (result.RetType) {
                         case RetType.Name:
-                            FreeRegIndex--;
-                            Emit(Bytecode.RaRb(Op.Unm, FreeRegIndex, 0));
-                            return new Ret(FreeRegIndex++, RetType.Name);
+                            _FreeRegIndex--;
+                            Emit(Bytecode.RaRb(Op.Unm, _FreeRegIndex, 0));
+                            return new Ret(_FreeRegIndex++, RetType.Name);
                         case RetType.NIndex:
                             var n = Ns[result.KIndex];
                             return new Ret(AppendN(n), RetType.NIndex);
@@ -333,18 +377,18 @@ namespace zlua.Parser
                         throw new OprdTypeException(opcode);
                 }
             } else if (lhs.RetType == RetType.Name && rhs.RetType == KType) {
-                FreeRegIndex--;
-                Emit(Bytecode.RaRKbRkc(opcode, FreeRegIndex, false, Name2RegIndex(lhs.Name), true, rhs.KIndex));
-                return new Ret(FreeRegIndex++, RetType.Name);
+                _FreeRegIndex--;
+                Emit(Bytecode.RaRKbRkc(opcode, _FreeRegIndex, false, Name2RegIndex(lhs.Name, out NameType nameType), true, rhs.KIndex));
+                return new Ret(_FreeRegIndex++, RetType.Name);
             } else if (lhs.RetType == KType && rhs.RetType == RetType.Name) {
-                FreeRegIndex--;
-                Emit(Bytecode.RaRKbRkc(opcode, FreeRegIndex, true, lhs.KIndex, false, Name2RegIndex(rhs.Name)));
-                return new Ret(FreeRegIndex++, RetType.Name);
+                _FreeRegIndex--;
+                Emit(Bytecode.RaRKbRkc(opcode, _FreeRegIndex, true, lhs.KIndex, false, Name2RegIndex(rhs.Name, out NameType nameType)));
+                return new Ret(_FreeRegIndex++, RetType.Name);
             } else if (lhs.RetType == RetType.Name && rhs.RetType == RetType.Name) {
-                FreeRegIndex--;
-                FreeRegIndex--;
-                Emit(Bytecode.RaRKbRkc(opcode, FreeRegIndex, false, Name2RegIndex(lhs.Name), false, Name2RegIndex(rhs.Name)));
-                return new Ret(FreeRegIndex++, RetType.Name);
+                _FreeRegIndex--;
+                _FreeRegIndex--;
+                Emit(Bytecode.RaRKbRkc(opcode, _FreeRegIndex, false, Name2RegIndex(lhs.Name, out NameType nameType), false, Name2RegIndex(rhs.Name, out NameType nameType1)));
+                return new Ret(_FreeRegIndex++, RetType.Name);
             } else
                 throw new OprdTypeException(Op.Concat);
         }
@@ -451,12 +495,12 @@ namespace zlua.Parser
             var names = context.namelist().NAME();
             //context.GetToken(2, 0) == null if no equal，没有正确判断，有=也返回true，大概是token不对
             if (context.explist() == null) { // , eg. local a,b,c 只声明不赋值，freereg+=n，names加入符号表
-                int _nilStart = FreeRegIndex;
+                int _nilStart = _FreeRegIndex;
                 foreach (var item in names) {
-                    CurrBlock.localName2RegIndexAndStartPc[item.GetText()] =
-                        Tuple.Create(FreeRegIndex++, CurrPc);
+                    _CurrBlock.localName2RegIndex[item.GetText()] =
+                        Tuple.Create(_FreeRegIndex++, _CurrPc);
                 }
-                Emit(new Bytecode(Op.LoadNil, _nilStart, FreeRegIndex - 1));
+                Emit(new Bytecode(Op.LoadNil, _nilStart, _FreeRegIndex - 1));
                 return Ret.Void;
             }
 
@@ -467,7 +511,7 @@ namespace zlua.Parser
             //先遍历一遍名字，不允许重复声明，这里还要想一想。嵌入循环不好，因为后面其实分类讨论了
             foreach (var item in names) {
                 var name = item.GetText();
-                if (CurrBlock.localName2RegIndexAndStartPc.ContainsKey(name))
+                if (_CurrBlock.localName2RegIndex.ContainsKey(name))
                     throw new Exception("不允许重复声明局部变量" + name); //嗯，全局也是，学习python
             }
             var tempSymbolTable = new Dictionary<string, Tuple<int, int>>();
@@ -476,35 +520,35 @@ namespace zlua.Parser
                 var result = Visit(exps[i]);
                 switch (result.RetType) {
                     case RetType.Name:
-                        FreeRegIndex--; //pop the result
+                        _FreeRegIndex--; //pop the result
                         break;
                     case RetType.NIndex:
-                        Emit(new Bytecode(Op.LoadN, FreeRegIndex, result.KIndex));
+                        Emit(new Bytecode(Op.LoadN, _FreeRegIndex, result.KIndex));
                         break;
                     case RetType.SIndex:
-                        Emit(new Bytecode(Op.LoadS, FreeRegIndex, result.KIndex));
+                        Emit(new Bytecode(Op.LoadS, _FreeRegIndex, result.KIndex));
                         break;
                     case RetType.B:
-                        Emit(new Bytecode(Op.LoadBool, FreeRegIndex, Convert.ToInt32(result.B), 0));//<no frills> p11，要处理pc++，想一想
+                        Emit(new Bytecode(Op.LoadBool, _FreeRegIndex, Convert.ToInt32(result.B), 0));//<no frills> p11，要处理pc++，想一想
                         break;
                     case RetType.Nil:
-                        Emit(new Bytecode(Op.LoadNil, FreeRegIndex, FreeRegIndex, 0));
+                        Emit(new Bytecode(Op.LoadNil, _FreeRegIndex, _FreeRegIndex, 0));
                         break;
                     default:
                         throw new Exception();
                 }
                 //详见《2018-08-05 22-15-41.971398.lua》，reg会分配给新local，但是它还没声明（没加入符号表）
                 //，这里简单地，先存起来然后loop外加给符号表
-                tempSymbolTable[names[i].GetText()] = Tuple.Create(FreeRegIndex++, CurrPc);
+                tempSymbolTable[names[i].GetText()] = Tuple.Create(_FreeRegIndex++, _CurrPc);
             }
-            int nilStart = FreeRegIndex;
+            int nilStart = _FreeRegIndex;
             for (int i = Math.Min(names.Length, exps.Length); i < names.Length; i++) {
-                tempSymbolTable[names[i].GetText()] = Tuple.Create(FreeRegIndex++, CurrPc);
+                tempSymbolTable[names[i].GetText()] = Tuple.Create(_FreeRegIndex++, _CurrPc);
             }
             if (names.Length > exps.Length)
-                Emit(new Bytecode(Op.LoadNil, nilStart, FreeRegIndex - 1));
+                Emit(new Bytecode(Op.LoadNil, nilStart, _FreeRegIndex - 1));
             foreach (var item in tempSymbolTable) {
-                CurrBlock.localName2RegIndexAndStartPc[item.Key] = item.Value;
+                _CurrBlock.localName2RegIndex[item.Key] = item.Value;
             }
             return Ret.Void; //statements return void
         }
@@ -517,21 +561,140 @@ namespace zlua.Parser
         //functiondef: 'function' funcbody;  //定义函数;
         //funcbody: '(' parlist? ')' block 'end';
         //parlist: namelist(',' '...')? | '...' ; //param list，一堆param后vararg或单独vararg;
+        //funcname: NAME ('.' NAME)* (':' NAME)?; //任意多次查表得到对象，然后调用方法；最简单的情况下，就是单独一个name
 
         //显然也是local最简单（因为name固定就是个id），相当于local f=funcion （）。。。end
         //所以我们要处理prefixexp里的函数部分，提取出一个生成表达式的方法。因为这几个规则要共用
 
+        /// <summary>
+        /// 处理函数块，emit closure加载到freereg
+        /// </summary>
+        /// <param name="context"></param>
+        /// <returns></returns>
+        public override Ret VisitFuncbody([NotNull] LuaParser.FuncbodyContext context)
+        {
+            //进出新函数
+            Blocks.EnterNewFuncBlock();
+            if (context.parlist() != null) { //劣化一点把
+                foreach (var item in context.parlist().namelist().NAME()) {
+                    _CurrBlock.localName2RegIndex[item.GetText()] =
+                     Tuple.Create(_FreeRegIndex++, _CurrPc);
+                }
+            }
+            Visit(context.block());
+            Emit(new Bytecode(Op.Return, 0, 1, 0));
+            Blocks.ExitFuncBlock();
+            //closure指令加载到局部变量
+            Emit(new Bytecode(Op.Closure, _FreeRegIndex++, Blocks._LastKProtoIndex)); //还是push和pop一下
+            return Ret.Void; //no need，func必须单独声明，类似于f=function()end =》 真香，还是到ret里新增了enum
+        }
         public override Ret VisitFunctiondefExp([NotNull] LuaParser.FunctiondefExpContext context)
         {
-            return base.VisitFunctiondefExp(context);
+            ////进出新函数
+            //Blocks.EnterNewFuncBlock();
+            //if (context.funcbody().parlist() != null) { //劣化一点把
+            //    foreach (var item in context.funcbody().parlist().namelist().NAME()) {
+            //        CurrBlock.localName2RegIndexAndStartPc[item.GetText()] =
+            //         Tuple.Create(FreeRegIndex++, CurrPc);
+            //    }
+            //}
+            //Visit(context.funcbody().block());
+            //Emit(new Bytecode(Op.Return, 0, 1, 0));
+            //Blocks.ExitFuncBlock();
+            ////closure指令加载到局部变量
+            //Emit(new Bytecode(Op.Closure, FreeRegIndex, Blocks._LastKProtoIndex));
+            ////name添加符号表
+            return Ret.Void;
         }
+        /// <summary>
+        /// "local and non local function def" handle funcname only
+        /// </summary>
+        /// <param name="context"></param>
+        /// <returns></returns>
         public override Ret VisitFunctiondefStat([NotNull] LuaParser.FunctiondefStatContext context)
         {
-            return base.VisitFunctiondefStat(context);
+            //这里非常丑。method必须单独处理，而且Visit funcbody也要改，因为要传入this
+            if (context.funcname().methodname() != null) {
+                var funcbody = context.funcbody();
+                //处理名字
+                var methodname = context.funcname().methodname().NAME().GetText();
+                var names = context.funcname().tableOrFunc().NAME();
+                var tableIndex = Name2RegIndex(context.funcname().NAME().GetText(), out NameType nameType); //first name is a table
+                if (nameType == NameType.Global) {
+                    Emit(new Bytecode(Op.GetGlobal, _FreeRegIndex++, tableIndex));
+                    _FreeRegIndex--; //pop table 局部变量直接，所以不需要pop
+                }
+                for (int i = 0; i < names.Length; i++) {
+                    _FreeRegIndex--; //pop result
+                    Emit(Bytecode.GetTable(_FreeRegIndex++, tableIndex, Tuple.Create(true, AppendS(names[i].GetText())))); //设计上。默认strk，double才需要loadk
+                }
+                //进出新函数
+                Blocks.EnterNewFuncBlock();
+
+                if (funcbody.parlist() != null) { //劣化一点把
+                    foreach (var item in funcbody.parlist().namelist().NAME()) {
+                        _CurrBlock.localName2RegIndex[item.GetText()] =
+                         Tuple.Create(_FreeRegIndex++, _CurrPc);
+                    }
+                }
+                Visit(funcbody.block());
+                Emit(new Bytecode(Op.Return, 0, 1, 0));
+                Blocks.ExitFuncBlock();
+                //closure指令加载到局部变量
+                Emit(new Bytecode(Op.Closure, _FreeRegIndex++, Blocks._LastKProtoIndex)); //还是push和pop一下
+                return Ret.Void; //no need，func必须单独声明，类似于f=function()end =》 真香，还是到ret里新增了enum
+            }
+
+            Visit(context.funcbody());
+            var funcInex = _FreeRegIndex--; //pop func def
+
+            //handle func name
+            //funcname: NAME0 ('.' NAMEn-1)* (':' NAMEn)?; 
+            //任意多次查表得到对象，然后调用方法；最简单的情况下，就是单独一个name
+            // 1. Name0 : function f()end, _G[f]=def
+            // 2. Name0.Name1.Name2 : function T1.T2.T3.f()end, gettable* to get f, f=def
+            // 3. Name0.....:Namen : function T1.T2.obj.f()end, gettale* to get obj, obj[f]=def(obj, ...)
+            //修改了语法
+            //funcname: NAME tableOrFunc methodname; //任意多次查表得到对象，然后调用方法；最简单的情况下，就是单独一个name
+            //tableOrFunc: ('.' NAME)*;
+            var funcname = context.funcname();
+            //这里的逻辑要清晰，其实是有methodname决定前面的意思的
+            if (funcname.methodname() == null)
+                if (funcname.tableOrFunc() == null)
+                    // case 1.
+                    Emit(new Bytecode(Op.SetGlobal, _FreeRegIndex++, AppendS(funcname.NAME().GetText())));
+                else {
+                    // case 2.
+                    var names = funcname.tableOrFunc().NAME();
+                    var tableIndex = Name2RegIndex(funcname.NAME().GetText(), out NameType nameType); //first name is a table
+                    if (nameType == NameType.Global) {
+                        Emit(new Bytecode(Op.GetGlobal, _FreeRegIndex++, tableIndex));
+                        _FreeRegIndex--; //pop table 局部变量直接，所以不需要pop
+                    }
+                    for (int i = 0; i < names.Length - 1; i++) {
+                        _FreeRegIndex--; //pop result
+                        Emit(Bytecode.GetTable(_FreeRegIndex++, tableIndex, Tuple.Create(true, AppendS(names[i].GetText())))); //设计上。默认strk，double才需要loadk
+                    }
+                }
+            return Ret.Void;
         }
         public override Ret VisitLocalfunctiondefStat([NotNull] LuaParser.LocalfunctiondefStatContext context)
         {
-            return base.VisitLocalfunctiondefStat(context);
+            Visit(context.funcbody());
+            //name添加符号表
+            var name = context.NAME().GetText();
+            if (_CurrBlock.localName2RegIndex.ContainsKey(name))
+                throw new Exception("不允许重复声明局部变量" + name); //嗯，全局也是，学习python
+            _FreeRegIndex--; //pop func
+            _CurrBlock.localName2RegIndex[name] = Tuple.Create(_FreeRegIndex++, _CurrPc);
+            return Ret.Void;
+        }
+        public override Ret VisitChunk([NotNull] LuaParser.ChunkContext context)
+        {
+            //这句之前ctor初始化了一个chunkblock
+            VisitChildren(context); //visit之后栈会恢复到chunkblock
+            Emit(new Bytecode(Op.Return, 0, 1, 0)); //加入最后一句return
+            return Ret.Void;
         }
         #endregion
 

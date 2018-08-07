@@ -23,9 +23,9 @@ namespace zlua.VM
         public TValue registry = new TValue(new TTable(sizeHashTablePart: 2, sizeArrayPart: 0));
         //internal TThread mainThread;
         internal TTable[] metaTableForBasicType = new TTable[(int)LuaTypes.Thread + 1];
-        internal TString[] metaMethodNames = new TString[(int)MetamethodTypes.N];
+        internal TString[] metaMethodNames = new TString[(int)MMType.N];
     }
-    public class TThread : TObject, ITest
+    public class TThread : TObject
     {
         /// <summary>
         /// 相比src，几乎没用，从L里脱离出来的，维护多个L共享的DS；没法internal，详见《internal规则》
@@ -98,7 +98,7 @@ namespace zlua.VM
         /// luaV_execute; 执行一个深度为level的lua函数，chunk深度为1；没有level就不知道什么时候结束了（事实上可以，用callinfo栈）
         /// </summary>
         /// <param name="level">1 is the first level</param>
-        public void Execute(int level)
+        internal void Execute(int level)
         {
             reentry:
             Debug.Assert(this[Ci.funcIndex].IsLuaFunction);
@@ -176,27 +176,27 @@ namespace zlua.VM
                             continue;
                         }
                     case Op.Add: {
-                            Arith(instr, LuaConf.Add, MetamethodTypes.Add);
+                            Arith(instr, LuaConf.Add, MMType.Add);
                             continue;
                         }
                     case Op.Sub: {
-                            Arith(instr, LuaConf.Sub, MetamethodTypes.Sub);
+                            Arith(instr, LuaConf.Sub, MMType.Sub);
                             continue;
                         }
                     case Op.Mul: {
-                            Arith(instr, LuaConf.Mul, MetamethodTypes.Mul);
+                            Arith(instr, LuaConf.Mul, MMType.Mul);
                             continue;
                         }
                     case Op.Div: {
-                            Arith(instr, LuaConf.Div, MetamethodTypes.Div);
+                            Arith(instr, LuaConf.Div, MMType.Div);
                             continue;
                         }
                     case Op.Mod: {
-                            Arith(instr, LuaConf.Div, MetamethodTypes.Mod);
+                            Arith(instr, LuaConf.Div, MMType.Mod);
                             continue;
                         }
                     case Op.Pow: {
-                            Arith(instr, LuaConf.Pow, MetamethodTypes.Pow);
+                            Arith(instr, LuaConf.Pow, MMType.Pow);
                             continue;
                         }
                     case Op.Unm: {
@@ -204,7 +204,7 @@ namespace zlua.VM
                             double nb = (double)ToNumber(rb, out bool b);
                             if (b) ra.N = -nb;
                             else
-                                if (!CallBinaryMetamethod(rb, rb, ra, MetamethodTypes.Unm))
+                                if (!CallBinaryMetamethod(rb, rb, ra, MMType.Unm))
                                 throw new ArithmeticException("operand cannot be unmed");
                             continue;
                         }
@@ -222,7 +222,7 @@ namespace zlua.VM
                                     ra.N = rb.TStr.Len;
                                     break;
                                 default:
-                                    if (!CallBinaryMetamethod(rb, TValue.NilObject, ra, MetamethodTypes.Len))
+                                    if (!CallBinaryMetamethod(rb, TValue.NilObject, ra, MMType.Len))
                                         throw new ArithmeticException("operand cannot be lened");
                                     break;
                             }
@@ -264,8 +264,8 @@ namespace zlua.VM
                                     return;
                             }
                         }
-                    case Op.TailCall:
-                        continue;
+                    //case Op.TailCall:
+                        //continue;
                     case Op.Return: {
                             int b = instr.B;
                             if (b != 0) topIndex = this.baseIndex + instr.A + b - 1;
@@ -314,7 +314,7 @@ namespace zlua.VM
             }
 
         }
-        void Arith(Bytecode instr, Func<double, double, double> func, MetamethodTypes mtType)
+        void Arith(Bytecode instr, Func<double, double, double> func, MMType mtType)
         {
             TValue ra = RA(instr); //重算一遍
             TValue rb = RNB(instr);
@@ -326,49 +326,6 @@ namespace zlua.VM
                 throw new OprdTypeException(instr.Opcode);
             else
                 throw new GodDamnException();
-        }
-        public void Test()
-        {
-            var L = new TThread();
-            var codes = Bytecode.Gen(new uint[]
-            {
-                0x00000007, 0x00000002, 0x00004007, 0x00800002, 0x00008007, 0x00010001,
-                0x0000C007, 0x00018001, 0x00014007, 0x00020001, 0x0001C007, 0x00000003,
-                0x00000042, 0x00800082, 0x000100C1, 0x00018101, 0x00020141, 0x0100018A,
-                0x000101C1, 0x00024201, 0x010041A2, 0x000241C1, 0x00028201, 0x85C3024C,
-                0x82424057, 0x00800282, 0x000002C2, 0x00000324, 0x00034307, 0x00034305,
-                0x00010341, 0x00024381, 0x0180831C
-            });
-            var p = new Proto() {
-                codes = codes,
-                nParams = 0,
-                isVararg = false,
-                k = new List<TValue> {
-                    (TValue)(TString)"a",
-                    (TValue)(TString)"a1",
-                    (TValue)(TString)"a2",
-                    (TValue)(TString)"b",
-                    (TValue)1,
-                    (TValue)(TString)"b1",
-                    (TValue)1.2,
-                    (TValue)(TString)"c",
-                    (TValue)(TString)"lalala",
-                    (TValue)2,
-                    (TValue)3,
-                    (TValue)(TString)"1",
-                    (TValue)(TString)"2",
-                    (TValue)(TString)"add"
-                },
-                pp = new List<Proto> { new Proto() }
-            };
-            IFormatter formatter = new BinaryFormatter();
-            Stream stream = new FileStream("MyFile.bin", FileMode.Create, FileAccess.Write, FileShare.None);
-            formatter.Serialize(stream, p);
-            stream.Close();
-            Closure closure = new LuaClosure((TTable)L.globalsTable, 0, p);
-            L[L.topIndex].Cl = closure;
-            L.topIndex++;
-            LApi.Call(L, 0, 0);
         }
         /// <summary>
         /// 让栈扩展到`size大小
@@ -511,7 +468,7 @@ namespace zlua.VM
         /// <summary>
         /// call_binTM; result = __add(lhs, rhs); __add从lhs和rhs的元表查找出，如果都没找到返回false
         /// </summary>
-        bool CallBinaryMetamethod(TValue lhs, TValue rhs, TValue result, MetamethodTypes metamethodType)
+        bool CallBinaryMetamethod(TValue lhs, TValue rhs, TValue result, MMType metamethodType)
         {
             result = null;
             TValue metamethod = LTm.GetMetamethod(this, lhs, metamethodType);
@@ -551,7 +508,7 @@ namespace zlua.VM
         /// </summary>
         public int savedpc;
         public int nRetvals; //期望的返回值个数
-        int nTailCalls;/* number of tail calls lost under this entry ???*/
+        //int nTailCalls;/* number of tail calls lost under this entry ???*/
     }
 
 }

@@ -41,7 +41,7 @@ namespace zlua.CallSystem
         /// </summary>
         static TValue TryMetaCall(this TThread L, int funcIndex)
         {
-            TValue metamethod = LTm.GetMetamethod(L, L[funcIndex], MetamethodTypes.Call);
+            TValue metamethod = LTm.GetMetamethod(L, L[funcIndex], MMType.Call);
             Debug.Assert(metamethod.IsFunction);
             /* Open a hole inside the stack at `func' */
             for (int i = L.topIndex; i > funcIndex; i--)
