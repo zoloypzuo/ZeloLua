@@ -8,7 +8,7 @@ using zlua.VM;
 /// <summary>
 /// 调试器
 /// </summary>
-namespace zlua.Debug
+namespace zlua.Debugger
 {
     public class LDebug
     {

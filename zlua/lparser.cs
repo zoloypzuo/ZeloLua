@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using Antlr4.Runtime.Misc;
-using Antlr4.Runtime.Tree;
-using zlua.Configuration;
 using System.Linq;
 using zlua.Gen;
 using zlua.ISA;
@@ -18,6 +16,8 @@ namespace zlua.Parser
         NIndex,
         SIndex,
         PIndex, //proto index
+        Vararg,
+        MultiRetIndex,
         B,
         Nil,
         None, //没有返回值，比如语句
@@ -56,6 +56,7 @@ namespace zlua.Parser
         public static readonly Ret Nil = new Ret { RetType = RetType.Nil };
         public static readonly Ret True = new Ret { RetType = RetType.B, B = true };
         public static readonly Ret False = new Ret { RetType = RetType.B, B = false };
+        public static readonly Ret Vararg = new Ret { RetType = RetType.Vararg };
     }
 
     class LParser : LuaBaseVisitor<Ret>
@@ -70,48 +71,47 @@ namespace zlua.Parser
         /// </summary>
         class BlockStack
         {
+            readonly LParser parser;
+            public BlockStack(LParser parser)
+            {
+                this.parser = parser;
+            }
             public List<Block> blockStack = new List<Block>();
             public List<int> funcBlockIndexes = new List<int>();
-            public Block Top { get => blockStack.Last(); }
-            public FuncBlock FBTop
-            {
-                get
-                {
-                    var fbtop = blockStack[funcBlockIndexes.Last()] as FuncBlock;
-                    Debug.Assert(fbtop != null);
-                    return fbtop;
-                }
-            }
-            public ChunkProto ChunkProto { get; private set; } //set only in ctor once
-            public int _LastKProtoIndex { get => FBTop.p.pp.Count - 1; } //kproto[-1]的index，emit closure用
-            /// <summary>
-            /// 传入chunkprot看起来比较奇怪。是因为第一个必须栈底必须是一个FuncBlock带一个ChunkProto，
-            /// 不这样的话要提供一个返回chunkproto的property，更奇怪 =>真香
-            /// </summary>
-            /// <param name="chunkProto"></param>
+            int CurrBlockIndex = 0;
+            int CurrFBIndex = 0;
+            public Block _CurrBlock { get => blockStack[CurrBlockIndex]; }
+            public FuncBlock _CurrFB { get => blockStack[funcBlockIndexes[CurrFBIndex]] as FuncBlock; }
+
+            public ChunkProto ChunkProto { get => (blockStack[0] as FuncBlock).p as ChunkProto; }
+            public int _LastKProtoIndex { get => _CurrFB.p.pp.Count - 1; } //kproto[-1]的index，emit closure用
             public BlockStack()
             {
-                ChunkProto = new ChunkProto();
-                var chunk = new FuncBlock() { p = ChunkProto };
-                funcBlockIndexes.Add(blockStack.Count);
-                blockStack.Add(chunk);
+                var chunkFB = new FuncBlock() { p = new ChunkProto() };
+                funcBlockIndexes.Add(0);
+                blockStack.Add(chunkFB);
             }
             public void EnterNewBlock()
             {
-                blockStack.Add(new Block());
+                blockStack.Add(new Block() { startPc = parser._CurrPc });
+                CurrBlockIndex++;
             }
             public void EnterNewFuncBlock()
             {
                 var newFb = new FuncBlock() { p = new Proto() };//这里分开new，因为第一次chunkproto是单独new的
-                FBTop.p.pp.Add(newFb.p);
+                _CurrFB.p.pp.Add(newFb.p);
                 funcBlockIndexes.Add(blockStack.Count);
                 blockStack.Add(newFb);
+                CurrFBIndex++;
             }
-            public void ExitBlock() { blockStack.RemoveAt(blockStack.Count - 1); }
+            public void ExitBlock()
+            {
+                _CurrBlock.endPc = parser._CurrPc;
+                CurrBlockIndex--;
+            }
             public void ExitFuncBlock()
             {
-                blockStack.RemoveAt(blockStack.Count - 1);
-                funcBlockIndexes.RemoveAt(funcBlockIndexes.Count - 1);
+                CurrFBIndex--;
             }
 
         }
@@ -121,10 +121,9 @@ namespace zlua.Parser
         /// </summary>
         class Block
         {
-            /// <summary>
-            /// 反向索引局部变量名的左值；重复声明直接覆盖，所以不用管；这个结构替代了LocVar，现在不需要startpc了，因为不允许重复声明（傻逼设计）
-            /// </summary>
             public Dictionary<string, int> localName2RegIndex = new Dictionary<string, int>();
+            public int startPc;
+            public int endPc;
         }
         /// <summary>
         /// 当前正在编译的函数块的编译期信息
@@ -143,8 +142,8 @@ namespace zlua.Parser
         }
         #region  处理scope
         BlockStack Blocks { get; } = new BlockStack();
-        Block _CurrBlock { get => Blocks.Top; }
-        FuncBlock _CurrFB { get => Blocks.FBTop; }
+        Block _CurrBlock { get => Blocks._CurrBlock; }
+        FuncBlock _CurrFB { get => Blocks._CurrFB; }
         Proto _CurrP { get => _CurrFB.p; }
         int _FreeRegIndex { get => _CurrFB.freeRegIndex; set => _CurrFB.freeRegIndex = value; }
         int _CurrPc { get => _CurrFB._CurrPc; }
@@ -173,8 +172,6 @@ namespace zlua.Parser
         /// 当然不应该直接emit加载指令，应该交给caller。eg a=1对upval会生成setupval，要你生成getupval当然是错的
         /// name通过scope映射到lvalue（龙书第二章重点），因此还要有反向索引表
         /// </summary>
-        /// <param name="name"></param>
-        /// <returns></returns>
         int Name2RegIndex(string name, out NameType nameType)
         {
             var localFBIndex = Blocks.funcBlockIndexes.Last();
@@ -197,7 +194,6 @@ namespace zlua.Parser
         /// <summary>
         /// 添加新指令
         /// </summary>
-        /// <param name="bytecode"></param>
         void Emit(Bytecode bytecode)
         {
             _CurrP.codes.Add(bytecode);
@@ -207,7 +203,6 @@ namespace zlua.Parser
         /// 这里设计可能是有问题的，我假设C#的Parse能得到互相相等的double，
         /// 如果不行，这个函数再传入一个getText的str作为key；但是这样是没error的，最差也就是所有的都是新常量，没有复用
         /// </summary>
-        /// <param name="n"></param>
         int AppendN(double n)
         {
             if (!n2NsIndex.ContainsKey(n)) {  //常量池里没有再新加，这样复用
@@ -221,7 +216,6 @@ namespace zlua.Parser
         /// <summary>
         /// 增加新s常量
         /// </summary>
-        /// <param name="s"></param>
         int AppendS(string s)
         {
             if (!s2StrsIndex.ContainsKey(s)) {
@@ -271,7 +265,7 @@ namespace zlua.Parser
                 case LuaLexer.FalseKW: return Ret.False;
                 case LuaLexer.TrueKW: return Ret.True;
                 case LuaLexer.VarargKW:
-                    throw new NotImplementedException();
+                    return Ret.Vararg;
                 default:
                     throw new GodDamnException();
             }

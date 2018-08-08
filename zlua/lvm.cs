@@ -27,9 +27,6 @@ namespace zlua.VM
     }
     public class TThread : TObject
     {
-        /// <summary>
-        /// 相比src，几乎没用，从L里脱离出来的，维护多个L共享的DS；没法internal，详见《internal规则》
-        /// </summary>
         #region fields
         internal List<TValue> Stack;
         /// <summary>
@@ -73,10 +70,6 @@ namespace zlua.VM
         internal List<Bytecode> codes;
         internal int nCSharpCalls;
         internal /*static readonly*/ GlobalState globalState = new GlobalState(); //注册表是一个L一个吗？
-        /// <summary>
-        /// "temp place for env", 仅被index2adr调用;除此之外，thread通过分支创建时，和父thread共享环境（然而并没有看到引用）
-        /// </summary>
-        internal TValue env;
         #endregion
 
         /// <summary>
@@ -93,6 +86,14 @@ namespace zlua.VM
                 Stack.Add(new TValue());
             }
             Ci.baseIndex = baseIndex = topIndex = 1;
+            
+            //注册assert，这样可以测试了
+            int Assert(TThread L)
+            {
+                Debug.Assert(L[L.topIndex - 1].B);
+                return 0;
+            }
+            Lua.Register(this, Assert, "assert");
         }
         /// <summary>
         /// luaV_execute; 执行一个深度为level的lua函数，chunk深度为1；没有level就不知道什么时候结束了（事实上可以，用callinfo栈）
@@ -176,27 +177,27 @@ namespace zlua.VM
                             continue;
                         }
                     case Op.Add: {
-                            Arith(instr, LuaConf.Add, MMType.Add);
+                            Arith(instr, (a,b)=>a+b, MMType.Add);
                             continue;
                         }
                     case Op.Sub: {
-                            Arith(instr, LuaConf.Sub, MMType.Sub);
+                            Arith(instr, (a,b)=>a-b, MMType.Sub);
                             continue;
                         }
                     case Op.Mul: {
-                            Arith(instr, LuaConf.Mul, MMType.Mul);
+                            Arith(instr, (a,b)=>a*b, MMType.Mul);
                             continue;
                         }
                     case Op.Div: {
-                            Arith(instr, LuaConf.Div, MMType.Div);
+                            Arith(instr, (a,b)=>a/b, MMType.Div);
                             continue;
                         }
                     case Op.Mod: {
-                            Arith(instr, LuaConf.Div, MMType.Mod);
+                            Arith(instr, (a,b)=>a%b, MMType.Mod);
                             continue;
                         }
                     case Op.Pow: {
-                            Arith(instr, LuaConf.Pow, MMType.Pow);
+                            Arith(instr, Math.Pow, MMType.Pow);
                             continue;
                         }
                     case Op.Unm: {
@@ -257,8 +258,6 @@ namespace zlua.VM
                                         goto reentry;
                                     }
                                 case LDo.PCRC:
-                                    if (n_retvals >= 0)
-                                        topIndex = Ci.topIndex;
                                     continue;
                                 default:
                                     return;
@@ -269,12 +268,12 @@ namespace zlua.VM
                     case Op.Return: {
                             int b = instr.B;
                             if (b != 0) topIndex = this.baseIndex + instr.A + b - 1;
-                            int i = LDo.PosCall(this, instr.A);
+                            LDo.PosCall(this, instr.A);
                             if (--level == 0) /* chunk executed, return*/
                                 return;
                             else { /*continue the execution*/
-                                if (i != 0)
-                                    topIndex = Ci.topIndex;
+                                //if (i != 0)
+                                //    topIndex = Ci.topIndex;
                                 goto reentry;
                             }
                             continue;
@@ -501,14 +500,12 @@ namespace zlua.VM
     class Callinfo
     {
         public int funcIndex;
-        public int baseIndex; // = func+1
+        public int baseIndex; // = func+1，vararg时会更高
         public int topIndex;
         /// <summary>
         /// saved pc when call function, index of instruction array
         /// </summary>
         public int savedpc;
-        public int nRetvals; //期望的返回值个数
-        //int nTailCalls;/* number of tail calls lost under this entry ???*/
     }
 
 }

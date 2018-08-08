@@ -25,7 +25,6 @@ namespace zlua.CallSystem
         /// 这个call是从lapi开始的call，lapi计算出funcIndex，这条线是算一次C call，在Thread里也存了counter
         /// lua的call指令只使用precall，因为后面跟着goto reentry，而这里要主动调用一次execute开始执行；precall处理C或lua，我们先走lua
         /// lapi和这里ldo的Call只是签名形式不一样；说是ccall是因为这个必须是c api发起的call，因为lua call只调用precall
-        /// 实现决策】禁用this，因为与lapi的签名一致，ldo这里是zlua的内部，所以。。弃车保帅
         /// </summary>
         public static void Call(TThread L, int funcIndex, int nRetvals)
         {
@@ -39,7 +38,7 @@ namespace zlua.CallSystem
         /// <summary>
         /// tryfuncTM; 尝试返回元方法__call
         /// </summary>
-        static TValue TryMetaCall(this TThread L, int funcIndex)
+        static TValue TryMetaCall(TThread L, int funcIndex)
         {
             TValue metamethod = LTm.GetMetamethod(L, L[funcIndex], MMType.Call);
             Debug.Assert(metamethod.IsFunction);
@@ -51,16 +50,13 @@ namespace zlua.CallSystem
             return L[funcIndex];
         }
         /* results from luaD_precall */
-        public const int PCRLUA = 0;   /* 说明precall初始化了一个lua函数：initiated a call to a Lua function */
-        public const int PCRC = 1;    /* 说明precall调用了一个c函数：did a call to a C function */
-        public const int PCRYIELD = 2; /* c函数yield？？？：C funtion yielded */
+        internal const int PCRLUA = 0;   /* 说明precall初始化了一个lua函数：initiated a call to a Lua function */
+        internal const int PCRC = 1;    /* 说明precall调用了一个c函数：did a call to a C function */
 
         /// <summary>
-        /// luaD_precall, TODO save pc to caller CallInfo, create new CallInfo for callee
-        /// 首先
-        /// 中文说明】call指令实现；所以即调用新韩淑，因此保存数据，push栈帧
+        /// call指令实现
         /// </summary>
-        public static int PreCall(this TThread L, int funcIndex, int nRetvals)
+        public static int PreCall(TThread L, int funcIndex, int nRetvals)
         {
             //获取函数
             TValue func = L[funcIndex];
@@ -75,96 +71,118 @@ namespace zlua.CallSystem
                     //新base在func+1
                     _base = funcIndex + 1;
                     //截断多余的args，因为args可以压任意多个
-                    if (L.topIndex > _base + p.nParams)
-                        L.topIndex = _base + p.nParams;
+                    if (L.topIndex != _base + p.nParams)
+                        throw new Exception("实参列表与形参列表不匹配，可能需要vararg");
                 } else {  /* vararg function */
-                    //否则要从top减掉nparam，算出新base，TODO处理vararg
-                    int nargs = (L.topIndex - funcIndex) - 1;
-                    _base = AdjustVararg(L, p, nargs); //复杂
+                    //否则要从top减掉nparam，算出新base
+                    _base = L.topIndex - p.nParams; //这里很可能是错的，要
                 }
                 Callinfo ci = new Callinfo() {
                     funcIndex = funcIndex,
                     baseIndex = _base,
-                    topIndex = L.baseIndex + p.MaxStacksize,  //top存最大的栈帧大小，编译期确定
-                    nRetvals = nRetvals
+                    topIndex= _base + p.MaxStacksize
                 };
                 if (ci.topIndex >= L.StackLastFree)
-                    L.Alloc(ci.topIndex + 1);
-                Debug.Assert(ci.topIndex <= L.StackLastFree);
+                    L.Alloc(ci.topIndex+ 1);
+                Debug.Assert(ci.topIndex < L.StackLastFree);
                 L.baseIndex = _base; //更新base
-                //更新pc和k
+                //更新pc
                 L.pc = 0;
                 L.codes = p.codes;
-                //L.k = p.k;
                 L.ciStack.Push(ci);
-                for (int st = L.topIndex; st < ci.topIndex; st++) //st是stacktop
+                //栈帧清为nil
+                for (int st = L.topIndex; st < L.topIndex + p.MaxStacksize; st++) //st是stacktop
                     L[st].SetNil();
-                //L.topIndex = ci.topIndex;  //为什么。这样不就不对了。必要的话删掉，我个人的感觉，ci的top是栈帧上限。l的top是当前栈顶
                 return PCRLUA;
             } else {  /* if is a C function, call it */
-                //这里根本不对。也没讲清楚yield是干嘛的。一般来说直接按协议调用即可，为什么这么烦。
                 int n;
                 Callinfo ci = new Callinfo();
                 L.baseIndex = ci.baseIndex = ci.funcIndex + 1;
                 const int MinStackSizeForCSharpFunction = 20;
-                ci.topIndex = L.topIndex + MinStackSizeForCSharpFunction;
-                Debug.Assert(ci.topIndex <= L.StackLastFree);
-                // 期待返回多少个返回值
-                ci.nRetvals = nRetvals;
+                if (L.topIndex + MinStackSizeForCSharpFunction >= L.StackLastFree)
+                    L.Alloc(L.topIndex + MinStackSizeForCSharpFunction + 1);
+                Debug.Assert(L.topIndex + MinStackSizeForCSharpFunction < L.StackLastFree);
                 // 调用C函数
                 n = (L[L.Ci.funcIndex].Cl as CSharpClosure).f(L);
-                if (n < 0)  /* yielding? */
-                    return PCRYIELD;
-                else {
-                    // 调用结束之后的处理
-                    PosCall(L, L.topIndex - n);
-                    return PCRC;
-                }
+                // 调用结束之后的处理
+                PosCall(L, L.topIndex - n);
+                return PCRC;
             }
 
         }
         /// <summary>
-        /// luaD_poscall; 从C或lua函数返回； 如果返回0，说名从一个多返回值的函数返回
+        /// 从C或lua函数返回；`firstResultIndex是返回值开始的index
+        /// return A  => mov RA, ...,R[L.topIndex] to R[ci.funcIndex], ...
         /// </summary>
-        public static int PosCall(this TThread L, int firstResultIndex)
+        public static void PosCall(TThread L, int firstResultIndex)
         {
-            Callinfo ci = L.ciStack.Pop(); //ci弹栈
-                                           /* 恢复一部分*/
+            Callinfo ci = L.ciStack.Pop();
             int resultIndex = ci.funcIndex;
-            int wanted = ci.nRetvals;
             L.baseIndex = L.Ci.baseIndex;
             L.pc = L.Ci.savedpc;
-            /* 返回值压栈, 补nil到wanted个返回值*/
-            int i;
-            for (i = wanted; i != 0 && firstResultIndex < L.topIndex; i--) {
-                L[resultIndex++].TVal = L[firstResultIndex++];
+            for (int i = firstResultIndex; i < L.topIndex; i++) {
+                L[resultIndex++].TVal = L[i];
             }
-            while (i-- > 0) {
-                L[resultIndex++].SetNil();
-            }
-            L.topIndex = resultIndex; //恢复top
-            return wanted - Lua.MultiRet; /* 0 if wanted == LUA_MULTRET */
         }
-        /// <summary>
-        /// adjust_varargs 根据函数的参数数量调整base和top指针位置
-        /// </summary>
-        public static int AdjustVararg(this TThread L, Proto p, int acutal)
-        {
-            //TODO
-            return 1;
-        }
-        /// <summary>
-        /// luaD_checkstack
-        /// </summary>
-        public static void CheckStack() { }
-        /// <summary>
-        /// savestack; 嗯，就这么简单
-        /// </summary>
-        public static int SaveStack(this TThread L, int index) => index;
-        /// <summary>
-        /// restorestack;
-        /// </summary>
-        public static TValue RestoreStack(this TThread L, int index) => L[index];
-
     }
+}
+/// <summary>
+/// 元方法
+/// </summary>
+namespace zlua.Metamethod
+{
+    static class LTm  //src称为tagged method，不喜欢。。
+    {
+        public static readonly string[] names = new string[] {
+            "__index", "__newindex",
+            "__gc", "__mode", "__eq",
+            "__add", "__sub", "__mul", "__div", "__mod",
+            "__pow", "__unm", "__len", "__lt", "__le",
+            "__concat", "__call"
+        };
+        /// <summary>
+        /// luaT_gettmbyobj; get metamethod from `obj，
+        /// obj没有元表或没有该元方法返回nilobject；enum和string一一对应，这里从enum开始
+        /// </summary>
+        public static TValue GetMetamethod(this TThread L, TValue obj, MMType metamethodType)
+        {
+            TTable metatable;
+            switch (obj.Type) {
+                case LuaTypes.Table:
+                    metatable = obj.Table.metatable;
+                    break;
+                case LuaTypes.Userdata:
+                    metatable = obj.Userdata.metaTable;
+                    break;
+                default:
+                    metatable = L.globalState.metaTableForBasicType[(int)obj.Type];
+                    break;
+            }
+            return metatable != null ?
+                metatable.GetByStr(L.globalState.metaMethodNames[(int)metamethodType]) :
+                TValue.NilObject;
+        }
+    }
+    enum MMType
+    {
+        Index,
+        NewIndex,
+        GC,
+        Mode,
+        Eq,  /* last tag method with `fast' access */
+        Add,
+        Sub,
+        Mul,
+        Div,
+        Mod,
+        Pow,
+        Unm,
+        Len,
+        Lt,
+        Le,
+        Concat,
+        Call,
+        N     /* number of elements in the enum */ //仅用于标记大小。
+    }
+
 }

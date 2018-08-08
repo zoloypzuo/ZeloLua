@@ -49,14 +49,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="lapi.cs" />
-    <Compile Include="lauxlib.cs" />
-    <Compile Include="lbaselib.cs" />
     <Compile Include="ldebug.cs" />
     <Compile Include="ldo.cs" />
     <Compile Include="lparser.cs" />
-    <Compile Include="ltm.cs" />
     <Compile Include="luaconf.cs" />
-    <Compile Include="lualib.cs" />
     <Compile Include="lopcodes.cs" />
     <Compile Include="lobject.cs" />
     <Compile Include="lua.cs" />

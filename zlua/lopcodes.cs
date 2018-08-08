@@ -68,20 +68,19 @@ namespace zlua.ISA
         /// </summary>
         public static Bytecode Mov(int a, int b) => RaRb(Op.Move, a, b);
         public static Bytecode LoadNil(int a, int b) => RaRb(Op.LoadNil, a, b);
-        public static Bytecode LoadN(int a, int bx) => new Bytecode(Op.LoadN,a, bx);
-        public static Bytecode LoadS(int a, int bx) => new Bytecode(Op.LoadS,a, bx);
+        public static Bytecode LoadN(int a, int bx) => new Bytecode(Op.LoadN, a, bx);
+        public static Bytecode LoadS(int a, int bx) => new Bytecode(Op.LoadS, a, bx);
         /// <summary>
         /// RA = B, if C then pc++
         /// </summary>
-        /// <param name="a"></param>
-        /// <param name="b"></param>
-        /// <returns></returns>
-        public static Bytecode LoadB(int a, bool b,bool c=false) => 
-            new Bytecode(Op.LoadBool, a, Convert.ToInt32(b),Convert.ToInt32(c));
+        public static Bytecode LoadB(int a, bool b, bool c = false) =>
+            new Bytecode(Op.LoadBool, a, Convert.ToInt32(b), Convert.ToInt32(c));
         public static Bytecode GetG(int a, int bx) => new Bytecode(Op.GetGlobal, a, bx);
         public static Bytecode SetG(int a, int bx) => new Bytecode(Op.SetGlobal, a, bx);
         public static Bytecode GetU(int a, int b) => RaRb(Op.GetUpVal, a, b);
         public static Bytecode SetU(int a, int b) => RaRb(Op.SetUpval, a, b);
+        public static Bytecode GetL(int a, int bx) => new Bytecode(Op.GetLocal, a, bx);
+        public static Bytecode SetL(int a, int bx) => new Bytecode(Op.SetLocal, a, bx);
         /// <summary>
         /// 一个仅用于warp args的struct
         /// </summary>
@@ -89,7 +88,7 @@ namespace zlua.ISA
         {
             public bool isK;
             public int val;
-            public RK(bool isK,int val)
+            public RK(bool isK, int val)
             {
                 this.isK = isK;
                 this.val = val;
@@ -125,7 +124,11 @@ namespace zlua.ISA
         public static Bytecode Concat(int a, int b, int c) => new Bytecode(Op.Concat, a, b, c);
         public static Bytecode Jmp(int sbx) => new Bytecode(Op.Jmp, 0, sbx);
         public static Bytecode Call(int a, int b, int c) => new Bytecode(Op.Call, a, b, c);
-        public static Bytecode Ret(int a, int b) => RaRb(Op.Return, a, b);
+        /// <summary>
+        /// return A  => mov RA, ...,R[L.topIndex] to R[ci.funcIndex], ...
+        /// 我修改了指令和函数调用的语义。现在不需要RB了
+        /// </summary>
+        public static Bytecode Ret(int a) => new Bytecode(Op.Return, a, 0, 0);
         /// <summary>
         /// RA, RA+1, ...,RA+B-2 = vararg 
         /// </summary>
@@ -135,8 +138,60 @@ namespace zlua.ISA
         /// </summary>
         public static Bytecode Self(int a, int b, int c) => new Bytecode(Op.Self, a, b, c);
         #endregion
+        #region getters, setters
+        public Op Opcode
+        {
+            get => (Op)Get(SizeOp, PosOp);
+            set => Set((int)value, SizeOp, PosOp);
+        }
+        public int A
+        {
+            get => Get(SizeA, PosA);
+            set => Set(value, SizeA, PosA);
+        }
+        public int B
+        {
+            get => Get(SizeB, PosB);
+            set => Set(value, SizeB, PosB);
+        }
+        public int C
+        {
+            get => Get(SizeC, PosC);
+            set => Set(value, SizeC, PosC);
+        }
+        public int Bx
+        {
+            get => Get(SizeBx, PosBx);
+            set => Set(value, SizeBx, PosBx);
+        }
+        /// <summary>
+        /// sBx
+        /// </summary>
+        public int SignedBx
+        {
+            get => Bx - MaxArgSignedBx;
+            set => Bx = value + MaxArgSignedBx;
+        }
+        #endregion
+        #region handle RK
+        /// <summary>
+        /// if x[7] (in bit) is 1, return true, and RKB returns KB
+        /// </summary>
+        /// <param name="x">B or C</param>
+        public static bool IsK(int x) => (x & (1 << (SizeB - 1))) != 0;
+        public static int IndexK(int x) => x & ~(1 << (SizeB - 1));
+        internal static List<Bytecode> Gen(uint[] hexs)
+        {
+            var a = new List<Bytecode>();
+            foreach (var item in hexs) {
+                a.Add(new Bytecode(item));
+            }
+            return a;
+        }
+        #endregion
         public static explicit operator uint(Bytecode i) => i.i;
         public static explicit operator Bytecode(uint i) => new Bytecode(i);
+        #region private things
         #region size and position of instruction arguments
         const int SizeC = 9;
         const int SizeB = 9;
@@ -172,65 +227,15 @@ namespace zlua.ISA
             var b = ((uint)x << pos) & Mask1(n, pos); // "(uint)"是必要的。
             i = a | b;
         }
-        public Op Opcode
-        {
-            get => (Op)Get(SizeOp, PosOp);
-            set => Set((int)value, SizeOp, PosOp);
-        }
-        public int A
-        {
-            get => Get(SizeA, PosA);
-            set => Set(value, SizeA, PosA);
-        }
-        public int B
-        {
-            get => Get(SizeB, PosB);
-            set => Set(value, SizeB, PosB);
-        }
-        public int C
-        {
-            get => Get(SizeC, PosC);
-            set => Set(value, SizeC, PosC);
-        }
-        public int Bx
-        {
-            get => Get(SizeBx, PosBx);
-            set => Set(value, SizeBx, PosBx);
-        }
-        /// <summary>
-        /// sBx
-        /// </summary>
-        public int SignedBx
-        {
-            get => Bx - MaxArgSignedBx;
-            set => Bx = value + MaxArgSignedBx;
-        }
         #endregion
-        #region other things
-        const int NOpcodes = (int)Op.VarArg + 1;
-        #region handle RK
-        /// <summary>
-        /// if x[7] (in bit) is 1, return true, and RKB returns KB
-        /// </summary>
-        /// <param name="x">B or C</param>
-        public static bool IsK(int x) => (x & (1 << (SizeB - 1))) != 0;
-        public static int IndexK(int x) => x & ~(1 << (SizeB - 1));
-        internal static List<Bytecode> Gen(uint[] hexs)
-        {
-            var a = new List<Bytecode>();
-            foreach (var item in hexs) {
-                a.Add(new Bytecode(item));
-            }
-            return a;
-        }
         #endregion
+
         public override string ToString()
         {
             return Opcode.ToString() + " A: " + A.ToString() +
                " B: " + B.ToString() + " C: " + C.ToString() +
                " Bx: " + Bx.ToString();
         }
-        #endregion
         public void Test()
         {
             void TestCreateOprd2()
@@ -409,5 +414,7 @@ namespace zlua.ISA
         LoadN, //loadN和loadS替代LoadK
         LoadS,
         Ne, //不加lparser里没法实现
+        GetLocal,  //额外加的指令，简化实现
+        SetLocal,
     }
 }

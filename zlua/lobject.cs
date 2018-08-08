@@ -122,7 +122,7 @@ namespace zlua.TypeModel
             {
                 Type = LuaTypes.String;
                 var tstr = tobj as TString;  //这里尽量复用TValue上的TString对象，因为只是个Wrapper
-                if (tstr != null)tstr.str = value;
+                if (tstr != null) tstr.str = value;
                 else
                     tobj = (TString)value;
             }
@@ -321,12 +321,12 @@ namespace zlua.TypeModel
 
         }
     }
-     class ChunkProto : Proto
+    class ChunkProto : Proto
     {
         internal List<string> strs = new List<string>();
         internal List<double> ns = new List<double>();
     }
-     class LocVar
+    class LocVar
     {
         public string var_name;
         public int startpc;
@@ -344,7 +344,7 @@ namespace zlua.TypeModel
             this.env = env;
         }
     }
-     class LuaClosure : Closure
+    class LuaClosure : Closure
     {
         public Proto p;
         public List<Upval> upvals;
@@ -359,9 +359,9 @@ namespace zlua.TypeModel
             upvals = new List<Upval>(nUpvals);
         }
     }
-     class CSharpClosure : Closure
+    class CSharpClosure : Closure
     {
-        public Lua.CSharpFunction f;
+        public Lua.CSFunc f;
         public List<TValue> upvals;
         public int NUpvals { get => upvals.Count; }
         public CSharpClosure() : base(null)
@@ -414,6 +414,8 @@ namespace zlua.TypeModel
             hashTablePart = new Dictionary<TValue, TValue>(sizeHashTablePart);
             arrayPart = new List<TValue>(sizeArrayPart);
         }
+        static int Double2Integer(double d)
+           => (int)Math.Round(d, MidpointRounding.AwayFromZero); //目前来说只有这里需要用
         /// <summary>
         /// luaH_get
         /// </summary>
@@ -421,11 +423,13 @@ namespace zlua.TypeModel
         {
             switch (key.Type) {
                 case LuaTypes.Nil: return TValue.NilObject;
-                case LuaTypes.String: return GetByStr((TString)key);
+                case LuaTypes.String:
+                    return GetByStr((TString)key);
                 case LuaTypes.Number:
                     double n = (double)key;
-                    int k = (int)Math.Round(n);
-                    if ((double)k == n) return GetByInt(k);
+                    int k = Double2Integer(n);
+                    if ((double)k == n)
+                        return GetByInt(k);
                     goto default; // sigh, must have break or return, so ...
                 default:
                     if (hashTablePart.ContainsKey(key))
@@ -436,7 +440,6 @@ namespace zlua.TypeModel
         /// <summary>
         /// luaH_set, return tvalue found with `key, 
         /// else create a new pair and return the new tvalue
-        /// TODO try to return void, because "new TValue" and set outside is not controlable. bad smell.
         /// </summary>
         public TValue Set(TThread L, TValue key)
         {
@@ -444,7 +447,7 @@ namespace zlua.TypeModel
             if (tval != TValue.NilObject) return tval;
             else {
                 Debug.Assert(key.IsNil, "table index is nil");
-                Debug.Assert(key.IsNumber && LuaConf.IsNaN((double)key), "table index is NaN");
+                Debug.Assert(key.IsNumber && Double.IsNaN((double)key), "table index is NaN");
                 var new_val = new TValue();
                 hashTablePart[key] = new_val;
                 return new_val;

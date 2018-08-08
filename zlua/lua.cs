@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 using zlua.API;
 using zlua.TypeModel;
 using zlua.VM;
-using zlua.AuxLib;
 using System.Diagnostics;
 using zlua.ISA;
 namespace zlua
@@ -40,7 +39,7 @@ namespace zlua
     interface ITest
     {
         /// <summary>
-        /// 在这个函数中测试所有Test*函数
+        /// 在这个函数中测试所有`Test*函数
         /// </summary>
         void Test();
     }
@@ -66,38 +65,34 @@ namespace zlua
         Proto = 9,
         Upval = 10
     }
+
     /// <summary>
     /// lua接口
     /// </summary>
     public static class Lua
     {
         public const string Version = "zlua 1.0, based on lua 5.1.4";
-        /// <summary>
-        /// luaL_dofile, luaB_dofile, dofile
-        /// 实现决策】dofile在src中共有三处，luaB的实现简单，从luaD_call开始，lua.c的dofile不知道包装了什么鬼，不允许实现;但是lua.c是独立解释器，因此把实现放在这里
-        /// </summary>
+
         public static void DoFile(this TThread L, string path)
         {
             L.LoadFile(path);
             LApi.Call(L, nArgs: 0, nRetvals: 0);
         }
-        public static void DoString(this TThread L,string luaCode)
+        public static void DoString(this TThread L, string luaCode)
         {
             L.LoadString(luaCode);
             LApi.Call(L, nArgs: 0, nRetvals: 0);
         }
         /// <summary>
-        /// LUA_MULTRET, an option for lua_pcall and lua_call；两处引用。最好能删掉
+        /// 注册一个C#函数，在lua代码中用name调用
+        /// 被调用函数被包装成closure，在G中，key是`name
+        /// no upval，你要自己设置（永远用不到）
         /// </summary>
-        public const int MultiRet = -1;
-        #region 伪索引（pseudo indicdes），预计会删掉。
-        public const int RegisteyIndex = -10000;
-        public const int EnvIndex = -10001;
-        public const int GlobalsIndex = -10002;
-        public static int UpvalIndex(int index) => GlobalsIndex - index;
-        #endregion
-
-        public delegate int CSharpFunction(TThread L);
-
+        public static void Register(this TThread L, CSFunc csFunc, string name)
+        {
+            var newFunc=new CSharpClosure() { f = csFunc };
+            ((TTable)L.globalsTable).GetByStr((TString)name).Cl = newFunc;
+        }
+        public delegate int CSFunc(TThread L);
     }
 }
