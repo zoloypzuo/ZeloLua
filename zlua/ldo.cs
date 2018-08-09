@@ -25,18 +25,23 @@ namespace zlua.CallSystem
         /// 这个call是从lapi开始的call，lapi计算出funcIndex，这条线是算一次C call，在Thread里也存了counter
         /// lua的call指令只使用precall，因为后面跟着goto reentry，而这里要主动调用一次execute开始执行；precall处理C或lua，我们先走lua
         /// lapi和这里ldo的Call只是签名形式不一样；说是ccall是因为这个必须是c api发起的call，因为lua call只调用precall
+        /// lua_call 函数和args已经压栈，调用它；是一次C发起的调用
+        /// 这个特殊的call不是lua实现内部使用的，他会用api来push func，push args然后调用
+        /// 一个例子是每次启动chunk时，push chunk，call it，funcindex=topindex-1
         /// </summary>
-        public static void Call(TThread L, int funcIndex, int nRetvals)
+        public static void Call(TThread L, int nArgs)
         {
             ++L.nCSharpCalls;
             if (L.nCSharpCalls >= LuaConf.MaxCalls)
                 throw new Exception("CSharp stack overflow");
-            if (PreCall(L, funcIndex, nRetvals) == PCRLUA)
+            int funcIndex = L.topIndex - (nArgs + 1);
+            if (PreCall(L, funcIndex) == PCRLUA)
                 L.Execute(1);
             --L.nCSharpCalls;
         }
         /// <summary>
         /// tryfuncTM; 尝试返回元方法__call
+        /// 我们暂时不管metacall
         /// </summary>
         static TValue TryMetaCall(TThread L, int funcIndex)
         {
@@ -54,75 +59,55 @@ namespace zlua.CallSystem
         internal const int PCRC = 1;    /* 说明precall调用了一个c函数：did a call to a C function */
 
         /// <summary>
-        /// call指令实现
+        /// call指令实现，funindex是相对于base的偏移
         /// </summary>
-        public static int PreCall(TThread L, int funcIndex, int nRetvals)
+        public static int PreCall(TThread L, int funcOffset)
         {
+            int funcIndex = L.BaseIndex + funcOffset;
             //获取函数
             TValue func = L[funcIndex];
             if (!func.IsFunction)
-                func = TryMetaCall(L, funcIndex);
+                func = TryMetaCall(L, funcOffset);
             L.Ci.savedpc = L.pc;// 保存PC
             if (func.Cl is LuaClosure) {  /* Lua function? prepare its call */
                 LuaClosure cl = func.Cl as LuaClosure;
-                int _base; //新的base，算完再更新L的base
                 Proto p = cl.p;
-                if (!p.isVararg) {  /* no varargs? */
-                    //新base在func+1
-                    _base = funcIndex + 1;
-                    //截断多余的args，因为args可以压任意多个
-                    if (L.topIndex != _base + p.nParams)
-                        throw new Exception("实参列表与形参列表不匹配，可能需要vararg");
-                } else {  /* vararg function */
-                    //否则要从top减掉nparam，算出新base
-                    _base = L.topIndex - p.nParams; //这里很可能是错的，要
-                }
                 Callinfo ci = new Callinfo() {
                     funcIndex = funcIndex,
-                    baseIndex = _base,
-                    topIndex= _base + p.MaxStacksize
+                    topIndex = funcIndex + p.MaxStacksize
                 };
                 if (ci.topIndex >= L.StackLastFree)
-                    L.Alloc(ci.topIndex+ 1);
-                Debug.Assert(ci.topIndex < L.StackLastFree);
-                L.baseIndex = _base; //更新base
+                    L.Alloc(ci.topIndex + 1);
                 //更新pc
                 L.pc = 0;
                 L.codes = p.codes;
                 L.ciStack.Push(ci);
                 //栈帧清为nil
-                for (int st = L.topIndex; st < L.topIndex + p.MaxStacksize; st++) //st是stacktop
+                for (int st = L.topIndex; st < ci.topIndex; st++) //st是stacktop
                     L[st].SetNil();
+                L.topIndex = ci.topIndex;  //L.top指向栈帧分配好的空间之后
                 return PCRLUA;
             } else {  /* if is a C function, call it */
-                int n;
                 Callinfo ci = new Callinfo();
-                L.baseIndex = ci.baseIndex = ci.funcIndex + 1;
                 const int MinStackSizeForCSharpFunction = 20;
                 if (L.topIndex + MinStackSizeForCSharpFunction >= L.StackLastFree)
                     L.Alloc(L.topIndex + MinStackSizeForCSharpFunction + 1);
-                Debug.Assert(L.topIndex + MinStackSizeForCSharpFunction < L.StackLastFree);
                 // 调用C函数
-                n = (L[L.Ci.funcIndex].Cl as CSharpClosure).f(L);
+                (L[L.Ci.funcIndex].Cl as CSharpClosure).f(L);
                 // 调用结束之后的处理
-                PosCall(L, L.topIndex - n);
+                PosCall(L, L.topIndex - L.BaseIndex);
                 return PCRC;
             }
 
         }
         /// <summary>
-        /// 从C或lua函数返回；`firstResultIndex是返回值开始的index
-        /// return A  => mov RA, ...,R[L.topIndex] to R[ci.funcIndex], ...
+        /// 从C或lua函数返回;`resultIndex是返回值相对于L.base的偏移(很容易错，因为没有指针）
         /// </summary>
-        public static void PosCall(TThread L, int firstResultIndex)
+        public static void PosCall(TThread L, int resultOffset)
         {
             Callinfo ci = L.ciStack.Pop();
-            int resultIndex = ci.funcIndex;
-            L.baseIndex = L.Ci.baseIndex;
             L.pc = L.Ci.savedpc;
-            for (int i = firstResultIndex; i < L.topIndex; i++) {
-                L[resultIndex++].TVal = L[i];
-            }
+            L[ci.funcIndex].TVal = L[L.BaseIndex + resultOffset];
         }
     }
 }

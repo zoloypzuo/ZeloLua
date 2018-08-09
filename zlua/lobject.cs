@@ -306,7 +306,6 @@ namespace zlua.TypeModel
         internal List<TValue> k = new List<TValue>();
         internal List<Bytecode> codes = new List<Bytecode>();
 
-        internal bool isVararg;
         /// <summary>
         /// 暂时这样
         /// </summary>

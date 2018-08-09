@@ -34,9 +34,9 @@ namespace zlua.VM
         /// </summary>
         internal int topIndex;
         /// <summary>
-        /// 当前函数的base：Ido要使用，我希望他是private
+        /// 当前函数的base：Ido要使用，我希望他是private；是相对于栈底的偏移，所有函数内索引局部变量以这个为基准
         /// </summary>
-        internal int baseIndex;
+        internal int BaseIndex { get => Ci.BaseIndex; }
         /// <summary>
         /// 标记分配的大小,topIndex永远<stackLastFree
         /// </summary>
@@ -80,18 +80,16 @@ namespace zlua.VM
             const int BasicCiStackSize = 8;
             const int BasicStackSize = 40;
             ciStack = new Stack<Callinfo>(BasicCiStackSize);
-            ciStack.Push(new Callinfo());
             Stack = new List<TValue>();
             for (int i = 0; i < BasicStackSize; i++) {
                 Stack.Add(new TValue());
             }
-            Ci.baseIndex = baseIndex = topIndex = 1;
-            
+            topIndex = 0;
+
             //注册assert，这样可以测试了
-            int Assert(TThread L)
+            void Assert(TThread L)
             {
                 Debug.Assert(L[L.topIndex - 1].B);
-                return 0;
             }
             Lua.Register(this, Assert, "assert");
         }
@@ -107,8 +105,8 @@ namespace zlua.VM
             List<TValue> k = cl.p.k;
             while (true) {
                 Bytecode instr = codes[pc++];
-                Debug.Assert(baseIndex == Ci.baseIndex);
-                Debug.Assert(baseIndex <= topIndex && topIndex < StackLastFree); //这里始终没有。
+                Debug.Assert(BaseIndex == Ci.BaseIndex);
+                Debug.Assert(BaseIndex <= topIndex && topIndex < StackLastFree); //这里始终没有。
                 TValue ra = RA(instr);
                 switch (instr.Opcode) {
                     case Op.Move:
@@ -177,23 +175,23 @@ namespace zlua.VM
                             continue;
                         }
                     case Op.Add: {
-                            Arith(instr, (a,b)=>a+b, MMType.Add);
+                            Arith(instr, (a, b) => a + b, MMType.Add);
                             continue;
                         }
                     case Op.Sub: {
-                            Arith(instr, (a,b)=>a-b, MMType.Sub);
+                            Arith(instr, (a, b) => a - b, MMType.Sub);
                             continue;
                         }
                     case Op.Mul: {
-                            Arith(instr, (a,b)=>a*b, MMType.Mul);
+                            Arith(instr, (a, b) => a * b, MMType.Mul);
                             continue;
                         }
                     case Op.Div: {
-                            Arith(instr, (a,b)=>a/b, MMType.Div);
+                            Arith(instr, (a, b) => a / b, MMType.Div);
                             continue;
                         }
                     case Op.Mod: {
-                            Arith(instr, (a,b)=>a%b, MMType.Mod);
+                            Arith(instr, (a, b) => a % b, MMType.Mod);
                             continue;
                         }
                     case Op.Pow: {
@@ -233,7 +231,7 @@ namespace zlua.VM
                             int b = instr.B;
                             int c = instr.C;
                             Concat(c - b + 1, c);
-                            RA(instr).TVal = this[this.baseIndex + b];
+                            RA(instr).TVal = this[this.BaseIndex + b];
                             continue;
                         }
                     case Op.Jmp:
@@ -251,8 +249,8 @@ namespace zlua.VM
                     case Op.Call: {
                             int b = instr.B;
                             int n_retvals = instr.C - 1;
-                            if (b != 0) topIndex = this.baseIndex + instr.A + b;
-                            switch (LDo.PreCall(this, this.baseIndex + instr.A, n_retvals)) {
+                            if (b != 0) topIndex = this.BaseIndex + instr.A + b;
+                            switch (LDo.PreCall(this, this.BaseIndex + instr.A)) {
                                 case LDo.PCRLUA: {
                                         level++;
                                         goto reentry;
@@ -264,10 +262,10 @@ namespace zlua.VM
                             }
                         }
                     //case Op.TailCall:
-                        //continue;
+                    //continue;
                     case Op.Return: {
                             int b = instr.B;
-                            if (b != 0) topIndex = this.baseIndex + instr.A + b - 1;
+                            if (b != 0) topIndex = this.BaseIndex + instr.A + b - 1;
                             LDo.PosCall(this, instr.A);
                             if (--level == 0) /* chunk executed, return*/
                                 return;
@@ -341,13 +339,13 @@ namespace zlua.VM
         /// NO NEED TO IMPLEMENT check opmode of B, C
         /// </summary>
         [DebuggerStepThroughAttribute]
-        TValue R(int i) => Stack[baseIndex + i];
+        TValue R(int i) => Stack[BaseIndex + i];
         [DebuggerStepThroughAttribute]
-        TValue RA(Bytecode i) => Stack[baseIndex + i.A];
+        TValue RA(Bytecode i) => Stack[BaseIndex + i.A];
         [DebuggerStepThroughAttribute]
-        TValue RB(Bytecode i) => Stack[baseIndex + i.B];
+        TValue RB(Bytecode i) => Stack[BaseIndex + i.B];
         [DebuggerStepThroughAttribute]
-        TValue RC(Bytecode i) => Stack[baseIndex + i.C];
+        TValue RC(Bytecode i) => Stack[BaseIndex + i.C];
         [DebuggerStepThroughAttribute]
         TValue KBx(Bytecode i)
         {
@@ -487,7 +485,7 @@ namespace zlua.VM
             this[topIndex++].TVal = metamethod;
             this[topIndex++].TVal = lhs;
             this[topIndex++].TVal = rhs;
-            LDo.Call(this, topIndex - 3, 1);
+            LDo.Call(this, topIndex - 3);
             return this[--topIndex]; //TODO call做了什么，result放在哪里
         }
         #endregion
@@ -500,7 +498,7 @@ namespace zlua.VM
     class Callinfo
     {
         public int funcIndex;
-        public int baseIndex; // = func+1，vararg时会更高
+        public int BaseIndex { get => funcIndex + 1; }
         public int topIndex;
         /// <summary>
         /// saved pc when call function, index of instruction array

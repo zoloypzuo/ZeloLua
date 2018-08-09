@@ -10,6 +10,7 @@ using zlua.TypeModel;
 using zlua.VM;
 using System.Diagnostics;
 using zlua.ISA;
+using zlua.CallSystem;
 namespace zlua
 {
     /// <summary>
@@ -76,12 +77,12 @@ namespace zlua
         public static void DoFile(this TThread L, string path)
         {
             L.LoadFile(path);
-            LApi.Call(L, nArgs: 0, nRetvals: 0);
+            LDo.Call(L, 0);
         }
         public static void DoString(this TThread L, string luaCode)
         {
             L.LoadString(luaCode);
-            LApi.Call(L, nArgs: 0, nRetvals: 0);
+            LDo.Call(L, 0);
         }
         /// <summary>
         /// 注册一个C#函数，在lua代码中用name调用
@@ -90,9 +91,13 @@ namespace zlua
         /// </summary>
         public static void Register(this TThread L, CSFunc csFunc, string name)
         {
-            var newFunc=new CSharpClosure() { f = csFunc };
+            var newFunc = new CSharpClosure() { f = csFunc };
             ((TTable)L.globalsTable).GetByStr((TString)name).Cl = newFunc;
         }
-        public delegate int CSFunc(TThread L);
+        /// <summary>
+        /// 基于L.top，压函数，压args，返回1个值
+        /// </summary>
+        /// <param name="L"></param>
+        public delegate void CSFunc(TThread L);
     }
 }

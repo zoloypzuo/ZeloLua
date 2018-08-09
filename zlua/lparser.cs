@@ -16,8 +16,6 @@ namespace zlua.Parser
         NIndex,
         SIndex,
         PIndex, //proto index
-        Vararg,
-        MultiRetIndex,
         B,
         Nil,
         None, //没有返回值，比如语句
@@ -130,7 +128,7 @@ namespace zlua.Parser
         /// </summary>
         class FuncBlock : Block
         {
-            public Proto p;
+            public ProtoS p;
             /// <summary>
             /// first free register index
             /// </summary>
@@ -179,7 +177,7 @@ namespace zlua.Parser
                 var a = Blocks.blockStack[i].localName2RegIndex;
                 if (a.ContainsKey(name)) {
                     nameType = NameType.Local;
-                    return a[name].Item1;
+                    return a[name];
                 }
             }
             //现在不要管upval，基于一个简单的假设，不是local就是gloabl，也没有error

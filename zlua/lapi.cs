@@ -26,15 +26,6 @@ namespace zlua.API
     public static class LApi
     {
         #region load and call functions (run Lua code)
-        /// <summary>
-        /// lua_call 函数和args已经压栈，调用它；是一次C发起的调用
-        /// 名字重复了，不好。而且签名是一样的。
-        /// </summary>
-        public static void Call(TThread L, int nArgs, int nRetvals)
-        {
-            int funcIndex = L.topIndex - (nArgs + 1);
-            LDo.Call(L, funcIndex, nRetvals);
-        }
         public static void LoadFile(this TThread L, string path)
         {
             AntlrInputStream inputStream; //输入流传递给antlr的输入流
@@ -62,7 +53,12 @@ namespace zlua.API
                 L.strs.Add((TValue)item);
             }
             Closure closure = new LuaClosure(env: (TTable)L.globalsTable, nUpvals: 0, p: proto);
-            L[L.topIndex++].Cl = closure;
+            L.ciStack.Push(new Callinfo() {
+                funcIndex =L.topIndex,
+                topIndex= L.topIndex+proto.MaxStacksize
+            });
+            L[L.topIndex].Cl = closure;
+            L.topIndex = L.topIndex + proto.MaxStacksize;
         }
         public static void LoadString(this TThread L, string luaCode)
         {
@@ -89,7 +85,12 @@ namespace zlua.API
                 L.strs.Add((TValue)item);
             }
             Closure closure = new LuaClosure(env: (TTable)L.globalsTable, nUpvals: 0, p: proto);
-            L[L.topIndex++].Cl = closure;
+            L.ciStack.Push(new Callinfo() {
+                funcIndex = L.topIndex,
+                topIndex = L.topIndex + proto.MaxStacksize
+            });
+            L[L.topIndex].Cl = closure;
+            L.topIndex = L.topIndex + proto.MaxStacksize;
         }
         public delegate void CSharpFunction(TThread L);
         #endregion
