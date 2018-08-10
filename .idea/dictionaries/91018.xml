@@ -12,6 +12,7 @@
       <w>tokenization</w>
       <w>xasm</w>
       <w>zasm</w>
+      <w>zlua</w>
     </words>
   </dictionary>
 </component>
