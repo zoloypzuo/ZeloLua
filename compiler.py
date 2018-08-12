@@ -226,10 +226,10 @@ class LuaCompiler(LuaVisitor):
     # region tough ones
     def visitLvalueName(self, ctx: LuaParser.LvalueNameContext):
         self._handle_get_name(ctx.NAME().getText())  # 这里我们自然地处理了很多（很难做好）
-        map(self.visit, ctx.varSuffix())
+        list(map(self.visit, ctx.varSuffix()))
 
     def visitVarSuffix(self, ctx: LuaParser.VarSuffixContext):
-        map(self.visit, ctx.nameAndArgs())
+        list(map(self.visit, ctx.nameAndArgs()))
         self.visit(ctx.exp())
         name = ctx.NAME()
         if name:  # 这里是alternative，用if null简单判断一下
@@ -246,9 +246,7 @@ class LuaCompiler(LuaVisitor):
         if ctx.explist():
             exps = ctx.explist().exp()
             n_args = len(exps)
-            # for i in exps:
-            #     self.visit(i)
-            map(self.visit, exps)
+            list((map(self.visit, exps)))
         self._emit('call', n_args)
 
     def visitTablectorArgs(self, ctx: LuaParser.TablectorArgsContext):
@@ -306,7 +304,7 @@ class LuaCompiler(LuaVisitor):
         self.pstack.append(new_p)
         self._currp.enclosed_protos.append(new_p)
         if ctx.parlist():  # 可选项一定要检查null
-            param_names = map(lambda x: x.getText(), ctx.parlist().namelist())
+            param_names = list(map(lambda x: x.getText(), ctx.parlist().namelist()))
             self._currp.param_names = param_names
             for i in param_names:
                 self._currp.curr_locals[i] = None  # 形参加入符号表
@@ -326,7 +324,7 @@ class LuaCompiler(LuaVisitor):
             n_exps = len(exps)
             if n_exps > 1:
                 self._emit('new_table')
-            map(self.visit, exps)
+            list(map(self.visit, exps))
             if n_exps > 1:
                 self._emit('set_list', n_exps)  # 大于一个值要压缩成table
             self._emit('ret', 1)

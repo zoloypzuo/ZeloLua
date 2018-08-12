@@ -14,8 +14,9 @@ class Closure: pass
 
 
 class PythonClosure(Closure):
-    def __init__(self, py_func):
+    def __init__(self, py_func, n_ret):
         self.py_func = py_func
+        self.n_ret = n_ret
 
     def __call__(self, *args):
         return self.py_func(*args)
@@ -35,13 +36,13 @@ class LuaThread:
         self.globals: Dict[str,] = {}
         self.pc = 0
 
-        def lua_assert(thread):
-            assert thread.pop()
+        def lua_assert(b):
+            assert b
 
-        self.register(lua_assert, 'assert')
+        self.register(lua_assert, 'assert', 0)
 
-    def register(self, python_func, name):
-        self.globals[name] = PythonClosure(python_func)
+    def register(self, python_func, name, n_ret):
+        self.globals[name] = PythonClosure(python_func,n_ret)
 
     @property
     def curr_func(self) -> LuaClosure:
@@ -119,10 +120,6 @@ class LuaThread:
         name = operands[0]
         self.curr_func.func.curr_locals[name] = self.pop()
 
-    def _push_closure(self, *operands):
-        proto_index = operands[0]
-        self.push(LuaClosure(self.curr_func.func.inner_funcs[proto_index]))
-
     def _call(self, *operands):
         n_args = operands[0]
         args = self.popn(n_args)
@@ -141,7 +138,9 @@ class LuaThread:
                 dict(zip(closure.func.param_names, args)))  # 这句很复杂，一行把param names和args组合起来加入locals
             self.pc = -1
         else:
-            self.push(closure(args))  # push ret val
+            ret_val=closure(args)
+            if closure.n_ret==1:
+                self.push(ret_val)  # push ret val
 
     def _call_procedure(self, *operands):
         self._call(*operands)
