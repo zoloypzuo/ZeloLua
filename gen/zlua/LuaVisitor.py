@@ -1,4 +1,4 @@
-# Generated from C:/Users/91018/Documents/GitHub/zlua_prototype/_gen\Lua.g4 by ANTLR 4.7
+# Generated from C:/Users/91018/Documents/GitHub/zlua_prototype\Lua.g4 by ANTLR 4.7
 from antlr4 import *
 if __name__ is not None and "." in __name__:
     from .LuaParser import LuaParser
@@ -139,11 +139,6 @@ class LuaVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by LuaParser#nilfalsetruevarargExp.
-    def visitNilfalsetruevarargExp(self, ctx:LuaParser.NilfalsetruevarargExpContext):
-        return self.visitChildren(ctx)
-
-
     # Visit a parse tree produced by LuaParser#numberExp.
     def visitNumberExp(self, ctx:LuaParser.NumberExpContext):
         return self.visitChildren(ctx)
@@ -194,6 +189,11 @@ class LuaVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
+    # Visit a parse tree produced by LuaParser#nilfalsetrueExp.
+    def visitNilfalsetrueExp(self, ctx:LuaParser.NilfalsetrueExpContext):
+        return self.visitChildren(ctx)
+
+
     # Visit a parse tree produced by LuaParser#tablectorExp.
     def visitTablectorExp(self, ctx:LuaParser.TablectorExpContext):
         return self.visitChildren(ctx)
@@ -214,8 +214,13 @@ class LuaVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by LuaParser#var.
-    def visitVar(self, ctx:LuaParser.VarContext):
+    # Visit a parse tree produced by LuaParser#lvalueName.
+    def visitLvalueName(self, ctx:LuaParser.LvalueNameContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by LuaParser#rvalueName.
+    def visitRvalueName(self, ctx:LuaParser.RvalueNameContext):
         return self.visitChildren(ctx)
 
 

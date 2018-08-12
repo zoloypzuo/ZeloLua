@@ -24,7 +24,6 @@ def do_string(lua_code: str, thread: LuaThread = None):
     compiler = LuaCompiler()
     compiler.visit(tree)
     lc = LuaClosure(compiler.chunk_proto)
-
     #有点复杂，思考过的，chunk签名形如void chunk(){}，因此不需要传参数和返回值
     #但是提出来这件事的重要原因是调用chunk的逻辑必须是单独的，不可能和其他lua closure共用call函数
     #do string有两种情况，一是什么都没有，二是已经加载了lua代码，内部元编程加载新代码，后者要保存指针，就像一般的调用一样

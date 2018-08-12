@@ -2,6 +2,8 @@
   <dictionary name="91018">
     <words>
       <w>addr</w>
+      <w>endpc</w>
+      <w>exps</w>
       <w>ident</w>
       <w>instrs</w>
       <w>mssg</w>
@@ -9,7 +11,9 @@
       <w>setglobal</w>
       <w>setstacksize</w>
       <w>setstacksizes</w>
+      <w>startpc</w>
       <w>tokenization</w>
+      <w>upval</w>
       <w>xasm</w>
       <w>zasm</w>
       <w>zlua</w>

@@ -58,7 +58,7 @@ doc:LONGSTRING; //chunk, function（其实都是proto）和表可以拥有doc
 /* #endregion*/
 /* #region Expression*/
 exp
-    : nilfalsetruevararg=('nil'|'false'|'true') #nilfalsetruevarargExp
+    : nilfalsetrue=('nil'|'false'|'true') #nilfalsetrueExp
     | number #numberExp
     | string #stringExp
     | functiondef #functiondefExp
@@ -100,7 +100,9 @@ functioncall: varOrExp nameAndArgs+;
 
 varOrExp: var | '(' exp ')' ; //其实还是exp，左值也要返回右值的
 
-var: (NAME | '(' exp ')' varSuffix) varSuffix*; //左值，name或者表字段
+var
+    : NAME varSuffix*  #lvalueName
+    | '(' exp ')' varSuffix+ #rvalueName; //左值，name或者表字段
 
 varSuffix: nameAndArgs* ('[' exp ']' | '.' NAME);
 
@@ -115,7 +117,7 @@ functiondef: 'function' funcbody;  //定义函数;
 
 funcbody: '(' parlist? ')' block 'end';
 
-parlist: namelist (',' '...')? | '...' ; //param list，一堆param后vararg或单独vararg;
+parlist: namelist; //param list，一堆param后vararg或单独vararg;
 
 tableconstructor: '{' fieldlist? '}';
 
