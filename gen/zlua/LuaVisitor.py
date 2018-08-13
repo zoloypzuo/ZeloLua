@@ -214,13 +214,43 @@ class LuaVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by LuaParser#lvalueName.
-    def visitLvalueName(self, ctx:LuaParser.LvalueNameContext):
+    # Visit a parse tree produced by LuaParser#nameLvalue.
+    def visitNameLvalue(self, ctx:LuaParser.NameLvalueContext):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by LuaParser#rvalueName.
-    def visitRvalueName(self, ctx:LuaParser.RvalueNameContext):
+    # Visit a parse tree produced by LuaParser#fieldLvalue.
+    def visitFieldLvalue(self, ctx:LuaParser.FieldLvalueContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by LuaParser#normalSetter.
+    def visitNormalSetter(self, ctx:LuaParser.NormalSetterContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by LuaParser#dotSetter.
+    def visitDotSetter(self, ctx:LuaParser.DotSetterContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by LuaParser#normalGetter.
+    def visitNormalGetter(self, ctx:LuaParser.NormalGetterContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by LuaParser#dotGetter.
+    def visitDotGetter(self, ctx:LuaParser.DotGetterContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by LuaParser#lvalueVar.
+    def visitLvalueVar(self, ctx:LuaParser.LvalueVarContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by LuaParser#rvalueVar.
+    def visitRvalueVar(self, ctx:LuaParser.RvalueVarContext):
         return self.visitChildren(ctx)
 
 
@@ -274,8 +304,18 @@ class LuaVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by LuaParser#field.
-    def visitField(self, ctx:LuaParser.FieldContext):
+    # Visit a parse tree produced by LuaParser#keyValField.
+    def visitKeyValField(self, ctx:LuaParser.KeyValFieldContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by LuaParser#nameValField.
+    def visitNameValField(self, ctx:LuaParser.NameValFieldContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by LuaParser#expField.
+    def visitExpField(self, ctx:LuaParser.ExpFieldContext):
         return self.visitChildren(ctx)
 
 

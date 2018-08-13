@@ -1,16 +1,17 @@
-# zlua
-设计
+# zlua设计
 ## 栈式虚拟机和指令集
 ### 调用与返回协议
-1. 宿主和Lua函数协议相同
+1. 宿主函数和Lua函数协议相同
 2. no vararg，这个特性根本用不到（python都很少用）
-3. 调用流程：push closure，push args（被解析lua代码中的实参列表从左到右压栈），`_call会逆序args（因为压栈）然后以closure(args)调用它
-4. 返回流程：pop ret：单返回值，以多返回值形式写的会被包装到tuple里（目前是table）
+3. 调用流程：push closure，push args（被解析lua代码中的实参列表从左到右压栈）
+    1. 宿主函数以closure(args)调用它
+4. 返回流程：
+    1. 单返回值：
+        1. 多返回值会被包装到table里，返回一个table
+        2. 没有返回值的返回None，包括"return "和函数末尾自动添加ret 0指令
+    2. 过程调用，这是有语句级别确定的，所以必须。所以我选择加指令，procedure pop（专用pop）
+        
 
-### 解包/多重赋值协议
-1. a,b,c这样的会被包装成tuple
-2. 赋值右侧的tuple自动解包
-3. 不允许类似于 a, b, c = 1, (2, 3)，个数要严格匹配
 
 ### 虚拟机执行流程
 1. 因为python严格不允许goto（事实上真的不好，你得逼自己想一个好的，抽象的solution）
@@ -127,7 +128,52 @@ prefixexp: varOrExp nameAndArgs *; // var或带括号的exp；注意看下一条
 name args是调用
 
 ###表创建指令
-####setlist n
+```antlrv4
+tableconstructor: '{' fieldlist? '}';
+fieldlist: field (fieldsep field)* fieldsep?;
+field: '[' exp ']' '=' exp | NAME '=' exp | exp ; //表ctor的字段初始化;
+```
+首先一定有一句newtable，然后处理field
+这些new指令会把表压栈（尤其是set new table）
+####set_new_list n
+return 1，2，3和local a=1，2，3时使用，因为隐式table，可以一次解决
 一个newtable和n个exp已经正序（从左到右）压栈，取出exps加入表，把表压栈
 ####newtable
 local a={}。所以{}是一个表达式，所以要有指令，所有ctor以newtable打头
+####append_new_list
+新指令，table ctor变数太多，遇到exp我们就append
+####set_new_table
+
+
+###函数实现
+因为相关parser rule太多了
+####定义
+'local' 'function' NAME funcbody #localfunctiondefStat 完成
+'function' funcname funcbody #functiondefStat 难 完成
+functiondef #functiondefExp 完成
+####调用
+缺方法
+functioncall #functioncallStat
+
+### 解包/多重赋值协议
+1. a,b,c这样的exps会被包装成tuple
+2. 赋值右侧的tuple自动解包
+3. 不允许类似于 a, b, c = 1, (2, 3)，个数要严格匹配
+
+####赋值
+```antlrv4
+varlist '=' explist #assignStat
+var
+    : NAME varSuffix*  #lvalueName
+    | '(' exp ')' varSuffix+ #rvalueName; //左值，name或者表字段
+varSuffix: nameAndArgs* ('[' exp ']' | '.' NAME);
+```
+这里很难做好，lua manual对多重复制的语义有明确的规定。而且和python不太一样。
+这是一个语言细节。不应该太依赖，这样会写出容易错的代码（以manual的那个例子）
+先计算所有左侧的表字段，因为这里面涉及exp，这一步对于varlist要从左到右，因为可以调用函数，理论上有副作用
+然后计算右侧所有表达式，这是一般的设计。因为这样才能a,b=b,a来swap。
+
+答案是不要这个特性了。
+
+来看local声明的assign
+我们用unpack解开。总之栈顶是一个exps，去出来后用new local直接赋值

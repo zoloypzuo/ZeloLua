@@ -13,6 +13,7 @@ def do_file(path: str, thread: LuaThread = None):
     input = FileStream(path)
     # TODO
 
+
 def do_string(lua_code: str, thread: LuaThread = None):
     '''主要用这个测试短小的lua代码；默认新开一个thread'''
     thread = thread or LuaThread()
@@ -22,15 +23,16 @@ def do_string(lua_code: str, thread: LuaThread = None):
     parser = LuaParser(stream)
     tree = parser.chunk()
     compiler = LuaCompiler()
+    compiler._code = lua_code #j f debug
     compiler.visit(tree)
     lc = LuaClosure(compiler.chunk_proto)
-    #有点复杂，思考过的，chunk签名形如void chunk(){}，因此不需要传参数和返回值
-    #但是提出来这件事的重要原因是调用chunk的逻辑必须是单独的，不可能和其他lua closure共用call函数
-    #do string有两种情况，一是什么都没有，二是已经加载了lua代码，内部元编程加载新代码，后者要保存指针，就像一般的调用一样
-    #而且要用if判断，否则null reference
-    #要理解execute的功能：就是状态机的转换动作，而且是靠指令来行动的，你要给他准备正确的pc和栈帧，仅此而且，它只负责loop里执行指令
+    # 有点复杂，思考过的，chunk签名形如void chunk(){}，因此不需要传参数和返回值
+    # 但是提出来这件事的重要原因是调用chunk的逻辑必须是单独的，不可能和其他lua closure共用call函数
+    # do string有两种情况，一是什么都没有，二是已经加载了lua代码，内部元编程加载新代码，后者要保存指针，就像一般的调用一样
+    # 而且要用if判断，否则null reference
+    # 要理解execute的功能：就是状态机的转换动作，而且是靠指令来行动的，你要给他准备正确的pc和栈帧，仅此而且，它只负责loop里执行指令
     if thread.frame_stack:
-        thread.curr_func.saved_pc=thread.pc
-    thread.pc=0 #调用新函数，指针清零
+        thread.curr_func.saved_pc = thread.pc
+    thread.pc = 0  # 调用新函数，指针清零
     thread.frame_stack.append(lc)
     thread.execute()

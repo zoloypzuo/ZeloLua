@@ -14,9 +14,8 @@ class Closure: pass
 
 
 class PythonClosure(Closure):
-    def __init__(self, py_func, n_ret):
+    def __init__(self, py_func):
         self.py_func = py_func
-        self.n_ret = n_ret
 
     def __call__(self, *args):
         return self.py_func(*args)
@@ -28,6 +27,7 @@ class LuaClosure(Closure):
         self.saved_pc = 0
         self.func: Proto = func
         self.exp_stack = []  # "stack-based vm"
+        self.upvals = []
 
 
 class LuaThread:
@@ -39,10 +39,10 @@ class LuaThread:
         def lua_assert(b):
             assert b
 
-        self.register(lua_assert, 'assert', 0)
+        self.register(lua_assert, 'assert')
 
-    def register(self, python_func, name, n_ret):
-        self.globals[name] = PythonClosure(python_func,n_ret)
+    def register(self, python_func, name):
+        self.globals[name] = PythonClosure(python_func)
 
     @property
     def curr_func(self) -> LuaClosure:
@@ -133,14 +133,15 @@ class LuaThread:
                 raise TypeError('对象不可调用')  # 没有metatable字段
 
         if isinstance(closure, LuaClosure):
+            self.curr_func.saved_pc = self.pc
             self.frame_stack.append(closure)
             closure.func.locals.update(
                 dict(zip(closure.func.param_names, args)))  # 这句很复杂，一行把param names和args组合起来加入locals
             self.pc = -1
         else:
-            ret_val=closure(args)
-            if closure.n_ret==1:
-                self.push(ret_val)  # push ret val
+            assert isinstance(closure, PythonClosure)
+            ret_val = closure(args)
+            self.push(ret_val)  # push ret val
 
     def _call_procedure(self, *operands):
         self._call(*operands)
@@ -149,19 +150,21 @@ class LuaThread:
     def _closure(self, *operands):
         index = operands[0]
         lc = LuaClosure(self.curr_func.func.enclosed_protos[index])
-        self.push()
+        self.push(lc)
 
     def _ret(self, *operands):
         n_ret = operands[0]
         ret_val = None
-        if n_ret == 1:
+        if n_ret == 1:  # ret 0则返回值为None，否则弹出一个值
             ret_val = self.pop()
         self.frame_stack.pop()
         if not self.frame_stack:
             return 'return from chunk'
         self.pc = self.curr_func.saved_pc
-        if n_ret == 1:
-            self.push(ret_val)
+        self.push(ret_val)
+
+    def _procedure_pop(self, *operands):
+        self.pop()
 
     def _self(self, *operands):
         func_name = operands[0]
@@ -206,21 +209,36 @@ class LuaThread:
     def _minus(self, *operands):
         oprd = self.pop()
         self.push(-oprd)
-
+    def _len(self,*operands):
+        oprd=self.pop()
+        self.push(len(oprd))
     def _eq(self, *operands):
         a0 = self.pop()
         a1 = self.pop()
         self.push(a0 == a1)
 
-    def _set_list(self, *operands):
+    def _new_table(self, *operands):
+        self.push(Table())
+
+    def _set_new_list(self, *operands):
         n_exps = operands[0]
         exps = self.popn(n_exps)
         table: Table = self.pop()
         table.apart += exps
         self.push(table)
 
-    def _new_table(self, *operands):
-        self.push(Table())
+    def _append_new_list(self, *operands):
+        exp = self.pop()
+        table = self.pop()
+        table.apart.append(exp)
+        self.push(table)
+
+    def _set_new_table(self, *operands):
+        val = self.pop()
+        key = self.pop()
+        table = self.pop()
+        table[key] = val
+        self.push(table)
 
     def _get_table(self, *operands):
         key = self.pop()

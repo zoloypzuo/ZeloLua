@@ -35,6 +35,9 @@ class Table:
         for i in self.apart: yield i
         for k, v in self.hpart.items(): yield k, v
 
+    def __len__(self):
+        return len(self.apart) + len(self.hpart)
+
 
 if __name__ == '__main__':
     t = Table()

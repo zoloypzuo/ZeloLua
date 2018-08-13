@@ -62,10 +62,10 @@ class Proto:
         curr_enclosed_bs = self._curr_enclosed_bs
         index = len(curr_enclosed_bs)
         curr_enclosed_bs.append(new_b)
-        self.instrs.append('enter_block', index)
+        self.instrs.append(Instr('enter_block', index))
 
     def exit_b(self):
-        self.instrs.append('exit_block')
+        self.instrs.append(Instr('exit_block'))
         self._curr_enclosed_bs.pop()
 
 
@@ -90,6 +90,7 @@ class LuaCompiler(LuaVisitor):
         self.pstack: List[Proto] = []
         self.chunk_proto = Proto()
         self.pstack.append(self.chunk_proto)
+        self._code = None  # just for debug
 
     @property
     def _currp(self) -> Proto:
@@ -215,25 +216,40 @@ class LuaCompiler(LuaVisitor):
         switch[ctx.operatorComparison.type]()
 
     # endregion
-    # region function def, table ctor
-    def visitFunctiondefExp(self, ctx: LuaParser.FunctiondefExpContext):
-        pass
 
     def visitTablectorExp(self, ctx: LuaParser.TablectorExpContext):
-        pass
+        '''
+        tableconstructor: '{' fieldlist? '}';
+        fieldlist: field (fieldsep field)* fieldsep?;
+        field: '[' exp ']' '=' exp | NAME '=' exp | exp ; //表ctor的字段初始化;
+        '''
+        self._emit('new_table')
+        self.visitChildren(ctx)
 
-    # endregion
-    # region tough ones
-    def visitLvalueName(self, ctx: LuaParser.LvalueNameContext):
-        self._handle_get_name(ctx.NAME().getText())  # 这里我们自然地处理了很多（很难做好）
+    def visitKeyValField(self, ctx: LuaParser.KeyValFieldContext):
+        self.visitChildren(ctx)
+        self._emit('set_new_table')
+
+    def visitNameValField(self, ctx: LuaParser.NameValFieldContext):
+        self._emit('push_l', ctx.NAME().getText())
+        self.visit(ctx.exp())
+        self._emit('set_new_table')
+
+    def visitExpField(self, ctx: LuaParser.ExpFieldContext):
+        self.visit(ctx.exp())
+        self._emit('append_new_list')
+
+    # region prefixexp and function call
+    def visitLvalueVar(self, ctx: LuaParser.LvalueVarContext):
+        self._handle_get_name(ctx.NAME().getText())
         list(map(self.visit, ctx.varSuffix()))
 
-    def visitVarSuffix(self, ctx: LuaParser.VarSuffixContext):
-        list(map(self.visit, ctx.nameAndArgs()))
+    def visitDotGetter(self, ctx: LuaParser.DotGetterContext):
+        self._emit('push_l', ctx.NAME().getText())
+        self._emit('get_table')
+
+    def visitNormalGetter(self, ctx: LuaParser.NormalGetterContext):
         self.visit(ctx.exp())
-        name = ctx.NAME()
-        if name:  # 这里是alternative，用if null简单判断一下
-            self._emit('push_l', name)  # 这里name是一个str key
         self._emit('get_table')
 
     def visitNameAndArgs(self, ctx: LuaParser.NameAndArgsContext):
@@ -265,8 +281,12 @@ class LuaCompiler(LuaVisitor):
     def visitOrExp(self, ctx: LuaParser.OrExpContext):
         pass
 
+    def visitFunctioncallStat(self, ctx: LuaParser.FunctioncallStatContext):
+        self.visitChildren(ctx)
+        self._emit('procedure_pop')
+
     # endregion
-    # region
+    # region assign stat
     def visitLocalDeclarationStat(self, ctx: LuaParser.LocalDeclarationStatContext):
         names = list(map(lambda x: x.getText(), ctx.namelist().NAME()))
         exps = ctx.explist().exp()
@@ -286,12 +306,69 @@ class LuaCompiler(LuaVisitor):
             self._emit('set_local', names[0])
 
     def visitAssignStat(self, ctx: LuaParser.AssignStatContext):
-        pass
+        tag, o = self.visit(ctx.lvalue())
+        self.visit(ctx.exp())
+        if tag == 'nameLvalue':
+            self._handle_set_name(o)
+        else:
+            self._emit('set_table')
+
+    def visitNameLvalue(self, ctx: LuaParser.NameLvalueContext):
+        return 'nameLvalue', ctx.NAME().getText()
+
+    def visitFieldLvalue(self, ctx: LuaParser.FieldLvalueContext):
+        self.visitChildren(ctx)
+        return 'fieldLvalue', None
+
+    def visitNormalSetter(self, ctx: LuaParser.NormalSetterContext):
+        self.visit(ctx.exp())
+
+    def visitDotSetter(self, ctx: LuaParser.DotSetterContext):
+        self._emit('push_l', ctx.NAME().getText())
+
+    # region function def
+    def visitFunctiondefExp(self, ctx: LuaParser.FunctiondefExpContext):
+        index = len(self._currp.enclosed_protos)
+        self.visit(ctx.functiondef().funcbody())
+        self._emit('closure', index)
 
     def visitFunctiondefStat(self, ctx: LuaParser.FunctiondefStatContext):
-        self.visit(ctx.funcbody())
+        # 'function' funcname funcbody #functiondefStat
+        # funcname: NAME tableOrFunc methodname; //任意多次查表得到对象，然后调用方法；最简单的情况下，就是单独一个name
+        # tableOrFunc:('.' NAME)*;
+        # methodname:(':' NAME)?;
+        name = ctx.funcname().NAME().getText()
+        index = len(self._currp.enclosed_protos)
+        fn = ctx.funcname()
+        mn = fn.methodname().NAME()
+        tof = fn.tableOrFunc().NAME()
+        if not mn and not tof:
+            # 'function f() end'
+            self.visit(ctx.funcbody())
+            self._emit('closure', index)
+            self._emit('set_global', name)
+        else:
+            self._handle_get_name(name)
+            if tof:  # 'local t={["obj"]={}}; function t.obj:m() end'
+                names = list(map(lambda x: x.getText(), tof))
+                if len(names) > 1:
+                    for i in names[:-1]:
+                        self._emit('push_l', i)
+                        self._emit('get_table')
+                self._emit('push_l', names[-1])
+                if mn:
+                    self._emit('get_table')
+            if mn:
+                # 'local obj={}; function obj:m() end'
+                self._emit('push_l', mn.getText())
+            self.visit(ctx.funcbody())
+            self._emit('closure', index)
+            if mn:
+                self._currp.enclosed_protos[index].param_names.insert(0, 'self')
+            self._emit('set_table')
 
     def visitLocalfunctiondefStat(self, ctx: LuaParser.LocalfunctiondefStatContext):
+        # 'local' 'function' NAME funcbody #localfunctiondefStat
         name = ctx.NAME().getText()
         index = len(self._currp.enclosed_protos)
         self._currp.curr_locals[name] = None
@@ -301,21 +378,20 @@ class LuaCompiler(LuaVisitor):
 
     def visitFuncbody(self, ctx: LuaParser.FuncbodyContext):
         new_p = Proto()
-        self.pstack.append(new_p)
         self._currp.enclosed_protos.append(new_p)
+        self.pstack.append(new_p)
         if ctx.parlist():  # 可选项一定要检查null
-            param_names = list(map(lambda x: x.getText(), ctx.parlist().namelist()))
+            param_names = list(map(lambda x: x.getText(), ctx.parlist().namelist().NAME()))
             self._currp.param_names = param_names
+            self._currp.curr_locals[
+                'self'] = None  # 这是一个妥协，self虽然不是关键字，其实就是关键字，你不该用它声明局部变量，这里是因为method的情况，self在funcbody外处理。要么把new proto移出去，那很烦
             for i in param_names:
                 self._currp.curr_locals[i] = None  # 形参加入符号表
+        else:
+            self._currp.param_names = []  # 一个corner case，没形参列表时也要初始化
         self.visit(ctx.block())
         self._emit('ret', 0)
         self.pstack.pop()
-
-    def visitDoendStat(self, ctx: LuaParser.DoendStatContext):
-        self._currp.enter_newb()
-        self.visitChildren(ctx)
-        self._currp.exit_b()
 
     def visitRetstat(self, ctx: LuaParser.RetstatContext):
         # retstat: 'return' explist? ';'?;
@@ -326,15 +402,21 @@ class LuaCompiler(LuaVisitor):
                 self._emit('new_table')
             list(map(self.visit, exps))
             if n_exps > 1:
-                self._emit('set_list', n_exps)  # 大于一个值要压缩成table
+                self._emit('set_new_list', n_exps)  # 大于一个值要压缩成table
             self._emit('ret', 1)
         else:
             self._emit('ret', 0)
 
-    # endregion
+    def visitDoendStat(self, ctx: LuaParser.DoendStatContext):
+        self._currp.enter_newb()
+        self.visitChildren(ctx)
+        self._currp.exit_b()
+
     def visitChunk(self, ctx: LuaParser.ChunkContext):
         self.visitChildren(ctx)
         self._emit('ret', 0)
+
+    # endregion
 
 
 if __name__ == '__main__':

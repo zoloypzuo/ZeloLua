@@ -19,7 +19,7 @@ retstat: 'return' explist? ';'?;
 /* #region Statement*/
 stat
     : ';' #emptyStat
-    | varlist '=' explist #assignStat
+    | lvalue '=' exp #assignStat
     | functioncall #functioncallStat
     | 'break' #breakStat
     | 'do' block 'end' #doendStat
@@ -100,11 +100,25 @@ functioncall: varOrExp nameAndArgs+;
 
 varOrExp: var | '(' exp ')' ; //其实还是exp，左值也要返回右值的
 
-var
-    : NAME varSuffix*  #lvalueName
-    | '(' exp ')' varSuffix+ #rvalueName; //左值，name或者表字段
+lvalue
+    :NAME #nameLvalue // => set_lug
+    |prefixexp setter #fieldLvalue;
 
-varSuffix: nameAndArgs* ('[' exp ']' | '.' NAME);
+setter
+    :'[' exp ']' #normalSetter
+    | '.' NAME #dotSetter;
+
+
+getter
+    :'[' exp ']' #normalGetter
+    | '.' NAME #dotGetter;
+
+
+var  //右值。和lvalue匹配的str内容是一样的，但是是右值
+    : NAME varSuffix*  #lvalueVar
+    | '(' exp ')' varSuffix+ #rvalueVar;
+
+varSuffix: nameAndArgs* getter;
 
 nameAndArgs: (':' NAME)? args;
 
@@ -123,7 +137,10 @@ tableconstructor: '{' fieldlist? '}';
 
 fieldlist: field (fieldsep field)* fieldsep?;
 
-field: '[' exp ']' '=' exp | NAME '=' exp | exp ; //表ctor的字段初始化;
+field
+    : '[' exp ']' '=' exp #keyValField
+    | NAME '=' exp  #nameValField
+    | exp #expField; //表ctor的字段初始化;
 
 fieldsep: ',' | ';' ; //表ctor的字段分隔符;
 
