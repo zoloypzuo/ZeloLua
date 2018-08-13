@@ -23,7 +23,6 @@ def do_string(lua_code: str, thread: LuaThread = None):
     parser = LuaParser(stream)
     tree = parser.chunk()
     compiler = LuaCompiler()
-    compiler._code = lua_code #j f debug
     compiler.visit(tree)
     lc = LuaClosure(compiler.chunk_proto)
     # 有点复杂，思考过的，chunk签名形如void chunk(){}，因此不需要传参数和返回值
@@ -32,7 +31,7 @@ def do_string(lua_code: str, thread: LuaThread = None):
     # 而且要用if判断，否则null reference
     # 要理解execute的功能：就是状态机的转换动作，而且是靠指令来行动的，你要给他准备正确的pc和栈帧，仅此而且，它只负责loop里执行指令
     if thread.frame_stack:
-        thread.curr_func.saved_pc = thread.pc
+        thread.curr_cl.saved_pc = thread.pc
     thread.pc = 0  # 调用新函数，指针清零
     thread.frame_stack.append(lc)
     thread.execute()

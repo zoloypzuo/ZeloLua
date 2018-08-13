@@ -25,7 +25,7 @@ class LuaClosure(Closure):
 
     def __init__(self, func: Proto):
         self.saved_pc = 0
-        self.func: Proto = func
+        self.p: Proto = func
         self.exp_stack = []  # "stack-based vm"
         self.upvals = []
 
@@ -45,35 +45,35 @@ class LuaThread:
         self.globals[name] = PythonClosure(python_func)
 
     @property
-    def curr_func(self) -> LuaClosure:
+    def curr_cl(self) -> LuaClosure:
         return self.frame_stack[-1]
 
     @property
     def _instrs(self):  # just for debug
-        return self.curr_func.func.instrs
+        return self.curr_cl.p.instrs
 
     def push(self, val):
-        self.curr_func.exp_stack.append(val)
+        self.curr_cl.exp_stack.append(val)
 
     def pop(self):
-        return self.curr_func.exp_stack.pop()
+        return self.curr_cl.exp_stack.pop()
 
     def pushn(self, l: list):
-        self.curr_func.exp_stack += l  # [1]+=[2,3] => [1,2,3]
+        self.curr_cl.exp_stack += l  # [1]+=[2,3] => [1,2,3]
 
     def popn(self, n):
         '''正序弹出n个栈顶元素，eg s=[1,2,3,4], popn(2) => [3,4]'''
         assert n >= 0
         if n > 0:
-            exps = self.curr_func.exp_stack[-n:]  # tricky: [1,2,3][-1:] => [3] but [1,2,3][-0:] => [1,2,3]
-            del self.curr_func.exp_stack[-n:]
+            exps = self.curr_cl.exp_stack[-n:]  # tricky: [1,2,3][-1:] => [3] but [1,2,3][-0:] => [1,2,3]
+            del self.curr_cl.exp_stack[-n:]
             return exps
         else:
             return []
 
     def execute(self):
         while True:
-            self.curr_instr = self.curr_func.func.instrs[self.pc]
+            self.curr_instr = self.curr_cl.p.instrs[self.pc]
             op = '_' + self.curr_instr.op
             operands = self.curr_instr.operands
             if getattr(self, op)(*operands) == 'return from chunk':  # 为了能从chunk返回
@@ -86,11 +86,11 @@ class LuaThread:
 
     def _get_upval(self, *operands):
         name = operands[0]
-        self.push(self.curr_func.upvals[name])
+        self.push(self.curr_cl.upvals[name])
 
     def _set_upval(self, *operands):
         name = operands[0]
-        self.curr_func.upvals[name] = self.pop()
+        self.curr_cl.upvals[name] = self.pop()
 
     def _get_global(self, *operands):
         name = operands[0]
@@ -110,15 +110,15 @@ class LuaThread:
     def _new_locals(self, *operands):
         names = operands
         exps = self.popn(len(names))
-        self.curr_func.func.curr_locals.update(dict(zip(names, exps)))
+        self.curr_cl.p.curr_locals.update(dict(zip(names, exps)))
 
     def _get_local(self, *operands):
         name = operands[0]
-        self.push(self.curr_func.func.curr_locals[name])
+        self.push(self.curr_cl.p.curr_locals[name])
 
     def _set_local(self, *operands):
         name = operands[0]
-        self.curr_func.func.curr_locals[name] = self.pop()
+        self.curr_cl.p.curr_locals[name] = self.pop()
 
     def _call(self, *operands):
         n_args = operands[0]
@@ -133,10 +133,10 @@ class LuaThread:
                 raise TypeError('对象不可调用')  # 没有metatable字段
 
         if isinstance(closure, LuaClosure):
-            self.curr_func.saved_pc = self.pc
+            self.curr_cl.saved_pc = self.pc
             self.frame_stack.append(closure)
-            closure.func.locals.update(
-                dict(zip(closure.func.param_names, args)))  # 这句很复杂，一行把param names和args组合起来加入locals
+            closure.p.locals.update(
+                dict(zip(closure.p.param_names, args)))  # 这句很复杂，一行把param names和args组合起来加入locals
             self.pc = -1
         else:
             assert isinstance(closure, PythonClosure)
@@ -149,7 +149,7 @@ class LuaThread:
 
     def _closure(self, *operands):
         index = operands[0]
-        lc = LuaClosure(self.curr_func.func.enclosed_protos[index])
+        lc = LuaClosure(self.curr_cl.p.enclosed_protos[index])
         self.push(lc)
 
     def _ret(self, *operands):
@@ -160,7 +160,7 @@ class LuaThread:
         self.frame_stack.pop()
         if not self.frame_stack:
             return 'return from chunk'
-        self.pc = self.curr_func.saved_pc
+        self.pc = self.curr_cl.saved_pc
         self.push(ret_val)
 
     def _procedure_pop(self, *operands):
@@ -253,11 +253,11 @@ class LuaThread:
 
     def _enter_block(self, *operands):
         index = operands[0]
-        curr_proto = self.curr_func.func
+        curr_proto = self.curr_cl.p
         curr_proto.bstack.push(curr_proto.enclosed_blocks[index])
 
     def _exit_block(self, *operands):
-        curr_proto = self.curr_func.func
+        curr_proto = self.curr_cl.p
         curr_proto.bstack.pop()
 
     def _try_meta_call(self, func):

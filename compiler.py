@@ -90,7 +90,6 @@ class LuaCompiler(LuaVisitor):
         self.pstack: List[Proto] = []
         self.chunk_proto = Proto()
         self.pstack.append(self.chunk_proto)
-        self._code = None  # just for debug
 
     @property
     def _currp(self) -> Proto:
@@ -140,10 +139,6 @@ class LuaCompiler(LuaVisitor):
         elif lug == 'global':
             self._emit('set_global', name)
 
-    def _handle_exp(self, ret: tuple):
-        '''辅助为exp生成指令,ret就是visit*的返回值，本身是tuple'''
-        tag, o = ret
-        if tag == 'name': pass
 
     # region handle literals
     def visitNumberExp(self, ctx: LuaParser.NumberExpContext):
@@ -218,11 +213,6 @@ class LuaCompiler(LuaVisitor):
     # endregion
 
     def visitTablectorExp(self, ctx: LuaParser.TablectorExpContext):
-        '''
-        tableconstructor: '{' fieldlist? '}';
-        fieldlist: field (fieldsep field)* fieldsep?;
-        field: '[' exp ']' '=' exp | NAME '=' exp | exp ; //表ctor的字段初始化;
-        '''
         self._emit('new_table')
         self.visitChildren(ctx)
 
@@ -239,7 +229,7 @@ class LuaCompiler(LuaVisitor):
         self.visit(ctx.exp())
         self._emit('append_new_list')
 
-    # region prefixexp and function call
+    # region prefixexp
     def visitLvalueVar(self, ctx: LuaParser.LvalueVarContext):
         self._handle_get_name(ctx.NAME().getText())
         list(map(self.visit, ctx.varSuffix()))
@@ -275,15 +265,7 @@ class LuaCompiler(LuaVisitor):
         self.visit(ctx.string())
         self._emit('call', n_args)
 
-    def visitAndExp(self, ctx: LuaParser.AndExpContext):
-        pass
 
-    def visitOrExp(self, ctx: LuaParser.OrExpContext):
-        pass
-
-    def visitFunctioncallStat(self, ctx: LuaParser.FunctioncallStatContext):
-        self.visitChildren(ctx)
-        self._emit('procedure_pop')
 
     # endregion
     # region assign stat
@@ -417,6 +399,15 @@ class LuaCompiler(LuaVisitor):
         self._emit('ret', 0)
 
     # endregion
+    def visitAndExp(self, ctx: LuaParser.AndExpContext):
+        pass
+
+    def visitOrExp(self, ctx: LuaParser.OrExpContext):
+        pass
+
+    def visitFunctioncallStat(self, ctx: LuaParser.FunctioncallStatContext):
+        self.visitChildren(ctx)
+        self._emit('procedure_pop')
 
 
 if __name__ == '__main__':
