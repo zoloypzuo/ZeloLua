@@ -399,6 +399,15 @@ class LuaCompiler(LuaVisitor):
         self._emit('ret', 0)
 
     # endregion
+    # region ctrl flow and relation operation
+    # | 'break' #breakStat
+    # | 'while' exp 'do' block 'end' #whileStat
+    # | 'if' exp 'then' block elseifBlock* elseBlock? 'end' #ifelseStat
+    # | 'for' NAME '=' exp ',' exp (',' exp)? 'do' block 'end' #forijkStat
+    # | 'for' namelist 'in' explist 'do' block 'end' #forinStat
+
+
+    # endregion
     def visitAndExp(self, ctx: LuaParser.AndExpContext):
         pass
 
