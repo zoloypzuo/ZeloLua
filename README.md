@@ -40,13 +40,54 @@ TODO 错误处理：你不希望报exp stack empty这种错误。错误处理很
 旧版：startpc和endpc，非常不好。要用事件驱动换
 新版：新增enterb和exitb指令
 因为block的原因，这里有点乱
-我们使用了两个栈，而不是一个proto和block的多态栈，因为还是要判断local
-我们用栈来替代了parent
-一个proto内的locals要根据curr来确定，是proto的locals加上block栈上的所有locals
-坚持了C#的内部block不能与外部有同名局部变量，因此block的作用是我可以在同一层的三个子block里都声明一个i，这很重要
+1. 设计
+    1. 我们用栈来替代了父指针
+    3. 一个proto内的locals要根据运行时当前环境来确定，是proto的locals加上block栈上的所有locals，即
+        bstack上所有元素的locals，我们把proto也压进去，利用多态简化判断
+2. 坚持了C#的内部block不能与外部有同名局部变量，因此block的作用是我可以在同一层的三个子block里都声明一个i，这很重要
 刚刚想到了一个特殊情况，说明了这样的重要性。本来最早的认知是：debug显示很不好。事实上允许同名会出现这样的情况
 local a{{local b=a}local a}，你看，运行时回去找到后面一个a，这是错误的。
 重名会在编译期检查好。所以运行时虽然所有声明都已加入locals（而不是声明了再加）但是是对的
+
+利用多态栈，清晰简单地实现了scope的两个作用：确定scope（LUG）和get/set局部变量
+
+确定scope（LUG）：需要先查proto的可见作用域，再递归向上层查upval，否则是G
+```python 
+def _local_upval_global(self, name):
+    '''分析右值name是从哪来的，local一定是local声明时已经加入符号表的，但是upval一定是右值，所以第一次要检查一下并注册到upval符号表
+    global不需要符号表_G，默认就是有的
+    '''
+    assert isinstance(name, str)
+    if name in self._currp:  # local一定是通过声明已经注册的
+        return 'local'
+    if name in self._currp.upvals:  # 已经注册的upval
+        return 'upval'
+    # 否则我们得第一次检查这个名字的作用域
+    for p in reversed(self.pstack[:-1]):  # 栈顶是local p，前面检查过local了
+        for scope in reversed(p.scope_stack):
+            if name in scope.locals:
+                self._currp.upvals[name] = partial(lambda scope: scope.locals[name], scope=scope)
+                return 'upval'
+    return 'global'
+```
+
+get/set局部变量，注意细节上的区别
+```python
+def _new_locals(self, *operands):
+    names = operands
+    exps = self.popn(len(names))
+    self.curr_cl.p.curr_locals.update(dict(zip(names, exps)))
+
+def _get_local(self, *operands):
+    name = operands[0]
+    self.push(self.curr_cl.p[name])
+
+def _set_local(self, *operands):
+    name = operands[0]
+    self.curr_cl.p[name] = self.pop()
+```
+new_locals是声明新的局部变量，因此要在当前块中
+get/set_local是在当前可见作用域中get/set局部变量
 
 ### 指令集设计
 ### 基本指令
@@ -87,16 +128,16 @@ obj:f()
 一个push指令（LUG）压入obj
 有一个self f指令，压入f，压入obj
 然后call
-####call nargs
+#### call nargs
 函数自己和参数已经压栈，取出后调用，nargs标记了实参列表长度（虽然exp栈理论上长度可以推出来，但是不好）
-####return 1/0
+#### return 1/0
 旧版：(无参。自动检测有没有返回值，因为exp栈在计算后保持是空的，如果有就是有返回值返回他)
 新版：1表示有一个返回值。不这样设计的后果是要区分call procedure，然后compiler这里的逻辑很复杂（对，可以写，我想出来了，
 但是这个问题在于你吃掉了return的一个参数，which让事情变得复杂）
 其实道理很简单。函数有没有返回值当然是return管。
 因为有没return的函数体，所以自动附加ret
 
-###表创建指令
+### 表创建指令
 ```antlrv4
 tableconstructor: '{' fieldlist? '}';
 fieldlist: field (fieldsep field)* fieldsep?;
@@ -104,14 +145,14 @@ field: '[' exp ']' '=' exp | NAME '=' exp | exp ; //表ctor的字段初始化;
 ```
 首先一定有一句newtable，然后处理field
 这些new指令会把表压栈（尤其是set new table）
-####set_new_list n
+#### set_new_list n
 return 1，2，3和local a=1，2，3时使用，因为隐式table，可以一次解决
 一个newtable和n个exp已经正序（从左到右）压栈，取出exps加入表，把表压栈
-####newtable
+#### newtable
 local a={}。所以{}是一个表达式，所以要有指令，所有ctor以newtable打头
-####append_new_list
+#### append_new_list
 新指令，table ctor变数太多，遇到exp我们就append
-####set_new_table
+#### set_new_table
 
 ### 表达式与指令生成
 #### 常量折叠
@@ -138,6 +179,40 @@ local a={}。所以{}是一个表达式，所以要有指令，所有ctor以newt
 来看local声明的assign
 我们用unpack解开。总之栈顶是一个exps，去出来后用new local直接赋值
 
-###函数实现
+### 函数实现
 说一句，func def里的查表是不能用prefixexp代替的，因为设计上它就像是必须编译器确定
 TODO所以你可以看到这里使用切片是多么蛋疼。你应该加一个parser rule区别开table的部分
+
+### 控制流
+0. 所有谓词表达式返回bool，使用test指令检查是否为真（lua真），test指令紧跟一句jmp，jmp到假的处理，因此指令顺序是test；jmp 假处理块；真处理块
+1. jmp使用绝对地址-1（因为pc++），因为本质上是绝对跳转
+2. cond exp的实现：我们让exp自然地返回bool，对于cond的情况使用test指令生成jmp
+3. test：弹出一个exp判断真假
+4. and or 短路求值：1.返回bool，因为讲过了 2.更接近if else 3. test_and test_or用于跳转，并且会把lhs压栈（不同于test）
+5. for ijk：for prep初始化三个变量，for loop用于exp判断和跳转回去;
+    1. 这里必须存储ijk对象，我选择特殊记号。因为local中的id不能特殊符号起头，我用@i来表示循环变量对象
+    2. prep name has_k，name是循环变量id，has_k时为3，否则为2
+6. for in: 弹出一个table（之前已经压入）;for in loop。这里证明了for ijk这种做法的失策。其实道理
+    
+### 元方法
+元方法绝对不是一开始就要考虑的，它是可选项
+1. 只有表有元表
+2. 不初始化key，而是访问是检查in
+3. 使用有限的元方法，多了也没用，其实分为两个部分，一个是核心的index和new index，这个当然很重要，call其次（参见《脚本语言中消失的设计模式》），其他都只是为了重载符号而已
+4. 为了元方法对vm loop重构，提取arith统一用binary处理，正因为抽象而简单，这样可以debug时跳过，美滋滋
+
+1. 有一点对语言的理解，注意metatable是对象的一个表，元表固定有那么多key；而不是表直接有元方法，这很重要。
+
+
+### upval实现
+之前忽略了一个问题，既然proto是编译器产物，lua closure也只是proto的wrap，执行到函数定义完就构建好了，那么函数是对象是怎么做到的呢，函数怎么保证每次闭包生成新的状态（upval）
+答案是我用python闭包实现闭包，但是要注意，要存储这些闭包（未调用的lambda），每次close时更新状态，这样就实现了
+之前是错的，我直接用upvals\[name\]存储，这样只能更新一次，是错的。
+这样的设计有一个好处，我们并不像lua src那样那么关心内存生命周期，我总是引用那个scope的那个数值，这意味着那个proto的locals有引用，事实上本来就不会回收，这样挺好的
+而且我们只要在call指令处初始化upvals即可，非常简单清晰
+
+### 错误处理
+错误处理的目的是给用户返回可读的错误信息
+谷歌关键字换了好几次：error handle python visitor都没用，都是教你抛出语言异常（有毛病。。）
+我要的是控制错误信息。我试了一下IDLE，其实默认的错误信息很好。（但是红字太多了一开始没看清楚）；
+结论：重载visitErrorNode抛出一个SyntaxError即可。为什么呢？因为前面说的antlr error好像是沉默的（就是个print），它继续执行到运行时抛出了看不懂的错误

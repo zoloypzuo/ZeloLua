@@ -26,7 +26,7 @@ stat
     | 'while' exp 'do' block 'end' #whileStat
     | 'if' exp 'then' block elseifBlock* elseBlock? 'end' #ifelseStat
     | 'for' NAME '=' exp ',' exp (',' exp)? 'do' block 'end' #forijkStat
-    | 'for' namelist 'in' explist 'do' block 'end' #forinStat
+    | 'for' NAME ',' NAME 'in' exp 'do' block 'end' #forinStat
     | 'function' funcname funcbody #functiondefStat
     | 'local' 'function' NAME funcbody #localfunctiondefStat
     | 'local' namelist ('=' explist)? #localDeclarationStat;

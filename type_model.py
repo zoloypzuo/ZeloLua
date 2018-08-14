@@ -2,6 +2,7 @@ class Table:
     def __init__(self):
         self.apart = []
         self.hpart = {}
+        self.metatable = {}
 
     def append(self, obj):
         self.apart.append(obj)
@@ -37,6 +38,29 @@ class Table:
 
     def __len__(self):
         return len(self.apart) + len(self.hpart)
+
+
+def lua_cond_true_false(o):
+    '''lua真假定义'''
+    if o == None: return False
+    if o == False: return False
+    return True
+
+
+def lua_not(o):
+    return not lua_cond_true_false(o)
+
+
+def get_metamethod(obj, mt_name: str):
+    '''
+    对错误沉默，返回None
+    不设计成方法'''
+    assert mt_name
+    if not isinstance(obj, Table):
+        return None
+    if mt_name not in obj.metatable:
+        return None
+    return obj.metatable[mt_name]
 
 
 if __name__ == '__main__':

@@ -1,78 +1,94 @@
 '''
 the compile stage part of zlua
 '''
+from functools import partial
+
 from gen.zlua.LuaParser import LuaParser
 from gen.zlua.LuaVisitor import LuaVisitor
 from gen.zlua.LuaLexer import LuaLexer
 from typing import *
 
 
-class Proto:
-
-    def __init__(self):
-        self.param_names: List[str] = None
-        self.instrs: List[Instr] = []
-        self.labels: Dict[str:int] = {}
-        self.locals = {}
-        self.enclosed_protos = []
-        self.enclosed_blocks = []
-        self.bstack: List[Block] = []
-        self.upvals = {}
-
-    @property
-    def _curr_scope(self):
-        if self.bstack:
-            return self.bstack[-1]
-        else:
-            return self
-
-    @property
-    def curr_locals(self):
-        '''当前locals，'''
-        return self._curr_scope.locals
-
-    @property
-    def _curr_enclosed_bs(self):
-        return self._curr_scope.enclosed_blocks
-
-    def __getitem__(self, key):
-        '''以当前可见scope查找key，如果是block可能在上层，如果proto找不到说明没有'''
-        assert isinstance(key, str)
-        for i in reversed(self.bstack):
-            if key in i.locals:
-                return i.locals[key]
-        return self.locals[key]
-
-    def __setitem__(self, key, value):
-        assert isinstance(key, str)
-        self.bstack[-1].locals[key] = value
-
-    def __contains__(self, key):
-        '''getitem的in版本，不重载可能误用in'''
-        assert isinstance(key, str)
-        for i in reversed(self.bstack):
-            if key in i.locals:
-                return True
-        if key in self.locals: return True
-        return False
-
-    def enter_newb(self):
-        new_b = Block()
-        self.bstack.append(new_b)
-        curr_enclosed_bs = self._curr_enclosed_bs
-        index = len(curr_enclosed_bs)
-        curr_enclosed_bs.append(new_b)
-        self.instrs.append(Instr('enter_block', index))
-
-    def exit_b(self):
-        self.instrs.append(Instr('exit_block'))
-        self._curr_enclosed_bs.pop()
-
-
-class Block:
+class Scope:
     def __init__(self):
         self.enclosed_blocks: List[Block] = []
         self.locals = {}
+
+
+class Upval:
+    def __init__(self, state_func):
+        self.state_func = state_func
+        self.val = None
+
+    def close(self):
+        self.val = self.state_func()
+
+
+class Proto(Scope):
+
+    def __init__(self):
+        super().__init__()
+        self.param_names: List[str] = None
+        self.instrs: List[Instr] = []
+        self.labels: Dict[str:int] = {}
+        self.enclosed_protos = []
+        self.scope_stack: List[Scope] = [self]  # 进入一个函数后会压入proto自己，然后每次进出block即压栈弹栈；换种说法，第一个是p自己，之后是blocks
+        self.upvals: Dict[str:Upval] = {}
+        self._label_counter = 0
+
+    def _new_label(self):
+        self._label_counter += 1
+        return 'L' + str(self._label_counter)
+
+    @property
+    def curr_scope(self) -> Scope:
+        return self.scope_stack[-1]
+
+    @property
+    def curr_locals(self):
+        '''当前locals，注意不是“所有可见locals”'''
+        return self.curr_scope.locals
+
+    @property
+    def curr_enclosed_blocks(self):
+        return self.curr_scope.enclosed_blocks
+
+    def __getitem__(self, key):
+        '''以当前可见scope查找key'''
+        assert isinstance(key, str)
+        for scope in reversed(self.scope_stack):
+            if key in scope.locals:
+                return scope.locals[key]
+
+    def __setitem__(self, key, value):
+        assert isinstance(key, str)
+        self.curr_locals[key] = value
+
+    def __contains__(self, key):
+        '''getitem的in版本，不重载这个可能导致误用in；功能有点不一样，这个是严格检查有没有key'''
+        assert isinstance(key, str)
+        for scope in reversed(self.scope_stack):
+            if key in scope.locals:
+                return True
+        return False
+
+    def enter_block(self):
+        '''注意是编译期enter，要新建block和emit指令的'''
+        new_b = Block()
+        curr_ebs = self.curr_enclosed_blocks
+        index = len(curr_ebs)
+        self.scope_stack.append(new_b)
+        curr_ebs.append(new_b)
+        self.instrs.append(Instr('enter_block', index))
+
+    def exit_block(self):
+        self.instrs.append(Instr('exit_block'))
+        self.scope_stack.pop()
+
+
+class Block(Scope):
+    def __init__(self):
+        super().__init__()
 
 
 class Instr:
@@ -84,12 +100,13 @@ class Instr:
     def __str__(self):
         return self.op + ' ' + ','.join(map(repr, self.operands))
 
+    __repr__ = __str__
+
 
 class LuaCompiler(LuaVisitor):
     def __init__(self):
-        self.pstack: List[Proto] = []
         self.chunk_proto = Proto()
-        self.pstack.append(self.chunk_proto)
+        self.pstack: List[Proto] = [self.chunk_proto]
 
     @property
     def _currp(self) -> Proto:
@@ -103,21 +120,16 @@ class LuaCompiler(LuaVisitor):
         global不需要符号表_G，默认就是有的
         '''
         assert isinstance(name, str)
-        if name in self._currp:
+        if name in self._currp:  # local一定是通过声明已经注册的
             return 'local'
-        if name in self._currp.upvals:
+        if name in self._currp.upvals:  # 已经注册的upval
             return 'upval'
-        locals = None
-        for p in (reversed(self.pstack[:-1]) if len(self.pstack) > 0 else []):  # 检查pstack为空
-            for b in reversed(p.bstack):
-                if name in b.locals:
-                    locals = b.locals
-                    break
-            if name in p.locals:
-                locals = p.locals
-        if locals:
-            self._currp.upvals[name] = lambda: locals[name]
-            return 'upval'
+        # 否则我们得第一次检查这个名字的作用域
+        for p in reversed(self.pstack[:-1]):  # 栈顶是local p，前面检查过local了
+            for scope in reversed(p.scope_stack):
+                if name in scope.locals:
+                    self._currp.upvals[name] = Upval(partial(lambda scope: scope.locals[name], scope=scope))
+                    return 'upval'
         return 'global'
 
     def _handle_get_name(self, name):
@@ -138,7 +150,6 @@ class LuaCompiler(LuaVisitor):
             self._emit('set_upval', name)
         elif lug == 'global':
             self._emit('set_global', name)
-
 
     # region handle literals
     def visitNumberExp(self, ctx: LuaParser.NumberExpContext):
@@ -211,7 +222,7 @@ class LuaCompiler(LuaVisitor):
         switch[ctx.operatorComparison.type]()
 
     # endregion
-
+    # region table ctor
     def visitTablectorExp(self, ctx: LuaParser.TablectorExpContext):
         self._emit('new_table')
         self.visitChildren(ctx)
@@ -229,6 +240,7 @@ class LuaCompiler(LuaVisitor):
         self.visit(ctx.exp())
         self._emit('append_new_list')
 
+    # endregion
     # region prefixexp
     def visitLvalueVar(self, ctx: LuaParser.LvalueVarContext):
         self._handle_get_name(ctx.NAME().getText())
@@ -265,13 +277,11 @@ class LuaCompiler(LuaVisitor):
         self.visit(ctx.string())
         self._emit('call', n_args)
 
-
-
     # endregion
     # region assign stat
     def visitLocalDeclarationStat(self, ctx: LuaParser.LocalDeclarationStatContext):
         names = list(map(lambda x: x.getText(), ctx.namelist().NAME()))
-        exps = ctx.explist().exp()
+        exps = ctx.explist().exp() if ctx.explist() else []
         for exp in exps:
             self.visit(exp)
         for name in names:  # 在locals里创建新局部变量
@@ -390,9 +400,9 @@ class LuaCompiler(LuaVisitor):
             self._emit('ret', 0)
 
     def visitDoendStat(self, ctx: LuaParser.DoendStatContext):
-        self._currp.enter_newb()
+        self._currp.enter_block()
         self.visitChildren(ctx)
-        self._currp.exit_b()
+        self._currp.exit_block()
 
     def visitChunk(self, ctx: LuaParser.ChunkContext):
         self.visitChildren(ctx)
@@ -405,18 +415,127 @@ class LuaCompiler(LuaVisitor):
     # | 'if' exp 'then' block elseifBlock* elseBlock? 'end' #ifelseStat
     # | 'for' NAME '=' exp ',' exp (',' exp)? 'do' block 'end' #forijkStat
     # | 'for' namelist 'in' explist 'do' block 'end' #forinStat
+    def _register_label(self, label):
+        self._currp.labels[label] = len(self._currp.instrs) - 1
 
+    def visitWhileStat(self, ctx: LuaParser.WhileStatContext):
+        nl1 = self._currp._new_label()
+        nl2 = self._currp._new_label()
+        nl3 = self._currp._new_label()
+        self._emit('jmp', nl1)
+        self._register_label(nl2)
+        self._currp.enter_block()
+        self.visit(ctx.block())
+        self._currp.exit_block()  # while cond exp is outside the block
+        self._register_label(nl1)
+        self.visit(ctx.exp())
+        self._emit('test')
+        self._emit('jmp', nl3)  # just for correctness, false => jmp
+        self._emit('jmp', nl2)
+        self._register_label(nl3)
+
+    def visitIfelseStat(self, ctx: LuaParser.IfelseStatContext):
+        '''
+        'if' exp 'then' block elseifBlock* elseBlock? 'end' #ifelseStat
+        elseifBlock:'elseif' exp 'then' block;
+        elseBlock:'else' block;'''
+        eibs = ctx.elseifBlock()
+        labels = [self._currp._new_label() for i in range(len(eibs) + 1)]
+        end = self._currp._new_label()
+        self.visit(ctx.exp())
+        self._emit('test')
+        self._emit('jmp', labels[0])
+        self._currp.enter_block()
+        self.visit(ctx.block())
+        self._currp.exit_block()
+        for i in range(len(eibs)):
+            self._register_label(labels[i])
+            self.visit(eibs[i].exp())
+            self._emit('test')
+            self._emit('jmp', labels[i + 1])
+            self._currp.enter_block()
+            self.visit(eibs[i].block())
+            self._currp.exit_block()
+            self._emit('jmp', end)
+        self._register_label(labels[-1])
+        if ctx.elseBlock():
+            self._currp.enter_block()
+            self.visit(ctx.elseBlock())
+            self._currp.exit_block()
+        self._register_label(end)
+
+    def visitForijkStat(self, ctx: LuaParser.ForijkStatContext):
+        ''''''
+        # | 'for' NAME '=' exp ',' exp (',' exp)? 'do' block 'end' #forijkStat
+        nl1 = self._currp._new_label()
+        nl2 = self._currp._new_label()
+        nl3 = self._currp._new_label()
+        name = ctx.NAME().getText()
+        list(map(self.visit, ctx.exp()))
+        self._currp.enter_block()
+        self._currp.curr_locals[name] = None  # 加入符号表，因为是第一个local，不用检查重名
+        self._emit('for_ijk_prep', name, len(ctx.exp()))
+        self._emit('jmp', nl1)
+        self._register_label(nl2)
+        self.visit(ctx.block())
+        self._register_label(nl1)
+        # self.visit(ctx.exp()) 这是从while复制过来的，保留。看一下区别
+        # self._emit('test') 我们不要test，因为bool是指令计算出来的
+        self._emit('for_ijk_loop', name)
+        self._emit('jmp', nl3)  # just for correctness, false => jmp
+        self._emit('jmp', nl2)
+        self._currp.exit_block()  # 注意name在循环体作用域内
+        self._register_label(nl3)
+
+    def visitForinStat(self, ctx: LuaParser.ForinStatContext):
+        ''''''
+        # | 'for' namelist 'in' explist 'do' block 'end' #forinStat
+        kname, vname = list(map(lambda x: x.getText(), ctx.NAME()))
+        nl1 = self._currp._new_label()
+        nl2 = self._currp._new_label()
+        nl3 = self._currp._new_label()
+        self._currp.enter_block()
+        self._currp.curr_locals[kname] = None
+        self._currp.curr_locals[vname] = None
+        self.visit(ctx.exp())
+        self._emit('for_in_prep', kname, vname)
+        self._emit('jmp', nl1)
+        self._register_label(nl2)
+        self.visit(ctx.block())
+        self._register_label(nl1)
+        self._emit('for_in_loop', kname, vname)
+        self._emit('jmp', nl3)  # just for correctness, false => jmp
+        self._emit('jmp', nl2)
+        self._currp.exit_block()  # 注意name在循环体作用域内
+        self._register_label(nl3)
 
     # endregion
     def visitAndExp(self, ctx: LuaParser.AndExpContext):
-        pass
+        nl1 = self._currp._new_label()
+        self.visit(ctx.lhs)
+        self._emit('test_and')
+        self._emit('jmp', nl1)
+        self.visit(ctx.rhs)
+        self._emit('and')
+        self._register_label(nl1)
 
     def visitOrExp(self, ctx: LuaParser.OrExpContext):
-        pass
+        nl1 = self._currp._new_label()
+        self.visit(ctx.lhs)
+        self._emit('test_or')
+        self._emit('jmp', nl1)
+        self.visit(ctx.rhs)
+        self._emit('or')
+        self._register_label(nl1)
 
     def visitFunctioncallStat(self, ctx: LuaParser.FunctioncallStatContext):
         self.visitChildren(ctx)
         self._emit('procedure_pop')
+
+    def visitErrorNode(self, node):
+        # node.symbol.getInputStream().getText(start,end) 没用，你拿不到行
+        # node.symbol.line symbol是Token，line是行号，没用，没有行api。因此你放弃把。拿不到什么信息
+        raise SyntaxError('lua syntax error: ' + node.__str__())
 
 
 if __name__ == '__main__':

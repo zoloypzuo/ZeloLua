@@ -3,11 +3,10 @@ the runtime stage part of zlua
 
 '''
 
-import pickle
-from type_model import Table
 from typing import *
 
 from compiler import Proto
+from type_model import Table, lua_not, lua_cond_true_false, get_metamethod
 
 
 class Closure: pass
@@ -27,7 +26,6 @@ class LuaClosure(Closure):
         self.saved_pc = 0
         self.p: Proto = func
         self.exp_stack = []  # "stack-based vm"
-        self.upvals = []
 
 
 class LuaThread:
@@ -40,6 +38,7 @@ class LuaThread:
             assert b
 
         self.register(lua_assert, 'assert')
+        self.register(print, 'print')
 
     def register(self, python_func, name):
         self.globals[name] = PythonClosure(python_func)
@@ -74,9 +73,11 @@ class LuaThread:
     def execute(self):
         while True:
             self.curr_instr = self.curr_cl.p.instrs[self.pc]
-            op = '_' + self.curr_instr.op
+            op_name = self.curr_instr.op
             operands = self.curr_instr.operands
-            if getattr(self, op)(*operands) == 'return from chunk':  # 为了能从chunk返回
+            if op_name in binary_arith_op:
+                self._binary(op_name)
+            elif getattr(self, '_' + op_name)(*operands) == 'return from chunk':  # 为了能从chunk返回
                 return
             self.pc += 1
 
@@ -86,11 +87,11 @@ class LuaThread:
 
     def _get_upval(self, *operands):
         name = operands[0]
-        self.push(self.curr_cl.upvals[name])
+        self.push(self.curr_cl.p.upvals[name].val)
 
     def _set_upval(self, *operands):
         name = operands[0]
-        self.curr_cl.upvals[name] = self.pop()
+        self.curr_cl.p.upvals[name].val = self.pop()
 
     def _get_global(self, *operands):
         name = operands[0]
@@ -114,11 +115,11 @@ class LuaThread:
 
     def _get_local(self, *operands):
         name = operands[0]
-        self.push(self.curr_cl.p.curr_locals[name])
+        self.push(self.curr_cl.p[name])
 
     def _set_local(self, *operands):
         name = operands[0]
-        self.curr_cl.p.curr_locals[name] = self.pop()
+        self.curr_cl.p[name] = self.pop()
 
     def _call(self, *operands):
         n_args = operands[0]
@@ -126,10 +127,10 @@ class LuaThread:
         closure = self.pop()
         if not isinstance(closure, Closure):  # 不是函数，尝试元方法
             try:
-                closure = closure.metatable['__call']
+                closure = get_metamethod(closure, '__call')
                 if not isinstance(closure, Closure):
                     raise TypeError('对象不可调用')  # __call不是函数
-            except AttributeError:
+            except TypeError:
                 raise TypeError('对象不可调用')  # 没有metatable字段
 
         if isinstance(closure, LuaClosure):
@@ -137,10 +138,12 @@ class LuaThread:
             self.frame_stack.append(closure)
             closure.p.locals.update(
                 dict(zip(closure.p.param_names, args)))  # 这句很复杂，一行把param names和args组合起来加入locals
+            for uv in closure.p.upvals.values():
+                uv.close()
             self.pc = -1
         else:
             assert isinstance(closure, PythonClosure)
-            ret_val = closure(args)
+            ret_val = closure(*args)
             self.push(ret_val)  # push ret val
 
     def _call_procedure(self, *operands):
@@ -172,50 +175,101 @@ class LuaThread:
         self.push(table[func_name])
         self.push(table)
 
-    def _add(self, *operands):
+    def _unary(self, op):
+        oprd = self.pop()
+        self.push(op(oprd))
+
+    def _binary(self, op_name):
         rhs = self.pop()
         lhs = self.pop()
-        self.push(lhs + rhs)
+        direct_or_mt = isinstance(lhs, (float, int)) and isinstance(rhs, (float, int))
+        if direct_or_mt:
+            self.push(binary_arith_op[op_name](lhs, rhs))
+        else:
+            mt_name = '__' + op_name
+            mt = None
+            # 尝试调用元方法，如果没有说明错误，这里因为python不支持赋值是表达式，所以不能短路，判断丑了点
+            if mt_name in metamethod_names:
+                mt = get_metamethod(lhs, mt_name) or get_metamethod(rhs, mt_name)
+                if mt:
+                    self.push(mt)
+                    self.push(lhs)
+                    self.push(rhs)
+                    self._call(2)
+            if not mt:
+                raise TypeError('操作数不支持 ', op_name)
 
-    def _sub(self, *operands):
-        rhs = self.pop()  # 注意出栈顺序
-        lhs = self.pop()
-        self.push(lhs - rhs)
-
-    def _mul(self, *operands):
+    def _concat(self, *operands):
         rhs = self.pop()
         lhs = self.pop()
-        self.push(lhs * rhs)
+        if isinstance(lhs, str) and isinstance(rhs, str):
+            self.push(lhs + rhs)
+        else:
+            raise TypeError('只有字符串可以concat')
 
-    def _div(self, *operands):
-        rhs = self.pop()
-        lhs = self.pop()
-        self.push(lhs + rhs)
-
-    def _mod(self, *operands):
-        rhs = self.pop()
-        lhs = self.pop()
-        self.push(lhs % rhs)
-
-    def _pow(self, *operands):
-        lhs = self.pop()
-        rhs = self.pop()
-        self.push(lhs ** rhs)
+    def _jmp(self, *operands):
+        label = operands[0]
+        abs_addr = self.curr_cl.p.labels[label]
+        self.pc = abs_addr
 
     def _not(self, *operands):
+        self._unary(lua_not)
+
+    def _test(self, *operands):
         oprd = self.pop()
-        self.push(not oprd)
+        if lua_cond_true_false(oprd):
+            self.pc += 1
+
+    def _test_and(self, *operands):
+        oprd = self.pop()
+        if lua_cond_true_false(oprd):
+            self.pc += 1
+        self.push(oprd)
+
+    def _test_or(self, *operands):
+        oprd = self.pop()
+        if not lua_cond_true_false(oprd):
+            self.pc += 1
+        self.push(oprd)
 
     def _minus(self, *operands):
-        oprd = self.pop()
-        self.push(-oprd)
-    def _len(self,*operands):
-        oprd=self.pop()
-        self.push(len(oprd))
-    def _eq(self, *operands):
-        a0 = self.pop()
-        a1 = self.pop()
-        self.push(a0 == a1)
+        self._unary(lambda x: -x)
+
+    def _len(self, *operands):
+        self._unary(len)
+
+    def _for_ijk_prep(self, *operands):
+        k = 1
+        name, len = operands
+        if len == 3: k = self.pop()
+        j = self.pop()
+        i = self.pop()
+        self.curr_cl.p.curr_locals['@' + name] = (j, k)  # j:limit k:step
+        self.curr_cl.p.curr_locals[name] = i - k  # 倒退一步，因为for loop每次都加，一开始要倒退一步
+
+    def _for_ijk_loop(self, *operands):
+        name = operands[0]
+        j, k = self.curr_cl.p.curr_locals['@' + name]
+        i = self.curr_cl.p.curr_locals[name]
+        if i + k <= j:
+            self.curr_cl.p.curr_locals[name] = i + k
+            self.pc += 1
+
+    def _for_in_prep(self, *operands):
+        kname, vname = operands
+        table = self.pop()
+        self.curr_cl.p.curr_locals['@iter'] = table.__iter__()
+
+    def _for_in_loop(self, *operands):
+        kname, vname = operands
+        iter = self.curr_cl.p.curr_locals['@iter']
+        try:
+            kval, vval = next(iter)
+            self.curr_cl.p.curr_locals[kname] = kval
+            self.curr_cl.p.curr_locals[vname] = vval
+            self.pc += 1
+        except StopIteration:
+            pass
 
     def _new_table(self, *operands):
         self.push(Table())
@@ -243,41 +297,57 @@ class LuaThread:
     def _get_table(self, *operands):
         key = self.pop()
         table = self.pop()
-        self.push(table[key])
+        val = None
+        while key not in table:
+            table = get_metamethod(table, '__getter')
+        else:
+            val = table[key]
+        self.push(val)
 
     def _set_table(self, *operands):
         val = self.pop()
         key = self.pop()
         table = self.pop()
-        table[key] = val
+        while key not in table:
+            table = get_metamethod(table, '__setter')
+        else:
+            table[key] = val
 
     def _enter_block(self, *operands):
         index = operands[0]
         curr_proto = self.curr_cl.p
-        curr_proto.bstack.push(curr_proto.enclosed_blocks[index])
+        curr_proto.scope_stack.append(curr_proto.curr_enclosed_blocks[index])
 
     def _exit_block(self, *operands):
         curr_proto = self.curr_cl.p
-        curr_proto.bstack.pop()
-
-    def _try_meta_call(self, func):
-        pass
-
-    def _get_metamethod(self, obj, meta_type: str):
-        pass
-
-    def call_binary_mt(self, lhs, rhs, result, mt_name):
-        pass
-
-    def cal_mt(self, mt, lhs, rhs):
-        pass
+        curr_proto.scope_stack.pop()
 
 
-metamethod_names = ["__index", "__newindex",
-                    "__gc", "__mode", "__eq",
-                    "__add", "__sub", "__mul", "__div", "__mod",
-                    "__pow", "__unm", "__len", "__lt", "__le",
-                    "__concat", "__call"]
+metamethod_names = ["__getter", "__setter",  # table 替代了index和newindex，垃圾名字
+                    "__call",  # func
+                    "__eq",  # eq
+                    "__add", "__sub", "__mul", "__div", "__mod", "__pow",  # arith
+                    "__unm", "__len",  # unary
+                    "__lt", "__le",  # relation op
+                    ]
+from operator import *
+
+binary_arith_op = {
+    'add': add,
+    'sub': sub,
+    'mul': mul,
+    'div': truediv,
+    'mod': mod,
+    'pow': pow,
+    'and': lambda x, y: x and y,
+    'or': lambda x, y: x or y,
+    'eq': eq,
+    'ne': ne,
+    'lt': lt,
+    'le': le,
+    'mt': lambda x, y: x > y,
+    'me': lambda x, y: x >= y,
+}
 
 if __name__ == '__main__':
     assert True

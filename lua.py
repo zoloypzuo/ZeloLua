@@ -11,8 +11,18 @@ __version__ = 'zlua based on lua 5.1.4'
 def do_file(path: str, thread: LuaThread = None):
     thread = thread or LuaThread()
     input = FileStream(path)
-    # TODO
-
+    lexer = LuaLexer(input)
+    stream = CommonTokenStream(lexer)
+    parser = LuaParser(stream)
+    tree = parser.chunk()
+    compiler = LuaCompiler()
+    compiler.visit(tree)
+    lc = LuaClosure(compiler.chunk_proto)
+    if thread.frame_stack:
+        thread.curr_cl.saved_pc = thread.pc
+    thread.pc = 0  # 调用新函数，指针清零
+    thread.frame_stack.append(lc)
+    thread.execute()
 
 def do_string(lua_code: str, thread: LuaThread = None):
     '''主要用这个测试短小的lua代码；默认新开一个thread'''
@@ -35,3 +45,5 @@ def do_string(lua_code: str, thread: LuaThread = None):
     thread.pc = 0  # 调用新函数，指针清零
     thread.frame_stack.append(lc)
     thread.execute()
+
+
