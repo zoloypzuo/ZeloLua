@@ -39,6 +39,9 @@ class Table:
     def __len__(self):
         return len(self.apart) + len(self.hpart)
 
+    def __str__(self):
+        return self.apart.__str__(), self.hpart.__str__()
+
 
 def lua_cond_true_false(o):
     '''lua真假定义'''

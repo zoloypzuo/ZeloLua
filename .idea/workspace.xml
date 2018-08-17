@@ -2,14 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="3cd1adb7-fda5-4b8e-8462-9bcc5578c8c3" name="Default" comment="">
-      <change beforePath="" afterPath="$PROJECT_DIR$/test.lua" />
-      <change beforePath="$PROJECT_DIR$/.idea/dictionaries/91018.xml" afterPath="$PROJECT_DIR$/.idea/dictionaries/91018.xml" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/Lua.g4" afterPath="$PROJECT_DIR$/Lua.g4" />
-      <change beforePath="$PROJECT_DIR$/README.md" afterPath="$PROJECT_DIR$/README.md" />
-      <change beforePath="$PROJECT_DIR$/compiler.py" afterPath="$PROJECT_DIR$/compiler.py" />
-      <change beforePath="$PROJECT_DIR$/gen/zlua/LuaParser.py" afterPath="$PROJECT_DIR$/gen/zlua/LuaParser.py" />
-      <change beforePath="$PROJECT_DIR$/lua.py" afterPath="$PROJECT_DIR$/lua.py" />
       <change beforePath="$PROJECT_DIR$/test.py" afterPath="$PROJECT_DIR$/test.py" />
       <change beforePath="$PROJECT_DIR$/type_model.py" afterPath="$PROJECT_DIR$/type_model.py" />
       <change beforePath="$PROJECT_DIR$/vm.py" afterPath="$PROJECT_DIR$/vm.py" />
@@ -38,13 +31,15 @@
     <SUITE FILE_PATH="coverage/XASM_Assembler$Unittests_in_test_process_py.coverage" NAME="Unittests in test_process.py Coverage Results" MODIFIED="1524796798703" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/XASM_Assembler$tree.coverage" NAME="tree Coverage Results" MODIFIED="1524940216455" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/zlua_prototype$lua.coverage" NAME="lua Coverage Results" MODIFIED="1534249050061" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/zlua_prototype$Unittests_for_test_Test.coverage" NAME="Unittests for test.Test Coverage Results" MODIFIED="1534260529669" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/zlua_prototype$Unittests_for_test_Test.coverage" NAME="Unittests for test.Test Coverage Results" MODIFIED="1534548197448" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/zlua_prototype$Unittests_for_test_Test_test_func_def_stat.coverage" NAME="Unittests for test.Test.test_func_def_stat Coverage Results" MODIFIED="1534136780775" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/zlua_prototype$Unittests_for_test_Test_test_basic_stat.coverage" NAME="Unittests for test.Test.test_basic_stat Coverage Results" MODIFIED="1534549939127" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/XASM_Assembler$Unittests_in_test_assembler_py.coverage" NAME="Unittests in test_assembler.py Coverage Results" MODIFIED="1522471939429" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/zlua_prototype$Unittests_for_test_Test_test_relation_op.coverage" NAME="Unittests for test.Test.test_relation_op Coverage Results" MODIFIED="1534089357227" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/zlua_prototype$Unittests_for_test_Test_test_table_ctor.coverage" NAME="Unittests for test.Test.test_table_ctor Coverage Results" MODIFIED="1534142971254" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/zlua_prototype$Unittests_for_test_Test_test_func_call.coverage" NAME="Unittests for test.Test.test_func_call Coverage Results" MODIFIED="1534141239529" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/zlua_prototype$compiler.coverage" NAME="compiler Coverage Results" MODIFIED="1534087774178" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/zlua_prototype$Unittests_for_test_Test_test_upval.coverage" NAME="Unittests for test.Test.test_upval Coverage Results" MODIFIED="1534468013148" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/XASM_Assembler$Unittests_for_test_assembler_TestAssembler_test_lex.coverage" NAME="Unittests for test_assembler.TestAssembler.test_lex Coverage Results" MODIFIED="1522472107030" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/XASM_Assembler$Unittests_for_test_assembler_TestAssembler_test_split_punc.coverage" NAME="Unittests for test_assembler.TestAssembler.test_split_punc Coverage Results" MODIFIED="1522549214329" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/XASM_Assembler$test_zvm.coverage" NAME="test_zvm Coverage Results" MODIFIED="1524909190732" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
@@ -62,31 +57,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="600">
-      <file leaf-file-name="literals.lua" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/lua5.1-tests/literals.lua">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="33">
-              <caret line="44" column="10" lean-forward="true" selection-start-line="44" selection-start-column="10" selection-end-line="44" selection-end-column="10" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="gc.lua" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/lua5.1-tests/gc.lua">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="vm.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/vm.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-156">
-              <caret line="313" column="28" lean-forward="false" selection-start-line="313" selection-start-column="28" selection-end-line="313" selection-end-column="28" />
+            <state relative-caret-position="186">
+              <caret line="300" column="45" lean-forward="false" selection-start-line="300" selection-start-column="45" selection-end-line="300" selection-end-column="45" />
               <folding>
                 <element signature="e#41#61#0" expanded="true" />
               </folding>
@@ -94,74 +69,99 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="test.lua" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/test.lua">
+      <file leaf-file-name="lua.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/lua.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+            <state relative-caret-position="801">
+              <caret line="46" column="0" lean-forward="false" selection-start-line="46" selection-start-column="0" selection-end-line="46" selection-end-column="0" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="files.lua" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/lua5.1-tests/files.lua">
+      <file leaf-file-name="compiler.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/compiler.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+            <state relative-caret-position="329">
+              <caret line="305" column="0" lean-forward="false" selection-start-line="305" selection-start-column="0" selection-end-line="305" selection-end-column="0" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="events.lua" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/lua5.1-tests/events.lua">
+      <file leaf-file-name="Tree.py" pinned="false" current-in-tab="false">
+        <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python36/Lib/antlr4/tree/Tree.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+            <state relative-caret-position="351">
+              <caret line="33" column="0" lean-forward="false" selection-start-line="33" selection-start-column="0" selection-end-line="33" selection-end-column="0" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="errors.lua" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/lua5.1-tests/errors.lua">
+      <file leaf-file-name="LuaParser.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/gen/zlua/LuaParser.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+            <state relative-caret-position="351">
+              <caret line="1671" column="0" lean-forward="false" selection-start-line="1671" selection-start-column="0" selection-end-line="1671" selection-end-column="0" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="db.lua" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/lua5.1-tests/db.lua">
+      <file leaf-file-name="LuaVisitor.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/gen/zlua/LuaVisitor.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+            <state relative-caret-position="366">
+              <caret line="298" column="0" lean-forward="false" selection-start-line="298" selection-start-column="0" selection-end-line="298" selection-end-column="0" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="test.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="ParserRuleContext.py" pinned="false" current-in-tab="false">
+        <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python36/Lib/antlr4/ParserRuleContext.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="384">
+              <caret line="115" column="0" lean-forward="false" selection-start-line="115" selection-start-column="0" selection-end-line="115" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="test.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/test.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="925">
-              <caret line="87" column="14" lean-forward="true" selection-start-line="87" selection-start-column="14" selection-end-line="87" selection-end-column="14" />
+            <state relative-caret-position="351">
+              <caret line="28" column="0" lean-forward="false" selection-start-line="28" selection-start-column="0" selection-end-line="28" selection-end-column="0" />
               <folding>
                 <element signature="e#0#29#0" expanded="true" />
+                <marker date="1534549234811" expanded="true" signature="3063:3182" ph="..." />
+                <marker date="1534549234811" expanded="true" signature="3120:3139" ph="..." />
+                <marker date="1534549234811" expanded="true" signature="3149:3166" ph="..." />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="all.lua" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/lua5.1-tests/all.lua">
+      <file leaf-file-name="case.py" pinned="false" current-in-tab="false">
+        <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python36/Lib/unittest/case.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+            <state relative-caret-position="927">
+              <caret line="621" column="0" lean-forward="false" selection-start-line="621" selection-start-column="0" selection-end-line="621" selection-end-column="0" />
               <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Lua.g4" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Lua.g4">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="297">
+              <caret line="12" column="3" lean-forward="false" selection-start-line="12" selection-start-column="3" selection-end-line="12" selection-end-column="3" />
+              <folding>
+                <element signature="e#0#5707#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -178,8 +178,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>pref</find>
-      <find>prefix_exp_exp</find>
       <find>func_def_stat</find>
       <find>prefixexp</find>
       <find>functioncall</find>
@@ -208,6 +206,8 @@
       <find>upvals</find>
       <find>pow</find>
       <find>concat</find>
+      <find>set_new_table</find>
+      <find>set_table</find>
     </findStrings>
     <replaceStrings>
       <replace />
@@ -242,13 +242,13 @@
         <option value="$PROJECT_DIR$/test_luaThread.py" />
         <option value="$PROJECT_DIR$/Lua.g4" />
         <option value="$PROJECT_DIR$/README.md" />
-        <option value="$PROJECT_DIR$/type_model.py" />
-        <option value="$PROJECT_DIR$/vm.py" />
         <option value="$PROJECT_DIR$/lua.py" />
-        <option value="$PROJECT_DIR$/compiler.py" />
         <option value="$PROJECT_DIR$/locals.lua" />
-        <option value="$PROJECT_DIR$/test.py" />
         <option value="$PROJECT_DIR$/test.lua" />
+        <option value="$PROJECT_DIR$/type_model.py" />
+        <option value="$PROJECT_DIR$/compiler.py" />
+        <option value="$PROJECT_DIR$/test.py" />
+        <option value="$PROJECT_DIR$/vm.py" />
       </list>
     </option>
   </component>
@@ -281,7 +281,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scratches" />
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -304,7 +304,7 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
+      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -344,26 +344,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python tests.Unittests for test.Test.test_formal">
-    <configuration name="lua" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="XASM_Assembler" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/lua.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-    </configuration>
+  <component name="RunManager" selected="Python tests.Unittests for test.Test.test_basic_stat">
     <configuration name="Unittests for test.Test" type="tests" factoryName="Unittests" temporary="true" nameIsGenerated="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -379,7 +360,7 @@
       <option name="_new_target" value="&quot;test.Test&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
     </configuration>
-    <configuration name="Unittests for test.Test.test_ctrl_flow" type="tests" factoryName="Unittests" temporary="true" nameIsGenerated="true">
+    <configuration name="Unittests for test.Test.test_basic_stat" type="tests" factoryName="Unittests" temporary="true" nameIsGenerated="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs />
@@ -391,7 +372,7 @@
       <module name="XASM_Assembler" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test.Test.test_ctrl_flow&quot;" />
+      <option name="_new_target" value="&quot;test.Test.test_basic_stat&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
     </configuration>
     <configuration name="Unittests for test.Test.test_exp" type="tests" factoryName="Unittests" temporary="true" nameIsGenerated="true">
@@ -424,20 +405,35 @@
       <option name="_new_target" value="&quot;test.Test.test_formal&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
     </configuration>
+    <configuration name="Unittests for test.Test.test_upval" type="tests" factoryName="Unittests" temporary="true" nameIsGenerated="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="XASM_Assembler" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;test.Test.test_upval&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+    </configuration>
     <list size="5">
       <item index="0" class="java.lang.String" itemvalue="Python tests.Unittests for test.Test" />
-      <item index="1" class="java.lang.String" itemvalue="Python tests.Unittests for test.Test.test_ctrl_flow" />
-      <item index="2" class="java.lang.String" itemvalue="Python.lua" />
-      <item index="3" class="java.lang.String" itemvalue="Python tests.Unittests for test.Test.test_exp" />
-      <item index="4" class="java.lang.String" itemvalue="Python tests.Unittests for test.Test.test_formal" />
+      <item index="1" class="java.lang.String" itemvalue="Python tests.Unittests for test.Test.test_exp" />
+      <item index="2" class="java.lang.String" itemvalue="Python tests.Unittests for test.Test.test_formal" />
+      <item index="3" class="java.lang.String" itemvalue="Python tests.Unittests for test.Test.test_upval" />
+      <item index="4" class="java.lang.String" itemvalue="Python tests.Unittests for test.Test.test_basic_stat" />
     </list>
     <recent_temporary>
       <list size="5">
-        <item index="0" class="java.lang.String" itemvalue="Python tests.Unittests for test.Test.test_formal" />
+        <item index="0" class="java.lang.String" itemvalue="Python tests.Unittests for test.Test.test_basic_stat" />
         <item index="1" class="java.lang.String" itemvalue="Python tests.Unittests for test.Test" />
-        <item index="2" class="java.lang.String" itemvalue="Python tests.Unittests for test.Test.test_exp" />
-        <item index="3" class="java.lang.String" itemvalue="Python tests.Unittests for test.Test.test_ctrl_flow" />
-        <item index="4" class="java.lang.String" itemvalue="Python.lua" />
+        <item index="2" class="java.lang.String" itemvalue="Python tests.Unittests for test.Test.test_upval" />
+        <item index="3" class="java.lang.String" itemvalue="Python tests.Unittests for test.Test.test_formal" />
+        <item index="4" class="java.lang.String" itemvalue="Python tests.Unittests for test.Test.test_exp" />
       </list>
     </recent_temporary>
   </component>
@@ -458,40 +454,39 @@
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="Unittests_for_test_Test - 2018.08.14 at 22h 44m 02s.xml">
-      <configuration name="Unittests for test.Test" configurationId="tests" />
+    <history-entry file="Unittests_for_test_Test_test_basic_stat - 2018.08.18 at 07h 25m 03s.xml">
+      <configuration name="Unittests for test.Test.test_basic_stat" configurationId="tests" />
     </history-entry>
-    <history-entry file="Unittests_for_test_Test - 2018.08.14 at 23h 28m 50s.xml">
-      <configuration name="Unittests for test.Test" configurationId="tests" />
+    <history-entry file="Unittests_for_test_Test_test_basic_stat - 2018.08.18 at 07h 26m 00s.xml">
+      <configuration name="Unittests for test.Test.test_basic_stat" configurationId="tests" />
     </history-entry>
-    <history-entry file="Unittests_for_test_Test_test_formal - 2018.08.14 at 23h 20m 10s.xml">
-      <configuration name="Unittests for test.Test.test_formal" configurationId="tests" />
+    <history-entry file="Unittests_for_test_Test_test_basic_stat - 2018.08.18 at 07h 26m 47s.xml">
+      <configuration name="Unittests for test.Test.test_basic_stat" configurationId="tests" />
     </history-entry>
-    <history-entry file="Unittests_for_test_Test_test_formal - 2018.08.14 at 23h 21m 14s.xml">
-      <configuration name="Unittests for test.Test.test_formal" configurationId="tests" />
+    <history-entry file="Unittests_for_test_Test_test_basic_stat - 2018.08.18 at 07h 27m 03s.xml">
+      <configuration name="Unittests for test.Test.test_basic_stat" configurationId="tests" />
     </history-entry>
-    <history-entry file="Unittests_for_test_Test_test_formal - 2018.08.14 at 23h 22m 27s.xml">
-      <configuration name="Unittests for test.Test.test_formal" configurationId="tests" />
+    <history-entry file="Unittests_for_test_Test_test_basic_stat - 2018.08.18 at 07h 28m 14s.xml">
+      <configuration name="Unittests for test.Test.test_basic_stat" configurationId="tests" />
     </history-entry>
-    <history-entry file="Unittests_for_test_Test_test_formal - 2018.08.14 at 23h 25m 08s.xml">
-      <configuration name="Unittests for test.Test.test_formal" configurationId="tests" />
+    <history-entry file="Unittests_for_test_Test_test_basic_stat - 2018.08.18 at 07h 31m 08s.xml">
+      <configuration name="Unittests for test.Test.test_basic_stat" configurationId="tests" />
     </history-entry>
-    <history-entry file="Unittests_for_test_Test_test_formal - 2018.08.14 at 23h 25m 19s.xml">
-      <configuration name="Unittests for test.Test.test_formal" configurationId="tests" />
+    <history-entry file="Unittests_for_test_Test_test_basic_stat - 2018.08.18 at 07h 31m 16s.xml">
+      <configuration name="Unittests for test.Test.test_basic_stat" configurationId="tests" />
     </history-entry>
-    <history-entry file="Unittests_for_test_Test_test_formal - 2018.08.14 at 23h 25m 31s.xml">
-      <configuration name="Unittests for test.Test.test_formal" configurationId="tests" />
+    <history-entry file="Unittests_for_test_Test_test_basic_stat - 2018.08.18 at 07h 33m 34s.xml">
+      <configuration name="Unittests for test.Test.test_basic_stat" configurationId="tests" />
     </history-entry>
-    <history-entry file="Unittests_for_test_Test_test_formal - 2018.08.14 at 23h 25m 38s.xml">
-      <configuration name="Unittests for test.Test.test_formal" configurationId="tests" />
+    <history-entry file="Unittests_for_test_Test_test_basic_stat - 2018.08.18 at 07h 52m 18s.xml">
+      <configuration name="Unittests for test.Test.test_basic_stat" configurationId="tests" />
     </history-entry>
-    <history-entry file="Unittests_for_test_Test_test_formal - 2018.08.14 at 23h 29m 07s.xml">
-      <configuration name="Unittests for test.Test.test_formal" configurationId="tests" />
+    <history-entry file="Unittests_for_test_Test_test_basic_stat - 2018.08.18 at 07h 52m 32s.xml">
+      <configuration name="Unittests for test.Test.test_basic_stat" configurationId="tests" />
     </history-entry>
   </component>
   <component name="ToolWindowManager">
     <frame x="-13" y="-13" width="2618" height="1850" extended-state="6" />
-    <editor active="true" />
     <layout>
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Tool Output" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.329455" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -499,23 +494,23 @@
       <window_info id="LuaCheck" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="14" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2951623" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2951623" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Coverage" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.13657407" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Docker" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="13" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32823026" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="ANTLR Preview" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.329455" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="SciView" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.5011565" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3025107" sideWeight="0.49865642" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3025107" sideWeight="0.49865642" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Coverage" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2496142" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32823026" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
     </layout>
     <layout-to-restore>
@@ -559,6 +554,16 @@
           <line>3</line>
           <option name="timeStamp" value="118" />
         </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/compiler.py</url>
+          <line>359</line>
+          <option name="timeStamp" value="238" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/test.py</url>
+          <line>28</line>
+          <option name="timeStamp" value="239" />
+        </line-breakpoint>
       </breakpoints>
       <breakpoints-dialog>
         <breakpoints-dialog />
@@ -571,7 +576,7 @@
           </properties>
         </breakpoint>
       </default-breakpoints>
-      <option name="time" value="228" />
+      <option name="time" value="242" />
     </breakpoint-manager>
     <watches-manager>
       <configuration name="PythonConfigurationType">
@@ -630,32 +635,6 @@
     </expressions>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/zasm.py" />
-    <entry file="file://$PROJECT_DIR$/test_assembler.py" />
-    <entry file="file://$PROJECT_DIR$/test_zvm.py" />
-    <entry file="file://$PROJECT_DIR$/_gen/LuaListener.py" />
-    <entry file="file://$PROJECT_DIR$/gen/zlua/Lua.tokens">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/gen/zlua/LuaLexer.tokens">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python36/Lib/antlr4/FileStream.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="363">
-          <caret line="11" column="0" lean-forward="false" selection-start-line="11" selection-start-column="0" selection-end-line="11" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ISA.py" />
     <entry file="file://$PROJECT_DIR$/call_system.py" />
     <entry file="file://$PROJECT_DIR$/test_luaThread.py" />
     <entry file="jar://$APPLICATION_PLUGINS_DIR$/EmmyLua/lib/EmmyLua-1.2.4.jar!/std/builtin.lua">
@@ -676,7 +655,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="11187">
           <caret line="342" column="0" lean-forward="false" selection-start-line="342" selection-start-column="0" selection-end-line="342" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -712,7 +690,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="2739">
           <caret line="85" column="0" lean-forward="false" selection-start-line="85" selection-start-column="0" selection-end-line="85" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -720,38 +697,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python36/Lib/antlr4/ParserRuleContext.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="5049">
-          <caret line="156" column="0" lean-forward="false" selection-start-line="156" selection-start-column="0" selection-end-line="156" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/gen/zlua/LuaVisitor.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="366">
-          <caret line="62" column="8" lean-forward="false" selection-start-line="62" selection-start-column="8" selection-end-line="62" selection-end-column="8" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/gen/zlua/LuaParser.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="900">
-          <caret line="584" column="0" lean-forward="false" selection-start-line="584" selection-start-column="0" selection-end-line="584" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python36/Lib/antlr4/tree/Tree.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1419">
-          <caret line="43" column="0" lean-forward="false" selection-start-line="43" selection-start-column="0" selection-end-line="43" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -768,17 +713,8 @@
         <state split_layout="SPLIT">
           <first_editor relative-caret-position="734">
             <caret line="203" column="60" lean-forward="false" selection-start-line="203" selection-start-column="60" selection-end-line="203" selection-end-column="60" />
-            <folding />
           </first_editor>
           <second_editor />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python36/Lib/unittest/case.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="355">
-          <caret line="604" column="0" lean-forward="false" selection-start-line="604" selection-start-column="0" selection-end-line="604" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -786,7 +722,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="510">
           <caret line="26" column="4" lean-forward="false" selection-start-line="26" selection-start-column="4" selection-end-line="26" selection-end-column="4" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -794,57 +729,14 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="33">
           <caret line="128" column="4" lean-forward="false" selection-start-line="128" selection-start-column="4" selection-end-line="128" selection-end-column="4" />
-          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/type_model.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="471">
-          <caret line="55" column="16" lean-forward="false" selection-start-line="55" selection-start-column="16" selection-end-line="55" selection-end-column="16" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Lua.g4">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="231">
-          <caret line="7" column="86" lean-forward="false" selection-start-line="7" selection-start-column="57" selection-end-line="7" selection-end-column="86" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/compiler.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="610">
-          <caret line="537" column="0" lean-forward="false" selection-start-line="537" selection-start-column="0" selection-end-line="537" selection-end-column="0" />
-          <folding>
-            <element signature="e#39#68#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/locals.lua">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="63" column="15" lean-forward="false" selection-start-line="63" selection-start-column="15" selection-end-line="63" selection-end-column="15" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/lua.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="660">
-          <caret line="24" column="20" lean-forward="false" selection-start-line="24" selection-start-column="20" selection-end-line="24" selection-end-column="20" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/locals.lua" />
     <entry file="file://$PROJECT_DIR$/lua5.1-tests/verybig.lua">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-1287">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -852,7 +744,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -860,7 +751,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-5022">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -868,7 +758,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -876,7 +765,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -884,7 +772,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-8195">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -892,7 +779,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -900,15 +786,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/lua5.1-tests/literals.lua">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="33">
-          <caret line="44" column="10" lean-forward="true" selection-start-line="44" selection-start-column="10" selection-end-line="44" selection-end-column="10" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -960,10 +837,164 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/test.lua">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lua5.1-tests/literals.lua">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="44" column="10" lean-forward="false" selection-start-line="44" selection-start-column="10" selection-end-line="44" selection-end-column="10" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python36/Lib/antlr4/atn/ATNConfig.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="370">
+          <caret line="25" column="0" lean-forward="false" selection-start-line="25" selection-start-column="0" selection-end-line="25" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python36/Lib/antlr4/atn/LexerATNSimulator.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="370">
+          <caret line="317" column="0" lean-forward="false" selection-start-line="317" selection-start-column="0" selection-end-line="317" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python36/Lib/antlr4/tree/Chunk.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="231">
+          <caret line="7" column="0" lean-forward="false" selection-start-line="7" selection-start-column="0" selection-end-line="7" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/type_model.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="801">
+          <caret line="42" column="57" lean-forward="false" selection-start-line="42" selection-start-column="57" selection-end-line="42" selection-end-column="57" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python36/Lib/unittest/suite.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="351">
+          <caret line="83" column="0" lean-forward="false" selection-start-line="83" selection-start-column="0" selection-end-line="83" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python36/Lib/unittest/runner.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="366">
+          <caret line="175" column="0" lean-forward="false" selection-start-line="175" selection-start-column="0" selection-end-line="175" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$APPLICATION_HOME_DIR$/helpers/pycharm/teamcity/unittestpy.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="641">
+          <caret line="303" column="0" lean-forward="false" selection-start-line="303" selection-start-column="0" selection-end-line="303" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python36/Lib/unittest/main.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="351">
+          <caret line="94" column="0" lean-forward="false" selection-start-line="94" selection-start-column="0" selection-end-line="94" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$APPLICATION_HOME_DIR$/helpers/pycharm/_jb_unittest_runner.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="957">
+          <caret line="34" column="0" lean-forward="false" selection-start-line="34" selection-start-column="0" selection-end-line="34" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python36/Lib/antlr4/ParserRuleContext.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="384">
+          <caret line="115" column="0" lean-forward="false" selection-start-line="115" selection-start-column="0" selection-end-line="115" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/gen/zlua/LuaParser.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="351">
+          <caret line="1671" column="0" lean-forward="false" selection-start-line="1671" selection-start-column="0" selection-end-line="1671" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python36/Lib/antlr4/tree/Tree.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="351">
+          <caret line="33" column="0" lean-forward="false" selection-start-line="33" selection-start-column="0" selection-end-line="33" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/gen/zlua/LuaVisitor.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="366">
+          <caret line="298" column="0" lean-forward="false" selection-start-line="298" selection-start-column="0" selection-end-line="298" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Lua.g4">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="297">
+          <caret line="12" column="3" lean-forward="false" selection-start-line="12" selection-start-column="3" selection-end-line="12" selection-end-column="3" />
+          <folding>
+            <element signature="e#0#5707#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lua.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="801">
+          <caret line="46" column="0" lean-forward="false" selection-start-line="46" selection-start-column="0" selection-end-line="46" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python36/Lib/unittest/case.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="927">
+          <caret line="621" column="0" lean-forward="false" selection-start-line="621" selection-start-column="0" selection-end-line="621" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/compiler.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="329">
+          <caret line="305" column="0" lean-forward="false" selection-start-line="305" selection-start-column="0" selection-end-line="305" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/vm.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-156">
-          <caret line="313" column="28" lean-forward="false" selection-start-line="313" selection-start-column="28" selection-end-line="313" selection-end-column="28" />
+        <state relative-caret-position="186">
+          <caret line="300" column="45" lean-forward="false" selection-start-line="300" selection-start-column="45" selection-end-line="300" selection-end-column="45" />
           <folding>
             <element signature="e#41#61#0" expanded="true" />
           </folding>
@@ -972,19 +1003,14 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/test.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="925">
-          <caret line="87" column="14" lean-forward="true" selection-start-line="87" selection-start-column="14" selection-end-line="87" selection-end-column="14" />
+        <state relative-caret-position="351">
+          <caret line="28" column="0" lean-forward="false" selection-start-line="28" selection-start-column="0" selection-end-line="28" selection-end-column="0" />
           <folding>
             <element signature="e#0#29#0" expanded="true" />
+            <marker date="1534549234811" expanded="true" signature="3063:3182" ph="..." />
+            <marker date="1534549234811" expanded="true" signature="3120:3139" ph="..." />
+            <marker date="1534549234811" expanded="true" signature="3149:3166" ph="..." />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/test.lua">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>

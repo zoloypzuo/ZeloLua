@@ -298,7 +298,7 @@ class LuaThread:
         key = self.pop()
         table = self.pop()
         val = None
-        while key not in table:
+        while key in table or table.metatable:
             table = get_metamethod(table, '__getter')
         else:
             val = table[key]
@@ -307,8 +307,8 @@ class LuaThread:
     def _set_table(self, *operands):
         val = self.pop()
         key = self.pop()
-        table = self.pop()
-        while key not in table:
+        table: Table = self.pop()
+        while key in table or table.metatable:
             table = get_metamethod(table, '__setter')
         else:
             table[key] = val

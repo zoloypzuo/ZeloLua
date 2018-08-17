@@ -77,6 +77,16 @@ class Test(TestCase):
     # region 更加严格的测试，测试行为的正确性；使用官方测试文件
     def test_upval(self):
         do_string('local a=1;local function f() return a end;a=2;assert(f()==2)')
+        do_string('''
+        function f(a)
+              local b=3
+              return function(b)
+                  return a+b
+                end
+            end
+        print(f(1)(2))
+        assert(f(1)(2)==3)''')
+        # TODO args和params不匹配没有报错     
 
     def test_error(self):
         '''https://python3-cookbook.readthedocs.io/zh_CN/latest/c14/p03_testing_for_exceptional_conditions_in_unit_tests.html'''
