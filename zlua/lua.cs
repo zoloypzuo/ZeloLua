@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using zlua.API;
+//using zlua.API;
 using zlua.TypeModel;
 using zlua.VM;
 using System.Diagnostics;
@@ -76,12 +76,12 @@ namespace zlua
 
         public static void DoFile(this TThread L, string path)
         {
-            L.LoadFile(path);
+            //L.LoadFile(path);
             LDo.Call(L, 0);
         }
         public static void DoString(this TThread L, string luaCode)
         {
-            L.LoadString(luaCode);
+            //L.LoadString(luaCode);
             LDo.Call(L, 0);
         }
         /// <summary>

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using zlua.TypeModel;
 using zlua.ISA;
 using System.Diagnostics;
-using zlua.API;
+//using zlua.API;
 using zlua.CallSystem;
 using zlua.Metamethod;
 using System.Runtime.Serialization;

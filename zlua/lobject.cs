@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using zlua.VM;
 using zlua.ISA;
-using zlua.Stdlib;
+//using zlua.Stdlib;
 using zlua.Configuration;
 using System.Collections;
 
