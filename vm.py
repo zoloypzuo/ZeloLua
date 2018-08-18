@@ -39,6 +39,7 @@ class LuaThread:
 
         self.register(lua_assert, 'assert')
         self.register(print, 'print')
+        self.register(lambda t, mt: t.set_metatable(mt), 'setmetatable')
 
     def register(self, python_func, name):
         self.globals[name] = PythonClosure(python_func)
@@ -136,6 +137,9 @@ class LuaThread:
         if isinstance(closure, LuaClosure):
             self.curr_cl.saved_pc = self.pc
             self.frame_stack.append(closure)
+            pns = closure.p.param_names
+            if len(pns) != len(args):
+                raise Exception('实参列表与形参列表长度不匹配')
             closure.p.locals.update(
                 dict(zip(closure.p.param_names, args)))  # 这句很复杂，一行把param names和args组合起来加入locals
             for uv in closure.p.upvals.values():
@@ -197,7 +201,7 @@ class LuaThread:
                     self.push(rhs)
                     self._call(2)
             if not mt:
-                raise TypeError('操作数不支持 ', op_name)
+                raise TypeError('操作数不支持 ' + op_name)
 
     def _concat(self, *operands):
         rhs = self.pop()
@@ -290,28 +294,20 @@ class LuaThread:
     def _set_new_table(self, *operands):
         val = self.pop()
         key = self.pop()
-        table = self.pop()
-        table[key] = val
+        table: Table = self.pop()
+        table.V_set_table(key, val)
         self.push(table)
 
     def _get_table(self, *operands):
         key = self.pop()
         table = self.pop()
-        val = None
-        while key in table or table.metatable:
-            table = get_metamethod(table, '__getter')
-        else:
-            val = table[key]
-        self.push(val)
+        self.push(table.V_get_table(key))
 
     def _set_table(self, *operands):
         val = self.pop()
         key = self.pop()
         table: Table = self.pop()
-        while key in table or table.metatable:
-            table = get_metamethod(table, '__setter')
-        else:
-            table[key] = val
+        table.V_set_table(key, val)
 
     def _enter_block(self, *operands):
         index = operands[0]

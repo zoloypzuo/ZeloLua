@@ -96,6 +96,7 @@ class Instr:
     def __init__(self, op, *operands):
         self.op = op
         self.operands = operands
+        self.src_line_number = 0
 
     def __str__(self):
         return self.op + ' ' + ','.join(map(repr, self.operands))
@@ -112,8 +113,10 @@ class LuaCompiler(LuaVisitor):
     def _currp(self) -> Proto:
         return self.pstack[-1]
 
-    def _emit(self, op, *operands):
-        self._currp.instrs.append(Instr(op, *operands))
+    def _emit(self, op, *operands,**kwargs):
+        i=Instr(op, *operands)
+        i.src_line_number=kwargs['ctx'].start if 'ctx' in kwargs else None
+        self._currp.instrs.append(i)
 
     def _local_upval_global(self, name):
         '''分析右值name是从哪来的，local一定是local声明时已经加入符号表的，但是upval一定是右值，所以第一次要检查一下并注册到upval符号表
@@ -248,11 +251,11 @@ class LuaCompiler(LuaVisitor):
 
     def visitDotGetter(self, ctx: LuaParser.DotGetterContext):
         self._emit('push_l', ctx.NAME().getText())
-        self._emit('get_table')
+        self._emit('get_table',ctx=ctx)
 
     def visitNormalGetter(self, ctx: LuaParser.NormalGetterContext):
         self.visit(ctx.exp())
-        self._emit('get_table')
+        self._emit('get_table',ctx=ctx)
 
     def visitNameAndArgs(self, ctx: LuaParser.NameAndArgsContext):
         if ctx.NAME():
@@ -303,7 +306,7 @@ class LuaCompiler(LuaVisitor):
         if tag == 'nameLvalue':
             self._handle_set_name(o)
         else:
-            self._emit('set_table')
+            self._emit('set_table',ctx=ctx)
 
     def visitNameLvalue(self, ctx: LuaParser.NameLvalueContext):
         return 'nameLvalue', ctx.NAME().getText()
@@ -349,7 +352,7 @@ class LuaCompiler(LuaVisitor):
                         self._emit('get_table')
                 self._emit('push_l', names[-1])
                 if mn:
-                    self._emit('get_table')
+                    self._emit('get_table',ctx=ctx)
             if mn:
                 # 'local obj={}; function obj:m() end'
                 self._emit('push_l', mn.getText())
@@ -357,7 +360,7 @@ class LuaCompiler(LuaVisitor):
             self._emit('closure', index)
             if mn:
                 self._currp.enclosed_protos[index].param_names.insert(0, 'self')
-            self._emit('set_table')
+            self._emit('set_table',ctx=ctx)
 
     def visitLocalfunctiondefStat(self, ctx: LuaParser.LocalfunctiondefStatContext):
         # 'local' 'function' NAME funcbody #localfunctiondefStat

@@ -24,6 +24,7 @@ TODO 错误处理：你不希望报exp stack empty这种错误。错误处理很
         1. 多返回值会被包装到table里，返回一个table
         2. 没有返回值的返回None，包括"return "和函数末尾自动添加ret 0指令
     2. 过程调用，这是由语句级别确定的，所以我选择加指令，procedure pop（专用pop）
+5. 与宿主语言互操作：宿主调用lua一般是dofile，不谈；主要是lua调用宿主，提供了一个*args的接口，任意函数可以直接注册，实参正确性不会被检查，lua代码中所有实参列表传给宿主函数直接调用   
 
 ### 虚拟机执行流程
 1. thread只知道要执行Lua closure，第一次需要手动push chunk（无参无返回值），然后调用execute执行
@@ -216,3 +217,15 @@ TODO所以你可以看到这里使用切片是多么蛋疼。你应该加一个p
 谷歌关键字换了好几次：error handle python visitor都没用，都是教你抛出语言异常（有毛病。。）
 我要的是控制错误信息。我试了一下IDLE，其实默认的错误信息很好。（但是红字太多了一开始没看清楚）；
 结论：重载visitErrorNode抛出一个SyntaxError即可。为什么呢？因为前面说的antlr error好像是沉默的（就是个print），它继续执行到运行时抛出了看不懂的错误
+
+### 数字类型使用float的问题
+1. 解析num literal我一定返回float；程序处理的也只有float
+2. 但是我要求key必须是int或str，因此1.0转成1（int）存入，get时也是这样
+
+### 如何debug line number
+python接口有点不一样，SO没有，你自己ctrl n搜一下CommonToken，有line，text和coloumn
+我使用keyword arg，这样“完美地扩展”，只需要对自己需要debug时知道的指令加入ctx，不影响原来
+
+### get/set table带元方法的处理
+带元方法后暴露了设计的问题和src看不懂。原来的代码可能变成错的了
+set table，考虑new index和覆盖两种情况，显然找到了就要覆盖，否则调用new index，如果没有new index则当前表插入新键。new index要考虑no mt和no mm两种
