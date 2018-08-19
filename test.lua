@@ -1,4 +1,5 @@
 do
+    print('nothing')
     local msgs = {}
     local function Message (m)
         print('Msg: ', m)
@@ -8,6 +9,7 @@ do
 end
 
 do
+    print('nothing')
     local function formatmem (m)
         if m < 1024 then
             do
@@ -31,6 +33,7 @@ do
 end
 
 do
+    print('test ijk loop')
     local a = {}
     for i = 0, 1000 do
         a[i] = true
@@ -40,6 +43,7 @@ do
 end
 
 do
+    print('test metamethod')
     local b = {
         __lt = function(a, b)
             return a[0] < b[0]
@@ -54,3 +58,20 @@ do
     assert(not (a4 < a3))
 end
 
+do
+    print "testing require"
+
+    --assert(require "string" == string)
+    --assert(require "math" == math)
+    --assert(require "table" == table)
+    --assert(require "io" == io)
+    --assert(require "os" == os)
+    --assert(require "debug" == debug)
+    --assert(require "coroutine" == coroutine)
+    --
+    --assert(type(package.path) == "string")
+    --assert(type(package.cpath) == "string")
+    --assert(type(package.loaded) == "table")
+    --assert(type(package.preload) == "table")
+
+end

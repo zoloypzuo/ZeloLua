@@ -41,6 +41,7 @@ class Test(TestCase):
     def test_func_call(self):
         do_string('local function f() return 1 end; f()')
         do_string('local function f() end; local ret=f()')
+        do_string('print "hello"')
 
     def test_relation_op(self):
         do_string('local a=(1+1==2)')

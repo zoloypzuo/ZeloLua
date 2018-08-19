@@ -57,12 +57,9 @@ class LuaThread:
         self.globals: Dict[str,] = {}
         self.pc = 0
 
-        def lua_assert(b):
-            assert b
-
-        self.register(lua_assert, 'assert')
-        self.register(print, 'print')
-        self.register(lambda t, mt: t.set_metatable(mt), 'setmetatable')
+    def load_lib(self, lib: Dict[str, Callable]):
+        for name, py_func in lib.items():
+            self.register(py_func, name)
 
     def error(self, error_type, msg):
         '''帮助生成一个带信息的'''
@@ -166,7 +163,7 @@ class LuaThread:
             self.frame_stack.append(closure)
             pns = closure.p.param_names
             if len(pns) != len(args):
-                raise self.error(LuaRuntimeError,'实参列表与形参列表长度不匹配')
+                raise self.error(LuaRuntimeError, '实参列表与形参列表长度不匹配')
             closure.p.locals.update(
                 dict(zip(closure.p.param_names, args)))  # 这句很复杂，一行把param names和args组合起来加入locals
             for uv in closure.p.upvals.values():
@@ -228,7 +225,7 @@ class LuaThread:
                     self.push(rhs)
                     self._call(2)
             if not mt:
-                raise self.error(LuaTypeError,'操作数不支持 ' + op_name)
+                raise self.error(LuaTypeError, '操作数不支持 ' + op_name)
 
     def _concat(self, *operands):
         rhs = self.pop()
@@ -236,7 +233,7 @@ class LuaThread:
         if isinstance(lhs, str) and isinstance(rhs, str):
             self.push(lhs + rhs)
         else:
-            raise self.error(LuaTypeError,'只有字符串可以concat')
+            raise self.error(LuaTypeError, '只有字符串可以concat')
 
     def _jmp(self, *operands):
         label = operands[0]

@@ -168,6 +168,9 @@ class LuaCompiler(LuaVisitor):
         self._emit('push_l', n)
 
     def visitStringExp(self, ctx: LuaParser.StringExpContext):
+        self.visit(ctx.string())
+
+    def visitString(self, ctx: LuaParser.StringContext):
         s = ctx.getText().strip('\'\"')
         self._emit('push_l', s)
 
@@ -235,6 +238,9 @@ class LuaCompiler(LuaVisitor):
     # endregion
     # region table ctor
     def visitTablectorExp(self, ctx: LuaParser.TablectorExpContext):
+        self.visit(ctx.tableconstructor())
+
+    def visitTableconstructor(self, ctx: LuaParser.TableconstructorContext):
         self._emit('new_table')
         self.visitChildren(ctx)
 
@@ -517,7 +523,6 @@ class LuaCompiler(LuaVisitor):
         self._emit('jmp', nl2)
         self._register_label(nl3)
         self._currp.exit_block()  # 注意name在循环体作用域内
-
 
     # endregion
     def visitAndExp(self, ctx: LuaParser.AndExpContext):

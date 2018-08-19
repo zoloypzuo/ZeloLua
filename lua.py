@@ -20,9 +20,11 @@ def do_file(path: str, thread: LuaThread = None):
     lc = LuaClosure(compiler.chunk_proto)
     if thread.frame_stack:
         thread.curr_cl.saved_pc = thread.pc
+    thread.load_lib(std_base_lib)
     thread.pc = 0  # 调用新函数，指针清零
     thread.frame_stack.append(lc)
     thread.execute()
+
 
 def do_string(lua_code: str, thread: LuaThread = None):
     '''主要用这个测试短小的lua代码；默认新开一个thread'''
@@ -42,8 +44,19 @@ def do_string(lua_code: str, thread: LuaThread = None):
     # 要理解execute的功能：就是状态机的转换动作，而且是靠指令来行动的，你要给他准备正确的pc和栈帧，仅此而且，它只负责loop里执行指令
     if thread.frame_stack:
         thread.curr_cl.saved_pc = thread.pc
+    thread.load_lib(std_base_lib)
     thread.pc = 0  # 调用新函数，指针清零
     thread.frame_stack.append(lc)
     thread.execute()
 
 
+def lua_assert(b): assert b
+
+
+std_base_lib = {
+    'assert': lua_assert,
+    'setmetatable': lambda t, mt: t.set_metatable(mt),
+    'dofile': do_file,
+    'dostring': do_string,
+    'print': print,
+}
