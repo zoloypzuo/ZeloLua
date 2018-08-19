@@ -92,6 +92,12 @@ class Test(TestCase):
         self.assertRaises(SyntaxError, do_string, 'local a=(')
         self.assertRaises(Exception,do_string,'local f=function (a) return a end; f(1,2);')
 
+    def test_scope(self):
+        do_string('''
+        do local i=1 end
+        do local i1=1 end
+        do local i2=1 end
+        ''')
     def test_formal(self):
         '''TODO 1. 因为你修改了语法，无法兼容 a,b=1,2 2.标准库还没上。 3.他的文件都有语法文件和编码问题'''
         do_file('test.lua')

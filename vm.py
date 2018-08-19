@@ -9,6 +9,29 @@ from compiler import Proto
 from type_model import Table, lua_not, lua_cond_true_false, get_metamethod
 
 
+class LuaRuntimeError(RuntimeError):
+    def __init__(self, msg):
+        self.msg = msg
+
+    def __str__(self):
+        return self.msg.__str__()
+
+
+class LuaValueError(LuaRuntimeError):
+    def __init__(self, msg):
+        super().__init__(msg)
+
+
+class LuaKeyError(LuaRuntimeError):
+    def __init__(self, msg):
+        super().__init__(msg)
+
+
+class LuaTypeError(LuaRuntimeError):
+    def __init__(self, msg):
+        super().__init__(msg)
+
+
 class Closure: pass
 
 
@@ -40,6 +63,10 @@ class LuaThread:
         self.register(lua_assert, 'assert')
         self.register(print, 'print')
         self.register(lambda t, mt: t.set_metatable(mt), 'setmetatable')
+
+    def error(self, error_type, msg):
+        '''帮助生成一个带信息的'''
+        return error_type(self.curr_instr.src_line_number + '\n' + msg)
 
     def register(self, python_func, name):
         self.globals[name] = PythonClosure(python_func)
@@ -106,7 +133,7 @@ class LuaThread:
         n_names = operands[0]
         exps: list = self.pop().apart
         if len(exps) != n_names:
-            raise ValueError('解包左右个数不相等')
+            raise self.error(LuaValueError, '解包左右个数不相等')
         self.pushn(exps)
 
     def _new_locals(self, *operands):
@@ -130,16 +157,16 @@ class LuaThread:
             try:
                 closure = get_metamethod(closure, '__call')
                 if not isinstance(closure, Closure):
-                    raise TypeError('对象不可调用')  # __call不是函数
+                    raise self.error(LuaTypeError, '对象不可调用')  # __call不是函数
             except TypeError:
-                raise TypeError('对象不可调用')  # 没有metatable字段
+                raise self.error(LuaTypeError, '对象不可调用')  # 没有metatable字段
 
         if isinstance(closure, LuaClosure):
             self.curr_cl.saved_pc = self.pc
             self.frame_stack.append(closure)
             pns = closure.p.param_names
             if len(pns) != len(args):
-                raise Exception('实参列表与形参列表长度不匹配')
+                raise self.error(LuaRuntimeError,'实参列表与形参列表长度不匹配')
             closure.p.locals.update(
                 dict(zip(closure.p.param_names, args)))  # 这句很复杂，一行把param names和args组合起来加入locals
             for uv in closure.p.upvals.values():
@@ -201,7 +228,7 @@ class LuaThread:
                     self.push(rhs)
                     self._call(2)
             if not mt:
-                raise TypeError('操作数不支持 ' + op_name)
+                raise self.error(LuaTypeError,'操作数不支持 ' + op_name)
 
     def _concat(self, *operands):
         rhs = self.pop()
@@ -209,7 +236,7 @@ class LuaThread:
         if isinstance(lhs, str) and isinstance(rhs, str):
             self.push(lhs + rhs)
         else:
-            raise TypeError('只有字符串可以concat')
+            raise self.error(LuaTypeError,'只有字符串可以concat')
 
     def _jmp(self, *operands):
         label = operands[0]

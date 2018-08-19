@@ -40,12 +40,14 @@ class Table:
         if isinstance(key, float):
             i = int(key)
             if i == key:
-                try:
+                if i == len(self.apart):
+                    self.apart.append(value)
+                if i >= 0 and i < len(self.apart):
                     self.apart[i] = value
-                except IndexError:
+                else:
                     self.hpart[i] = value
             else:
-                raise TypeError('不要使用float作为key')
+                raise TypeError('不要用float作为key')
         elif isinstance(key, str):
             self.hpart[key] = value
         else:

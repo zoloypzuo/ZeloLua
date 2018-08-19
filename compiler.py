@@ -9,6 +9,14 @@ from gen.zlua.LuaLexer import LuaLexer
 from typing import *
 
 
+class LuaCompileError(Exception):
+    def __init__(self, msg):
+        self.msg = msg
+
+    def __str__(self):
+        return self.msg.__str__()
+
+
 class Scope:
     def __init__(self):
         self.enclosed_blocks: List[Block] = []
@@ -113,9 +121,9 @@ class LuaCompiler(LuaVisitor):
     def _currp(self) -> Proto:
         return self.pstack[-1]
 
-    def _emit(self, op, *operands,**kwargs):
-        i=Instr(op, *operands)
-        i.src_line_number=kwargs['ctx'].start if 'ctx' in kwargs else None
+    def _emit(self, op, *operands):
+        i = Instr(op, *operands)
+        i.src_line_number = (self._curr_tree.start.line, self._curr_tree.start.getInputStream().strdata)
         self._currp.instrs.append(i)
 
     def _local_upval_global(self, name):
@@ -251,11 +259,11 @@ class LuaCompiler(LuaVisitor):
 
     def visitDotGetter(self, ctx: LuaParser.DotGetterContext):
         self._emit('push_l', ctx.NAME().getText())
-        self._emit('get_table',ctx=ctx)
+        self._emit('get_table')
 
     def visitNormalGetter(self, ctx: LuaParser.NormalGetterContext):
         self.visit(ctx.exp())
-        self._emit('get_table',ctx=ctx)
+        self._emit('get_table')
 
     def visitNameAndArgs(self, ctx: LuaParser.NameAndArgsContext):
         if ctx.NAME():
@@ -306,7 +314,7 @@ class LuaCompiler(LuaVisitor):
         if tag == 'nameLvalue':
             self._handle_set_name(o)
         else:
-            self._emit('set_table',ctx=ctx)
+            self._emit('set_table')
 
     def visitNameLvalue(self, ctx: LuaParser.NameLvalueContext):
         return 'nameLvalue', ctx.NAME().getText()
@@ -352,7 +360,7 @@ class LuaCompiler(LuaVisitor):
                         self._emit('get_table')
                 self._emit('push_l', names[-1])
                 if mn:
-                    self._emit('get_table',ctx=ctx)
+                    self._emit('get_table')
             if mn:
                 # 'local obj={}; function obj:m() end'
                 self._emit('push_l', mn.getText())
@@ -360,7 +368,7 @@ class LuaCompiler(LuaVisitor):
             self._emit('closure', index)
             if mn:
                 self._currp.enclosed_protos[index].param_names.insert(0, 'self')
-            self._emit('set_table',ctx=ctx)
+            self._emit('set_table')
 
     def visitLocalfunctiondefStat(self, ctx: LuaParser.LocalfunctiondefStatContext):
         # 'local' 'function' NAME funcbody #localfunctiondefStat
@@ -468,8 +476,7 @@ class LuaCompiler(LuaVisitor):
         self._register_label(end)
 
     def visitForijkStat(self, ctx: LuaParser.ForijkStatContext):
-        ''''''
-        # | 'for' NAME '=' exp ',' exp (',' exp)? 'do' block 'end' #forijkStat
+        # 'for' NAME '=' exp ',' exp (',' exp)? 'do' block 'end' #forijkStat
         nl1 = self._currp._new_label()
         nl2 = self._currp._new_label()
         nl3 = self._currp._new_label()
@@ -487,12 +494,11 @@ class LuaCompiler(LuaVisitor):
         self._emit('for_ijk_loop', name)
         self._emit('jmp', nl3)  # just for correctness, false => jmp
         self._emit('jmp', nl2)
-        self._currp.exit_block()  # 注意name在循环体作用域内
         self._register_label(nl3)
+        self._currp.exit_block()  # 注意name在循环体作用域内
 
     def visitForinStat(self, ctx: LuaParser.ForinStatContext):
-        ''''''
-        # | 'for' namelist 'in' explist 'do' block 'end' #forinStat
+        # 'for' namelist 'in' explist 'do' block 'end' #forinStat
         kname, vname = list(map(lambda x: x.getText(), ctx.NAME()))
         nl1 = self._currp._new_label()
         nl2 = self._currp._new_label()
@@ -509,8 +515,9 @@ class LuaCompiler(LuaVisitor):
         self._emit('for_in_loop', kname, vname)
         self._emit('jmp', nl3)  # just for correctness, false => jmp
         self._emit('jmp', nl2)
-        self._currp.exit_block()  # 注意name在循环体作用域内
         self._register_label(nl3)
+        self._currp.exit_block()  # 注意name在循环体作用域内
+
 
     # endregion
     def visitAndExp(self, ctx: LuaParser.AndExpContext):
@@ -538,7 +545,11 @@ class LuaCompiler(LuaVisitor):
     def visitErrorNode(self, node):
         # node.symbol.getInputStream().getText(start,end) 没用，你拿不到行
         # node.symbol.line symbol是Token，line是行号，没用，没有行api。因此你放弃把。拿不到什么信息
-        raise SyntaxError('lua syntax error: ' + node.__str__())
+        raise SyntaxError('lua syntax error: ' + node.symbol.getInputStream().strdata)
+
+    def visit(self, tree):
+        self._curr_tree = tree
+        return tree.accept(self)
 
 
 if __name__ == '__main__':
