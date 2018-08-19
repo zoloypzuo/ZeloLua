@@ -10,26 +10,7 @@ assert(a==10 and b==11 and c==12 and d==nil)
 a,b = f(), 1, 2, 3, f()
 assert(a==10 and b==1)
 
-assert(a<b == false and a>b == true)
-assert((10 and 2) == 2)
-assert((10 or 2) == 10)
-assert((10 or assert(nil)) == 10)
-assert(not (nil and assert(nil)))
-assert((nil or "alo") == "alo")
-assert((nil and 10) == nil)
-assert((false and 10) == false)
-assert((true or 10) == true)
-assert((false or 10) == 10)
-assert(false ~= nil)
-assert(nil ~= false)
-assert(not nil == true)
-assert(not not nil == false)
-assert(not not 1 == true)
-assert(not not a == true)
-assert(not not (6 or nil) == true)
-assert(not not (nil and 56) == false)
-assert(not not (nil and true) == false)
-print('+')
+
 
 a = {}
 a[true] = 20

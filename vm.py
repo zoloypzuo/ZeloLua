@@ -63,7 +63,7 @@ class LuaThread:
 
     def error(self, error_type, msg):
         '''帮助生成一个带信息的'''
-        return error_type(self.curr_instr.src_line_number + '\n' + msg)
+        return error_type(self.curr_instr.src_line_number.__str__() + '\n' + msg)
 
     def register(self, python_func, name):
         self.globals[name] = PythonClosure(python_func)
@@ -227,6 +227,26 @@ class LuaThread:
             if not mt:
                 raise self.error(LuaTypeError, '操作数不支持 ' + op_name)
 
+    def _and(self, *operands):
+        rhs = self.pop()
+        lhs = self.pop()
+        self.push(lhs and rhs)
+
+    def _or(self, *operands):
+        rhs = self.pop()
+        lhs = self.pop()
+        self.push(lhs or rhs)
+
+    def _eq(self, *operands):
+        rhs = self.pop()
+        lhs = self.pop()
+        self.push(lhs == rhs)
+
+    def _ne(self, *operands):
+        rhs = self.pop()
+        lhs = self.pop()
+        self.push(lhs != rhs)
+
     def _concat(self, *operands):
         rhs = self.pop()
         lhs = self.pop()
@@ -359,10 +379,7 @@ binary_arith_op = {
     'div': truediv,
     'mod': mod,
     'pow': pow,
-    'and': lambda x, y: x and y,
-    'or': lambda x, y: x or y,
-    'eq': eq,
-    'ne': ne,
+
     'lt': lt,
     'le': le,
     'mt': lambda x, y: x > y,

@@ -8,9 +8,9 @@ from vm import LuaThread, LuaClosure
 __version__ = 'zlua based on lua 5.1.4'
 
 
-def do_file(path: str, thread: LuaThread = None):
+def do_file(path: str, thread: LuaThread = None, *libs):
     thread = thread or LuaThread()
-    input = FileStream(path)
+    input = FileStream(path,encoding='utf-8')
     lexer = LuaLexer(input)
     stream = CommonTokenStream(lexer)
     parser = LuaParser(stream)
@@ -21,12 +21,13 @@ def do_file(path: str, thread: LuaThread = None):
     if thread.frame_stack:
         thread.curr_cl.saved_pc = thread.pc
     thread.load_lib(std_base_lib)
+    list(map(thread.load_lib, libs))
     thread.pc = 0  # 调用新函数，指针清零
     thread.frame_stack.append(lc)
     thread.execute()
 
 
-def do_string(lua_code: str, thread: LuaThread = None):
+def do_string(lua_code: str, thread: LuaThread = None, *libs):
     '''主要用这个测试短小的lua代码；默认新开一个thread'''
     thread = thread or LuaThread()
     input = InputStream(lua_code)
@@ -45,6 +46,7 @@ def do_string(lua_code: str, thread: LuaThread = None):
     if thread.frame_stack:
         thread.curr_cl.saved_pc = thread.pc
     thread.load_lib(std_base_lib)
+    list(map(thread.load_lib, libs))
     thread.pc = 0  # 调用新函数，指针清零
     thread.frame_stack.append(lc)
     thread.execute()

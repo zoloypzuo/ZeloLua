@@ -50,10 +50,11 @@ class Test(TestCase):
         do_string('local a=(1<=2)')
         do_string('local a=(1>2)')
         do_string('local a=(1>=2)')
-        do_string('local a=true and false')
-        do_string('local a=false and true')
+        do_string('local a=true and false; assert(a==false)')
+        do_string('local a=false and true; assert(a==false)')
         do_string('local a=true or false')
         do_string('local a=false or false')
+        do_string('assert((nil or "alo") == "alo")')
 
         do_string('assert(1+1==2)')
         do_string('local a=1;local b=2;assert(a+b==3);')
