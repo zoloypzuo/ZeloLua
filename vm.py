@@ -215,17 +215,21 @@ class LuaThread:
             self.push(binary_arith_op[op_name](lhs, rhs))
         else:
             mt_name = '__' + op_name
-            mt = None
-            # 尝试调用元方法，如果没有说明错误，这里因为python不支持赋值是表达式，所以不能短路，判断丑了点
-            if mt_name in metamethod_names:
-                mt = get_metamethod(lhs, mt_name) or get_metamethod(rhs, mt_name)
-                if mt:
-                    self.push(mt)
-                    self.push(lhs)
-                    self.push(rhs)
-                    self._call(2)
-            if not mt:
-                raise self.error(LuaTypeError, '操作数不支持 ' + op_name)
+            if not self._binary_mt(lhs, rhs, mt_name):
+                raise self.error(LuaTypeError, '操作数不支持该基本运算和对应的元方法', op_name)
+
+    def _binary_mt(self, lhs, rhs, mt_name):
+        '''调用元方法，返回是否成功，让caller抛出自定的异常'''
+        mt = None
+        # 尝试调用元方法，如果没有说明错误，这里因为python不支持赋值是表达式，所以不能短路，判断丑了点
+        if mt_name in metamethod_names:
+            mt = get_metamethod(lhs, mt_name) or get_metamethod(rhs, mt_name)
+            if mt:
+                self.push(mt)
+                self.push(lhs)
+                self.push(rhs)
+                self._call(2)
+        return mt != None
 
     def _and(self, *operands):
         rhs = self.pop()
@@ -240,12 +244,14 @@ class LuaThread:
     def _eq(self, *operands):
         rhs = self.pop()
         lhs = self.pop()
-        self.push(lhs == rhs)
+        if not self._binary_mt(lhs, rhs, '__eq'):
+            self.push(lhs == rhs)
 
     def _ne(self, *operands):
         rhs = self.pop()
         lhs = self.pop()
-        self.push(lhs != rhs)
+        if not self._binary_mt(lhs, rhs, '__ne'):
+            self.push(lhs != rhs)
 
     def _concat(self, *operands):
         rhs = self.pop()
@@ -292,14 +298,18 @@ class LuaThread:
         if len == 3: k = self.pop()
         j = self.pop()
         i = self.pop()
+        if k < 0:
+            raise self.error(LuaValueError, '不支持负数step')
         self.curr_cl.p.curr_locals['@' + name] = (j, k)  # j:limit k:step
-        self.curr_cl.p.curr_locals[name] = i - k  # 倒退一步，因为for loop每次都加，一开始要倒退一步
+        self.curr_cl.p.curr_locals[name] = i
+        if i < j:
+            self.pc += 1
 
     def _for_ijk_loop(self, *operands):
         name = operands[0]
         j, k = self.curr_cl.p.curr_locals['@' + name]
         i = self.curr_cl.p.curr_locals[name]
-        if i + k <= j:
+        if i + k < j:
             self.curr_cl.p.curr_locals[name] = i + k
             self.pc += 1
 
@@ -345,7 +355,8 @@ class LuaThread:
     def _get_table(self, *operands):
         key = self.pop()
         table = self.pop()
-        self.push(table.V_get_table(key))
+        value = table.V_get_table(key)
+        self.push(value)
 
     def _set_table(self, *operands):
         val = self.pop()
@@ -365,8 +376,8 @@ class LuaThread:
 
 metamethod_names = ["__getter", "__setter",  # table 替代了index和newindex，垃圾名字
                     "__call",  # func
-                    "__eq",  # eq
-                    "__add", "__sub", "__mul", "__div", "__mod", "__pow",  # arith
+                    "__eq", "__ne"  # eq
+                            "__add", "__sub", "__mul", "__div", "__mod", "__pow",  # arith
                     "__unm", "__len",  # unary
                     "__lt", "__le",  # relation op
                     ]

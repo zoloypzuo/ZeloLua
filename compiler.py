@@ -483,7 +483,6 @@ class LuaCompiler(LuaVisitor):
 
     def visitForijkStat(self, ctx: LuaParser.ForijkStatContext):
         # 'for' NAME '=' exp ',' exp (',' exp)? 'do' block 'end' #forijkStat
-        nl1 = self._currp._new_label()
         nl2 = self._currp._new_label()
         nl3 = self._currp._new_label()
         name = ctx.NAME().getText()
@@ -491,10 +490,9 @@ class LuaCompiler(LuaVisitor):
         self._currp.enter_block()
         self._currp.curr_locals[name] = None  # 加入符号表，因为是第一个local，不用检查重名
         self._emit('for_ijk_prep', name, len(ctx.exp()))
-        self._emit('jmp', nl1)
+        self._emit('jmp', nl3)
         self._register_label(nl2)
         self.visit(ctx.block())
-        self._register_label(nl1)
         # self.visit(ctx.exp()) 这是从while复制过来的，保留。看一下区别
         # self._emit('test') 我们不要test，因为bool是指令计算出来的
         self._emit('for_ijk_loop', name)

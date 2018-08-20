@@ -77,6 +77,7 @@ do
 end
 
 do
+    print 'test exp'
     assert((10 and 2) == 2)
     assert((10 or 2) == 10)
     assert((10 or assert(nil)) == 10)
@@ -95,4 +96,40 @@ do
     assert(not not (nil and 56) == false)
     assert(not not (nil and true) == false)
     print('+')
+end
+
+do
+    print 'test table'
+    function f(a)
+        return a
+    end
+
+    local a = {}
+    for i = -3000, 3000, 1 do
+        a[i] = i;
+    end
+    a[10e30] = "alo";
+    --print(a)
+    for i = -3000, 3000, 1 do
+        --print('i',i,'a[i]',a[i])
+        assert(a[i] == i);
+    end
+
+    a = a
+    a.x = a[-3]
+    a.y = nil
+
+    a[2 ^ 31] = 10;
+    a[2 ^ 31 + 1] = 11;
+    a[-2 ^ 31] = 12;
+    a[2 ^ 32] = 13;
+    a[-2 ^ 32] = 14;
+    a[2 ^ 32 + 1] = 15;
+    a[10 ^ 33] = 16;
+
+    assert(a[2 ^ 31] == 10 and a[2 ^ 31 + 1] == 11 and a[-2 ^ 31] == 12 and
+            a[2 ^ 32] == 13 and a[-2 ^ 32] == 14 and a[2 ^ 32 + 1] == 15 and
+            a[10 ^ 33] == 16)
+
+    a = nil
 end

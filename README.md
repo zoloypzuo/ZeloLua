@@ -233,3 +233,20 @@ set table，考虑new index和覆盖两种情况，显然找到了就要覆盖�
 ### 模块加载机制和库的导入
 1. 我放弃了require。因为没有必要。你要的是热加载，因此所有都用dofile。这样语义清晰
 2. 库导入十分简单直接，name => func的dict就是一个lib，加载到G
+
+### and or eq ne和元方法，vm loop取指分派的设计
+1. 分派的设计是，先判断算术运算，which操作数只能是float，这些方法都有对应元方法，直接处理
+2. concat，relation op可能有元方法：1. and or是一定没有元方法的，不讲 2. relation op只有eq需要元方法，其他不需要
+
+### debugger
+必须实现，否则你无法debug。简单的方法，关联行号。如果不能，其实你可以自己解析行内容（很傻，应该不必）
+
+### table设计
+1，不简单，in和get/set会有repeat的地方，但是可能单独用，因此重复是必要的
+2. TODO，文档没写好，api都没有
+3. 
+
+### for ijk loop
+1. 不支持负数step，现在不必
+2. ij还是最好左闭右开，src是左右闭，不好
+3. 既然有prep指令，其实不必退一步再跳到loop指令，可以直接在prep判断是否第一次就不匹配

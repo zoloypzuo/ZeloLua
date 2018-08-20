@@ -1,6 +1,7 @@
 from unittest import TestCase
 import unittest
 from lua import do_string, do_file
+from vm import LuaValueError
 
 
 class Test(TestCase):
@@ -60,7 +61,6 @@ class Test(TestCase):
         do_string('local a=1;local b=2;assert(a+b==3);')
 
     def test_ctrl_flow(self):
-        # do_string('while true do end')  # while true !!! cause infinite loop !!!
         do_string('while false do end')  # while false
         do_string('if true then elseif false then else end')  # if true
         do_string('if false then elseif true then else end')  # elseif true
@@ -71,7 +71,22 @@ class Test(TestCase):
         do_string('for i=1,2 do print(i) end')
         do_string('for i=1,2,1 do print(i) end')  # => 1,2
         do_string('for i=1,5,3 do print(i) end')  # => 1,4
+        do_string('for i=-5,5,1 do print("i:", i) end')  # => -5, ... ,5
+        self.assertRaises(LuaValueError, do_string, 'for i=5,-5,-2 do print(i) end')  # => 5, 3, 1, -1, -3, -5，不实现
         do_string('for k,v in {["key1"]="val1",["key2"]="val2"} do print(k,v) end')
+        do_string('''
+            local a = {}
+            for i = -1, 1, 1 do
+                --print(i)
+                a[i] = i;
+            end
+            --a[10e30] = "alo";
+            --print(a)
+            for i = -1, 1, 1 do
+                --print('i:',i,'a[i]:',a[i])
+                assert(a[i] == i);
+            end
+            ''')
 
     def test_mt(self):
         pass
@@ -92,7 +107,7 @@ class Test(TestCase):
     def test_error(self):
         '''https://python3-cookbook.readthedocs.io/zh_CN/latest/c14/p03_testing_for_exceptional_conditions_in_unit_tests.html'''
         self.assertRaises(SyntaxError, do_string, 'local a=(')
-        self.assertRaises(Exception,do_string,'local f=function (a) return a end; f(1,2);')
+        self.assertRaises(Exception, do_string, 'local f=function (a) return a end; f(1,2);')
 
     def test_scope(self):
         do_string('''
@@ -100,6 +115,7 @@ class Test(TestCase):
         do local i1=1 end
         do local i2=1 end
         ''')
+
     def test_formal(self):
         '''TODO 1. 因为你修改了语法，无法兼容 a,b=1,2 2.标准库还没上。 3.他的文件都有语法文件和编码问题'''
         do_file('test.lua')

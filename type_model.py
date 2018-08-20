@@ -14,9 +14,9 @@ class Table:
         if isinstance(key, float):
             i = int(key)
             if i == key:
-                try:
+                if i >= 0 and i < len(self.apart):
                     return self.apart[i]
-                except IndexError:
+                else:
                     return self.hpart[i]
             else:
                 raise TypeError('不要使用float作为key')
@@ -32,7 +32,7 @@ class Table:
             if mm:
                 table = mm
             else:
-                raise KeyError('Lua KeyError')
+                raise KeyError('Lua KeyError :table: ' + self.__str__() + ' key: ' + key.__str__())
         else:
             return table[key]
 

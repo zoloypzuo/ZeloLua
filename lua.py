@@ -52,7 +52,8 @@ def do_string(lua_code: str, thread: LuaThread = None, *libs):
     thread.execute()
 
 
-def lua_assert(b): assert b
+def lua_assert(b):
+    assert b
 
 
 std_base_lib = {
