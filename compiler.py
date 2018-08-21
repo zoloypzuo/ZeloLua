@@ -31,8 +31,14 @@ class Upval:
     def close(self):
         self.val = self.state_func()
 
+    def __str__(self): return 'Upval'
 
-class Proto(Scope):
+    __repr__ = __str__
+
+
+class Function: pass
+
+class Proto(Scope, Function):
 
     def __init__(self):
         super().__init__()
@@ -54,7 +60,7 @@ class Proto(Scope):
 
     @property
     def curr_locals(self):
-        '''当前locals，注意不是“所有可见locals”'''
+        '''当前locals，注意不是“所有可见locals”，用于添加局部变量'''
         return self.curr_scope.locals
 
     @property
@@ -93,10 +99,19 @@ class Proto(Scope):
         self.instrs.append(Instr('exit_block'))
         self.scope_stack.pop()
 
+    def __str__(self):
+        return 'Proto'
+
+    __repr__ = __str__
+
 
 class Block(Scope):
     def __init__(self):
         super().__init__()
+
+    def __str__(self): return 'Block'
+
+    __repr__ = __str__
 
 
 class Instr:
@@ -339,7 +354,7 @@ class LuaCompiler(LuaVisitor):
     def visitFunctiondefExp(self, ctx: LuaParser.FunctiondefExpContext):
         index = len(self._currp.enclosed_protos)
         self.visit(ctx.functiondef().funcbody())
-        self._emit('closure', index)
+        self._emit('proto', index)
 
     def visitFunctiondefStat(self, ctx: LuaParser.FunctiondefStatContext):
         # 'function' funcname funcbody #functiondefStat
@@ -354,7 +369,7 @@ class LuaCompiler(LuaVisitor):
         if not mn and not tof:
             # 'function f() end'
             self.visit(ctx.funcbody())
-            self._emit('closure', index)
+            self._emit('proto', index)
             self._emit('set_global', name)
         else:
             self._handle_get_name(name)
@@ -371,7 +386,7 @@ class LuaCompiler(LuaVisitor):
                 # 'local obj={}; function obj:m() end'
                 self._emit('push_l', mn.getText())
             self.visit(ctx.funcbody())
-            self._emit('closure', index)
+            self._emit('proto', index)
             if mn:
                 self._currp.enclosed_protos[index].param_names.insert(0, 'self')
             self._emit('set_table')
@@ -382,7 +397,7 @@ class LuaCompiler(LuaVisitor):
         index = len(self._currp.enclosed_protos)
         self._currp.curr_locals[name] = None
         self.visit(ctx.funcbody())
-        self._emit('closure', index)  # closure runtime创建其实只是为了proto序列化
+        self._emit('proto', index)  # closure runtime创建其实只是为了proto序列化
         self._emit('set_local', name)  # 我们的很多东西其实已经直接放入你可以
 
     def visitFuncbody(self, ctx: LuaParser.FuncbodyContext):
@@ -548,7 +563,7 @@ class LuaCompiler(LuaVisitor):
     def visitErrorNode(self, node):
         # node.symbol.getInputStream().getText(start,end) 没用，你拿不到行
         # node.symbol.line symbol是Token，line是行号，没用，没有行api。因此你放弃把。拿不到什么信息
-        raise SyntaxError('lua syntax error: ' + node.symbol.getInputStream().strdata)
+        raise SyntaxError('lua syntax error: ')  # + node.symbol.getInputStream().strdata)
 
     def visit(self, tree):
         self._curr_tree = tree

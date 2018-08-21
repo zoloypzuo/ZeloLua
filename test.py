@@ -40,7 +40,7 @@ class Test(TestCase):
         do_string('local a={["keya"]="vala"}')
 
     def test_func_call(self):
-        do_string('local function f() return 1 end; f()')
+        do_string('local function f() do return 1 end end; f(); f();')
         do_string('local function f() end; local ret=f()')
         do_string('print "hello"')
 
@@ -85,8 +85,18 @@ class Test(TestCase):
             for i = -1, 1, 1 do
                 --print('i:',i,'a[i]:',a[i])
                 assert(a[i] == i);
+            end''')
+        do_string('''
+            local res = 1
+            local function fact (n)
+                if n == 0 then
+                    return res
+                else
+                    return n * fact(n - 1)
+                end
             end
-            ''')
+            fact(5)
+            assert(fact(5) == 120)''')
 
     def test_mt(self):
         pass
@@ -119,6 +129,7 @@ class Test(TestCase):
     def test_formal(self):
         '''TODO 1. 因为你修改了语法，无法兼容 a,b=1,2 2.标准库还没上。 3.他的文件都有语法文件和编码问题'''
         do_file('test.lua')
+        do_file('calls.lua')
     # endregion
 
 

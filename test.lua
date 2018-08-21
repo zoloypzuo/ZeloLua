@@ -134,6 +134,3 @@ do
     a = nil
 end
 
-do
-    
-end

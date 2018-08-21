@@ -5,7 +5,7 @@ the runtime stage part of zlua
 
 from typing import *
 
-from compiler import Proto
+from compiler import Proto, Function
 from type_model import Table, lua_not, lua_cond_true_false, get_metamethod
 
 
@@ -32,29 +32,44 @@ class LuaTypeError(LuaRuntimeError):
         super().__init__(msg)
 
 
-class Closure: pass
-
-
-class PythonClosure(Closure):
+class PythonFunction(Function):
     def __init__(self, py_func):
         self.py_func = py_func
 
     def __call__(self, *args):
         return self.py_func(*args)
 
+    def __str__(self): return 'PyCl'
 
-class LuaClosure(Closure):
+    __repr__ = __str__
+
+
+class LuaClosure:
 
     def __init__(self, func: Proto):
-        self.saved_pc = 0
         self.p: Proto = func
+        self.p.scope_stack = [self.p]
         self.exp_stack = []  # "stack-based vm"
+
+    def __str__(self): return 'LuaCl'
+
+    __repr__ = __str__
+
+
+class CallInfo:
+    def __init__(self, closure: LuaClosure):
+        self.saved_pc = 0
+        self.closure = closure
+
+    def __str__(self): return 'Ci'
+
+    __repr__ = __str__
 
 
 class LuaThread:
     def __init__(self):
-        self.frame_stack: List[LuaClosure] = []
-        self.globals: Dict[str,] = {}
+        self.ci_stack: List[CallInfo] = []
+        self.globals: Dict[str, Any] = {}
         self.pc = 0
 
     def load_lib(self, lib: Dict[str, Callable]):
@@ -66,11 +81,19 @@ class LuaThread:
         return error_type(self.curr_instr.src_line_number.__str__() + '\n' + msg)
 
     def register(self, python_func, name):
-        self.globals[name] = PythonClosure(python_func)
+        self.globals[name] = PythonFunction(python_func)
+
+    @property
+    def curr_ci(self) -> CallInfo:
+        return self.ci_stack[-1]
 
     @property
     def curr_cl(self) -> LuaClosure:
-        return self.frame_stack[-1]
+        return self.curr_ci.closure
+
+    @property
+    def curr_p(self):
+        return self.curr_cl.p
 
     @property
     def _instrs(self):  # just for debug
@@ -149,49 +172,47 @@ class LuaThread:
     def _call(self, *operands):
         n_args = operands[0]
         args = self.popn(n_args)
-        closure = self.pop()
-        if not isinstance(closure, Closure):  # 不是函数，尝试元方法
+        func = self.pop()
+        if not isinstance(func, Function):  # 不是函数，尝试元方法
             try:
-                closure = get_metamethod(closure, '__call')
-                if not isinstance(closure, Closure):
+                func = get_metamethod(func, '__call')
+                if not isinstance(func, Function):
                     raise self.error(LuaTypeError, '对象不可调用')  # __call不是函数
             except TypeError:
                 raise self.error(LuaTypeError, '对象不可调用')  # 没有metatable字段
 
-        if isinstance(closure, LuaClosure):
-            self.curr_cl.saved_pc = self.pc
-            self.frame_stack.append(closure)
-            pns = closure.p.param_names
+        if isinstance(func, Proto):
+            self.curr_ci.saved_pc, self.pc = self.pc, -1
+            self.ci_stack.append(CallInfo(LuaClosure(func)))
+            pns = func.param_names
             if len(pns) != len(args):
                 raise self.error(LuaRuntimeError, '实参列表与形参列表长度不匹配')
-            closure.p.locals.update(
-                dict(zip(closure.p.param_names, args)))  # 这句很复杂，一行把param names和args组合起来加入locals
-            for uv in closure.p.upvals.values():
+            func.locals.update(
+                dict(zip(func.param_names, args)))  # 这句很复杂，一行把param names和args组合起来加入locals
+            for uv in func.upvals.values():
                 uv.close()
-            self.pc = -1
         else:
-            assert isinstance(closure, PythonClosure)
-            ret_val = closure(*args)
+            assert isinstance(func, PythonFunction)
+            ret_val = func(*args)
             self.push(ret_val)  # push ret val
 
     def _call_procedure(self, *operands):
         self._call(*operands)
         self.pop()  # 抛弃返回值
 
-    def _closure(self, *operands):
+    def _proto(self, *operands):
         index = operands[0]
-        lc = LuaClosure(self.curr_cl.p.enclosed_protos[index])
-        self.push(lc)
+        self.push(self.curr_p.enclosed_protos[index])
 
     def _ret(self, *operands):
         n_ret = operands[0]
         ret_val = None
         if n_ret == 1:  # ret 0则返回值为None，否则弹出一个值
             ret_val = self.pop()
-        self.frame_stack.pop()
-        if not self.frame_stack:
+        self.ci_stack.pop()
+        if not self.ci_stack:
             return 'return from chunk'
-        self.pc = self.curr_cl.saved_pc
+        self.pc = self.curr_ci.saved_pc
         self.push(ret_val)
 
     def _procedure_pop(self, *operands):
@@ -367,7 +388,8 @@ class LuaThread:
     def _enter_block(self, *operands):
         index = operands[0]
         curr_proto = self.curr_cl.p
-        curr_proto.scope_stack.append(curr_proto.curr_enclosed_blocks[index])
+        nb = curr_proto.curr_enclosed_blocks[index]
+        curr_proto.scope_stack.append(nb)
 
     def _exit_block(self, *operands):
         curr_proto = self.curr_cl.p

@@ -68,7 +68,13 @@ set table，考虑new index和覆盖两种情况，显然找到了就要覆盖�
 ### 函数定义和调用指令
 
 #### closure proto index
-从inner funcs里索引一个proto，包装成closure后push；注意匿名函数是表达式/右值
+，包装成closure后push；注意匿名函数是表达式/右值
+
+#### proto index
+从inner funcs里索引一个proto压栈
+
+#### proto，closure与实例化
+实例化的本质是深复制，道理是简单的。自己写有点迷糊，事实上scope stack并不是恢复不恢复的问题，而是call应该新建一个提供空的运行时环境的closure对象
 
 #### self name
 表对象已经在栈顶，弹出后压入t\[name\]，再压入表
@@ -88,7 +94,7 @@ obj:f()
 thread只知道要执行Lua closure，第一次需要手动push chunk（无参有返回值），然后调用execute执行
 
 ## 运行时环境
-### Stack\<LuaClosure\>
+### Stack\<CallInfo\>
 基本的调用数据结构，不讲
 
 ### env：block与scope
@@ -248,3 +254,8 @@ do string有两种情况，一是什么都没有，二是已经加载了lua代�
 而且要用if判断，否则null reference
 要理解execute的功能：就是状态机的转换动作，而且是靠指令来行动的，你要给他准备正确的pc和栈帧，仅此而且，它只负责loop里执行指令
 这里也看起来简单，实际上不太好写
+
+## 一个严重bug，函数实例化
+函数是对象，定义即实例化。但是call时要wrap到一个结构，否则。要有保存与恢复状态。
+这次的bug在block上。因为block是状态，当你递归时，上一个函数的block栈情况没有保存清零。导致error
+
