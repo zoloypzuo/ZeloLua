@@ -1,5 +1,7 @@
 '''一些全局信息，整个lua的API'''
 from antlr4 import *
+from functools import partial
+
 from gen.zlua.LuaLexer import LuaLexer
 from gen.zlua.LuaParser import LuaParser
 from compiler import LuaCompiler
@@ -59,7 +61,7 @@ def lua_assert(b):
 std_base_lib = {
     'assert': lua_assert,
     'setmetatable': lambda t, mt: t.set_metatable(mt),
-    'dofile': do_file,
+    'dofile': partial(do_file,thread=None),
     'dostring': do_string,
     'print': print,
 }
