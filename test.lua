@@ -1,5 +1,5 @@
 do
-    print('nothing')
+    print 'nothing'
     local msgs = {}
     local function Message (m)
         print('Msg: ', m)
@@ -9,7 +9,7 @@ do
 end
 
 do
-    print('nothing')
+    print 'nothing'
     local function formatmem (m)
         if m < 1024 then
             do
@@ -33,7 +33,7 @@ do
 end
 
 do
-    print('test ijk loop')
+    print 'test ijk loop'
     local a = {}
     for i = 0, 1000 do
         a[i] = true
@@ -43,7 +43,7 @@ do
 end
 
 do
-    print('test metamethod')
+    print 'test metamethod'
     local b = {
         __lt = function(a, b)
             return a[0] < b[0]
@@ -132,4 +132,8 @@ do
             a[10 ^ 33] == 16)
 
     a = nil
+end
+
+do
+    
 end
