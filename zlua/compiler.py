@@ -79,7 +79,7 @@ class Proto(Scope, Function):
         assert isinstance(key, str)
         for scope in reversed(self.scope_stack):
             if key in scope.locals:
-                scope.locals[key]=value
+                scope.locals[key] = value
 
     def __contains__(self, key):
         '''getitem的in版本，不重载这个可能导致误用in；功能有点不一样，这个是严格检查有没有key'''
@@ -108,6 +108,13 @@ class Proto(Scope, Function):
     __repr__ = __str__
 
 
+class Chunk(Proto):
+    '''仅仅为了区别出chunk proto,这样vm才能返回'''
+
+    def __init__(self):
+        super().__init__()
+
+
 class Block(Scope):
     def __init__(self):
         super().__init__()
@@ -132,7 +139,7 @@ class Instr:
 
 class LuaCompiler(LuaVisitor):
     def __init__(self):
-        self.chunk_proto = Proto()
+        self.chunk_proto = Chunk()
         self.pstack: List[Proto] = [self.chunk_proto]
 
     @property
@@ -189,7 +196,8 @@ class LuaCompiler(LuaVisitor):
         self.visit(ctx.string())
 
     def visitString(self, ctx: LuaParser.StringContext):
-        s = ctx.getText().strip('\'\"')
+        text = ctx.getText()
+        s = text[1:-1]
         self._emit('push_l', s)
 
     def visitNilfalsetrueExp(self, ctx: LuaParser.NilfalsetrueExpContext):

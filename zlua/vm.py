@@ -5,7 +5,7 @@ the runtime stage part of zlua
 
 from typing import *
 
-from zlua.compiler import Proto, Function
+from zlua.compiler import Proto, Function, Chunk
 from zlua.type_model import Table, lua_not, lua_cond_true_false, get_metamethod
 
 
@@ -194,8 +194,10 @@ class LuaThread:
                 uv.close()
         else:
             assert isinstance(func, PythonFunction)
+            self.curr_ci.saved_pc=self.pc # call dofile will overwrite pc
             ret_val = func(*args)
             self.push(ret_val)  # push ret val
+            self.pc=self.curr_ci.saved_pc
 
     def _call_procedure(self, *operands):
         self._call(*operands)
@@ -210,8 +212,7 @@ class LuaThread:
         ret_val = None
         if n_ret == 1:  # ret 0则返回值为None，否则弹出一个值
             ret_val = self.pop()
-        self.ci_stack.pop()
-        if not self.ci_stack:
+        if isinstance(self.ci_stack.pop().closure.p,Chunk):
             return 'return from chunk'
         self.pc = self.curr_ci.saved_pc
         self.push(ret_val)
