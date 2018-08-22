@@ -223,11 +223,6 @@ l=literal
 1. 分派的设计是，先判断算术运算，which操作数只能是float，这些方法都有对应元方法，直接处理
 2. concat，relation op可能有元方法：1. and or是一定没有元方法的，不讲 2. relation op只有eq需要元方法，其他不需要
 
-## debugger
-必须实现，否则你无法debug。简单的方法，关联行号。如果不能，其实你可以自己解析行内容（很傻，应该不必）
-
-## 如何debug line number
-python接口有点不一样，SO没有，你自己ctrl n搜一下CommonToken，有line，text和coloumn
 
 ## 控制流
 0. 所有谓词表达式返回bool，使用test指令检查是否为真（lua真），test指令紧跟一句jmp，jmp到假的处理，因此指令顺序是test；jmp 假处理块；真处理块
@@ -257,4 +252,17 @@ do string有两种情况，一是什么都没有，二是已经加载了lua代�
 函数是对象，定义即实例化。但是call时要wrap到一个结构，否则。要有保存与恢复状态。
 这次的bug在block上。因为block是状态，当你递归时，上一个函数的block栈情况没有保存清零。导致error
 
-## TODO,测试语言内dofile,不能正确退出
+## TODO debugger
+流程】
+1. 得到line num，附加到instr上
+2. new一个debugger，debug指令会修改其状态
+3. 写一个while true的cmd repl执行器
+4. 内部的方法会修改debugger状态
+5. new thread(debugger=None);if status cond： debugger.a
+
+
+
+必须实现，否则你无法debug。简单的方法，关联行号。如果不能，其实你可以自己解析行内容（很傻，应该不必）
+
+## 如何debug line number
+python接口有点不一样，SO没有，你自己ctrl n搜一下CommonToken，有line，text和coloumn

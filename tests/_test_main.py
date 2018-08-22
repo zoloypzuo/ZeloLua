@@ -165,11 +165,11 @@ class Test(TestCase):
 
     def test_formal(self):
         '''TODO 1. 因为你修改了语法，无法兼容 a,b=1,2 2.标准库还没上。 3.他的文件都有语法文件和编码问题'''
-        # do_file('test.lua')
-        # do_file('calls.lua')
-        # do_file('constructs.lua')
-        # nt = new_thread({'print': lambda *args: None})  # 覆盖print
-        # do_file('verybig.lua', nt)  # 3.921s执行10次constructs.lua(4kb)
+        do_file('test.lua')
+        do_file('calls.lua')
+        do_file('constructs.lua')
+        nt = new_thread({'print': lambda *args: None})  # 覆盖print
+        do_file('verybig.lua', nt)  # 3.921s执行10次constructs.lua(4kb)
         do_file('locals.lua')
     # endregion
 

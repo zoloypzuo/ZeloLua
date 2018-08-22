@@ -59,24 +59,6 @@ do
 end
 
 do
-    print "testing require，不需要，require被原始的dofile替代"
-
-    --assert(require "string" == string)
-    --assert(require "math" == math)
-    --assert(require "table" == table)
-    --assert(require "io" == io)
-    --assert(require "os" == os)
-    --assert(require "debug" == debug)
-    --assert(require "coroutine" == coroutine)
-    --
-    --assert(type(package.path) == "string")
-    --assert(type(package.cpath) == "string")
-    --assert(type(package.loaded) == "table")
-    --assert(type(package.preload) == "table")
-
-end
-
-do
     print 'test exp'
     assert((10 and 2) == 2)
     assert((10 or 2) == 10)
