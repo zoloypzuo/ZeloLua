@@ -1,7 +1,7 @@
 class Table:
-    def __init__(self):
-        self.apart = []
-        self.hpart = {}
+    def __init__(self, apart=None, hpart=None):
+        self.apart = apart if apart != None else []
+        self.hpart = hpart if hpart != None else {}
         self.metatable = None
 
     def set_metatable(self, mt):
@@ -73,6 +73,8 @@ class Table:
 
     def __str__(self):
         return self.apart.__str__() + self.hpart.__str__()
+
+    __repr__ = __str__
 
     def __contains__(self, key):
         '''注意table同时是list和dict，但是in是dict的in，因此。。。；相比于get item，不跑出异常，而是返回False'''

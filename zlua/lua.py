@@ -27,15 +27,11 @@ def new_thread(*libs):
         'tostring': str,
         'tonumber': float,  # TODO 再想想
     }
-    s = Table()
-    s.hpart = {
-        'format': lambda s, *args: s.format(*args)
-    }
-    str_lib = {
-        'str': s
-    }
+    s = Table([], {'format': lambda s, *args: s.format(*args)})
+    g = Table([], thread.globals)
     thread.load_lib(std_base_lib)
-    thread.load_lib(str_lib)
+    thread.load_lib({'str': s})
+    thread.load_lib({'_G': g})
     list(map(thread.load_lib, libs))
     return thread
 

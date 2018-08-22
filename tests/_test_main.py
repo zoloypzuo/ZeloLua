@@ -99,7 +99,34 @@ class Test(TestCase):
                 assert(fact(5) == 120)''')
 
     def test_mt(self):
-        pass
+        do_string('''
+            local b = {
+                __lt = function(a, b)
+                    return a[0] < b[0]
+                end
+            }
+            local a1, a3, a4 = { 1 }, { 3 }, { 4 }
+            setmetatable(a1, b)
+            setmetatable(a3, b)
+            setmetatable(a4, b)
+            assert(a1 < a3)
+            assert(a1 < a4)
+            assert(not (a4 < a3))
+        ''')
+
+    def test_local_declare(self):
+        do_string('''
+        local a,b,c=1,2,3
+        assert(a==1)
+        assert(b==2)
+        assert(c==3)
+        ''')
+        do_string('''
+        local a1,a3,a4={1},{3},{4}
+        print(a1)
+        print(a3)
+        print(a4)
+        ''')
 
     # region 更加严格的测试，测试行为的正确性；使用官方测试文件
     def test_upval(self):
@@ -134,14 +161,16 @@ class Test(TestCase):
 
     def test_lib(self):
         do_string('dostring("")')  # TODO
+        do_string('print(_G)')
 
     def test_formal(self):
         '''TODO 1. 因为你修改了语法，无法兼容 a,b=1,2 2.标准库还没上。 3.他的文件都有语法文件和编码问题'''
-        do_file('test.lua')
-        do_file('calls.lua')
-        do_file('constructs.lua')
-        nt = new_thread({'print': lambda *args: None})  # 覆盖print
-        do_file('verybig.lua', nt)  # 3.921s执行10次constructs.lua(4kb)
+        # do_file('test.lua')
+        # do_file('calls.lua')
+        # do_file('constructs.lua')
+        # nt = new_thread({'print': lambda *args: None})  # 覆盖print
+        # do_file('verybig.lua', nt)  # 3.921s执行10次constructs.lua(4kb)
+        do_file('locals.lua')
     # endregion
 
 
