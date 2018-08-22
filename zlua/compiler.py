@@ -38,6 +38,7 @@ class Upval:
 
 class Function: pass
 
+
 class Proto(Scope, Function):
 
     def __init__(self):
@@ -76,7 +77,9 @@ class Proto(Scope, Function):
 
     def __setitem__(self, key, value):
         assert isinstance(key, str)
-        self.curr_locals[key] = value
+        for scope in reversed(self.scope_stack):
+            if key in scope.locals:
+                scope.locals[key]=value
 
     def __contains__(self, key):
         '''getitem的in版本，不重载这个可能导致误用in；功能有点不一样，这个是严格检查有没有key'''
@@ -317,9 +320,10 @@ class LuaCompiler(LuaVisitor):
         for exp in exps:
             self.visit(exp)
         for name in names:  # 在locals里创建新局部变量
-            if name in self._currp.curr_locals:
+            if name in self._currp:
                 raise Exception('重复声明标识符')
             self._currp.curr_locals[name] = None
+        if len(exps) == 0: return  # 'local a'直接跳过
         if len(names) > 1:
             if len(exps) == 1:
                 # eg. local a,b,c={1,2,3} or f()

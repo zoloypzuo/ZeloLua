@@ -50,8 +50,8 @@ set table 指令本身：要再push val，pop三个值后赋值即可
 set table，考虑new index和覆盖两种情况，显然找到了就要覆盖，否则调用new index，如果没有new index则当前表插入新键。new index要考虑no mt和no mm两种
 
 ## 调用与返回协议
-1. 调用流程：push closure，push args（被解析lua代码中的实参列表从左到右压栈），call
-    * 宿主函数以closure(args)的形式直接调用它
+1. 调用流程：push func，push args（被解析lua代码中的实参列表从左到右压栈），call
+    * 宿主函数以func(args)的形式直接调用它
 2. 返回流程：
     1. 单返回值：
         1. 多返回值会被包装到一个table（apart）里，返回这个table
@@ -59,19 +59,16 @@ set table，考虑new index和覆盖两种情况，显然找到了就要覆盖�
         3. 函数末尾自动添加ret 0指令
     2. 过程调用：这是由语句级别确定的，所以我选择加指令，procedure pop（专用pop）
 3. 与宿主语言互操作：宿主调用lua一般是dofile，不谈；主要是lua调用宿主，提供了一个*args的接口，任意函数可以直接注册，实参正确性不会被检查，lua代码中所有实参列表传给宿主函数直接调用
-4. 关于PythonClosure
-    1. python closure被注册到G，lua里调用后参数照样传入
-    2. call指令会取出参数直接调用py func，返回值压栈
-    3. 不需要栈帧
+4. 关于PythonFunction
+    1. call指令会取出参数直接调用py func，返回值压栈
+    2. 不需要栈帧
 5. no vararg，这个特性根本用不到（python都很少用）
 
 ### 函数定义和调用指令
 
-#### closure proto index
-，包装成closure后push；注意匿名函数是表达式/右值
-
 #### proto index
 从inner funcs里索引一个proto压栈
+TODO 出于基于扩展地写法，我没有取消inner func，既然是表达式，不必用array这样简洁
 
 #### proto，closure与实例化
 实例化的本质是深复制，道理是简单的。自己写有点迷糊，事实上scope stack并不是恢复不恢复的问题，而是call应该新建一个提供空的运行时环境的closure对象
@@ -98,6 +95,7 @@ thread只知道要执行Lua closure，第一次需要手动push chunk（无参�
 基本的调用数据结构，不讲
 
 ### env：block与scope
+这里其实有一个很重要的事情，proto拥有的scope stack其实compiler和runtime共用，严格来说应该分离出新类，但是很麻烦啊。TODO
 1. 设计
     1. 一个proto内的locals要根据运行时当前环境来确定，是proto的locals加上block栈上的所有locals，即
         bstack上所有元素的locals，我们把proto也压进去，利用多态简化判断

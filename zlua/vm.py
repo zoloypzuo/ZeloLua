@@ -5,8 +5,8 @@ the runtime stage part of zlua
 
 from typing import *
 
-from compiler import Proto, Function
-from type_model import Table, lua_not, lua_cond_true_false, get_metamethod
+from zlua.compiler import Proto, Function
+from zlua.type_model import Table, lua_not, lua_cond_true_false, get_metamethod
 
 
 class LuaRuntimeError(RuntimeError):
@@ -72,16 +72,16 @@ class LuaThread:
         self.globals: Dict[str, Any] = {}
         self.pc = 0
 
-    def load_lib(self, lib: Dict[str, Callable]):
-        for name, py_func in lib.items():
-            self.register(py_func, name)
+    def load_lib(self, lib: Dict[str, Union[Callable, Table]]):
+        for name, obj in lib.items():
+            if callable(obj):
+                self.globals[name] = PythonFunction(obj)
+            elif isinstance(obj, Table):
+                self.globals[name] = obj
 
     def error(self, error_type, msg):
         '''帮助生成一个带信息的'''
         return error_type(self.curr_instr.src_line_number.__str__() + '\n' + msg)
-
-    def register(self, python_func, name):
-        self.globals[name] = PythonFunction(python_func)
 
     @property
     def curr_ci(self) -> CallInfo:
@@ -92,7 +92,7 @@ class LuaThread:
         return self.curr_ci.closure
 
     @property
-    def curr_p(self):
+    def curr_p(self) -> Proto:
         return self.curr_cl.p
 
     @property
@@ -167,7 +167,8 @@ class LuaThread:
 
     def _set_local(self, *operands):
         name = operands[0]
-        self.curr_cl.p[name] = self.pop()
+        pop = self.pop()
+        self.curr_cl.p[name] = pop
 
     def _call(self, *operands):
         n_args = operands[0]
@@ -237,7 +238,7 @@ class LuaThread:
         else:
             mt_name = '__' + op_name
             if not self._binary_mt(lhs, rhs, mt_name):
-                raise self.error(LuaTypeError, '操作数不支持该基本运算和对应的元方法', op_name)
+                raise self.error(LuaTypeError, '操作数不支持该基本运算和对应的元方法: ' + op_name)
 
     def _binary_mt(self, lhs, rhs, mt_name):
         '''调用元方法，返回是否成功，让caller抛出自定的异常'''

@@ -1,7 +1,7 @@
 from unittest import TestCase
 import unittest
-from lua import do_string, do_file
-from vm import LuaValueError
+from zlua.lua import do_string, do_file
+from zlua.vm import LuaValueError
 
 
 class Test(TestCase):
@@ -75,28 +75,28 @@ class Test(TestCase):
         self.assertRaises(LuaValueError, do_string, 'for i=5,-5,-2 do print(i) end')  # => 5, 3, 1, -1, -3, -5，不实现
         do_string('for k,v in {["key1"]="val1",["key2"]="val2"} do print(k,v) end')
         do_string('''
-            local a = {}
-            for i = -1, 1, 1 do
-                --print(i)
-                a[i] = i;
-            end
-            --a[10e30] = "alo";
-            --print(a)
-            for i = -1, 1, 1 do
-                --print('i:',i,'a[i]:',a[i])
-                assert(a[i] == i);
-            end''')
-        do_string('''
-            local res = 1
-            local function fact (n)
-                if n == 0 then
-                    return res
-                else
-                    return n * fact(n - 1)
+                local a = {}
+                for i = -1, 1, 1 do
+                    --print(i)
+                    a[i] = i;
                 end
-            end
-            fact(5)
-            assert(fact(5) == 120)''')
+                --a[10e30] = "alo";
+                --print(a)
+                for i = -1, 1, 1 do
+                    --print('i:',i,'a[i]:',a[i])
+                    assert(a[i] == i);
+                end''')
+        do_string('''
+                local res = 1
+                local function fact (n)
+                    if n == 0 then
+                        return res
+                    else
+                        return n * fact(n - 1)
+                    end
+                end
+                fact(5)
+                assert(fact(5) == 120)''')
 
     def test_mt(self):
         pass
@@ -105,14 +105,14 @@ class Test(TestCase):
     def test_upval(self):
         do_string('local a=1;local function f() return a end;a=2;assert(f()==2)')
         do_string('''
-        function f(a)
-              local b=3
-              return function(b)
-                  return a+b
+            function f(a)
+                  local b=3
+                  return function(b)
+                      return a+b
+                    end
                 end
-            end
-        print(f(1)(2))
-        assert(f(1)(2)==3)''')
+            print(f(1)(2))
+            assert(f(1)(2)==3)''')
 
     def test_error(self):
         '''https://python3-cookbook.readthedocs.io/zh_CN/latest/c14/p03_testing_for_exceptional_conditions_in_unit_tests.html'''
@@ -121,15 +121,24 @@ class Test(TestCase):
 
     def test_scope(self):
         do_string('''
-        do local i=1 end
-        do local i1=1 end
-        do local i2=1 end
-        ''')
+            do local i=1 end
+            do local i1=1 end
+            do local i2=1 end
+            ''')
+        self.assertRaises(Exception, do_string, '''
+                local i;
+                do
+                    local i
+                end
+            ''')
 
     def test_formal(self):
         '''TODO 1. 因为你修改了语法，无法兼容 a,b=1,2 2.标准库还没上。 3.他的文件都有语法文件和编码问题'''
+        import sys,os
+        print(os.path.abspath('.'))
         do_file('test.lua')
         do_file('calls.lua')
+        do_file('constructs.lua')
     # endregion
 
 

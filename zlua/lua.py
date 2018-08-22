@@ -4,8 +4,9 @@ from functools import partial
 
 from gen.zlua.LuaLexer import LuaLexer
 from gen.zlua.LuaParser import LuaParser
-from compiler import LuaCompiler
-from vm import LuaThread, LuaClosure, CallInfo
+from zlua.compiler import LuaCompiler
+from zlua.type_model import Table
+from zlua.vm import LuaThread, LuaClosure, CallInfo
 
 __version__ = 'zlua based on lua 5.1.4'
 
@@ -37,8 +38,18 @@ def _do_input(input, thread: LuaThread):
         'dostring': partial(do_string, thread=thread),
         'print': print,
         'type': type,
+        'tostring':str,
+        'tonumber':float, #TODO 再想想
+    }
+    s=Table()
+    s.hpart={
+        'format':lambda s,*args:s.format(*args)
+    }
+    str_lib={
+        'str':s
     }
     thread.load_lib(std_base_lib)
+    thread.load_lib(str_lib)
     thread.pc = 0  # 调用新函数，指针清零
     thread.ci_stack.append(CallInfo(lc))
     thread.execute()
