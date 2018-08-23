@@ -81,7 +81,10 @@ class LuaThread:
 
     def error(self, error_type, msg):
         '''帮助生成一个带信息的'''
-        return error_type(self.curr_instr.src_line_number.__str__() + '\n' + msg)
+        curr_instr = self.curr_cl.p.instrs[self.pc]
+        s1 = str(curr_instr.src_line_number)
+        s2 = str(curr_instr.src_text)
+        return error_type(' '.join([s1, s2, msg]))
 
     @property
     def curr_ci(self) -> CallInfo:
@@ -120,9 +123,10 @@ class LuaThread:
 
     def execute(self):
         while True:
-            self.curr_instr = self.curr_cl.p.instrs[self.pc]
-            op_name = self.curr_instr.op
-            operands = self.curr_instr.operands
+            curr_instr = self.curr_cl.p.instrs[self.pc]
+            assert curr_instr.src_line_number > 0 and isinstance(curr_instr.src_text, str)
+            op_name = curr_instr.op
+            operands = curr_instr.operands
             if op_name in binary_arith_op:
                 self._binary(op_name)
             elif getattr(self, '_' + op_name)(*operands) == 'return from chunk':  # 为了能从chunk返回
@@ -194,10 +198,10 @@ class LuaThread:
                 uv.close()
         else:
             assert isinstance(func, PythonFunction)
-            self.curr_ci.saved_pc=self.pc # call dofile will overwrite pc
+            self.curr_ci.saved_pc = self.pc  # call dofile will overwrite pc
             ret_val = func(*args)
             self.push(ret_val)  # push ret val
-            self.pc=self.curr_ci.saved_pc
+            self.pc = self.curr_ci.saved_pc
 
     def _call_procedure(self, *operands):
         self._call(*operands)
@@ -212,7 +216,7 @@ class LuaThread:
         ret_val = None
         if n_ret == 1:  # ret 0则返回值为None，否则弹出一个值
             ret_val = self.pop()
-        if isinstance(self.ci_stack.pop().closure.p,Chunk):
+        if isinstance(self.ci_stack.pop().closure.p, Chunk):
             return 'return from chunk'
         self.pc = self.curr_ci.saved_pc
         self.push(ret_val)

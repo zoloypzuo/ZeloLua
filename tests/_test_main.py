@@ -3,8 +3,15 @@ import unittest
 from zlua.lua import do_string, do_file, new_thread
 from zlua.vm import LuaValueError
 
+from functools import partial
+
+nt = new_thread({'print': lambda *args: None})  # 覆盖print
+do_string = partial(do_string, thread=nt)
+do_file = partial(do_file, thread=nt)
+
 
 class Test(TestCase):
+
     def test_exp(self):
         do_string('local a=nil -- 安抚')
         do_string('local a=false')
@@ -168,8 +175,7 @@ class Test(TestCase):
         do_file('test.lua')
         do_file('calls.lua')
         do_file('constructs.lua')
-        nt = new_thread({'print': lambda *args: None})  # 覆盖print
-        do_file('verybig.lua', nt)  # 3.921s执行10次constructs.lua(4kb)
+        do_file('verybig.lua')  # 3.921s执行10次constructs.lua(4kb)
         do_file('locals.lua')
     # endregion
 

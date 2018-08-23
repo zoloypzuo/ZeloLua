@@ -3,10 +3,8 @@
   <component name="ChangeListManager">
     <list default="true" id="3cd1adb7-fda5-4b8e-8462-9bcc5578c8c3" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/README.md" afterPath="$PROJECT_DIR$/README.md" />
       <change beforePath="$PROJECT_DIR$/tests/_test_main.py" afterPath="$PROJECT_DIR$/tests/_test_main.py" />
-      <change beforePath="$PROJECT_DIR$/tests/test.lua" afterPath="$PROJECT_DIR$/tests/test.lua" />
-      <change beforePath="$PROJECT_DIR$/zlua/compiler.py" afterPath="$PROJECT_DIR$/zlua/compiler.py" />
+      <change beforePath="$PROJECT_DIR$/zlua/vm.py" afterPath="$PROJECT_DIR$/zlua/vm.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -23,7 +21,7 @@
     <SUITE FILE_PATH="coverage/zlua_prototype$Unittests_for_test_Test_test_do_string.coverage" NAME="Unittests for test.Test.test_do_string Coverage Results" MODIFIED="1533980987316" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/zlua_prototype$Unittests_for_test_Tests.coverage" NAME="Unittests for test.Tests Coverage Results" MODIFIED="1534912555297" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />
     <SUITE FILE_PATH="coverage/XASM_Assembler$ISA.coverage" NAME="ISA Coverage Results" MODIFIED="1524881772352" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/zlua_prototype$Unittests_for__test_main_Test.coverage" NAME="Unittests for _test_main.Test Coverage Results" MODIFIED="1534956714303" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />
+    <SUITE FILE_PATH="coverage/zlua_prototype$Unittests_for__test_main_Test.coverage" NAME="Unittests for _test_main.Test Coverage Results" MODIFIED="1535000561278" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />
     <SUITE FILE_PATH="coverage/zlua_prototype$Unittests_for_test_Test_test_func_def.coverage" NAME="Unittests for test.Test.test_func_def Coverage Results" MODIFIED="1534144164113" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/zlua_prototype$Unittests_for__test_main_Test_test_exp.coverage" NAME="Unittests for _test_main.Test.test_exp Coverage Results" MODIFIED="1534952460445" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />
     <SUITE FILE_PATH="coverage/XASM_Assembler$tree.coverage" NAME="tree Coverage Results" MODIFIED="1524940216455" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
@@ -77,13 +75,23 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="600">
-      <file leaf-file-name="vm.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="vm.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/zlua/vm.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="494">
-              <caret line="202" column="14" lean-forward="false" selection-start-line="202" selection-start-column="14" selection-end-line="202" selection-end-column="14" />
+            <state relative-caret-position="231">
+              <caret line="7" column="48" lean-forward="true" selection-start-line="7" selection-start-column="48" selection-end-line="7" selection-end-column="48" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="_test_main.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/tests/_test_main.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-2673">
+              <caret line="9" column="36" lean-forward="false" selection-start-line="9" selection-start-column="36" selection-end-line="9" selection-end-column="36" />
               <folding>
-                <element signature="e#41#61#0" expanded="true" />
+                <element signature="e#0#29#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -92,7 +100,7 @@
       <file leaf-file-name="lua.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/zlua/lua.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="706">
+            <state relative-caret-position="1056">
               <caret line="39" column="0" lean-forward="false" selection-start-line="39" selection-start-column="0" selection-end-line="39" selection-end-column="0" />
               <folding>
                 <element signature="e#23#43#0" expanded="true" />
@@ -104,7 +112,7 @@
       <file leaf-file-name="LuaLexer.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/gen/zlua/LuaLexer.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1168">
+            <state relative-caret-position="11088">
               <caret line="339" column="0" lean-forward="false" selection-start-line="339" selection-start-column="0" selection-end-line="339" selection-end-column="0" />
               <folding />
             </state>
@@ -114,17 +122,17 @@
       <file leaf-file-name="LuaParser.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/gen/zlua/LuaParser.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="530">
+            <state relative-caret-position="23529">
               <caret line="716" column="0" lean-forward="false" selection-start-line="716" selection-start-column="0" selection-end-line="716" selection-end-column="0" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="compiler.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="compiler.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/zlua/compiler.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-1984">
+            <state relative-caret-position="16566">
               <caret line="507" column="24" lean-forward="false" selection-start-line="507" selection-start-column="24" selection-end-line="507" selection-end-column="24" />
               <folding />
             </state>
@@ -221,7 +229,6 @@
         <option value="$PROJECT_DIR$/zlua/test_main.py" />
         <option value="$PROJECT_DIR$/tests/test.py" />
         <option value="$PROJECT_DIR$/lua5.1-tests/verybig.lua" />
-        <option value="$PROJECT_DIR$/zlua/vm.py" />
         <option value="$PROJECT_DIR$/tests/verybig.lua" />
         <option value="$PROJECT_DIR$/tests/test_main.py" />
         <option value="$PROJECT_DIR$/lua5.1-tests/vararg.lua" />
@@ -235,9 +242,10 @@
         <option value="$PROJECT_DIR$/lua5.1-tests/events.lua" />
         <option value="$PROJECT_DIR$/lua5.1-tests/db.lua" />
         <option value="$PROJECT_DIR$/README.md" />
-        <option value="$PROJECT_DIR$/tests/_test_main.py" />
         <option value="$PROJECT_DIR$/tests/test.lua" />
         <option value="$PROJECT_DIR$/zlua/compiler.py" />
+        <option value="$PROJECT_DIR$/zlua/vm.py" />
+        <option value="$PROJECT_DIR$/tests/_test_main.py" />
       </list>
     </option>
   </component>
@@ -247,9 +255,9 @@
     <detection-done>true</detection-done>
     <sorting>DEFINITION_ORDER</sorting>
   </component>
-  <component name="ProjectFrameBounds">
-    <option name="x" value="1335" />
-    <option name="y" value="349" />
+  <component name="ProjectFrameBounds" extendedState="6">
+    <option name="x" value="541" />
+    <option name="y" value="-36" />
     <option name="width" value="1318" />
     <option name="height" value="1835" />
   </component>
@@ -271,7 +279,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
@@ -305,6 +312,7 @@
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -473,19 +481,18 @@
     </configuration>
     <list size="6">
       <item index="0" class="java.lang.String" itemvalue="Python tests.Unittests for tests._test_main.Test" />
-      <item index="1" class="java.lang.String" itemvalue="Python tests.Unittests for _test_main.Test" />
-      <item index="2" class="java.lang.String" itemvalue="Python tests.Unittests for _test_main.Test.test_exp" />
-      <item index="3" class="java.lang.String" itemvalue="Python tests.Unittests for _test_main.Test.test_lib" />
-      <item index="4" class="java.lang.String" itemvalue="Python.compiler" />
+      <item index="1" class="java.lang.String" itemvalue="Python tests.Unittests for _test_main.Test.test_ctrl_flow" />
+      <item index="2" class="java.lang.String" itemvalue="Python tests.Unittests for _test_main.Test" />
+      <item index="3" class="java.lang.String" itemvalue="Python tests.Unittests for _test_main.Test.test_exp" />
+      <item index="4" class="java.lang.String" itemvalue="Python tests.Unittests for _test_main.Test.test_lib" />
       <item index="5" class="java.lang.String" itemvalue="Python tests.Unittests for _test_main.Test.test_formal" />
     </list>
     <recent_temporary>
-      <list size="5">
+      <list size="4">
         <item index="0" class="java.lang.String" itemvalue="Python tests.Unittests for _test_main.Test" />
         <item index="1" class="java.lang.String" itemvalue="Python tests.Unittests for _test_main.Test.test_formal" />
         <item index="2" class="java.lang.String" itemvalue="Python tests.Unittests for _test_main.Test.test_lib" />
-        <item index="3" class="java.lang.String" itemvalue="Python.compiler" />
-        <item index="4" class="java.lang.String" itemvalue="Python tests.Unittests for _test_main.Test.test_exp" />
+        <item index="3" class="java.lang.String" itemvalue="Python tests.Unittests for _test_main.Test.test_exp" />
       </list>
     </recent_temporary>
   </component>
@@ -506,39 +513,39 @@
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="Unittests_for__test_main_Test - 2018.08.23 at 00h 38m 46s.xml">
-      <configuration name="Unittests for _test_main.Test" configurationId="tests" />
-    </history-entry>
-    <history-entry file="Unittests_for__test_main_Test - 2018.08.23 at 00h 38m 57s.xml">
-      <configuration name="Unittests for _test_main.Test" configurationId="tests" />
-    </history-entry>
-    <history-entry file="Unittests_for__test_main_Test - 2018.08.23 at 00h 39m 33s.xml">
-      <configuration name="Unittests for _test_main.Test" configurationId="tests" />
-    </history-entry>
-    <history-entry file="Unittests_for__test_main_Test - 2018.08.23 at 00h 39m 43s.xml">
-      <configuration name="Unittests for _test_main.Test" configurationId="tests" />
-    </history-entry>
-    <history-entry file="Unittests_for__test_main_Test - 2018.08.23 at 00h 40m 17s.xml">
-      <configuration name="Unittests for _test_main.Test" configurationId="tests" />
-    </history-entry>
-    <history-entry file="Unittests_for__test_main_Test - 2018.08.23 at 00h 43m 34s.xml">
-      <configuration name="Unittests for _test_main.Test" configurationId="tests" />
-    </history-entry>
-    <history-entry file="Unittests_for__test_main_Test - 2018.08.23 at 00h 43m 55s.xml">
-      <configuration name="Unittests for _test_main.Test" configurationId="tests" />
-    </history-entry>
-    <history-entry file="Unittests_for__test_main_Test - 2018.08.23 at 00h 44m 44s.xml">
-      <configuration name="Unittests for _test_main.Test" configurationId="tests" />
-    </history-entry>
     <history-entry file="Unittests_for__test_main_Test - 2018.08.23 at 00h 51m 44s.xml">
       <configuration name="Unittests for _test_main.Test" configurationId="tests" />
     </history-entry>
     <history-entry file="Unittests_for__test_main_Test - 2018.08.23 at 00h 51m 58s.xml">
       <configuration name="Unittests for _test_main.Test" configurationId="tests" />
     </history-entry>
+    <history-entry file="Unittests_for__test_main_Test - 2018.08.23 at 01h 03m 07s.xml">
+      <configuration name="Unittests for _test_main.Test" configurationId="tests" />
+    </history-entry>
+    <history-entry file="Unittests_for__test_main_Test - 2018.08.23 at 01h 03m 30s.xml">
+      <configuration name="Unittests for _test_main.Test" configurationId="tests" />
+    </history-entry>
+    <history-entry file="Unittests_for__test_main_Test - 2018.08.23 at 01h 06m 20s.xml">
+      <configuration name="Unittests for _test_main.Test" configurationId="tests" />
+    </history-entry>
+    <history-entry file="Unittests_for__test_main_Test - 2018.08.23 at 12h 59m 03s.xml">
+      <configuration name="Unittests for _test_main.Test" configurationId="tests" />
+    </history-entry>
+    <history-entry file="Unittests_for__test_main_Test - 2018.08.23 at 12h 59m 10s.xml">
+      <configuration name="Unittests for _test_main.Test" configurationId="tests" />
+    </history-entry>
+    <history-entry file="Unittests_for__test_main_Test - 2018.08.23 at 13h 01m 34s.xml">
+      <configuration name="Unittests for _test_main.Test" configurationId="tests" />
+    </history-entry>
+    <history-entry file="Unittests_for__test_main_Test - 2018.08.23 at 13h 02m 36s.xml">
+      <configuration name="Unittests for _test_main.Test" configurationId="tests" />
+    </history-entry>
+    <history-entry file="Unittests_for__test_main_Test - 2018.08.23 at 13h 02m 45s.xml">
+      <configuration name="Unittests for _test_main.Test" configurationId="tests" />
+    </history-entry>
   </component>
   <component name="ToolWindowManager">
-    <frame x="1335" y="349" width="1318" height="1835" extended-state="0" />
+    <frame x="-13" y="-13" width="2626" height="1850" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
@@ -547,9 +554,9 @@
       <window_info id="LuaCheck" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.76702785" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.38807693" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.55263156" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.16692308" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Docker" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="ANTLR Preview" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.329455" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -563,7 +570,7 @@
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Coverage" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2496142" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32823026" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32823026" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
     </layout>
     <layout-to-restore>
@@ -577,7 +584,7 @@
       <window_info id="LuaCheck" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="true" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.38115385" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.38807693" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Coverage" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.55263156" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
@@ -604,12 +611,12 @@
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/tests/_test_main.py</url>
-          <line>167</line>
+          <line>174</line>
           <option name="timeStamp" value="348" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/zlua/vm.py</url>
-          <line>127</line>
+          <line>131</line>
           <option name="timeStamp" value="349" />
         </line-breakpoint>
       </breakpoints>
@@ -850,7 +857,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="548">
           <caret line="115" column="0" lean-forward="false" selection-start-line="115" selection-start-column="0" selection-end-line="115" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -858,7 +864,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="297">
           <caret line="9" column="23" lean-forward="false" selection-start-line="9" selection-start-column="23" selection-end-line="9" selection-end-column="23" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -866,7 +871,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="185">
           <caret line="32" column="0" lean-forward="false" selection-start-line="32" selection-start-column="0" selection-end-line="46" selection-end-column="21" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -881,7 +885,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="52701">
           <caret line="1598" column="25" lean-forward="false" selection-start-line="1598" selection-start-column="25" selection-end-line="1598" selection-end-column="25" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -897,7 +900,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="99">
           <caret line="12" column="2" lean-forward="false" selection-start-line="12" selection-start-column="2" selection-end-line="12" selection-end-column="2" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -905,13 +907,12 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="429">
           <caret line="19" column="0" lean-forward="false" selection-start-line="19" selection-start-column="0" selection-end-line="19" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/zlua/lua.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="706">
+        <state relative-caret-position="1056">
           <caret line="39" column="0" lean-forward="false" selection-start-line="39" selection-start-column="0" selection-end-line="39" selection-end-column="0" />
           <folding>
             <element signature="e#23#43#0" expanded="true" />
@@ -923,13 +924,12 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1307">
           <caret line="81" column="0" lean-forward="false" selection-start-line="81" selection-start-column="0" selection-end-line="81" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/gen/zlua/LuaLexer.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1168">
+        <state relative-caret-position="11088">
           <caret line="339" column="0" lean-forward="false" selection-start-line="339" selection-start-column="0" selection-end-line="339" selection-end-column="0" />
           <folding />
         </state>
@@ -939,7 +939,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="759">
           <caret line="25" column="0" lean-forward="false" selection-start-line="25" selection-start-column="0" selection-end-line="25" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -948,25 +947,14 @@
         <state split_layout="SPLIT">
           <first_editor relative-caret-position="1475">
             <caret line="261" column="0" lean-forward="false" selection-start-line="261" selection-start-column="0" selection-end-line="261" selection-end-column="0" />
-            <folding />
           </first_editor>
           <second_editor />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/zlua/vm.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="494">
-          <caret line="202" column="14" lean-forward="false" selection-start-line="202" selection-start-column="14" selection-end-line="202" selection-end-column="14" />
-          <folding>
-            <element signature="e#41#61#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/gen/zlua/LuaParser.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="530">
+        <state relative-caret-position="23529">
           <caret line="716" column="0" lean-forward="false" selection-start-line="716" selection-start-column="0" selection-end-line="716" selection-end-column="0" />
           <folding />
         </state>
@@ -976,24 +964,31 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1320">
           <caret line="88" column="16" lean-forward="true" selection-start-line="88" selection-start-column="16" selection-end-line="88" selection-end-column="16" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/zlua/compiler.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="16566">
+          <caret line="507" column="24" lean-forward="false" selection-start-line="507" selection-start-column="24" selection-end-line="507" selection-end-column="24" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/tests/_test_main.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="198">
-          <caret line="6" column="8" lean-forward="false" selection-start-line="6" selection-start-column="8" selection-end-line="6" selection-end-column="8" />
+        <state relative-caret-position="-2673">
+          <caret line="9" column="36" lean-forward="false" selection-start-line="9" selection-start-column="36" selection-end-line="9" selection-end-column="36" />
           <folding>
             <element signature="e#0#29#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/zlua/compiler.py">
+    <entry file="file://$PROJECT_DIR$/zlua/vm.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1984">
-          <caret line="507" column="24" lean-forward="false" selection-start-line="507" selection-start-column="24" selection-end-line="507" selection-end-column="24" />
+        <state relative-caret-position="231">
+          <caret line="7" column="48" lean-forward="true" selection-start-line="7" selection-start-column="48" selection-end-line="7" selection-end-column="48" />
           <folding />
         </state>
       </provider>
