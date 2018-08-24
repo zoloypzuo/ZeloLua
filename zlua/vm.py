@@ -71,6 +71,7 @@ class LuaThread:
         self.ci_stack: List[CallInfo] = []
         self.globals: Dict[str, Any] = {}
         self.pc = 0
+        self.debugger = None
 
     def load_lib(self, lib: Dict[str, Union[Callable, Table]]):
         for name, obj in lib.items():
@@ -121,10 +122,24 @@ class LuaThread:
         else:
             return []
 
+    @property
+    def line_changed(self):
+        if self.pc == 0: return True
+        curr_instr = self.curr_p.instrs[self.pc]
+        last_instr = self.curr_p.instrs[self.pc]
+        return curr_instr.src_line_number != last_instr.src_line_number
+
     def execute(self):
         while True:
             curr_instr = self.curr_cl.p.instrs[self.pc]
-            assert curr_instr.src_line_number > 0 and isinstance(curr_instr.src_text, str)
+            assert curr_instr.src_line_number > 0 \
+                   and isinstance(curr_instr.src_text, str)  # all instrs has this 2 info for debug and error
+            if self.debugger:
+                step_event = self.debugger.is_stepping
+                bp_event = curr_instr.src_line_number in self.debugger.bps
+                if (step_event or bp_event) and self.line_changed:
+                    self.debugger.is_stepping=False
+                    self.debugger.execute()
             op_name = curr_instr.op
             operands = curr_instr.operands
             if op_name in binary_arith_op:

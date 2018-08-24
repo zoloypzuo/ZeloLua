@@ -252,17 +252,12 @@ do string有两种情况，一是什么都没有，二是已经加载了lua代�
 函数是对象，定义即实例化。但是call时要wrap到一个结构，否则。要有保存与恢复状态。
 这次的bug在block上。因为block是状态，当你递归时，上一个函数的block栈情况没有保存清零。导致error
 
-## TODO debugger
-流程】
-1. 得到line num，附加到instr上
-2. new一个debugger，debug指令会修改其状态
-3. 写一个while true的cmd repl执行器
-4. 内部的方法会修改debugger状态
-5. new thread(debugger=None);if status cond： debugger.a
+## debugger
+我实现了一个半成品，这个项目结束了
+debugger的框架很简单，事件驱动，但是比较原始，不是回调，是简单的if 判断
+第一：debugger和thread其实是一个对象，debugger是从thread里分离出来的。因此ctor比较烦，丑，互相拥有对方实例。换句话说，其实debugger写在thread里面也挺好的
+第二：line change是一个重要的bool，因为debug时line是原子单位，然后，step和bp是两个event，每个vm loop周期需要检查它们，注意step event要清零
+第三：实现了step和bp，控制部分就实现了，接下来写打印所需信息的指令即可，很简单那
 
-
-
-必须实现，否则你无法debug。简单的方法，关联行号。如果不能，其实你可以自己解析行内容（很傻，应该不必）
-
-## 如何debug line number
-python接口有点不一样，SO没有，你自己ctrl n搜一下CommonToken，有line，text和coloumn
+bug与问题：跳了很多行。好像跳过了所有if else行之类的。可能是因为行号就标的不对，所以我懒得管了。这个项目到此为止
+关于C#版。你可以看到，你的语言欠缺了很多东西。离强类型迁移还太远。不要急着。但是我这次尝试知道了很多迁移导致的问题。复杂度会变大。有些东西很难实现。
