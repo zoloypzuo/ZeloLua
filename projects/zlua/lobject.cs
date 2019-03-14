@@ -1,16 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using zlua.VM;
-using zlua.ISA;
+using ZeptLua.VM;
+using ZeptLua.ISA;
 //using zlua.Stdlib;
-using zlua.Configuration;
+using ZeptLua.Configuration;
 using System.Collections;
 
 /// <summary>
 /// 类型模型
 /// </summary>
-namespace zlua.TypeModel
+namespace ZeptLua.TypeModel
 {
 
     /// <summary>

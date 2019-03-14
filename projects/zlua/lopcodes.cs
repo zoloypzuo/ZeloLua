@@ -4,7 +4,7 @@ using System.Diagnostics;
 /// <summary>
 /// 指令集
 /// </summary>
-namespace zlua.ISA
+namespace ZeptLua.ISA
 {
     /// <summary>
     /// byte code instruction，没有搞清楚sbx的问题。另外我删除了RK机制，不使用这种编码 => 真香

@@ -3,16 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using zlua.VM;
-using zlua.TypeModel;
-using zlua.Configuration;
+using ZeptLua.VM;
+using ZeptLua.TypeModel;
+using ZeptLua.Configuration;
 using System.Diagnostics;
-using zlua.ISA;
-using zlua.Metamethod;
+using ZeptLua.ISA;
+using ZeptLua.Metamethod;
 /// <summary>
 /// 调用系统
 /// </summary>
-namespace zlua.CallSystem
+namespace ZeptLua.CallSystem
 {
     static class LDo
     {
@@ -114,7 +114,7 @@ namespace zlua.CallSystem
 /// <summary>
 /// 元方法
 /// </summary>
-namespace zlua.Metamethod
+namespace ZeptLua.Metamethod
 {
     static class LTm  //src称为tagged method，不喜欢。。
     {

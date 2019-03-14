@@ -3,20 +3,20 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using zlua.TypeModel;
-using zlua.ISA;
+using ZeptLua.TypeModel;
+using ZeptLua.ISA;
 using System.Diagnostics;
 //using zlua.API;
-using zlua.CallSystem;
-using zlua.Metamethod;
+using ZeptLua.CallSystem;
+using ZeptLua.Metamethod;
 using System.Runtime.Serialization;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
-using zlua.Configuration;
+using ZeptLua.Configuration;
 /// <summary>
 /// 虚拟机
 /// </summary>
-namespace zlua.VM
+namespace ZeptLua.VM
 {
     class GlobalState
     {

@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using zlua.TypeModel;
-using zlua.VM;
+using ZeptLua.TypeModel;
+using ZeptLua.VM;
 /// <summary>
 /// 调试器
 /// </summary>
-namespace zlua.Debugger
+namespace ZeptLua.Debugger
 {
     public class LDebug
     {

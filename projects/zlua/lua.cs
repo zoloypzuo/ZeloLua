@@ -6,12 +6,12 @@ using System.Text;
 using System.Threading.Tasks;
 
 //using zlua.API;
-using zlua.TypeModel;
-using zlua.VM;
+using ZeptLua.TypeModel;
+using ZeptLua.VM;
 using System.Diagnostics;
-using zlua.ISA;
-using zlua.CallSystem;
-namespace zlua
+using ZeptLua.ISA;
+using ZeptLua.CallSystem;
+namespace ZeptLua
 {
     /// <summary>
     /// 见鬼了异常，因为有些分支根本不可能走到，用于占位
