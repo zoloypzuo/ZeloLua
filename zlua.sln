@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.27004.2006
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "zlua", "projects\zlua\zlua.csproj", "{FE00E8B4-594A-46F0-957B-A3AF643243B9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "zluaTests", "projects\zluaTests\zluaTests.csproj", "{B97D2F2E-7339-481A-AE0D-6F9D9A305E27}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{FE00E8B4-594A-46F0-957B-A3AF643243B9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FE00E8B4-594A-46F0-957B-A3AF643243B9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FE00E8B4-594A-46F0-957B-A3AF643243B9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B97D2F2E-7339-481A-AE0D-6F9D9A305E27}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B97D2F2E-7339-481A-AE0D-6F9D9A305E27}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B97D2F2E-7339-481A-AE0D-6F9D9A305E27}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B97D2F2E-7339-481A-AE0D-6F9D9A305E27}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

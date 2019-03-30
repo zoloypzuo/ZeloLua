@@ -10,16 +10,16 @@ namespace ZeptLua.ISA
     /// byte code instruction，没有搞清楚sbx的问题。另外我删除了RK机制，不使用这种编码 => 真香
     /// </summary>
     [Serializable]
-    struct Bytecode : ITest
+    struct Bytecode
     {
-        uint i;
+        public uint Value { get; set; }
         #region ctor and factorys
         /// <summary>
         /// 实现决策】struct本身语义就是与int相等，因此只允许使用cast
         /// </summary>
-        Bytecode(uint i)
+        public Bytecode(uint i)
         {
-            this.i = i;
+            this.Value = i;
         }
         public Bytecode(Op opcode, int a, int b, int c)
         {
@@ -29,7 +29,7 @@ namespace ZeptLua.ISA
             Debug.Assert(A < (1 << 8));
             Debug.Assert(B < (1 << 9));
             Debug.Assert(C < (1 << 9));
-            i = (uint)opcode << PosOp | A << PosA | B << PosB | C << PosC;
+            Value = (uint)opcode << PosOp | A << PosA | B << PosB | C << PosC;
         }
         public Bytecode(Op opcode, int a, int bx)
         {
@@ -37,7 +37,7 @@ namespace ZeptLua.ISA
             uint Bx = (uint)bx;
             Debug.Assert(A < (1 << 8));
             Debug.Assert(Bx < (1 << 18));
-            i = (uint)opcode << PosOp | A << PosA | Bx << PosBx;
+            Value = (uint)opcode << PosOp | A << PosA | Bx << PosBx;
         }
         /// <summary>
         /// 基于ctor的工厂，因为RA RKB RKC这种指令格式最好有通用函数，opcode会被检查
@@ -189,7 +189,7 @@ namespace ZeptLua.ISA
             return a;
         }
         #endregion
-        public static explicit operator uint(Bytecode i) => i.i;
+        public static explicit operator uint(Bytecode i) => i.Value;
         public static explicit operator Bytecode(uint i) => new Bytecode(i);
         #region private things
         #region size and position of instruction arguments
@@ -217,15 +217,15 @@ namespace ZeptLua.ISA
         static uint Mask0(int n, int pos) => ~Mask0(n, pos);
         int Get(int n, int pos)
         {
-            var a = (i >> pos);
+            var a = (Value >> pos);
             var b = Mask1(n, 0);
             return (int)(a & b);
         }
         void Set(int x, int n, int pos)
         {
-            var a = i & Mask0(n, pos);
+            var a = Value & Mask0(n, pos);
             var b = ((uint)x << pos) & Mask1(n, pos); // "(uint)"是必要的。
-            i = a | b;
+            Value = a | b;
         }
         #endregion
         #endregion
@@ -236,129 +236,129 @@ namespace ZeptLua.ISA
                " B: " + B.ToString() + " C: " + C.ToString() +
                " Bx: " + Bx.ToString();
         }
-        public void Test()
-        {
-            void TestCreateOprd2()
-            {
-                Assert.AreEqual<UInt32>(0x00000007, (uint)new Bytecode(Op.SetGlobal, 0, 0));
-                Assert.AreEqual<UInt32>(0x00004007, (uint)new Bytecode(Op.SetGlobal, 0, 1));
-                Assert.AreEqual<UInt32>(0x00008007, (uint)new Bytecode(Op.SetGlobal, 0, 2));
-                Assert.AreEqual<UInt32>(0x00010001, (uint)new Bytecode(Op.LoadK, 0, 4));
-                Assert.AreEqual<UInt32>(0x0000C007, (uint)new Bytecode(Op.SetGlobal, 0, 3));
-                Assert.AreEqual<UInt32>(0x00018001, (uint)new Bytecode(Op.LoadK, 0, 6));
-                Assert.AreEqual<UInt32>(0x00014007, (uint)new Bytecode(Op.SetGlobal, 0, 5));
-                Assert.AreEqual<UInt32>(0x00020001, (uint)new Bytecode(Op.LoadK, 0, 8));
-                Assert.AreEqual<UInt32>(0x0001C007, (uint)new Bytecode(Op.SetGlobal, 0, 7));
-                Assert.AreEqual<UInt32>(0x00000003, (uint)new Bytecode(Op.LoadNil, 0, 0));
-                Assert.AreEqual<UInt32>(0x000100C1, (uint)new Bytecode(Op.LoadK, 3, 4));
-                Assert.AreEqual<UInt32>(0x00018101, (uint)new Bytecode(Op.LoadK, 4, 6));
-                Assert.AreEqual<UInt32>(0x00020141, (uint)new Bytecode(Op.LoadK, 5, 8));
-                Assert.AreEqual<UInt32>(0x000101C1, (uint)new Bytecode(Op.LoadK, 7, 4));
-                Assert.AreEqual<UInt32>(0x00024201, (uint)new Bytecode(Op.LoadK, 8, 9));
-                Assert.AreEqual<UInt32>(0x000241C1, (uint)new Bytecode(Op.LoadK, 7, 9));
-                Assert.AreEqual<UInt32>(0x00028201, (uint)new Bytecode(Op.LoadK, 8, 10));
-                Assert.AreEqual<UInt32>(0x00000324, (uint)new Bytecode(Op.Closure, 12, 0));
-                Assert.AreEqual<UInt32>(0x00034307, (uint)new Bytecode(Op.SetGlobal, 12, 13));
-                Assert.AreEqual<UInt32>(0x00034305, (uint)new Bytecode(Op.GetGlobal, 12, 13));
-                Assert.AreEqual<UInt32>(0x00010341, (uint)new Bytecode(Op.LoadK, 13, 4));
-                Assert.AreEqual<UInt32>(0x00024381, (uint)new Bytecode(Op.LoadK, 14, 9));
-            }
-            void TestCreateOprd3()
-            {
+        //public void Test()
+        //{
+        //    void TestCreateOprd2()
+        //    {
+        //        Assert.AreEqual<UInt32>(0x00000007, (uint)new Bytecode(Op.SetGlobal, 0, 0));
+        //        Assert.AreEqual<UInt32>(0x00004007, (uint)new Bytecode(Op.SetGlobal, 0, 1));
+        //        Assert.AreEqual<UInt32>(0x00008007, (uint)new Bytecode(Op.SetGlobal, 0, 2));
+        //        Assert.AreEqual<UInt32>(0x00010001, (uint)new Bytecode(Op.LoadK, 0, 4));
+        //        Assert.AreEqual<UInt32>(0x0000C007, (uint)new Bytecode(Op.SetGlobal, 0, 3));
+        //        Assert.AreEqual<UInt32>(0x00018001, (uint)new Bytecode(Op.LoadK, 0, 6));
+        //        Assert.AreEqual<UInt32>(0x00014007, (uint)new Bytecode(Op.SetGlobal, 0, 5));
+        //        Assert.AreEqual<UInt32>(0x00020001, (uint)new Bytecode(Op.LoadK, 0, 8));
+        //        Assert.AreEqual<UInt32>(0x0001C007, (uint)new Bytecode(Op.SetGlobal, 0, 7));
+        //        Assert.AreEqual<UInt32>(0x00000003, (uint)new Bytecode(Op.LoadNil, 0, 0));
+        //        Assert.AreEqual<UInt32>(0x000100C1, (uint)new Bytecode(Op.LoadK, 3, 4));
+        //        Assert.AreEqual<UInt32>(0x00018101, (uint)new Bytecode(Op.LoadK, 4, 6));
+        //        Assert.AreEqual<UInt32>(0x00020141, (uint)new Bytecode(Op.LoadK, 5, 8));
+        //        Assert.AreEqual<UInt32>(0x000101C1, (uint)new Bytecode(Op.LoadK, 7, 4));
+        //        Assert.AreEqual<UInt32>(0x00024201, (uint)new Bytecode(Op.LoadK, 8, 9));
+        //        Assert.AreEqual<UInt32>(0x000241C1, (uint)new Bytecode(Op.LoadK, 7, 9));
+        //        Assert.AreEqual<UInt32>(0x00028201, (uint)new Bytecode(Op.LoadK, 8, 10));
+        //        Assert.AreEqual<UInt32>(0x00000324, (uint)new Bytecode(Op.Closure, 12, 0));
+        //        Assert.AreEqual<UInt32>(0x00034307, (uint)new Bytecode(Op.SetGlobal, 12, 13));
+        //        Assert.AreEqual<UInt32>(0x00034305, (uint)new Bytecode(Op.GetGlobal, 12, 13));
+        //        Assert.AreEqual<UInt32>(0x00010341, (uint)new Bytecode(Op.LoadK, 13, 4));
+        //        Assert.AreEqual<UInt32>(0x00024381, (uint)new Bytecode(Op.LoadK, 14, 9));
+        //    }
+        //    void TestCreateOprd3()
+        //    {
 
-                Assert.AreEqual<UInt32>(0x00000002, (uint)new Bytecode(Op.LoadBool, 0, 0, 0));
-                Assert.AreEqual<UInt32>(0x00800002, (uint)new Bytecode(Op.LoadBool, 0, 1, 0));
-                Assert.AreEqual<UInt32>(0x00000042, (uint)new Bytecode(Op.LoadBool, 1, 0, 0));
-                Assert.AreEqual<UInt32>(0x00800082, (uint)new Bytecode(Op.LoadBool, 2, 1, 0));
-                Assert.AreEqual<UInt32>(0x0100018A, (uint)new Bytecode(Op.NewTable, 6, 2, 0));
-                Assert.AreEqual<UInt32>(0x010041A2, (uint)new Bytecode(Op.SetList, 6, 2, 1));
-                Assert.AreEqual<UInt32>(0x85C3024C, (uint)new Bytecode(Op.Add, 9, 267, 268));
-                Assert.AreEqual<UInt32>(0x82424057, (uint)new Bytecode(Op.Eq, 1, 260, 265));
-                Assert.AreEqual<UInt32>(0x00004282, (uint)new Bytecode(Op.LoadBool, 10, 0, 1));
-                Assert.AreEqual<UInt32>(0x00800282, (uint)new Bytecode(Op.LoadBool, 10, 1, 0));
-                Assert.AreEqual<UInt32>(0x000002C2, (uint)new Bytecode(Op.LoadBool, 11, 0, 0));
-                Assert.AreEqual<UInt32>(0x0180831C, (uint)new Bytecode(Op.Call, 12, 3, 2));
+        //        Assert.AreEqual<UInt32>(0x00000002, (uint)new Bytecode(Op.LoadBool, 0, 0, 0));
+        //        Assert.AreEqual<UInt32>(0x00800002, (uint)new Bytecode(Op.LoadBool, 0, 1, 0));
+        //        Assert.AreEqual<UInt32>(0x00000042, (uint)new Bytecode(Op.LoadBool, 1, 0, 0));
+        //        Assert.AreEqual<UInt32>(0x00800082, (uint)new Bytecode(Op.LoadBool, 2, 1, 0));
+        //        Assert.AreEqual<UInt32>(0x0100018A, (uint)new Bytecode(Op.NewTable, 6, 2, 0));
+        //        Assert.AreEqual<UInt32>(0x010041A2, (uint)new Bytecode(Op.SetList, 6, 2, 1));
+        //        Assert.AreEqual<UInt32>(0x85C3024C, (uint)new Bytecode(Op.Add, 9, 267, 268));
+        //        Assert.AreEqual<UInt32>(0x82424057, (uint)new Bytecode(Op.Eq, 1, 260, 265));
+        //        Assert.AreEqual<UInt32>(0x00004282, (uint)new Bytecode(Op.LoadBool, 10, 0, 1));
+        //        Assert.AreEqual<UInt32>(0x00800282, (uint)new Bytecode(Op.LoadBool, 10, 1, 0));
+        //        Assert.AreEqual<UInt32>(0x000002C2, (uint)new Bytecode(Op.LoadBool, 11, 0, 0));
+        //        Assert.AreEqual<UInt32>(0x0180831C, (uint)new Bytecode(Op.Call, 12, 3, 2));
 
-                // TODO，这两条指令的C是省略为0的，另外jmp型是sbx，还没有考虑
-                Assert.AreEqual<UInt32>(0x03000194, (uint)new Bytecode(Op.Len, 6, 6, 0));
-                Assert.AreEqual<UInt32>(0x0080001E, (uint)new Bytecode(Op.Return, 0, 1, 0));
+        //        // TODO，这两条指令的C是省略为0的，另外jmp型是sbx，还没有考虑
+        //        Assert.AreEqual<UInt32>(0x03000194, (uint)new Bytecode(Op.Len, 6, 6, 0));
+        //        Assert.AreEqual<UInt32>(0x0080001E, (uint)new Bytecode(Op.Return, 0, 1, 0));
 
 
-            }
-            void TestA()
-            {
-                Assert.AreEqual<Int32>(0, new Bytecode(Op.LoadBool, 0, 0, 0).A);
-                Assert.AreEqual<Int32>(0, new Bytecode(Op.LoadBool, 0, 1, 0).A);
-                Assert.AreEqual<Int32>(1, new Bytecode(Op.LoadBool, 1, 0, 0).A);
-                Assert.AreEqual<Int32>(2, new Bytecode(Op.LoadBool, 2, 1, 0).A);
-                Assert.AreEqual<Int32>(6, new Bytecode(Op.NewTable, 6, 2, 0).A);
-                Assert.AreEqual<Int32>(6, new Bytecode(Op.SetList, 6, 2, 1).A);
-                Assert.AreEqual<Int32>(9, new Bytecode(Op.Add, 9, 267, 268).A);
-                Assert.AreEqual<Int32>(1, new Bytecode(Op.Eq, 1, 260, 265).A);
-                Assert.AreEqual<Int32>(10, new Bytecode(Op.LoadBool, 10, 1, 0).A);
-                Assert.AreEqual<Int32>(11, new Bytecode(Op.LoadBool, 11, 0, 0).A);
-                Assert.AreEqual<Int32>(12, new Bytecode(Op.Call, 12, 3, 2).A);
-            }
-            void TestB()
-            {
-                Assert.AreEqual<Int32>(0, new Bytecode(Op.LoadBool, 0, 0, 0).B);
-                Assert.AreEqual<Int32>(1, new Bytecode(Op.LoadBool, 0, 1, 0).B);
-                Assert.AreEqual<Int32>(0, new Bytecode(Op.LoadBool, 1, 0, 0).B);
-                Assert.AreEqual<Int32>(1, new Bytecode(Op.LoadBool, 2, 1, 0).B);
-                Assert.AreEqual<Int32>(2, new Bytecode(Op.NewTable, 6, 2, 0).B);
-                Assert.AreEqual<Int32>(2, new Bytecode(Op.SetList, 6, 2, 1).B);
-                Assert.AreEqual<Int32>(267, new Bytecode(Op.Add, 9, 267, 268).B);
-                Assert.AreEqual<Int32>(260, new Bytecode(Op.Eq, 1, 260, 265).B);
-                Assert.AreEqual<Int32>(1, new Bytecode(Op.LoadBool, 10, 1, 0).B);
-                Assert.AreEqual<Int32>(0, new Bytecode(Op.LoadBool, 11, 0, 0).B);
-                Assert.AreEqual<Int32>(3, new Bytecode(Op.Call, 12, 3, 2).B);
-            }
-            void TestC()
-            {
-                Assert.AreEqual<Int32>(0, new Bytecode(Op.LoadBool, 0, 0, 0).C);
-                Assert.AreEqual<Int32>(0, new Bytecode(Op.LoadBool, 0, 1, 0).C);
-                Assert.AreEqual<Int32>(0, new Bytecode(Op.LoadBool, 1, 0, 0).C);
-                Assert.AreEqual<Int32>(0, new Bytecode(Op.LoadBool, 2, 1, 0).C);
-                Assert.AreEqual<Int32>(0, new Bytecode(Op.NewTable, 6, 2, 0).C);
-                Assert.AreEqual<Int32>(1, new Bytecode(Op.SetList, 6, 2, 1).C);
-                Assert.AreEqual<Int32>(268, new Bytecode(Op.Add, 9, 267, 268).C);
-                Assert.AreEqual<Int32>(265, new Bytecode(Op.Eq, 1, 260, 265).C);
-                Assert.AreEqual<Int32>(0, new Bytecode(Op.LoadBool, 10, 1, 0).C);
-                Assert.AreEqual<Int32>(0, new Bytecode(Op.LoadBool, 11, 0, 0).C);
-                Assert.AreEqual<Int32>(2, new Bytecode(Op.Call, 12, 3, 2).C);
-            }
-            void TestBx()
-            {
-                Assert.AreEqual<Int32>(0, new Bytecode(Op.SetGlobal, 0, 0).Bx);
-                Assert.AreEqual<Int32>(1, new Bytecode(Op.SetGlobal, 0, 1).Bx);
-                Assert.AreEqual<Int32>(2, new Bytecode(Op.SetGlobal, 0, 2).Bx);
-                Assert.AreEqual<Int32>(4, new Bytecode(Op.LoadK, 0, 4).Bx);
-                Assert.AreEqual<Int32>(3, new Bytecode(Op.SetGlobal, 0, 3).Bx);
-                Assert.AreEqual<Int32>(6, new Bytecode(Op.LoadK, 0, 6).Bx);
-                Assert.AreEqual<Int32>(5, new Bytecode(Op.SetGlobal, 0, 5).Bx);
-                Assert.AreEqual<Int32>(8, new Bytecode(Op.LoadK, 0, 8).Bx);
-                Assert.AreEqual<Int32>(7, new Bytecode(Op.SetGlobal, 0, 7).Bx);
-                Assert.AreEqual<Int32>(0, new Bytecode(Op.LoadNil, 0, 0).Bx);
-                Assert.AreEqual<Int32>(4, new Bytecode(Op.LoadK, 3, 4).Bx);
-                Assert.AreEqual<Int32>(6, new Bytecode(Op.LoadK, 4, 6).Bx);
-                Assert.AreEqual<Int32>(8, new Bytecode(Op.LoadK, 5, 8).Bx);
-                Assert.AreEqual<Int32>(4, new Bytecode(Op.LoadK, 7, 4).Bx);
-                Assert.AreEqual<Int32>(9, new Bytecode(Op.LoadK, 8, 9).Bx);
-                Assert.AreEqual<Int32>(9, new Bytecode(Op.LoadK, 7, 9).Bx);
-                Assert.AreEqual<Int32>(10, new Bytecode(Op.LoadK, 8, 10).Bx);
-                Assert.AreEqual<Int32>(0, new Bytecode(Op.Closure, 12, 0).Bx);
-                Assert.AreEqual<Int32>(13, new Bytecode(Op.SetGlobal, 12, 13).Bx);
-                Assert.AreEqual<Int32>(13, new Bytecode(Op.GetGlobal, 12, 13).Bx);
-                Assert.AreEqual<Int32>(4, new Bytecode(Op.LoadK, 13, 4).Bx);
-                Assert.AreEqual<Int32>(9, new Bytecode(Op.LoadK, 14, 9).Bx);
-            }
-            TestCreateOprd2();
-            TestCreateOprd3();
-            TestA();
-            TestB();
-            TestC();
-            TestBx();
-        }
+        //    }
+        //    void TestA()
+        //    {
+        //        Assert.AreEqual<Int32>(0, new Bytecode(Op.LoadBool, 0, 0, 0).A);
+        //        Assert.AreEqual<Int32>(0, new Bytecode(Op.LoadBool, 0, 1, 0).A);
+        //        Assert.AreEqual<Int32>(1, new Bytecode(Op.LoadBool, 1, 0, 0).A);
+        //        Assert.AreEqual<Int32>(2, new Bytecode(Op.LoadBool, 2, 1, 0).A);
+        //        Assert.AreEqual<Int32>(6, new Bytecode(Op.NewTable, 6, 2, 0).A);
+        //        Assert.AreEqual<Int32>(6, new Bytecode(Op.SetList, 6, 2, 1).A);
+        //        Assert.AreEqual<Int32>(9, new Bytecode(Op.Add, 9, 267, 268).A);
+        //        Assert.AreEqual<Int32>(1, new Bytecode(Op.Eq, 1, 260, 265).A);
+        //        Assert.AreEqual<Int32>(10, new Bytecode(Op.LoadBool, 10, 1, 0).A);
+        //        Assert.AreEqual<Int32>(11, new Bytecode(Op.LoadBool, 11, 0, 0).A);
+        //        Assert.AreEqual<Int32>(12, new Bytecode(Op.Call, 12, 3, 2).A);
+        //    }
+        //    void TestB()
+        //    {
+        //        Assert.AreEqual<Int32>(0, new Bytecode(Op.LoadBool, 0, 0, 0).B);
+        //        Assert.AreEqual<Int32>(1, new Bytecode(Op.LoadBool, 0, 1, 0).B);
+        //        Assert.AreEqual<Int32>(0, new Bytecode(Op.LoadBool, 1, 0, 0).B);
+        //        Assert.AreEqual<Int32>(1, new Bytecode(Op.LoadBool, 2, 1, 0).B);
+        //        Assert.AreEqual<Int32>(2, new Bytecode(Op.NewTable, 6, 2, 0).B);
+        //        Assert.AreEqual<Int32>(2, new Bytecode(Op.SetList, 6, 2, 1).B);
+        //        Assert.AreEqual<Int32>(267, new Bytecode(Op.Add, 9, 267, 268).B);
+        //        Assert.AreEqual<Int32>(260, new Bytecode(Op.Eq, 1, 260, 265).B);
+        //        Assert.AreEqual<Int32>(1, new Bytecode(Op.LoadBool, 10, 1, 0).B);
+        //        Assert.AreEqual<Int32>(0, new Bytecode(Op.LoadBool, 11, 0, 0).B);
+        //        Assert.AreEqual<Int32>(3, new Bytecode(Op.Call, 12, 3, 2).B);
+        //    }
+        //    void TestC()
+        //    {
+        //        Assert.AreEqual<Int32>(0, new Bytecode(Op.LoadBool, 0, 0, 0).C);
+        //        Assert.AreEqual<Int32>(0, new Bytecode(Op.LoadBool, 0, 1, 0).C);
+        //        Assert.AreEqual<Int32>(0, new Bytecode(Op.LoadBool, 1, 0, 0).C);
+        //        Assert.AreEqual<Int32>(0, new Bytecode(Op.LoadBool, 2, 1, 0).C);
+        //        Assert.AreEqual<Int32>(0, new Bytecode(Op.NewTable, 6, 2, 0).C);
+        //        Assert.AreEqual<Int32>(1, new Bytecode(Op.SetList, 6, 2, 1).C);
+        //        Assert.AreEqual<Int32>(268, new Bytecode(Op.Add, 9, 267, 268).C);
+        //        Assert.AreEqual<Int32>(265, new Bytecode(Op.Eq, 1, 260, 265).C);
+        //        Assert.AreEqual<Int32>(0, new Bytecode(Op.LoadBool, 10, 1, 0).C);
+        //        Assert.AreEqual<Int32>(0, new Bytecode(Op.LoadBool, 11, 0, 0).C);
+        //        Assert.AreEqual<Int32>(2, new Bytecode(Op.Call, 12, 3, 2).C);
+        //    }
+        //    void TestBx()
+        //    {
+        //        Assert.AreEqual<Int32>(0, new Bytecode(Op.SetGlobal, 0, 0).Bx);
+        //        Assert.AreEqual<Int32>(1, new Bytecode(Op.SetGlobal, 0, 1).Bx);
+        //        Assert.AreEqual<Int32>(2, new Bytecode(Op.SetGlobal, 0, 2).Bx);
+        //        Assert.AreEqual<Int32>(4, new Bytecode(Op.LoadK, 0, 4).Bx);
+        //        Assert.AreEqual<Int32>(3, new Bytecode(Op.SetGlobal, 0, 3).Bx);
+        //        Assert.AreEqual<Int32>(6, new Bytecode(Op.LoadK, 0, 6).Bx);
+        //        Assert.AreEqual<Int32>(5, new Bytecode(Op.SetGlobal, 0, 5).Bx);
+        //        Assert.AreEqual<Int32>(8, new Bytecode(Op.LoadK, 0, 8).Bx);
+        //        Assert.AreEqual<Int32>(7, new Bytecode(Op.SetGlobal, 0, 7).Bx);
+        //        Assert.AreEqual<Int32>(0, new Bytecode(Op.LoadNil, 0, 0).Bx);
+        //        Assert.AreEqual<Int32>(4, new Bytecode(Op.LoadK, 3, 4).Bx);
+        //        Assert.AreEqual<Int32>(6, new Bytecode(Op.LoadK, 4, 6).Bx);
+        //        Assert.AreEqual<Int32>(8, new Bytecode(Op.LoadK, 5, 8).Bx);
+        //        Assert.AreEqual<Int32>(4, new Bytecode(Op.LoadK, 7, 4).Bx);
+        //        Assert.AreEqual<Int32>(9, new Bytecode(Op.LoadK, 8, 9).Bx);
+        //        Assert.AreEqual<Int32>(9, new Bytecode(Op.LoadK, 7, 9).Bx);
+        //        Assert.AreEqual<Int32>(10, new Bytecode(Op.LoadK, 8, 10).Bx);
+        //        Assert.AreEqual<Int32>(0, new Bytecode(Op.Closure, 12, 0).Bx);
+        //        Assert.AreEqual<Int32>(13, new Bytecode(Op.SetGlobal, 12, 13).Bx);
+        //        Assert.AreEqual<Int32>(13, new Bytecode(Op.GetGlobal, 12, 13).Bx);
+        //        Assert.AreEqual<Int32>(4, new Bytecode(Op.LoadK, 13, 4).Bx);
+        //        Assert.AreEqual<Int32>(9, new Bytecode(Op.LoadK, 14, 9).Bx);
+        //    }
+        //    TestCreateOprd2();
+        //    TestCreateOprd3();
+        //    TestA();
+        //    TestB();
+        //    TestC();
+        //    TestBx();
+        ////}
     }
 
     enum Op
