@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace ZeptLua.Properties {
+namespace zlua.Properties {
     using System;
     
     

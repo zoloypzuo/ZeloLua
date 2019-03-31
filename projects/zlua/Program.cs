@@ -1,15 +1,18 @@
-﻿//using ZeptLua.VM;
-//using zlua.Core;
+﻿
+using System.IO;
+using Newtonsoft.Json;
+using zlua.Core.BinaryChunk;
+namespace zeptlua
+{
+    public class Program
+    {
 
-//namespace ZeptLua
-//{
-//    public class Program
-//    {
+        public static void Main(string[] args)
+        {
 
-//        public static void Main(string[] args)
-//        {
-//            var path = @"" + "test.lua";
-//            Lua.DoFile(new TThread(), path);
-//        }
-//    }
-//}
+            //var path = @"" + "test.lua";
+            //lua.dofile(new tthread(), path);
+
+        }
+    }
+}

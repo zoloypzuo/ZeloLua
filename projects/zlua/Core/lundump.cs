@@ -11,65 +11,65 @@
 using System;
 using System.IO;
 using System.Text;
-using ZeptLua.ISA;
+using zlua.Core;
 
 namespace zlua.Core.BinaryChunk
 {
     // binchunk中函数原型
     //
     // 字段顺序对应binchunk中的字段顺序
-    public class Prototype
+    internal class Prototype
     {
         // 源文件名
         //
         // * 调试用
         // * 没必要继承出ChunkProto类
-        internal string Source;
+        public string Source;
         // 起止行号
-        internal uint LineDefined;
-        internal uint LastLineDefined;
+        public uint LineDefined;
+        public uint LastLineDefined;
         // 固定参数个数
-        internal byte NumParams;
+        public byte NumParams;
         // 是vararg函数
-        internal byte IsVararg;
+        public byte IsVararg;
         // 寄存器数量
-        internal byte MaxStackSize;
+        public byte MaxStackSize;
         // 指令表
-        internal Bytecode[] Code;
+        public Bytecode[] Code;
         // 常量表
-        internal LuaObject[] Constants;
+        public LuaObject[] Constants;
         // Upvalue表
-        internal Upvalue[] Upvalues;
+        public Upvalue[] Upvalues;
         // 子Proto表
-        internal Prototype[] Protos;
+        public Prototype[] Protos;
         // 行号表
         //
         // * 调试用
-        internal uint[] LineInfo;
+        public uint[] LineInfo;
         // 局部变量表
         //
         // * 调试用
-        internal LocVar[] LocVars;
+        public LocVar[] LocVars;
         // Upvalue名字表
         //
         // * 调试用
-        internal string[] UpvalueNames;
+        public string[] UpvalueNames;
     }
 
     internal struct Upvalue
     {
-        internal byte Instack;
-        internal byte Idx;
+        public byte Instack;
+        public byte Idx;
     }
 
     internal struct LocVar
     {
-        internal string VarName;
-        internal uint StartPc;
-        internal uint EndPc;
+        public string VarName;
+        public uint StartPc;
+        public uint EndPc;
     }
 
-    public class BinaryChunk
+    internal class BinaryChunk
     {
         #region 用于校验的常量
         // ASCII字符串 ESC L u a

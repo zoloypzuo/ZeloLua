@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Diagnostics;
-using ZeptLua.ISA;
+using zlua.Core;
+
 namespace zlua.Core
 {
-    /// <summary>
-    /// 见鬼了异常，因为有些分支根本不可能走到，用于占位
-    /// </summary>
+    // 见鬼了异常，因为有些分支根本不可能走到，用于占位
     class GodDamnException : Exception { }
+
     /// <summary>
     /// 错误的操作数类型，我们用opcode作为提示
     /// </summary>

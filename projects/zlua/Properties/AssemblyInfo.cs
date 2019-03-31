@@ -34,3 +34,8 @@ using System.Runtime.InteropServices;
 // [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
+
+// 让比如Bytecode类可以测试
+//
+// https://stackoverflow.com/questions/358196/c-sharp-internal-access-modifier-when-doing-unit-testing
+[assembly: InternalsVisibleTo("zluaTests")]

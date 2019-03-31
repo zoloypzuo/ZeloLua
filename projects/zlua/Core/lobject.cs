@@ -3,10 +3,9 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using ZeptLua.VM;
-using ZeptLua.ISA;
-using System.Collections;
 using System.Runtime.InteropServices;
+using Newtonsoft.Json;
+using zlua.Core;
 
 namespace zlua.Core
 {
@@ -25,6 +24,7 @@ namespace zlua.Core
         // * 大小8B
         // * 是union，这个特性不允许引用类型，所以TObject放在外面
         //   https://docs.microsoft.com/en-us/dotnet/api/system.runtime.interopservices.structlayoutattribute?view=netframework-4.7.2
+        [Serializable]
         [StructLayout(LayoutKind.Explicit)]
         private struct Numeric
         {
@@ -38,20 +38,24 @@ namespace zlua.Core
         #endregion
 
         #region 私有属性
+        [JsonProperty]
         private Numeric NumericValue { get; set; }
         #endregion
 
         #region 公有属性
         // lua引用类型
+        [JsonProperty]
         public TObject TObj { get; private set; }
 
         // 类型标签
+        [JsonProperty]
         public LuaTypes Type { get; private set; }
 
 
         #endregion
 
         #region 访问器与设置器
+        [JsonIgnore]
         public LuaNumber N
         {
             get
@@ -66,6 +70,7 @@ namespace zlua.Core
             }
         }
 
+        [JsonIgnore]
         public LuaInteger I
         {
             get
@@ -80,6 +85,7 @@ namespace zlua.Core
             }
         }
 
+        [JsonIgnore]
         public bool B
         {
             get
@@ -94,6 +100,7 @@ namespace zlua.Core
             }
         }
 
+        [JsonIgnore]
         public TString TStr
         {
             get
@@ -108,6 +115,7 @@ namespace zlua.Core
             }
         }
 
+        [JsonIgnore]
         public string Str
         {
             get
@@ -280,7 +288,7 @@ namespace zlua.Core
         public bool IsThread { get => Type == LuaTypes.Thread; }
         public bool IsLightUserdata { get => Type == LuaTypes.LightUserdata; }
         //public bool IsCSharpFunction { get => Type == LuaTypes.Function && (TObj as Closure) is CSharpClosure; }
-        public bool IsLuaFunction { get => Type == LuaTypes.Function && (TObj as Closure) is LuaClosure; }
+        //public bool IsLuaFunction { get => Type == LuaTypes.Function && (TObj as Closure) is LuaClosure; }
         public bool IsFunction { get => Type == LuaTypes.Function; }
         #endregion
 
@@ -380,63 +388,62 @@ namespace zlua.Core
     }
 
 
-    /// <summary>
-    /// is gcobject, but is not a primitive type
-    /// </summary>
-    [Serializable]
-    public class Proto : TObject
-    {
-        //public Proto parent;
-        internal List<Proto> pp = new List<Proto>();
-        internal List<LuaObject> k = new List<LuaObject>();
-        internal List<Bytecode> codes = new List<Bytecode>();
+    ///// <summary>
+    ///// is gcobject, but is not a primitive type
+    ///// </summary>
+    //public class Proto : TObject
+    //{
+    //    //public Proto parent;
+    //    internal List<Proto> pp = new List<Proto>();
+    //    internal List<LuaObject> k = new List<LuaObject>();
+    //    internal List<Bytecode> codes = new List<Bytecode>();
 
-        /// <summary>
-        /// 暂时这样
-        /// </summary>
-        internal int MaxStacksize { get => codes.Count; }
-        internal int nParams;
-        internal int nUpvals;
+    //    /// <summary>
+    //    /// 暂时这样
+    //    /// </summary>
+    //    internal int MaxStacksize { get => codes.Count; }
+    //    internal int nParams;
+    //    internal int nUpvals;
 
-    }
-    class ChunkProto : Proto
-    {
-        internal List<string> strs = new List<string>();
-        internal List<double> ns = new List<double>();
-    }
-    class LocVar
-    {
-        public string var_name;
-        public int startpc;
-        public override string ToString()
-        {
-            return String.Join(", ", var_name, startpc);
-        }
-    }
+    //}
+    //class ChunkProto : Proto
+    //{
+    //    internal List<string> strs = new List<string>();
+    //    internal List<double> ns = new List<double>();
+    //}
+    //class LocVar
+    //{
+    //    public string var_name;
+    //    public int startpc;
+    //    public override string ToString()
+    //    {
+    //        return String.Join(", ", var_name, startpc);
+    //    }
+    //}
 
-    public class Closure : TObject
-    {
-        public TTable env;
-        public Closure(TTable env)
-        {
-            this.env = env;
-        }
-    }
-    class LuaClosure : Closure
-    {
-        public Proto p;
-        public List<Upval> upvals;
-        public int NUpvals { get => upvals.Count; }
-        /// <summary>
-        /// luaF_newLclosure
-        /// called] f_parser in ldo.c; luaV_execute in lvm.c
-        /// </summary>
-        public LuaClosure(TTable env, int nUpvals, Proto p) : base(env)
-        {
-            this.p = p;
-            upvals = new List<Upval>(nUpvals);
-        }
-    }
+    //public class Closure : TObject
+    //{
+    //    public TTable env;
+    //    public Closure(TTable env)
+    //    {
+    //        this.env = env;
+    //    }
+    //}
+    //class LuaClosure : Closure
+    //{
+    //    public Proto p;
+    //    public List<Upval> upvals;
+    //    public int NUpvals { get => upvals.Count; }
+    //    /// <summary>
+    //    /// luaF_newLclosure
+    //    /// called] f_parser in ldo.c; luaV_execute in lvm.c
+    //    /// </summary>
+    //    public LuaClosure(TTable env, int nUpvals, Proto p) : base(env)
+    //    {
+    //        this.p = p;
+    //        upvals = new List<Upval>(nUpvals);
+    //    }
+    //}
     //class CSharpClosure : Closure
     //{
     //    public Lua.CSFunc f;
@@ -447,14 +454,14 @@ namespace zlua.Core
 
     //    }
     //}
-    /// <summary>
-    /// the string type of lua, just warpper of C# string
-    /// </summary>
+
+    // the string type of lua, just warpper of C# string
     public class TString : TObject
     {
 
         public TString(string str) { this.str = str; }
         public string str; //可以设置str，这样复用TString对象，因为只是个warpper，
+
         public override string ToString() { return str.ToString(); } // for debugging
         public override bool Equals(object obj)
         {
@@ -468,9 +475,7 @@ namespace zlua.Core
         public static explicit operator TString(string str) => new TString(str);
         public int Len { get => str.Length; }
     }
-    /// <summary>
-    /// GCObject; base class of all reference type objects in lua
-    /// </summary>
+    // GCObject; base class of all reference type objects in lua
     public abstract class TObject
     {
     }
@@ -481,7 +486,7 @@ namespace zlua.Core
         public TTable env;
     }
 
-    public class TTable:TObject { }
+    public class TTable : TObject { }
     //public class TTable : TObject, IEnumerable<KeyValuePair<LuaObject, LuaObject>>
     //{
     //    public TTable metatable;
