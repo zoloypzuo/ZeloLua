@@ -11,7 +11,6 @@
 //{
 //    static class LDo
 //    {
-
 //        /// <summary>
 //        /// luaD_call; call `func, `func can be either CSharp or Lua; when call `func, arguments are
 //        /// right after `func on the stack of `L; when returns, return values start at the original position

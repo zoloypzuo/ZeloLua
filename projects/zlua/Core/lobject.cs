@@ -1,16 +1,15 @@
 ﻿// 类型模型
 
+using Newtonsoft.Json;
+
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
-using Newtonsoft.Json;
-using zlua.Core;
 
 namespace zlua.Core
 {
     // lua对象
-    // 
+    //
     // * 大小8+8+4=20B
     //   指针大小4B或8B
     //   enum大小默认4B，可以设置，但是没必要，现在的样子是对齐的
@@ -19,30 +18,36 @@ namespace zlua.Core
     public class LuaObject : IEquatable<LuaObject>
     {
         #region 嵌套类型定义
+
         // lua值类型
         //
         // * 大小8B
         // * 是union，这个特性不允许引用类型，所以TObject放在外面
         //   https://docs.microsoft.com/en-us/dotnet/api/system.runtime.interopservices.structlayoutattribute?view=netframework-4.7.2
-        [Serializable]
         [StructLayout(LayoutKind.Explicit)]
         private struct Numeric
         {
             [FieldOffset(0)]
             public LuaInteger i;
+
             [FieldOffset(0)]
             public LuaNumber n;
+
             [FieldOffset(0)]
             public bool b;
         }
-        #endregion
+
+        #endregion 嵌套类型定义
 
         #region 私有属性
+
         [JsonProperty]
         private Numeric NumericValue { get; set; }
-        #endregion
+
+        #endregion 私有属性
 
         #region 公有属性
+
         // lua引用类型
         [JsonProperty]
         public TObject TObj { get; private set; }
@@ -51,80 +56,65 @@ namespace zlua.Core
         [JsonProperty]
         public LuaTypes Type { get; private set; }
 
-
-        #endregion
+        #endregion 公有属性
 
         #region 访问器与设置器
+
         [JsonIgnore]
-        public LuaNumber N
-        {
-            get
-            {
+        public LuaNumber N {
+            get {
                 Debug.Assert(IsNumber);
                 return NumericValue.n;
             }
-            set
-            {
+            set {
                 Type = LuaTypes.Number;
                 NumericValue = new Numeric { n = value };
             }
         }
 
         [JsonIgnore]
-        public LuaInteger I
-        {
-            get
-            {
+        public LuaInteger I {
+            get {
                 Debug.Assert(IsInteger);
                 return NumericValue.i;
             }
-            set
-            {
+            set {
                 Type = LuaTypes.Integer;
                 NumericValue = new Numeric { i = value };
             }
         }
 
         [JsonIgnore]
-        public bool B
-        {
-            get
-            {
+        public bool B {
+            get {
                 Debug.Assert(IsBool);
                 return NumericValue.b;
             }
-            set
-            {
+            set {
                 Type = LuaTypes.Boolean;
                 NumericValue = new Numeric { b = value };
             }
         }
 
         [JsonIgnore]
-        public TString TStr
-        {
-            get
-            {
+        public TString TStr {
+            get {
                 Debug.Assert(IsString);
                 return TObj as TString;
             }
-            set
-            {
+            set {
                 Type = LuaTypes.String;
                 TObj = value;
             }
         }
 
         [JsonIgnore]
-        public string Str
-        {
-            get
-            {
+        public string Str {
+            get {
                 Debug.Assert(IsString);
                 return (TObj as TString).str;
             }
-            set
-            {
+            set {
                 Type = LuaTypes.String;
                 // https://docs.microsoft.com/en-us/dotnet/csharp/pattern-matching
 #pragma warning disable IDE0019 // Use pattern matching
@@ -188,10 +178,8 @@ namespace zlua.Core
         //}
 
         // 拷贝函数
-        public LuaObject TVal
-        {
-            set
-            {
+        public LuaObject TVal {
+            set {
                 Type = value.Type;
                 NumericValue = value.NumericValue;
                 if (value.IsCollectable)
@@ -206,9 +194,11 @@ namespace zlua.Core
             Type = LuaTypes.Nil;
             TObj = null;
         }
-        #endregion
+
+        #endregion 访问器与设置器
 
         #region 构造函数
+
         // 构造nil
         public LuaObject()
         {
@@ -274,9 +264,11 @@ namespace zlua.Core
             Type = LuaTypes.Userdata;
             TObj = userdata;
         }
-        #endregion
+
+        #endregion 构造函数
 
         #region 类型谓词
+
         public bool IsNil { get => Type == LuaTypes.Nil; }
         public bool IsInteger { get { return Type == LuaTypes.Integer; } }
         public bool IsNumber { get => Type == LuaTypes.Number; }
@@ -287,12 +279,15 @@ namespace zlua.Core
         public bool IsUserdata { get => Type == LuaTypes.Userdata; }
         public bool IsThread { get => Type == LuaTypes.Thread; }
         public bool IsLightUserdata { get => Type == LuaTypes.LightUserdata; }
+
         //public bool IsCSharpFunction { get => Type == LuaTypes.Function && (TObj as Closure) is CSharpClosure; }
         //public bool IsLuaFunction { get => Type == LuaTypes.Function && (TObj as Closure) is LuaClosure; }
         public bool IsFunction { get => Type == LuaTypes.Function; }
-        #endregion
+
+        #endregion 类型谓词
 
         #region 其他方法
+
         public bool IsCollectable { get => (int)Type >= (int)LuaTypes.String; }
 
         public bool IsFalse { get => IsNil || IsBool && B == false; }
@@ -308,9 +303,11 @@ namespace zlua.Core
             canBeConvertedToNum = Double.TryParse(s, out _ret);
             return _ret;
         }
-        #endregion
+
+        #endregion 其他方法
 
         #region 重载基本方法
+
         // luaO_rawequalObj
         public bool Equals(LuaObject other)
         {
@@ -320,14 +317,19 @@ namespace zlua.Core
                 switch (other.Type) {
                     case LuaTypes.Nil:
                         return true;
+
                     case LuaTypes.Number:
                         return I == other.I;
+
                     case LuaTypes.Integer:
                         return I == other.I;
+
                     case LuaTypes.Boolean:
                         return B == other.B;
+
                     case LuaTypes.String:
                         return Str == other.Str;
+
                     default:
                         Debug.Assert(other.IsCollectable);
                         return TObj == other.TObj;
@@ -357,36 +359,48 @@ namespace zlua.Core
             switch (Type) {
                 case LuaTypes.None:
                     break;
+
                 case LuaTypes.Nil:
                     break;
+
                 case LuaTypes.Boolean:
                     break;
+
                 case LuaTypes.LightUserdata:
                     break;
+
                 case LuaTypes.Number:
                     break;
+
                 case LuaTypes.String:
                     break;
+
                 case LuaTypes.Table:
                     break;
+
                 case LuaTypes.Function:
                     break;
+
                 case LuaTypes.Userdata:
                     break;
+
                 case LuaTypes.Thread:
                     break;
+
                 case LuaTypes.Proto:
                     break;
+
                 case LuaTypes.Upval:
                     break;
+
                 case LuaTypes.Integer:
                     break;
             }
             return Type.ToString();
         }
-        #endregion
-    }
 
+        #endregion 重载基本方法
+    }
 
     ///// <summary>
     ///// is gcobject, but is not a primitive type
@@ -451,34 +465,46 @@ namespace zlua.Core
     //    public int NUpvals { get => upvals.Count; }
     //    public CSharpClosure() : base(null)
     //    {
-
     //    }
     //}
 
     // the string type of lua, just warpper of C# string
     public class TString : TObject
     {
+        public TString(string str)
+        {
+            this.str = str;
+        }
 
-        public TString(string str) { this.str = str; }
         public string str; //可以设置str，这样复用TString对象，因为只是个warpper，
 
-        public override string ToString() { return str.ToString(); } // for debugging
+        public override string ToString()
+        {
+            return str.ToString();
+        } // for debugging
+
         public override bool Equals(object obj)
         {
             return str.Equals((obj as TString)?.str);
         }
+
         public override int GetHashCode()
         {
             return str.GetHashCode();
         }
+
         public static explicit operator string(TString tstr) => tstr.str;
+
         public static explicit operator TString(string str) => new TString(str);
+
         public int Len { get => str.Length; }
     }
+
     // GCObject; base class of all reference type objects in lua
     public abstract class TObject
     {
     }
+
     //TODO
     public class Userdata : TObject
     {
@@ -487,6 +513,7 @@ namespace zlua.Core
     }
 
     public class TTable : TObject { }
+
     //public class TTable : TObject, IEnumerable<KeyValuePair<LuaObject, LuaObject>>
     //{
     //    public TTable metatable;
@@ -522,7 +549,7 @@ namespace zlua.Core
     //        }
     //    }
     //    /// <summary>
-    //    /// luaH_set, return tvalue found with `key, 
+    //    /// luaH_set, return tvalue found with `key,
     //    /// else create a new pair and return the new tvalue
     //    /// </summary>
     //    public LuaObject Set(TThread L, LuaObject key)
@@ -587,7 +614,6 @@ namespace zlua.Core
     //        return 1;
     //    }
 
-
     //    IEnumerator<KeyValuePair<LuaObject, LuaObject>> IEnumerable<KeyValuePair<LuaObject, LuaObject>>.GetEnumerator()
     //    {
     //        int index = 0;
@@ -605,6 +631,4 @@ namespace zlua.Core
     {
         public LuaObject val;
     }
-
-
 }

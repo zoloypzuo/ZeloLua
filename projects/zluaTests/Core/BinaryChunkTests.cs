@@ -1,6 +1,7 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.IO;
-using Newtonsoft.Json;
+﻿using System.IO;
+
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
 using zluaTests;
 
 namespace zlua.Core.BinaryChunk.Tests
@@ -8,15 +9,14 @@ namespace zlua.Core.BinaryChunk.Tests
     [TestClass()]
     public class BinaryChunkTests
     {
-        const string pathBase = "../../../../data/";
         [TestMethod()]
         public void UndumpTest()
         {
             TestTool.AssertPropertyEqual(
-                "zlua.Core.BinaryChunk.Prototype.txt",
+                "zlua.Core.BinaryChunk.Prototype.json",
                 BinaryChunk.Undump(
                     new FileStream(
-                        $"{pathBase}lua/ch02/hello_world.out"
+                        $"{TestTool.PathBase}lua/ch02/hello_world.out"
                         , FileMode.Open)));
             //TestTool.ExportObject(p);  // 使用这行生成文件
         }

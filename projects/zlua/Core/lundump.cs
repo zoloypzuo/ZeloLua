@@ -11,7 +11,6 @@
 using System;
 using System.IO;
 using System.Text;
-using zlua.Core;
 
 namespace zlua.Core.BinaryChunk
 {
@@ -25,31 +24,43 @@ namespace zlua.Core.BinaryChunk
         // * 调试用
         // * 没必要继承出ChunkProto类
         public string Source;
+
         // 起止行号
         public uint LineDefined;
+
         public uint LastLineDefined;
+
         // 固定参数个数
         public byte NumParams;
+
         // 是vararg函数
         public byte IsVararg;
+
         // 寄存器数量
         public byte MaxStackSize;
+
         // 指令表
         public Bytecode[] Code;
+
         // 常量表
         public LuaObject[] Constants;
+
         // Upvalue表
         public Upvalue[] Upvalues;
+
         // 子Proto表
         public Prototype[] Protos;
+
         // 行号表
         //
         // * 调试用
         public uint[] LineInfo;
+
         // 局部变量表
         //
         // * 调试用
         public LocVar[] LocVars;
+
         // Upvalue名字表
         //
         // * 调试用
@@ -72,15 +83,19 @@ namespace zlua.Core.BinaryChunk
     internal class BinaryChunk
     {
         #region 用于校验的常量
+
         // ASCII字符串 ESC L u a
         public const string LUA_SIGNATURE = "\x1bLua";
+
         public const byte LUAC_VERSION = 0x53;
         public const byte LUAC_FORMAT = 0;
+
         // "\x19\x93\r\n\x1a\n"
         //
         // 不要使用字符串，因为必须指定编码，而这个其实不是字符串，只是byte数组
         // 0x93不符合ASCII编码，也不能用utf8，不管怎么样，使用字符串不合适
         public static readonly byte[] LUAC_DATA = new byte[] { 0x19, 0x93, 0x0d, 0x0a, 0x1a, 0x0a };
+
         public const uint CINT_SIZE = 4;
         public const uint CSIZET_SIZE_32 = 4;
         public const uint CSIZET_SIZE_64 = 8;
@@ -89,22 +104,28 @@ namespace zlua.Core.BinaryChunk
         public const uint LUA_NUMER_SIZE = 8;
         public static readonly LuaInteger LUAC_INT = new LuaInteger { Value = 0x5678 };
         public static readonly LuaNumber LUAC_NUM = new LuaNumber { Value = 370.5f };
-        #endregion
+
+        #endregion 用于校验的常量
 
         #region 常量表类型枚举
+
         public const byte TAG_NIL = 0x00;
         public const byte TAG_BOOLEAN = 0x01;
         public const byte TAG_NUMBER = 0x03;
         public const byte TAG_INTEGER = 0x13;
         public const byte TAG_SHORT_STR = 0x04;
         public const byte TAG_LONG_STR = 0x14;
-        #endregion
+
+        #endregion 常量表类型枚举
 
         #region 公有属性
+
         public static bool IsSizeofCSizeT8 { get; private set; } = true;
-        #endregion
+
+        #endregion 公有属性
 
         #region 公有方法
+
         public static Prototype Undump(Stream data)
         {
             using (BinaryReader reader = new BinaryReader(
@@ -118,9 +139,10 @@ namespace zlua.Core.BinaryChunk
             }
         }
 
-        #endregion
+        #endregion 公有方法
 
         #region 私有方法
+
         private static int ReadSizeT(BinaryReader reader)
         {
             if (IsSizeofCSizeT8) {
@@ -302,16 +324,22 @@ namespace zlua.Core.BinaryChunk
             switch (reader.ReadByte()) {
                 case TAG_NIL:
                     return new LuaObject();
+
                 case TAG_BOOLEAN:
                     return new LuaObject(reader.ReadByte() != 0);
+
                 case TAG_INTEGER:
                     return new LuaObject(ReadLuaInteger(reader));
+
                 case TAG_NUMBER:
                     return new LuaObject(ReadLuaNumber(reader));
+
                 case TAG_SHORT_STR:
                     return new LuaObject(ReadString(reader));
+
                 case TAG_LONG_STR:
                     return new LuaObject(ReadString(reader));
+
                 default:
                     throw new UndumpException("corrupted");
             }
@@ -325,8 +353,8 @@ namespace zlua.Core.BinaryChunk
             }
             return code;
         }
-        #endregion
 
+        #endregion 私有方法
     }
 
     // 头部校验错误
@@ -342,7 +370,6 @@ namespace zlua.Core.BinaryChunk
     {
         public UndumpNumericTypeInconsistencyException(string msg) : base(msg)
         {
-
         }
     }
 }

@@ -1,21 +1,23 @@
 ﻿using System.Diagnostics;
 using System.IO;
+
 using Newtonsoft.Json;
 
 namespace zluaTests
 {
-    class TestTool
+    internal class TestTool
     {
         #region 私有常量
 
-        const string pathBase = "../../../../data/json/";
+        private const string pathBase = "../../../../data/json/";
 
-        static readonly JsonSerializerSettings settings =
+        private static readonly JsonSerializerSettings settings =
             new JsonSerializerSettings
             {
                 TypeNameHandling = TypeNameHandling.Auto
             };
-        #endregion
+
+        #endregion 私有常量
 
         #region 公有方法
 
@@ -23,11 +25,10 @@ namespace zluaTests
         public static void ExportObject(object o)
         {
             using (StreamWriter writer =
-                new StreamWriter(new FileStream(pathBase + $"{o}.txt", FileMode.OpenOrCreate))) {
+                new StreamWriter(new FileStream(pathBase + $"{o}.json", FileMode.OpenOrCreate))) {
                 string output = JsonConvert.SerializeObject(o, settings);
                 writer.Write(output);
             }
-
         }
 
         // 断言比较两个对象所有字段对应相等
@@ -44,7 +45,11 @@ namespace zluaTests
             string actualS = JsonConvert.SerializeObject(actual, settings);
             Debug.Assert(actualS == File.ReadAllText(pathBase + fileName));
         }
-        #endregion
 
+        #endregion 公有方法
+
+        #region 公有常量
+        public const string PathBase = "../../../../data/";
+        #endregion
     }
 }

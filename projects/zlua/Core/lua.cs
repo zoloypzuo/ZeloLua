@@ -1,54 +1,47 @@
 ﻿using System;
-using System.Diagnostics;
-using zlua.Core;
 
 namespace zlua.Core
 {
     // 见鬼了异常，因为有些分支根本不可能走到，用于占位
-    class GodDamnException : Exception { }
+    internal class GodDamnException : Exception
+    { }
 
-    /// <summary>
-    /// 错误的操作数类型，我们用opcode作为提示
-    /// </summary>
-    class OprdTypeException : Exception
+    // 错误的操作数类型，我们用opcode作为提示
+    internal class OprdTypeException : Exception
     {
-        public OprdTypeException(Op opcode) : base(opcode.ToString() + "错误的操作数") { }
-    }
-    class Assert
-    {
-        /// <summary>
-        /// 替代单元测试的该函数，因为一般的没法。对于内部的类，仍然需要测试。
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="expected"></param>
-        /// <param name="actual"></param>
-        internal static void AreEqual<T>(T expected, T actual)
+        public OprdTypeException(Op opcode) : base(opcode.ToString() + "错误的操作数")
         {
-            Debug.Assert(expected.Equals(actual));
         }
     }
 
     // lua类型枚举
     public enum LuaTypes
     {
+        // 无效索引对应的值的类型
         None = -1,
+
         Nil,
         Boolean,
         LightUserdata,
         Number,
         String,
         Table,
+
         // C and Lua functions
         Function,
+
         Userdata,
         Thread,
+
         //extra tags
         Proto,
+
         Upval,
+
         // lua5.3新增的整数类型
         //
         // lobject.h line 59
-        Integer=19,
+        Integer = 19,
     }
 
     ///// lua接口
@@ -164,5 +157,4 @@ namespace zlua.Core
             return !i1.Equals(i2);
         }
     }
-
 }

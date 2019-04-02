@@ -2,8 +2,8 @@
 
 public class TThread : TObject
 {
-
 }
+
 //using System;
 //using System.Collections.Generic;
 //using ZeptLua.ISA;
@@ -72,7 +72,7 @@ public class TThread : TObject
 //        #endregion
 
 //        /// <summary>
-//        /// lua_newstate    
+//        /// lua_newstate
 //        /// </summary>
 //        public TThread()
 //        {
@@ -291,7 +291,7 @@ public class TThread : TObject
 //                            //// 后面一定跟着一些getUpval或mov指令用来初始化upvals，分情况讨论，把这些指令在这个周期就执行掉
 //                            //for (int j = 0; j < p.nUpvals; j++, pc++) { /*从父函数的upvals直接取upvals*/
 //                            //    var next_instr = codes[pc];
-//                            //    if (next_instr.Opcode == Opcodes.GetUpVal) 
+//                            //    if (next_instr.Opcode == Opcodes.GetUpVal)
 //                            //        ncl.upvals[j] = cl.upvals[codes[pc].B];
 //                            //    else { /*否则得用复杂的方法确定upval的位置*/
 //                            //        Debug.Assert(codes[pc].Opcode == Opcodes.Move);
@@ -349,7 +349,7 @@ public class TThread : TObject
 //        TValue KBx(Bytecode i)
 //        {
 //            throw new NotImplementedException(); //大概是要返回strs
-//            //k[i.Bx]; 
+//            //k[i.Bx];
 //        }
 //        [DebuggerStepThroughAttribute]
 //        TValue RNB(Bytecode i) => Bytecode.IsK(i.B) ? ns[Bytecode.IndexK(i.B)] : RB(i);
@@ -397,7 +397,6 @@ public class TThread : TObject
 //        /// </summary>
 //        public void Concat(int total, int last)
 //        {
-
 //        }
 //        /// <summary>
 //        /// equalobj
@@ -433,7 +432,6 @@ public class TThread : TObject
 //        }
 //        public void SetTable(TValue t, TValue key, TValue val)
 //        {
-
 //        }
 
 //        public bool LessThan(TValue lhs, TValue rhs)
@@ -459,7 +457,6 @@ public class TThread : TObject
 //        /// </summary>
 //        //void Arith(TValue ra, TValue rb, TValue rc, MetamethodTypes metamethodType)
 //        //{
-
 //        //}
 //        /// <summary>
 //        /// call_binTM; result = __add(lhs, rhs); __add从lhs和rhs的元表查找出，如果都没找到返回false
