@@ -1,19 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-
-namespace zlua.Compiler
+﻿namespace zlua.Compiler
 {
     internal class Parser
     {
-        #region 私有属性
-
-
-
-        #endregion 私有属性
-
-
-
         #region 公有方法
 
         //public static Block Parse(Stream chunk, string chunkName)
@@ -34,8 +22,8 @@ namespace zlua.Compiler
         {
             return new Block
             {
-                Stats = ParseStats(),
-                RetExps = ParseExps(),
+                //Stats = ParseStats(),
+                //RetExps = ParseExps(),
                 LastLine = 1,// TODO lexer.line
             };
         }

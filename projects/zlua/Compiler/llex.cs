@@ -1,315 +1,517 @@
 ﻿// 词法分析
 //
 // [x] 正确分析hello world
-//     print("hello world") => (print, `(, hello world, `))
-// [ ] 学习和处理utf8字符串
-//     * 使用utf8编码文件，运行时使用utf16
-// [ ] 复习和参考leptjson解析基本字面量
-// [ ] 先使用简单的方法，而不是严格实现lua标准
-//    比如字符串转义，我们不转义，去掉引号输出就完事了
-//    比如浮点数，用c#库解析就完事了
-// [x] 为什么正则表达式不支持流，我觉得这是没道理的
-//     因为正则表达式要回溯 by 钟牧含
-// [x] 学习和使用流
-//     * 流基本的操作只有两个：Read和Peek
-//     * 因此流的基本特征是只能往前读，不能回退，且Peek只能看额外一个字符
-//     * 因此我们往往只能手工解析
-//     [ ] 写一个库可以match一个流，检查完了回退到开始，正则表达式不能回溯（反复回溯会替换缓冲，缓存命中率低，事实上我们不需要复杂的正则表达式），这样节省手工
-//         StreamReader.BaseStream是内在的流对象，拥有Position和Seek可以访问和设置位置
-//     * 读取流前总是要检查是否为eof
-//     * 但是peek就不必，因为peek本身可以用来检查eof
-//     * StreamReader
-//     * StringWriter
-//     * 处理eof可以暂缓一下，不是重点
-// [ ] Token类包含Token的信息（也就是attribute），像符号就不需要lexeme，只有字面量需要
-//     怎么搞
-//     antlr是有text字段的，我明确知道自己不需要，就全部设为空串，这是没什么开销的
-// [ ] lexer返回token流，parser要lookahead怎么缓存
-// [ ] 参考ANTLR API
-//     [ ] 为Token类添加位置，这样可以像python一样用^定位语法错误
+//     print("hello world") => (print, '(', hello world, '`'))
+// [x] lexer返回token流，parser要lookahead怎么缓存
+//     我构造了一个通用的缓存一次计算的流
+// [x] 参考ANTLR API
+// [ ] 为Token类添加位置，这样可以像python一样用^定位语法错误
 // [x] Token类有必要有行号吗，每次都构造返回this.line，感觉很重复
-//     A/ NewToken辅助lambda
-// [x] 我还是使用斜杠代替冒号，因为冒号的中英文很像，左边英文右边中文哪个都让人很烦躁
-// [ ] 跳过空白和注释不能一起做，注释必须放到后面switch中一起，因为减号也是-开头，跳过注释时
+//     A/ 使用闭包NewToken辅助lambda（md前几天面试还说自己不会用闭包的。。打脸了，真香）
+// [x] 跳过空白和注释不能一起做，注释必须放到后面switch中一起，因为减号也是-开头，跳过注释时
 //     我peek到一个-，但是要再peek一个字符才能确定是注释还是减号，peek只能一次，要想再前进，必须read
 //     如果混在一起会让代码复杂
-// lexer返回的Token包含lexeme，实际上，对于lua，在分词阶段可以返回TValue
-// 返回lexeme再让parser解析成值，其实多了一遍检查，你可以想象到，然而，自己读流开头然后手工解析是不实际的
-// 浮点数解析算法太复杂了，int勉强可以
-// antlr也是返回字符串的，而手写解析器这一步确实可以确定类型，那么早确定吧，这样符号的lexeme返回null
-// 不不不，为了简单性还是字符串把
+// [ ] 测试lua官方的错误信息
+// [ ] 异常，打行号
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
-using System.IO;
+using System.Text;
+using System.Text.RegularExpressions;
 
 namespace zlua.Compiler
 {
-    internal class Lexer
+    // 词法分析器
+    //
+    // 请实例化传给TokenStream再给parser调用
+    // 只有parser实现会调用这个类
+    //
+    // 使用字符串指针定位当前分析到的位置，需要正则表达式的时候才切片，避免切片，因为
+    internal class Lexer : IEnumerable<Token>
     {
+        #region 公有属性
+
+        // List有GetRange，数组没有
+        public List<char> Chunk { get; }
+
+        public string ChunkName { get; }
+
+        #endregion 公有属性
+
+        #region 私有属性
+
+        // chunk指针，指向还未处理的第一个字符
+        //
+        // 指针前进策略：
+        // * 使用if或者switch语句前瞻预判时不修改/Position/
+        // * 在控制语句块中第一行前进一格，表示字符已处理
+        //
+        // 这是件很琐碎很容易错的事情，不推荐在大范围内（比如几十行的switch）
+        // 提取公共的Position++，自己写到那里容易想，前面有没有Position++啊
+        // 我的想法有一些改变。。
+        private int Position { get; set; } = 0;
+
+        #endregion 私有属性
+
+        #region 构造函数
+
+        public Lexer(string chunk, string chunkName)
+        {
+            Chunk = new List<char>(chunk);
+            ChunkName = chunkName;
+        }
+
+        #endregion 构造函数
+
         #region 公有方法
-        //
-        //
-        // chunk/ lua源代码
-        //
-        public static IEnumerable<Token> TokenStream(Stream chunk, string chunkName)
+
+        public IEnumerator<Token> GetEnumerator()
         {
             int line = 1;
-            // 辅助函数，构造带有当前行号的Token
+
+            #region 内嵌辅助函数
+
+            // 构造带有当前行号的Token
             //
             // [x] 慢慢重构使用这个lambda
             // local function是c#7的功能，没必要使用，我们尽量维持在c#4以兼容unity
-            Func<TokenKind, string, Token> NewToken = (kind, lexeme) => { return new Token(line, kind, lexeme); };
+            Func<TokenKind, string, Token> NewToken = (TokenKind kind, string lexeme) => new Token(line, kind, lexeme);
 
-            // [ ] 慢慢重构使用这个lambda
-            Func<TokenKind, Token> NewSymbol = (kind) => { return new Token(line, kind, ""); };
+            // [x] 慢慢重构使用这个lambda
+            Func<TokenKind, Token> NewSymbol = (TokenKind kind) => new Token(line, kind, "");
 
             // 跳过空白符，遇到换行符时递增行号
             //
-            // 换行符有'\n'，'\r'，"\n\r"，"\r\n"
-            // 嵌入主要是因为捕获Line，避免传参
-            // TODO debug支持lambda吗，网上没找到
-            Action<StreamReader> SkipWhitespace = (StreamReader reader) =>
-              {
-                  while (!reader.EndOfStream) {
-                      // 跳过空白时只能peek再read
-                      char c = (char)reader.Peek();
-                      // 比较下面两种写法，switch多写一点不会死的
-                      //if(c==' ' || c == '\f' || c == '\v') {
-                      //reader.Read();
-                      //}else if(c=='')
+            // * 换行符有'\n'，'\r'，"\n\r"，"\r\n"
+            // * 嵌入主要是因为捕获Line，避免传参
+            // [x] debug支持lambda吗，网上没找到
+            //     A/ 试验过了，支持的
+            // * \f和\v是比较少见的空白符
+            //   leptjson就是普通的tnr和space
+            // * leptjson不记录行号，因此\n\r它不用考虑
+            Action SkipWhitespace = () =>
+            {
+                // 用于跳出外层循环
+                bool flag = true;
+                while (IsNotEndOfChunk && flag) {
+                    // 比较下面两种写法
+                    // switch方式虽然多写一点不会死的
+                    //if(c==' ' || c == '\f' || c == '\v') {
+                    //reader.Read();
+                    //}else if(c=='')
+                    char c = Chunk[Position];
+                    switch (c) {
+                        case ' ':
+                            Position++;
+                            break;
 
-                      // \f和\v是比较少见的空白符
-                      // leptjson就是普通的tnr和space
-                      // 另一个特点是leptjson不记录行号，因此\n\r它不用考虑
-                      // 我们必须考虑，手写状态机
-                      switch (c) {
-                          case ' ':
-                              reader.Read();
-                              break;
+                        case '\t':
+                            Position++;
+                            break;
 
-                          case '\t':
-                              reader.Read();
-                              break;
+                        case '\f':
+                            Position++;
+                            break;
 
-                          case '\f':
-                              reader.Read();
-                              break;
+                        case '\v':
+                            Position++;
+                            break;
 
-                          case '\v':
-                              reader.Read();
-                              break;
+                        case '\n':
+                            Position++;
+                            line++;
+                            // "\n\r"
+                            TestAndRead('\r');
+                            break;
 
-                          case '\n':
-                              reader.Read();
-                              line++;
-                              // "\n\r"
-                              if ('\r' == (char)reader.Peek()) {
-                                  reader.Read();
-                              } else {
-                              }
-                              break;
+                        case '\r':
+                            Position++;
+                            line++;
+                            TestAndRead('\n');
+                            break;
 
-                          case '\r':
-                              reader.Read();
-                              line++;
-                              if ('\n' == (char)reader.Peek()) {
-                                  reader.Read();
-                              } else {
-                              }
-                              break;
+                        default:
+                            flag = false;
+                            break;
+                    }
+                }
+            };
 
-                          default:
-                              break;
-                      }
-                  }
-              };
+            // 处理转义字符
+            //
+            // 开头的反斜杠被读掉了
+            // 传入builder是因为\z并不返回char
+            // 而是执行动作
+            // 内嵌式因为\z要调用SkipWhitespace
+            Action<StringBuilder> Escape =
+                (StringBuilder builder) =>
+            {
+                char c = Chunk[Position];
+                Position++;
+                char outChar;
+                if (Token.SingleCharEscapetable.TryGetValue(c, out outChar)) {
+                    builder.Append(outChar);
+                    return;
+                } else {
+                    switch (c) {
+                        case 'z':
+                            SkipWhitespace();
+                            break;
+                        // \xXX XX是两位十六进制代表的ascii码
+                        case 'x':
+                            // 一下子写不对的corner case，先跳过
+                            // 下面的代码可能是错误的，因为XX需要专用的解析，标准库的可能不适用
+                            //char[] cs = Chunk.GetRange(Position, 2).ToArray();
+                            //byte outByte;
+                            //if (!byte.TryParse(new String(cs), out outByte)) {
+                            //    throw new Exception("两位ascii整数格式不正确"); // TODO看心情验证ascii首位为0，不知道一般的解码器是否验证。。
+                            //} else {
+                            //    builder.Append((char)outByte);
+                            //}
+                            throw new NotImplementedException();
+                            break;
+                        // \u{XXX} utf8字符
+                        case 'u':
+                            throw new NotImplementedException();
+                            break;
+                        default: {
+                                // TODO \nnn 三位十进制，代表ascii，懒得搞了
+                                throw new NotImplementedException();
+                                throw new Exception("错误的转义字符内容");
+                                break;
+                            }
 
-            using (StreamReader reader = new StreamReader(chunk)) {
-                // TODO 这样真的检查好了eof吗
-                while (!reader.EndOfStream) {
-                    SkipWhitespace(reader);
-                    // 按标准，这里是peek或者说lookahead，然后匹配了再步进或者说消耗
-                    // 然而前面一大片符号时都是不需要这个字符的，因此我只在解析字面量时传入这第一个字符
-                    char c = (char)reader.Read();
-                    if (Token.SingleCharKeywords.TryGetValue(c, out TokenKind kind)) {
-                        yield return NewToken(kind, "");
+                    }
+                }
+            };
+
+            // 扫描一段字符串，转换其中的转义字符
+            //
+            // 这里必须做好转义，因为长字符串是没有转义的，而字符串我们只定义了一个token类型，所以必须统一返回解析好的字符串
+            Func<string> ScanShortString = () =>
+             {
+                 char leftQuote = Read();
+                 StringBuilder builder = new StringBuilder();
+                 while (IsNotEndOfChunk) {
+                     char c = Read();
+                     // 如果是转义，处理好
+                     if (c == '\\') {
+                         Escape(builder);
+                     } else if (c == leftQuote) {
+                         return builder.ToString();
+                     } else {
+                         builder.Append(c);
+                     }
+                 }
+                 // TODO error
+                 return "";
+             };
+
+            #endregion 内嵌辅助函数
+
+            while (IsNotEndOfChunk) {
+                SkipWhitespace();
+                // 若源文本末尾是空白符，跳过空白后Position已经越界
+                if (!IsNotEndOfChunk)
+                    break;
+
+                char c = Peek();
+
+                // 查表是为了过滤，因为这些字符有共同特点
+                TokenKind outKind;
+                Tuple<TokenKind, char, TokenKind> ouTuple;
+                if (Token.SingleCharSymbols.TryGetValue(c, out outKind)) {
+                    Position++;
+                    yield return NewSymbol(outKind);
+                } else if (Token.DoubleCharSymbols.TryGetValue(c, out ouTuple)) {
+                    Position++;
+                    if (TestAndRead(ouTuple.Item2)) {
+                        yield return NewSymbol(ouTuple.Item3);
                     } else {
-                        switch (c) {
-                            case ':': {
-                                    if (TestAndAdvanceC(reader, ':')) {
-                                        yield return NewToken(TokenKind.TOKEN_SEP_LABEL, "");
-                                    } else {
-                                        yield return NewToken(TokenKind.TOKEN_SEP_COLON, "");
-                                    }
-                                    break;  // yield return和return还是不一样的，必须有break
+                        yield return NewSymbol(ouTuple.Item1);
+                    }
+                } else {
+                    switch (c) {
+                        // 下面两个也是一样的逻辑，但是就两个，手写了
+                        case '<': {
+                                Position++;
+                                // <<
+                                if (TestAndRead('<')) {
+                                    yield return NewSymbol(TokenKind.TOKEN_OP_SHL);
                                 }
-                            case '/': {
-                                    if (TestAndAdvanceC(reader, '/')) {
-                                        yield return NewToken(TokenKind.TOKEN_OP_IDIV, "");
-                                    } else {
-                                        yield return NewToken(TokenKind.TOKEN_OP_DIV, "");
-                                    }
-                                    break;
+                                // <=
+                                else if (TestAndRead('=')) {
+                                    yield return NewSymbol(TokenKind.TOKEN_OP_LE);
                                 }
-                            case '~': {
-                                    if (TestAndAdvanceC(reader, '=')) {
-                                        yield return NewToken(TokenKind.TOKEN_OP_NE, "");
-                                    } else {
-                                        yield return NewToken(TokenKind.TOKEN_OP_WAVE, "");
-                                    }
-                                    break;
+                                // <
+                                else {
+                                    yield return NewSymbol(TokenKind.TOKEN_OP_LT);
                                 }
-                            case '=': {
-                                    if (TestAndAdvanceC(reader, '=')) {
-                                        yield return NewToken(TokenKind.TOKEN_OP_EQ, "");
-                                    } else {
-                                        yield return NewToken(TokenKind.TOKEN_OP_ASSIGN, "");
-                                    }
-                                    break;
-                                }
-                            // TODO 跳过一些，我们先完成helloworld需要的内容
-                            case '\'':
-                                yield return NewToken(TokenKind.TOKEN_STRING, ScanShortString(reader, c));
                                 break;
-
-                            case '"':
-                                // TODO 两条分支相同。。有没有set写法。。
-                                // 答案是没有，就两个case你就想优化成set？不会有好结果的。。
-                                yield return NewToken(TokenKind.TOKEN_STRING, ScanShortString(reader, c));
-                                break;
-
-                            case '-': {
-                                    if ('-' == (char)reader.Peek()) {
-                                        reader.Read();
-                                        SkipComment(reader);
-                                    } else {
-                                        yield return NewSymbol(TokenKind.TOKEN_OP_MINUS);
-                                    }
-                                    break;
+                            }
+                        case '>': {
+                                Position++;
+                                if (TestAndRead('>')) {
+                                    yield return NewSymbol(TokenKind.TOKEN_OP_SHR);
+                                } else if (TestAndRead('=')) {
+                                    yield return NewSymbol(TokenKind.TOKEN_OP_GE);
+                                } else {
+                                    yield return NewSymbol(TokenKind.TOKEN_OP_GT);
                                 }
-
-                            default:
-                                if (c == '.' || Char.IsDigit(c)) {
-                                    yield return NewToken(TokenKind.TOKEN_NUMBER, ScanNumber(reader, c));
+                                break;
+                            }
+                        // ...，..，.和.开头的浮点数
+                        // 注意这里是贪婪的
+                        case '.': {
+                                // ...
+                                if (Chunk[Position + 1] == '.' && Chunk[Position + 2] == '.') {
+                                    Position += 3;
+                                    yield return NewSymbol(TokenKind.TOKEN_VARARG);
+                                }
+                                // ..
+                                else if (Chunk[Position + 1] == '.') {
+                                    Position += 2;
+                                    yield return NewSymbol(TokenKind.TOKEN_OP_CONCAT);
+                                }
+                                // .
+                                else {
+                                    // peek一个字符以区别浮点数
+                                    // 这个浮点数必须在这里处理，因为c#的switch有严格的break要求
+                                    // 事后ifelse也不好，所以这里多写一行
+                                    // 注意相反的条件必须检查eof
+                                    // if (i == -1 || !Char.IsDigit((char)i))
+                                    if (Char.IsDigit(Chunk[Position + 1])) {
+                                        yield return NewToken(TokenKind.TOKEN_NUMBER, ScanNumber());
+                                    } else {
+                                        Position++;
+                                        yield return NewSymbol(TokenKind.TOKEN_SEP_DOT);
+                                    }
+                                }
+                                break;
+                            }
+                        // 长字符串和表索引
+                        case '[': {
+                                Position++;
+                                // 注意这里不读掉这个[或者=
+                                c = Peek();
+                                if (c == '[' || c == '=') {
+                                    yield return NewToken(TokenKind.TOKEN_STRING, ScanLongString());
+                                } else {
+                                    yield return NewSymbol(TokenKind.TOKEN_SEP_LBRACK);
+                                }
+                                break;
+                            }
+                        case '\'': {
+                                yield return NewToken(TokenKind.TOKEN_STRING, ScanShortString());
+                                break;
+                            }
+                        case '"': {
+                                yield return NewToken(TokenKind.TOKEN_STRING, ScanShortString());
+                                break;
+                            }
+                        case '-': {
+                                Position++;
+                                if (TestAndRead('-')) {
+                                    SkipComment();
+                                } else {
+                                    yield return NewSymbol(TokenKind.TOKEN_OP_MINUS);
+                                }
+                                break;
+                            }
+                        default: {
+                                // 这里我们不处理dot开头的浮点数
+                                // 在上面dot处处理
+                                if ( /*c == '.' ||*/ Char.IsDigit(c)) {
+                                    yield return NewToken(TokenKind.TOKEN_NUMBER, ScanNumber());
                                 } else if (c == '_' || Char.IsLetter(c)) {
-                                    string l = ScanIdentifier(reader, c);
-                                    if (Token.Keywords.TryGetValue(l, out kind)) {
-                                        yield return NewToken(kind, l);
+                                    string identifier = ScanIdentifier();
+                                    if (Token.Keywords.TryGetValue(identifier, out outKind)) {
+                                        yield return NewToken(outKind, identifier);
                                     } else {
-                                        yield return NewToken(TokenKind.TOKEN_IDENTIFIER, l);
+                                        yield return NewToken(TokenKind.TOKEN_IDENTIFIER, identifier);
                                     }
                                 } else {
                                     // TODO syntax error
                                     throw new Exception($"unexpected symbol near {c}");
                                 }
                                 break;
-                        }
+                            }
                     }
                 }
-                // 可以在这里yield一个eof
-            };
+            }
+            // chunk结束，返回eof
+            yield return NewSymbol(TokenKind.TOKEN_EOF);
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
         }
 
         #endregion 公有方法
 
         #region 私有方法
 
+        // 测试前瞻字符是否为/c/，是则前进一格chunk指针
         //
-        //private bool TestC(StreamReader reader, char c)
-        //{
-        //    return c == (char)reader.Peek();
-        //}
-
-        private static bool TestAndAdvanceC(StreamReader reader, char c)
+        // 在条件中有副作用不是一个好习惯，但是这是一个辅助函数
+        private bool TestAndRead(char c)
         {
-            if (c == (char)reader.Peek()) {
-                reader.Read();
+            if ((Position) < Chunk.Count && Chunk[Position] == c) {
+                Position++;
                 return true;
             } else {
                 return false;
             }
         }
 
+        // 测试前瞻字符是否满足/predicate/，是则前进一格指针
+        private bool TestAndRead(Predicate<char> predicate)
+        {
+            if (predicate(Chunk[Position])) {
+                Position++;
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+        private bool TestPeek(char c)
+        {
+            return Chunk[Position] == c;
+        }
+
+        private bool TestPeek(Predicate<char> predicate)
+        {
+            return predicate(Chunk[Position]);
+        }
+
+        private char Read()
+        {
+            return Chunk[Position++];
+        }
+
+        private char Peek()
+        {
+            return Chunk[Position];
+        }
+
+        private bool IsNotEndOfChunk {
+            // 初始值 0<n
+            get { return Position < Chunk.Count; }
+        }
+
+        //
+        //
+        // 不会抛出异常
+        string ScanIdentifier()
+        {
+            int count = MaxLength(Token.MaxLengthOfIdentifier);
+            var match = Regex.Match(new String(Chunk.GetRange(Position, count).ToArray()), Token.ReIdentifier);
+            Position += match.Length;
+            return match.Value;
+        }
+
+        private int MaxLength(int maxLength)
+        {
+            int count = Position + maxLength <= Chunk.Count ?
+                maxLength : Chunk.Count - Position;
+            return count;
+        }
+
+        string ScanNumber()
+        {
+            int count = MaxLength(Token.MaxLengthOfNumber);
+            Match match = Regex.Match(new String(Chunk.GetRange(Position, count).ToArray()), Token.ReNumber);
+            if (match.Success) {
+                Position += match.Length;
+                return match.Value;
+            } else {
+                // TODO
+                throw new Exception("parse number error");
+            }
+        }
+
+        int ScanNumLeftBracket()
+        {
+            int i = 0;
+            while (TestAndRead('=')) {
+                i++;
+            }
+            return i;
+        }
+
+        // 扫描并返回字符串内容
+        //
+        // [=[ xxx ]=] => xxx
+        // 这里我们要验证等号个数相等
+        // 这里我真的写得超级复杂。。没办法。。
+        string ScanLongString()
+        {
+            Read();
+
+            int n = ScanNumLeftBracket();
+            if (!TestAndRead('[')) {
+                throw new Exception("invalid long string delimiter near");
+            }
+            // 跳过第一个换行符
+            // TODO 没处理其他换行符
+            // TODO 长字符串将四种换行符统一换成\n
+            TestAndRead('\n');
+            // 解析来正式解析字符串内容，不允许转义
+            StringBuilder builder = new StringBuilder();
+            while (IsNotEndOfChunk) {
+                // 可能是字符串结尾，形如]==]
+                // 如果没匹配就仍然是字符串内部，要把读出的加入builder
+                // 检查过了，没问题，就是太烦了
+                // 注意这里是没法正则的，所以只好手写逻辑
+                if (TestAndRead(']')) {
+                    List<char> cs = new List<char>('[');
+                    bool pass = true;
+                    // 尝试读出n个等号，不够就不是字符串结尾
+                    for (int i = 0; i < n; i++) {
+                        char c1 = Chunk[Position++];
+                        cs.Add(c1);
+                        if ('=' != c1) {
+                            pass = false;
+                            break;
+                        }
+                    }
+                    if (pass) {
+                        // end of long string
+                        if (TestAndRead(']')) {
+                            return builder.ToString();
+                        } else {
+                            builder.Append(cs);
+                        }
+                    }
+                } else {
+                    builder.Append(Chunk[Position++]);
+                }
+            }
+            return builder.ToString();
+        }
+
         // 跳过注释，开头的--在/TokenStream/中已消耗
-        private static void SkipComment(StreamReader reader)
+        void SkipComment()
         {
             // 以[开头可能是长注释，匹配"^\[=**\["后一定是长注释
             // 换句话说，长注释时--加上长字符串
             // 从[开始ScanLongString，这个方法会递增行号
-            // TODO 这里正则要想一想 可以放一放
-            if ('[' == (char)reader.Peek()) {
-            } else {
-                // [x] 先处理短注释
-                // 短注释跳过这一行所有内容
-                while (!reader.EndOfStream) {
-                    if (!IsNewline((char)reader.Peek())) {
-                        reader.Read();
-                    }
-                }
+            // 实现上正则是做不到的，我今天忙了一天这件事了
+            if (TestPeek('[')) {
+                ScanLongString();
+            }
+
+            // [x] 先处理短注释
+            // 短注释跳过这一行所有内容
+            while (IsNotEndOfChunk && !IsNewlineChar(Peek())) {
+                Position++;
             }
         }
 
-        //private bool Test2C(StreamReader reader, char c1, char c2)
-        //{
-        //}
-
-        // 扫描一段字符串，转换其中的转义字符
-        //
-        // /leftQuote/是传入的左引号，因为/TokenStream/把这个字符先消耗了，还是要传入验证的
-        //
-        // * 使用了流无法直接应用regex，regex不接受流，只接受字符串，然而你没法确定要读出多长的字符串
-        //   所以我们干脆手写，这样边验证边转换转义字符
-        //   leptjson做过，我觉得ok
-        // TODO 先通过helloworld测试
-        private static string ScanShortString(StreamReader reader, char leftQuote)
-        {
-            using (StringWriter writer = new StringWriter()) {
-                while (!reader.EndOfStream) {
-                    char c = (char)reader.Read();
-                    if (c == leftQuote) {
-                        return writer.ToString();
-                    } else {
-                        writer.Write(c);
-                    }
-                }
-                // TODO error
-                return "";
-            }
-        }
-
-        private static string ScanIdentifier(StreamReader reader, char start)
-        {
-            using (StringWriter writer = new StringWriter()) {
-                writer.Write(start);
-                while (!reader.EndOfStream) {
-                    char c = (char)reader.Read();
-                    if (c == '_' || Char.IsLetterOrDigit(c)) {
-                        writer.Write(c);
-                    } else {
-                        return writer.ToString();
-                    }
-                }
-                // TODO
-                return "";
-            }
-        }
-
-        private static string ScanNumber(StreamReader reader, char start)
-        {
-            // TODO
-            return "";
-        }
-
-        // 没用了
-        // lua标准如下，如果有需要。。我的想法是用c#标准库
-        // '\t', '\n', '\v', '\f', '\r', ' '
-        //private static bool IsWhitespace(char c)
-        //{
-        //    return Char.IsWhiteSpace(c);
-        //}
-
-        private static bool IsNewline(char c)
+        bool IsNewlineChar(char c)
         {
             return c == '\r' || c == '\n';
         }
@@ -317,65 +519,96 @@ namespace zlua.Compiler
         #endregion 私有方法
     }
 
-    // 包装Lexer.TokenStream为一个带前瞻的
-    // 
-    // TODO 为什么不和Lexer合并呢
-    //      我觉得现在分开挺好的，antlr也是分开的，多写一行不会死的
-    //      antlr是传入lexer对象，而我因为用迭代器封装了状态，传入静态方法的返回值即可
-    // peek和read，因为peek的解析是复杂过程，需要缓存结果
-    // LookAheadToken有未缓存和有缓存两个状态，LookAhead方法计算出下一个Token缓存进去
-    // NextToken方法在有缓存时先返回并清空该缓存，否则计算下一个Token并返回
-
+    // 包装Lexer为一个带前瞻的流对象
+    //
+    // 词法分析认为是复杂计算，因此前瞻时缓存结果
+    // 内部维护一个List<Token>包含所有已经计算的Token值，不删除旧的值，所有Token都会一直在内存
+    // NextToken对应于流的指针，而LookAhead(n)的n是相对于流指针的偏移
+    // LookAhead有单个元素和数组两个版本，因为我暂时不知道parser是否要用哪种，干脆都写
+    // NextToken和LookAhead在未计算所需Token时计算并缓存Token，从缓存中取出Token
     internal class TokenStream
     {
         #region 公有属性
 
-        public bool IsEndOfStream { get; private set; }
+        public bool IsNotEndOfStream { get; private set; }
 
         #endregion 公有属性
 
         #region 私有属性
 
-        private IEnumerator<Token> Tokens { get; }
-        private Token LookAheadToken { get; set; }
+        private IEnumerator<Token> TokenEnumerator { get; }
+        private List<Token> CachedTokens { get; } = new List<Token>();
+
+        private int CachedPosition {
+            get { return CachedTokens.Count; }
+        }
+
+        private int StreamPosition { get; set; } = -1;
 
         #endregion 私有属性
 
         #region 构造函数
 
-        // 传入Lexer.TokenStream
+        // 传入Lexer对象
         public TokenStream(IEnumerable<Token> tokens)
         {
-            Tokens = tokens.GetEnumerator();
+            TokenEnumerator = tokens.GetEnumerator();
         }
 
         #endregion 构造函数
 
         #region 公有方法
 
-        // 前瞻一个token，不前进指针
-        public Token LookAhead()
+        // 前瞻token，不前进流指针
+        public Token LookAhead(int n)
         {
-            if (LookAheadToken == null) {
-                IsEndOfStream = !Tokens.MoveNext();
-                LookAheadToken = Tokens.Current;
-            } else {
-            }
-            return LookAheadToken;
+            CacheIfNeeded(n);
+            return CachedTokens[StreamPosition + n];
         }
 
-        // 返回下一个token并前进一格指针
+        public Token[] LookAheadArray(int n)
+        {
+            CacheIfNeeded(n);
+            return CachedTokens.GetRange(StreamPosition, n).ToArray();
+        }
+
+        // 返回下一个token并前进一格流指针
         public Token NextToken()
         {
-            if (LookAheadToken != null) {
-                return LookAheadToken;
-            } else {
-                LookAheadToken = null;
-                IsEndOfStream = !Tokens.MoveNext();
-                return Tokens.Current;
-            }
+            CacheIfNeeded(1);
+            StreamPosition++;
+            return CachedTokens[StreamPosition];
         }
 
         #endregion 公有方法
+
+        #region 私有方法
+
+        private void CacheIfNeeded(int n)
+        {
+            // 初始值 0<=-1+1
+            if (CachedPosition <= StreamPosition + n) {
+                // 初始值 -1+1-0+1
+                int numToCache = StreamPosition + n - CachedPosition + 1;
+                int i = 0;
+                while (i < numToCache) {
+                    IsNotEndOfStream = TokenEnumerator.MoveNext();
+                    if (IsNotEndOfStream) {
+                        CachedTokens.Add(TokenEnumerator.Current);
+                    } else {
+                        // TODO
+                        // 这里会在parser报错
+                        // 比如"print(1"缺少一个右括号，parser调用lexer时就会走到这里
+                        // 我现在还不知道
+                        // 到时候再说
+                        // 别忘了可以捕获异常，但是要考虑性能
+                        throw new Exception("no more tokens");
+                    }
+                    i++;
+                }
+            }
+        }
+
+        #endregion 私有方法
     }
 }

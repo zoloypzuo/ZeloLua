@@ -269,28 +269,28 @@ namespace zlua.Core
 
         #region 类型谓词
 
-        public bool IsNil { get => Type == LuaTypes.Nil; }
+        public bool IsNil { get { return Type == LuaTypes.Nil; } }
         public bool IsInteger { get { return Type == LuaTypes.Integer; } }
-        public bool IsNumber { get => Type == LuaTypes.Number; }
-        public bool IsString { get => Type == LuaTypes.String; }
-        public bool IsTable { get => Type == LuaTypes.Table; }
-        public bool IsProto { get => Type == LuaTypes.Function; }
-        public bool IsBool { get => Type == LuaTypes.Boolean; }
-        public bool IsUserdata { get => Type == LuaTypes.Userdata; }
-        public bool IsThread { get => Type == LuaTypes.Thread; }
-        public bool IsLightUserdata { get => Type == LuaTypes.LightUserdata; }
+        public bool IsNumber { get { return Type == LuaTypes.Number; } }
+        public bool IsString { get { return Type == LuaTypes.String; } }
+        public bool IsTable { get { return Type == LuaTypes.Table; } }
+        public bool IsProto { get { return Type == LuaTypes.Function; } }
+        public bool IsBool { get { return Type == LuaTypes.Boolean; } }
+        public bool IsUserdata { get { return Type == LuaTypes.Userdata; } }
+        public bool IsThread { get { return Type == LuaTypes.Thread; } }
+        public bool IsLightUserdata { get { return Type == LuaTypes.LightUserdata; } }
 
         //public bool IsCSharpFunction { get => Type == LuaTypes.Function && (TObj as Closure) is CSharpClosure; }
         //public bool IsLuaFunction { get => Type == LuaTypes.Function && (TObj as Closure) is LuaClosure; }
-        public bool IsFunction { get => Type == LuaTypes.Function; }
+        public bool IsFunction { get { return Type == LuaTypes.Function; } }
 
         #endregion 类型谓词
 
         #region 其他方法
 
-        public bool IsCollectable { get => (int)Type >= (int)LuaTypes.String; }
+        public bool IsCollectable { get { return (int)Type >= (int)LuaTypes.String; } }
 
-        public bool IsFalse { get => IsNil || IsBool && B == false; }
+        public bool IsFalse { get { return IsNil || IsBool && B == false; } }
 
         /// luaO_nilobject_; 单例
         public static readonly LuaObject NilObject = new LuaObject { Type = LuaTypes.Nil };
@@ -497,7 +497,7 @@ namespace zlua.Core
 
         public static explicit operator TString(string str) => new TString(str);
 
-        public int Len { get => str.Length; }
+        public int Len { get { return str.Length; } }
     }
 
     // GCObject; base class of all reference type objects in lua

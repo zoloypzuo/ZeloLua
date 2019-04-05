@@ -16,7 +16,7 @@ namespace zlua.Core.BinaryChunk.Tests
                 "zlua.Core.BinaryChunk.Prototype.json",
                 BinaryChunk.Undump(
                     new FileStream(
-                        $"{TestTool.PathBase}lua/ch02/hello_world.out"
+                        $"{TestTool.DataPathBase}lua/ch02/hello_world.out"
                         , FileMode.Open)));
             //TestTool.ExportObject(p);  // 使用这行生成文件
         }
