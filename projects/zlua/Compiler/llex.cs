@@ -32,8 +32,9 @@ namespace zlua.Compiler
     {
         #region 公有属性
 
+        // 一开始用list<char>，发现没有必要。。
         // List有GetRange，数组没有
-        public List<char> Chunk { get; }
+        public string Chunk { get; }
 
         public string ChunkName { get; }
 
@@ -58,7 +59,7 @@ namespace zlua.Compiler
 
         public Lexer(string chunk, string chunkName)
         {
-            Chunk = new List<char>(chunk);
+            Chunk = chunk;
             ChunkName = chunkName;
         }
 
@@ -100,8 +101,7 @@ namespace zlua.Compiler
                     //if(c==' ' || c == '\f' || c == '\v') {
                     //reader.Read();
                     //}else if(c=='')
-                    char c = Chunk[Position];
-                    switch (c) {
+                    switch (Peek()) {
                         case ' ':
                             Position++;
                             break;
@@ -147,8 +147,7 @@ namespace zlua.Compiler
             Action<StringBuilder> Escape =
                 (StringBuilder builder) =>
             {
-                char c = Chunk[Position];
-                Position++;
+                char c = Read();
                 char outChar;
                 if (Token.SingleCharEscapetable.TryGetValue(c, out outChar)) {
                     builder.Append(outChar);
@@ -175,13 +174,13 @@ namespace zlua.Compiler
                         case 'u':
                             throw new NotImplementedException();
                             break;
+
                         default: {
                                 // TODO \nnn 三位十进制，代表ascii，懒得搞了
                                 throw new NotImplementedException();
                                 throw new Exception("错误的转义字符内容");
                                 break;
                             }
-
                     }
                 }
             };
@@ -358,7 +357,7 @@ namespace zlua.Compiler
         // 在条件中有副作用不是一个好习惯，但是这是一个辅助函数
         private bool TestAndRead(char c)
         {
-            if ((Position) < Chunk.Count && Chunk[Position] == c) {
+            if ((Position) < Chunk.Length && Chunk[Position] == c) {
                 Position++;
                 return true;
             } else {
@@ -369,7 +368,7 @@ namespace zlua.Compiler
         // 测试前瞻字符是否满足/predicate/，是则前进一格指针
         private bool TestAndRead(Predicate<char> predicate)
         {
-            if (predicate(Chunk[Position])) {
+            if (predicate(Peek())) {
                 Position++;
                 return true;
             } else {
@@ -384,7 +383,7 @@ namespace zlua.Compiler
 
         private bool TestPeek(Predicate<char> predicate)
         {
-            return predicate(Chunk[Position]);
+            return predicate(Peek());
         }
 
         private char Read()
@@ -399,31 +398,31 @@ namespace zlua.Compiler
 
         private bool IsNotEndOfChunk {
             // 初始值 0<n
-            get { return Position < Chunk.Count; }
+            get { return Position < Chunk.Length; }
         }
 
         //
         //
         // 不会抛出异常
-        string ScanIdentifier()
+        private string ScanIdentifier()
         {
             int count = MaxLength(Token.MaxLengthOfIdentifier);
-            var match = Regex.Match(new String(Chunk.GetRange(Position, count).ToArray()), Token.ReIdentifier);
+            var match = Regex.Match(Chunk.Substring(Position, count), Token.ReIdentifier);
             Position += match.Length;
             return match.Value;
         }
 
         private int MaxLength(int maxLength)
         {
-            int count = Position + maxLength <= Chunk.Count ?
-                maxLength : Chunk.Count - Position;
+            int count = Position + maxLength <= Chunk.Length ?
+                maxLength : Chunk.Length - Position;
             return count;
         }
 
-        string ScanNumber()
+        private string ScanNumber()
         {
             int count = MaxLength(Token.MaxLengthOfNumber);
-            Match match = Regex.Match(new String(Chunk.GetRange(Position, count).ToArray()), Token.ReNumber);
+            Match match = Regex.Match(Chunk.Substring(Position, count), Token.ReNumber);
             if (match.Success) {
                 Position += match.Length;
                 return match.Value;
@@ -433,7 +432,7 @@ namespace zlua.Compiler
             }
         }
 
-        int ScanNumLeftBracket()
+        private int ScanNumLeftBracket()
         {
             int i = 0;
             while (TestAndRead('=')) {
@@ -447,7 +446,7 @@ namespace zlua.Compiler
         // [=[ xxx ]=] => xxx
         // 这里我们要验证等号个数相等
         // 这里我真的写得超级复杂。。没办法。。
-        string ScanLongString()
+        private string ScanLongString()
         {
             Read();
 
@@ -471,7 +470,7 @@ namespace zlua.Compiler
                     bool pass = true;
                     // 尝试读出n个等号，不够就不是字符串结尾
                     for (int i = 0; i < n; i++) {
-                        char c1 = Chunk[Position++];
+                        char c1 = Read();
                         cs.Add(c1);
                         if ('=' != c1) {
                             pass = false;
@@ -487,14 +486,14 @@ namespace zlua.Compiler
                         }
                     }
                 } else {
-                    builder.Append(Chunk[Position++]);
+                    builder.Append(Read());
                 }
             }
             return builder.ToString();
         }
 
         // 跳过注释，开头的--在/TokenStream/中已消耗
-        void SkipComment()
+        private void SkipComment()
         {
             // 以[开头可能是长注释，匹配"^\[=**\["后一定是长注释
             // 换句话说，长注释时--加上长字符串
@@ -511,7 +510,7 @@ namespace zlua.Compiler
             }
         }
 
-        bool IsNewlineChar(char c)
+        private bool IsNewlineChar(char c)
         {
             return c == '\r' || c == '\n';
         }
@@ -532,6 +531,10 @@ namespace zlua.Compiler
 
         public bool IsNotEndOfStream { get; private set; }
 
+        // 
+        public int Line {
+            get { return CachedTokens[StreamPosition].Line; }
+        }
         #endregion 公有属性
 
         #region 私有属性
@@ -560,7 +563,7 @@ namespace zlua.Compiler
         #region 公有方法
 
         // 前瞻token，不前进流指针
-        public Token LookAhead(int n)
+        public Token LookAhead(int n = 1)
         {
             CacheIfNeeded(n);
             return CachedTokens[StreamPosition + n];
@@ -610,5 +613,211 @@ namespace zlua.Compiler
         }
 
         #endregion 私有方法
+    }
+
+    // 语言的词法单元的静态信息
+    //
+    // Token类中几个静态字典其实都是词法分析器的可配置部分
+    // 抽象这一部分有利用在项目结束时抽象出可配置词法分析器
+    internal class Token
+    {
+        #region 公有属性
+
+        // 行号
+        public int Line { get; }
+
+        // 类型
+        public TokenKind Kind { get; }
+
+        // 对应的文本
+        //
+        // 只有字面量才有值，对于符号我们不使用这个字段，词法分析时设为空串
+        public string Lexeme { get; }
+
+        #endregion 公有属性
+
+        #region 构造函数
+
+        public Token(int line, TokenKind kind, string lexeme)
+        {
+            Line = line;
+            Kind = kind;
+            Lexeme = lexeme;
+        }
+
+        #endregion 构造函数
+
+        #region 公有常量
+
+        public static Dictionary<string, TokenKind> Keywords { get; } =
+                new Dictionary<string, TokenKind>
+                {
+                    ["and"] = TokenKind.TOKEN_OP_AND,
+                    ["break"] = TokenKind.TOKEN_KW_BREAK,
+                    ["do"] = TokenKind.TOKEN_KW_DO,
+                    ["else"] = TokenKind.TOKEN_KW_ELSE,
+                    ["elseif"] = TokenKind.TOKEN_KW_ELSEIF,
+                    ["end"] = TokenKind.TOKEN_KW_END,
+                    ["false"] = TokenKind.TOKEN_KW_FALSE,
+                    ["for"] = TokenKind.TOKEN_KW_FOR,
+                    ["function"] = TokenKind.TOKEN_KW_FUNCTION,
+                    ["goto"] = TokenKind.TOKEN_KW_GOTO,
+                    ["if"] = TokenKind.TOKEN_KW_IF,
+                    ["in"] = TokenKind.TOKEN_KW_IN,
+                    ["local"] = TokenKind.TOKEN_KW_LOCAL,
+                    ["nil"] = TokenKind.TOKEN_KW_NIL,
+                    ["not"] = TokenKind.TOKEN_OP_NOT,
+                    ["or"] = TokenKind.TOKEN_OP_OR,
+                    ["repeat"] = TokenKind.TOKEN_KW_REPEAT,
+                    ["return"] = TokenKind.TOKEN_KW_RETURN,
+                    ["then"] = TokenKind.TOKEN_KW_THEN,
+                    ["true"] = TokenKind.TOKEN_KW_TRUE,
+                    ["until"] = TokenKind.TOKEN_KW_UNTIL,
+                    ["while"] = TokenKind.TOKEN_KW_WHILE,
+                };
+
+        // peek一个字符即可区分出是这个token类型
+        public static Dictionary<char, TokenKind> SingleCharSymbols { get; } =
+                new Dictionary<char, TokenKind>
+                {
+                    [';'] = TokenKind.TOKEN_SEP_SEMI,
+                    [','] = TokenKind.TOKEN_SEP_COMMA,
+                    ['('] = TokenKind.TOKEN_SEP_LPAREN,
+                    [')'] = TokenKind.TOKEN_SEP_RPAREN,
+                    [']'] = TokenKind.TOKEN_SEP_RBRACK,
+                    ['{'] = TokenKind.TOKEN_SEP_LCURLY,
+                    ['}'] = TokenKind.TOKEN_SEP_RCURLY,
+                    ['+'] = TokenKind.TOKEN_OP_ADD,
+                    // 减号与注释都是以-开头，所以必须手工解析
+                    //['-']=TokenKind.TOKEN_OP_MINUS,
+                    ['*'] = TokenKind.TOKEN_OP_MUL,
+                    ['^'] = TokenKind.TOKEN_OP_POW,
+                    ['%'] = TokenKind.TOKEN_OP_MOD,
+                    ['&'] = TokenKind.TOKEN_OP_BAND,
+                    ['|'] = TokenKind.TOKEN_OP_BOR,
+                    ['#'] = TokenKind.TOKEN_OP_LEN
+                };
+
+        // peek到key char，检查下一个char是不是第二个char，来判断是哪种符号
+        public static Dictionary<char, Tuple<TokenKind, char, TokenKind>> DoubleCharSymbols { get; } =
+            new Dictionary<char, Tuple<TokenKind, char, TokenKind>>
+            {
+                {':', new Tuple<TokenKind,char, TokenKind>(TokenKind.TOKEN_SEP_COLON,':',TokenKind.TOKEN_SEP_LABEL) },
+                {'/', new Tuple<TokenKind, char, TokenKind>(TokenKind.TOKEN_OP_DIV,'/',TokenKind.TOKEN_OP_IDIV) },
+                {'~', new Tuple<TokenKind, char, TokenKind>(TokenKind.TOKEN_OP_WAVE,'=',TokenKind.TOKEN_OP_NE) },
+                {'=', new Tuple<TokenKind, char, TokenKind>(TokenKind.TOKEN_OP_ASSIGN,'=',TokenKind.TOKEN_OP_EQ) },
+            };
+
+        public static Dictionary<char, char> SingleCharEscapetable { get; } =
+            new Dictionary<char, char>
+            {
+                ['a'] = (char)0x07,
+                ['b'] = (char)0x08,
+                ['t'] = (char)0x09,
+                ['n'] = (char)0x0a,
+                ['\v'] = (char)0x0b,
+                ['\f'] = (char)0x0c,
+                ['\r'] = (char)0x0d,
+                ['"'] = (char)0x22,
+                ['\\'] = (char)0x5c,
+            };
+
+        // 为了避免c#字符串切片，我指定一个最大长度，满足99%的需要
+        public const int MaxLengthOfNumber = 20;
+
+        public const int MaxLengthOfIdentifier = 20;
+
+        public const string ReNumber =
+            @"^0[xX][0-9a-fA-F]*(\.[0-9a-fA-F]*)?([pP][+\-]?[0-9]+)?|^[0-9]*(\.[0-9]*)?([eE][+\-]?[0-9]+)?";
+
+        public const string ReIdentifier = @"[_a-zA-Z][_a-zA-Z0-9]*";
+
+        #endregion 公有常量
+
+        public override string ToString()
+        {
+            return $"line:{Line} kind:{Kind} text:{Lexeme}";
+        }
+    }
+
+    //
+    //
+    // 64个枚举值，为了方便判断First和Follow集合我们使用Flag
+    [Flags]
+    internal enum TokenKind : long
+    {
+        TOKEN_EOF,// end-of-file
+        TOKEN_VARARG,// ...
+        TOKEN_SEP_SEMI,// ;
+        TOKEN_SEP_COMMA,// ,
+        TOKEN_SEP_DOT,// .
+        TOKEN_SEP_COLON,// :
+        TOKEN_SEP_LABEL,// ::
+        TOKEN_SEP_LPAREN,// (
+        TOKEN_SEP_RPAREN,// )
+        TOKEN_SEP_LBRACK,// [
+        TOKEN_SEP_RBRACK,// ]
+        TOKEN_SEP_LCURLY,// {
+        TOKEN_SEP_RCURLY,// }
+        TOKEN_OP_ASSIGN,// =
+        TOKEN_OP_MINUS,// - (sub or unm)
+        TOKEN_OP_WAVE,// ~ (bnot or bxor)
+        TOKEN_OP_ADD,// +
+        TOKEN_OP_MUL,// *
+        TOKEN_OP_DIV,// /
+        TOKEN_OP_IDIV,// ,//
+        TOKEN_OP_POW,// ^
+        TOKEN_OP_MOD,// %
+        TOKEN_OP_BAND,// &
+        TOKEN_OP_BOR,// |
+        TOKEN_OP_SHR,// >>
+        TOKEN_OP_SHL,// <<
+        TOKEN_OP_CONCAT,// ..
+        TOKEN_OP_LT,// <
+        TOKEN_OP_LE,// <=
+        TOKEN_OP_GT,// >
+        TOKEN_OP_GE,// >=
+        TOKEN_OP_EQ,// ==
+        TOKEN_OP_NE,// ~=
+        TOKEN_OP_LEN,// #
+        TOKEN_OP_AND,// and
+        TOKEN_OP_OR,// or
+        TOKEN_OP_NOT,// not
+        TOKEN_KW_BREAK,// break
+        TOKEN_KW_DO,// do
+        TOKEN_KW_ELSE,// else
+        TOKEN_KW_ELSEIF,// elseif
+        TOKEN_KW_END,// end
+        TOKEN_KW_FALSE,// false
+        TOKEN_KW_FOR,// for
+        TOKEN_KW_FUNCTION,// function
+        TOKEN_KW_GOTO,// goto
+        TOKEN_KW_IF,// if
+        TOKEN_KW_IN,// in
+        TOKEN_KW_LOCAL,// local
+        TOKEN_KW_NIL,// nil
+        TOKEN_KW_REPEAT,// repeat
+        TOKEN_KW_RETURN,// return
+        TOKEN_KW_THEN,// then
+        TOKEN_KW_TRUE,// true
+        TOKEN_KW_UNTIL,// until
+        TOKEN_KW_WHILE,// while
+        TOKEN_IDENTIFIER,// identifier
+        TOKEN_NUMBER,// number literal
+        TOKEN_STRING,// string literal
+
+        //long string literal
+        // 这里作者不太好的地方
+        // 长字符串和短字符串的格式是不同的
+        // 既然lexer只返回string，由parser解析就应该分清楚
+        // 当然，这样做不是错的，只是不符合设计
+        // 然后发现\z要跳过空白，所以只能最好在lexer做了。。
+        // 放弃了。。
+        //TOKEN_LONG_STRING,
+        TOKEN_OP_UNM = TOKEN_OP_MINUS,// unary minus
+
+        TOKEN_OP_SUB = TOKEN_OP_MINUS,
+        TOKEN_OP_BNOT = TOKEN_OP_WAVE,
+        TOKEN_OP_BXOR = TOKEN_OP_WAVE
     }
 }

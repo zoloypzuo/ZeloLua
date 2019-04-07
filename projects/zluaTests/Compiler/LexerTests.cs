@@ -1,6 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+
 using System.Linq;
-using System.IO;
+
 using zluaTests;
 
 namespace zlua.Compiler.Tests
@@ -9,14 +10,14 @@ namespace zlua.Compiler.Tests
     public class LexerTests
     {
         // lua代码字符串与序列化结果比较
-        void Test0(string chunk, int index)
+        private void Test0(string chunk, int index)
         {
             string path = $"/Compiler/LexerTests/{index}.json";
             TestTool.AssertPropertyEqual(path, new Lexer(chunk, "").ToArray());
         }
 
         // lua代码字符串与手写结果比较
-        void Test1(string chunk, Token[] expect)
+        private void Test1(string chunk, Token[] expect)
         {
             var actual = new Lexer(chunk, "").ToArray();
             Assert.AreEqual(expect.Length, actual.Length);
@@ -38,7 +39,6 @@ namespace zlua.Compiler.Tests
             // 字面量的工作量比较大。。。
             //TODO 数字字面量
             //TODO 字符串字面量
-
         }
     }
 }
