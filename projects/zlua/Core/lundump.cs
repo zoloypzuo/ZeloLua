@@ -11,6 +11,7 @@
 using System;
 using System.IO;
 using System.Text;
+using zlua.Core.Instruction;
 
 namespace zlua.Core.BinaryChunk
 {

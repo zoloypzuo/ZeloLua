@@ -2,6 +2,8 @@
 
 using System.Linq;
 
+using zlua.Compiler.Lexer;
+
 using zluaTests;
 
 namespace zlua.Compiler.Tests
@@ -13,13 +15,13 @@ namespace zlua.Compiler.Tests
         private void Test0(string chunk, int index)
         {
             string path = $"/Compiler/LexerTests/{index}.json";
-            TestTool.AssertPropertyEqual(path, new Lexer(chunk, "").ToArray());
+            TestTool.AssertPropertyEqual(path, new LuaLexer(chunk, "").ToArray());
         }
 
         // lua代码字符串与手写结果比较
         private void Test1(string chunk, Token[] expect)
         {
-            var actual = new Lexer(chunk, "").ToArray();
+            var actual = new LuaLexer(chunk, "").ToArray();
             Assert.AreEqual(expect.Length, actual.Length);
             for (int i = 0; i < actual.Length; i++) {
                 Assert.AreEqual(expect[i].Kind, actual[i].Kind);

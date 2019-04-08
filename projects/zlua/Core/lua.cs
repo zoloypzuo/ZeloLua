@@ -1,4 +1,18 @@
-﻿using System;
+﻿// zlua v0.1 基于 clua5.3
+//
+// 目标：
+// [ ] 先看完并敲完《go lua》，细节可以不管
+// [ ] 重新看《lua设计与实现》，重新看clua源代码
+// [ ] 整理zlua的lua语法，语法标准是BNF，而不是antlr
+// [ ] 实现BNF parser generator
+// [ ] 静态代码检查，大概是测覆盖率之类，难得的机会要试试
+// [ ] 性能剖析与基准测试，如前面所说，要试一试
+// [ ] 异常处理怎么才是好的，是不是应该做一下本地化，
+//     我觉得这样很好，vs就将错误信息本地化了，虽然大部分编程语言包括lua都是英文的
+//     我觉得这是一个好的点子，所有工具都应该本地化
+
+using System;
+using zlua.Core.Instruction;
 
 namespace zlua.Core
 {

@@ -48,13 +48,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Compiler\llex.cs" />
+    <Compile Include="Compiler\CodeGenerator.cs" />
+    <Compile Include="Compiler\Lexer\llex.cs" />
+    <Compile Include="Compiler\Lexer\Token.cs" />
+    <Compile Include="Compiler\Lexer\TokenKind.cs" />
+    <Compile Include="Compiler\Lexer\TokenStream.cs" />
+    <Compile Include="Compiler\Parser\Context.cs" />
+    <Compile Include="Core\Instruction\Opcode.cs" />
     <Compile Include="Core\lapi.cs" />
     <Compile Include="Core\ldebug.cs" />
     <Compile Include="Core\ldo.cs" />
     <Compile Include="Core\lobject.cs" />
-    <Compile Include="Core\lopcodes.cs" />
-    <Compile Include="Compiler\lparser.cs" />
+    <Compile Include="Core\Instruction\lopcodes.cs" />
+    <Compile Include="Compiler\Parser\lparser.cs" />
     <Compile Include="Core\lua.cs" />
     <Compile Include="Core\luaconf.cs" />
     <Compile Include="Core\lvm.cs" />

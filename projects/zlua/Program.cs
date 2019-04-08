@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 
-using zlua.Compiler;
+using zlua.Compiler.Lexer;
+using zlua.Compiler.Parser;
 
 namespace zlua
 {
@@ -8,7 +9,7 @@ namespace zlua
     {
         private static void Test1(string chunk, Token[] expect)
         {
-            var actual = new Lexer(chunk, "").ToArray();
+            var actual = new LuaLexer(chunk, "").ToArray();
             //Assert.AreEqual(expect.Length, actual.Length);
             //for (int i = 0; i < actual.Length; i++) {
             //    Assert.AreEqual(expect[i].Kind, actual[i].Kind);
@@ -19,7 +20,7 @@ namespace zlua
         public static void Main(string[] args)
         {
             //Test1("-- this is a comment", new Token[] { new Token(1, TokenKind.TOKEN_EOF, ""), });
-            new Parser(new TokenStream(new Lexer("print(\"hello world\"", "")));
+            new LuaParser(new TokenStream(new LuaLexer("print(\"hello world\"", "")));
         }
     }
 }
