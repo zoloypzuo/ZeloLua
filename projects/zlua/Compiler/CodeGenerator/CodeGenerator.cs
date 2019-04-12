@@ -11,66 +11,124 @@
 //     [ ] 访问AST生成编译时信息（包括代码生成），返回funcinfo实例
 //     [ ] 将编译时信息转换成运行时需要的数据格式（这也是一次遍历），返回proto实例
 //     这个方法虽然遍历次数增加了若干次，但是程序结构清晰，把数据转换这种简单琐碎的工作分离出来，容易调试，开发，修改，我以后写编译器都会这样做
-// 
+//
 // TODO：
 // [ ] 为每个*Context类继承基类Context，包含一个必须实现的visitchildren(visitor)方法，这个方法遍历访问自己的生成式序列
 // [ ] 为Bytecode类添加工厂类，实现一些指令工厂
 // [ ] 整理zlua语法，请按照作者的标准来写，不要使用antlr的语法，不过他的单引号我打不出来这个算了
 // [ ] 试一试写一个parser generator，按照BNF语法的标准，用python写，生成c#代码
-// 
+//
 //
 //
 // 变量和作用域的原理请先看p321的例子代码和右侧的示意图，然后就能看懂代码了
 // 相关代码在funcInfo的scope区域
-using System.Collections.Generic;
 using System;
-using zlua.Core;
-using zlua.Core.Instruction;
+using System.Collections.Generic;
+
 using zlua.Compiler.Parser;
+using zlua.Core.Instruction;
 
 namespace zlua.Compiler.CodeGenerator
 {
-    // 我决定暂时，至少名字不用antlr visitor，而是使用作者的命名
-    internal class LuaVisitor
+    internal class LuaBaseVisitor
     {
-        // block ::= {stat} [retstat]
-        void cgBlock(funcInfo fi, blockContext node)
+        public void VisitChildren(blockContext ontext)
         {
-            foreach (var item in node.StatStar) {
-                cgStat(fi, item);
-            }
-            if (node.RetStatOptional != null) {
-                cgRetStat(fi, node.RetStatOptional);
-            }
+        }
+
+        public void VisitChildren(statContext context)
+        {
+        }
+    }
+
+    // 我决定暂时，至少名字不用antlr visitor，而是使用作者的命名
+    internal class LuaVisitor : LuaBaseVisitor
+    {
+        // 当前函数
+        private funcInfo fi;
+
+        // block ::= {stat} [retstat]
+        public void Visit_block(blockContext ctx)
+        {
+            //foreach (var item in ctx.StatStar) {
+            //    Visit_stat(fi, item);
+            //}
+            //if (ctx.RetStatOptional != null) {
+            //    Visit_retstat(ctx.RetStatOptional);
+            //}
         }
 
         // 我觉得这里就可以看出我和作者在语法解析时的区别了，我的方式更加类型安全
         // 更加严谨地定义语法成分
-        void cgRetStat(funcInfo fi, retstatContext ctx)
+        private void Visit_retstat(retstatContext ctx)
         {
+            // "return"
+            // 生成return nil语句
             if (ctx.explistOptional == null) {
-                //fi.emitReturn(0,0);
+                fi.emitReturn(0, 0);
                 return;
+            } else {
+                //TODO确认explist最后一个元素是vararg或函数
+                //
+                //不太好写，要判断一次，我先放一放
+                //bool multRet = isVarargOrFuncCall(c)
+                bool multRet = false;
+                //TODO
+                // 这里很依赖最后一个元素
+                // 如果最后一个exp是vararg或函数
+                // 要visit exp(fi,exp,r,-1)
+                // 对于前面的元素，要visit exp(fi,exp,r,1)
+                //fi.freeRegs(nExps);
+                int a = fi.usedRegs;
+                if (multRet) {
+                    fi.emitReturn(a, -1);
+                } else {
+                    //fi.emitReturn(a.nExps);
+                }
             }
-            // TODO
-            //bool multRet=
-            // TODO 列表要实现返回列表的方法
-            // 自己写一个迭代器，第一次返回第一个元素，之后。。。
-            // 不要构造一个新的列表返沪i
-            //foreach (var item in ctx.explistOptional.) {
-            //int i=0; // TODO 迭代时要有索引i
-            var r = fi.allocReg();
-            //if(i)
-            // TOOD 这里要处理最后一个vararg和函数调用
             // p328 最下面
             // 作者不实现尾递归
-            //}
         }
 
-        bool isVarargOrFuncCall(expContext exp)
+        private bool isVarargOrFuncCall(expContext exp)
         {
             return (exp is VarargExpContext) ||
                 (exp is functioncallPrefixexpLabelContext);
+        }
+
+        // label左部要这么写，antlr里我会交给BaseVisitor去VisitChildren
+        private void Visit_stat(statContext ctx)
+        {
+            // 这里要多态派发
+            // 当然是不好的
+            // 因此访问要写在context里
+            // 怎么弄
+            // context实现visitor显然乱了
+            // TODO 去看看antlr
+            ctx.Accept(this);
+        }
+
+        // local function Name funcbody
+        private void Visit_localFuncDefStat(localFuncDefStatLabelContext ctx)
+        {
+            // 这里就只需要名字字符串
+            //var r = fieldContext.addLocVar(ctx.Name);
+            //TODO fi, node, r, 0 ???
+            //Visit_funcbody(ctx.funcbody);
+        }
+
+        private void Visit_breakStat()
+        {
+            //int pc = fi.emitJmp(0, 0);
+            //fi.addBreakJmp(pc);
+        }
+
+        private void Visit_doStat(doStatLabelContext ctx)
+        {
+            fi.enterScope(false);
+            Visit_block(ctx.block);
+            //fi.closeOpenUpvals();
+            fi.exitScope();
         }
     }
 
@@ -82,45 +140,50 @@ namespace zlua.Compiler.CodeGenerator
     // 直接复制过来，重写类型是最重要的
     // 名字与原书或者clua源代码一致还有便于查看的优点
     // 我现在就是跟着《go lua》写，也不要管clua，因为作者是很可靠的
-    class upvalInfo
+    internal class upvalInfo
     {
         public int locVarSlot;
         public int upvalIndex;
         public int index;
     }
 
-    class locVarInfo
+    internal class locVarInfo
     {
         public locVarInfo prev;
         public string name;
+
         // 作用域层次
         public int scopeLv;
+
         // 与这个名字绑定的寄存器索引
         public int slot;
+
         // 是否被闭包捕获
         public bool captured;
     }
 
-    class funcInfo
+    internal class funcInfo
     {
         public funcInfo parent;
         public List<funcInfo> subFuncs;
 
         #region 寄存器分配
+
         // 每一个局部变量和vm计算的临时变量都会分配一个寄存器
         // 局部变量退出作用域
         // 和临时变量计算完毕时回收寄存器
         //
         // 已经分配的寄存器数量
         public int usedRegs;
+
         // 函数需要的最大的寄存器数量，必要时扩容
         public int maxRegs;
-        #endregion
 
-        #region 作用域与变量
-        #endregion ？？？
+        #endregion 寄存器分配
+
         // 当前作用域层次，初始值为0，每进入新作用域就递增
         public int scopeLv;
+
         // 变量作用域是纯粹的栈
         // 每个栈代表一个同名的局部变量
         // 但是是不同的lua对象实例，在lua栈上占用不同的寄存器
@@ -144,16 +207,24 @@ namespace zlua.Compiler.CodeGenerator
         //   }
         // local a
         public List<locVarInfo> locVars;
+
         // 当前生效的局部变量 是不是指已经声明的？？？
         public Dictionary<string, locVarInfo> locNames;
+
         // upvalue表 p324 17.1.5
         public Dictionary<string, upvalInfo> upvalues;
+
         // nil bool number string
         // 常量值到常量表索引的映射
         public Dictionary<object, int> constants;
+
         // break表 p323 17.1.4
         public List<List<int>> breaks;
+
         public List<Bytecode> insts;
+        public List<int> lineNums;
+        public int line;
+        public int lastLine;
         public int numParams;
         public bool isVararg;
 
@@ -194,6 +265,7 @@ namespace zlua.Compiler.CodeGenerator
                 return i;
             }
         }
+
         /* registers */
 
         // 分配一个寄存器，必要时更新最大寄存器数量
@@ -225,11 +297,9 @@ namespace zlua.Compiler.CodeGenerator
         {
             if (n <= 0) {
                 throw new Exception("n <= 0 !");
-
             } else {
                 for (int i = 0; i < n; i++) {
                     allocReg();
-
                 }
                 return usedRegs - n;
             }
@@ -247,6 +317,7 @@ namespace zlua.Compiler.CodeGenerator
         }
 
         /* lexical scope */
+
         // 注意，这里的进出指的是编译时进出作用域
         public void enterScope(bool breakable)
         {
@@ -349,8 +420,14 @@ namespace zlua.Compiler.CodeGenerator
             return insts.Count - 1;
         }
 
-        // TODO 注意fixSbx要修改移动码 
+        // TODO 注意fixSbx要修改移动码
 
+        // return r[a], ... ,r[a+b-2]
+        public void emitReturn(int a, int n)
+        {
+            //self.emitABC(OP_RETURN, a, n + 1, 0)
+        }
     }
+
 #pragma warning restore IDE1006 // Naming Styles
 }

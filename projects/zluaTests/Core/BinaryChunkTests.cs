@@ -1,7 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 using System.IO;
-
+using zlua.Core.Undumper;
 using zluaTests;
 
 namespace zlua.Core.BinaryChunk.Tests
@@ -14,7 +14,7 @@ namespace zlua.Core.BinaryChunk.Tests
         {
             TestTool.AssertPropertyEqual(
                 "zlua.Core.BinaryChunk.Prototype.json",
-                BinaryChunk.Undump(
+                luaU.Undump(
                     new FileStream(
                         $"{TestTool.DataPathBase}lua/ch02/hello_world.out"
                         , FileMode.Open)));

@@ -1,7 +1,11 @@
-﻿using System.Linq;
+﻿using System.IO;
+using System.Linq;
 
 using zlua.Compiler.Lexer;
 using zlua.Compiler.Parser;
+using zlua.Core.Lua;
+using zlua.Core.Undumper;
+using zlua.Core.VirtualMachine;
 
 namespace zlua
 {
@@ -20,7 +24,11 @@ namespace zlua
         public static void Main(string[] args)
         {
             //Test1("-- this is a comment", new Token[] { new Token(1, TokenKind.TOKEN_EOF, ""), });
-            new LuaParser(new TokenStream(new LuaLexer("print(\"hello world\"", "")));
+            //new LuaParser(new TokenStream(new LuaLexer("print(\"hello world\"", "")));
+            var p = luaU.Undump(new FileStream(
+                @"C:\Users\91018\Documents\GitHub\zlua\data\lua\ch02\hello_world.out",
+                FileMode.Open));
+            new LuaState().dofile(@"C:\Users\91018\Documents\GitHub\zlua\data\lua\ch02\hello_world.out");
         }
     }
 }

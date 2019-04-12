@@ -1,10 +1,8 @@
-﻿/// <summary>
-/// 配置
-/// 进度】完整地浏览了src，并且把应该搬运过来的都搬运过来了（包括注释，也阅读并裁剪过来了)，完成度99%
-/// </summary>
-namespace zlua.Configuration
+﻿// 配置
+
+namespace zlua.Core.Configuration
 {
-    internal static class LuaConf
+    internal static class LuaConfiguration
     {
         #region consts
 

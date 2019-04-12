@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace zlua.Compiler
+namespace zlua.Compiler.Lexer
 {
     //
     //

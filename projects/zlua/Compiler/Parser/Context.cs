@@ -1,18 +1,70 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+
+using zlua.Compiler.CodeGenerator;
+using zlua.Compiler.Lexer;
 
 namespace zlua.Compiler.Parser
 {
     #region 上下文类
 
+    // 上下文基类
+    //
+    // * 对应antlr的RuleContext类
+    // * 这里使用具体的LuaVisitor类，因为我确定我们只需要遍历一次ast，不需要其他visitor
+    //   然而。还是要用luabasevisitor，因为必须提供默认的visitchildren实现，regex engine里没这么做
+    //   导致必须手写，如果在luabasevisitor里则可以集中生成代码
+    internal interface Context
+    {
+        void Accept(LuaBaseVisitor visitor);
+
+        // 模板如下
+        //{
+        //    LuaVisitor luaVisitor = visitor as LuaVisitor;
+        //    if (luaVisitor != null) {
+        //        luaVisitor.VisitBlock(this);
+        //    } else {
+        //        visitor.VisitChildren(this);
+        //    }
+        //}
+    }
+
+    // antlr版本是有返回值的
+    // 带来了复杂性
+    // 似乎一整套必须统一返回类型为T
+    // 《lua go book》使用void，因此我也用void
+    //internal abstract class Context<T> : Context
+    //{
+    //    public T Accept(LuaBaseVisitor visitor)
+    //    {
+    //        LuaVisitor luaVisitor = visitor as LuaVisitor;
+    //        if (luaVisitor != null) {
+    //            return luaVisitor.VisitBlock(this);
+    //        } else {
+    //            return visitor.VisitChildren(this);
+    //        }
+    //    }
+    //}
+
 #pragma warning disable IDE1006 // Naming Styles
 
     // block ::= {stat} [retstat]
-    internal class blockContext
-
+    internal class blockContext : Context
     {
         public int LastLine;
         public statContext[] StatStar;
         public retstatContext RetStatOptional;
+
+        public void Accept(LuaBaseVisitor visitor)
+        {
+            LuaVisitor luaVisitor = visitor as LuaVisitor;
+            if (luaVisitor != null) {
+                luaVisitor.Visit_block(this);
+            } else {
+                visitor.VisitChildren(this);
+            }
+        }
     }
 
     /*
@@ -35,11 +87,7 @@ namespace zlua.Compiler.Parser
 
     // 注意我使用了abstract
     // 如果是antlr，我会使用label语法为每种语句标记一个NT名字
-    internal abstract class statContext
-    {
-    }
-
-    internal abstract class expContext
+    internal interface statContext : Context
     {
     }
 
@@ -51,13 +99,48 @@ namespace zlua.Compiler.Parser
         // 只有return一个词的空的返回语句
         public static retstatContext RetEmptyStat { get; } =
             new retstatContext { explistOptional = null };
+
+        public void Accept(LuaBaseVisitor visitor)
+        {
+            LuaVisitor luaVisitor = visitor as LuaVisitor;
+            if (luaVisitor != null) {
+                //luaVisitor.Visit_retstat(this);
+            } else {
+                visitor.VisitChildren(this);
+            }
+        }
+    }
+
+    internal abstract class expContext
+    {
     }
 
     // explist ::= exp {‘,’ exp}
-    internal class explistContext
+    // 相当于exp+
+    internal class explistContext : IEnumerable<expContext>
     {
         public expContext exp;
         public expContext[] expStar;
+
+        // 辅助方法，把explist看做一整个数组迭代
+        // 我保留了两种方法
+        public IEnumerable<expContext> exps()
+        {
+            yield return exp;
+            foreach (var item in expStar) {
+                yield return item;
+            }
+        }
+
+        public IEnumerator<expContext> GetEnumerator()
+        {
+            return exps().GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
     }
 
     // 只有分号的空语句
@@ -65,14 +148,18 @@ namespace zlua.Compiler.Parser
     // -> ;
     // 解析时会被丢弃
     // antlr的label语法我们使用形如StatLabel的后缀
-    internal class emptyStatLabelContext : statContext
+    internal class emptyStatLabelContext// : statContext
     {
         public static emptyStatLabelContext EmptyStat { get; } =
             new emptyStatLabelContext();
+
+        public void Accept()
+        {
+        }
     }
 
     // -> break
-    internal class breakStatLabelContext : statContext
+    internal class breakStatLabelContext// : statContext
     {
         // 跳出控制块需要的行号
         public int Line;
@@ -82,21 +169,21 @@ namespace zlua.Compiler.Parser
     // label -> :: Name ::
     //
     // 这里偷个懒折叠一下树的层次，无伤大雅
-    internal class labelStatLabelContext : statContext
+    internal class labelStatLabelContext //: statContext
     {
         // 标签名
         public string Name;
     }
 
     // -> goto Name
-    internal class gotoStatLabelContext : statContext
+    internal class gotoStatLabelContext// : statContext
     {
         // 标签名
         public string Name;
     }
 
     // -> do block end
-    internal class doStatLabelContext : statContext
+    internal class doStatLabelContext //: statContext
     {
         public blockContext block;
     }
@@ -104,7 +191,7 @@ namespace zlua.Compiler.Parser
     // stat -> funtioncall
     //
     // 作者难道不区别语句和表达式吗，反正我要区别
-    internal class functioncallStatLabelContext : statContext
+    internal class functioncallStatLabelContext //: statContext
     {
         public functioncallContext functioncall;
     }
@@ -151,7 +238,7 @@ namespace zlua.Compiler.Parser
     }
 
     // if exp then block {elseif exp then block} [else block] end
-    internal class ifStatLabelContext : statContext
+    internal class ifStatLabelContext/* : statContext*/
     {
         public expContext exp;
         public blockContext block;
@@ -161,14 +248,14 @@ namespace zlua.Compiler.Parser
     }
 
     // while exp do block end
-    internal class whileStatLabelContext : statContext
+    internal class whileStatLabelContext /*: statContext*/
     {
         public expContext exp;
         public blockContext block;
     }
 
     // repeat block until exp
-    internal class repeatStatLabelContext : statContext
+    internal class repeatStatLabelContext/* : statContext*/
     {
         public blockContext block;
         public expContext exp;
@@ -181,7 +268,7 @@ namespace zlua.Compiler.Parser
     // 一些额外的信息比如行号需要自己指定
     // 这些单纯是plus的NT，我们通过变通的方法不破坏lua语法
     // 让他们继承一个叫Plus<T>的接口或类并实现返回T []的方法
-    internal class forinStatLabelContext : statContext
+    internal class forinStatLabelContext// : statContext
     {
         public int LineOfDo;
         public namelistContext namelist;
@@ -190,7 +277,7 @@ namespace zlua.Compiler.Parser
     }
 
     // for Name ‘=’ exp ‘,’ exp [‘,’ exp] do block end
-    internal class forNumStatLabelContext : statContext
+    internal class forNumStatLabelContext// : statContext
     {
         public int LineOfFor;
         public int LineOfDo;
@@ -202,7 +289,7 @@ namespace zlua.Compiler.Parser
     }
 
     // varlist ‘=’ explist
-    internal class assignStatLabelContext : statContext
+    internal class assignStatLabelContext// : statContext
     {
         public int LastLine;
         public varlistContext varlist;
@@ -239,7 +326,7 @@ namespace zlua.Compiler.Parser
     // local namelist [‘=’ explist]
     // namelist ::= Name {‘,’ Name}
     // explist ::= exp {‘,’ exp}
-    internal class localVarDeclStatLabelContext : statContext
+    internal class localVarDeclStatLabelContext //: /*statContext*/
     {
         public int LastLine;
         public namelistContext namelist;
@@ -247,7 +334,7 @@ namespace zlua.Compiler.Parser
     }
 
     // local function Name funcbody
-    internal class localFuncDefStatLabelContext : statContext
+    internal class localFuncDefStatLabelContext //: /*statContext*/
     {
         public string Name;
         public funcbodyContext funcbody;
@@ -332,7 +419,7 @@ namespace zlua.Compiler.Parser
     // funcbody ::= ‘(’ [parlist] ‘)’ block end
     // parlist ::= namelist [‘,’ ‘...’] | ‘...’
     // namelist ::= Name {‘,’ Name}
-    internal class funcDefStatLabelContext : statContext
+    internal class funcDefStatLabelContext /*: statContext*/
     {
         public funcnameContext funcname;
         public funcbodyContext funcbody;
