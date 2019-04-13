@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+
 using zlua.Core.Instruction;
 using zlua.Core.Lua;
 using zlua.Core.MetaMethod;
@@ -26,6 +27,7 @@ namespace zlua.Core.VirtualMachine
     public partial class LuaState : LuaReference
     {
         #region 私有访问器
+
         private List<LuaValue> Stack { get { return stack.slots; } }
 
         /// top指向第一个可用位置，每次push时 top++ = value
@@ -39,7 +41,7 @@ namespace zlua.Core.VirtualMachine
         /// Ido要使用，我希望他是private
         /// 是相对于栈底的偏移，所有函数内索引局部变量以这个为基准
         private int @base {
-            get { return ci.BaseIndex; }
+            get { return ci.@base; }
             set { /*CallInfo.BaseIndex = value;*/ }
         }
 
@@ -48,7 +50,9 @@ namespace zlua.Core.VirtualMachine
 
         /// 当前函数
         private CallInfo ci { get { return CallInfoStack.Peek(); } }
-        #endregion
+
+        #endregion 私有访问器
+
         #region 私有属性
 
         private Stack<CallInfo> CallInfoStack { get; }
@@ -58,13 +62,13 @@ namespace zlua.Core.VirtualMachine
 
         /// saved pc when call a function
         /// index of instruction array；因为src用指针的原因，而zlua必须同时使用codes和pc来获取指令
-        internal int savedpc;
+        internal int pc;
 
-        private Bytecode[] Codes { get; set; }
+        private Bytecode[] codes { get; set; }
         private int NumCSharpCalls { get; set; }
         internal /*static readonly*/ GlobalState globalState = new GlobalState(); //注册表是一个L一个吗？
 
-        #endregion 属性
+        #endregion 私有属性
 
         /// <summary>
         /// lua_newstate
@@ -90,18 +94,26 @@ namespace zlua.Core.VirtualMachine
             //    Debug.Assert(L[L.topIndex - 1].B);
             //}
             //lua.Register(this, Assert, "assert");
+
+
+            // TODO OpenLibs()
         }
 
         // 缓存cl
         //
         // 因为要写辅助方法，所以从局部变量变为字段
         private LuaClosure cl;
+
         // 缓存k
         //
         // 因为要写辅助方法，所以从局部变量变为字段
         private LuaValue[] k;
 
         #region 从指令取出参数的辅助方法
+        private LuaValue R(int i)
+        {
+            return Stack[@base + i];
+        }
 
         // R(A)
         private LuaValue RA(Bytecode i)
@@ -120,7 +132,6 @@ namespace zlua.Core.VirtualMachine
         {
             return Stack[@base + (int)i.C];
         }
-
 
         // RK(C)
         private LuaValue RKC(Bytecode instr)
@@ -146,12 +157,16 @@ namespace zlua.Core.VirtualMachine
             return upb;
         }
 
-        #endregion get operands from instruction args
+        #endregion 从指令取出参数的辅助方法
+
         // luaV_execute
         // 执行一个深度为level的lua函数，chunk深度为1
         // 没有level就不知道什么时候结束了（事实上可以，用callinfo栈）
         private void Execute(int nexeccalls)
         {
+            // clua5.3缓存了ci
+            // clua5.1缓存了base和pc
+            // 我们都不缓存，因为这造成了代码混乱
             //CallInfo ci = this.ci;
             //int @base;
             //int pc;
@@ -164,9 +179,9 @@ namespace zlua.Core.VirtualMachine
             // 缓存savedpc
 
             while (true) {
-                Bytecode instr = Codes[savedpc++];
-                Debug.Assert(this.@base == ci.BaseIndex);
-                Debug.Assert(this.@base <= top && top < StackLastFree); //这里始终没有。
+                Bytecode instr = codes[pc++];
+                Debug.Assert(@base == ci.@base);
+                Debug.Assert(@base <= top && top < StackLastFree); //这里始终没有。
                 LuaValue ra = RA(instr);
                 switch (instr.Opcode) {
                     case Opcode.OP_MOVE: {
@@ -189,12 +204,17 @@ namespace zlua.Core.VirtualMachine
                             continue;
                         }
                     // A B C	R(A), ... ,R(A+C-2) := R(A)(R(A+1), ... ,R(A+B-1))
+                    // A指定被调用函数对象的寄存器索引
+                    // A后面紧跟实参列表，实参个数为B
+                    // 返回值个数为C
+                    // call指令对应于lua脚本中的函数调用
+                    // 执行完该指令后，被调用函数和它的栈帧被清空，返回值被留在栈上
+                    // 《自己动手实现Lua》p154
                     case Opcode.OP_CALL: {
                             int b = (int)instr.B;
                             int nresults = (int)instr.C - 1;
-                            int func = this.@base + (int)instr.A;
+                            int func = @base + (int)instr.A;
                             if (b != 0) top = func + b;  /* else previous instruction set top */
-                            //savedpc = pc;
                             switch (PreCall(func, nresults)) {
                                 case PCRLUA: {
                                         nexeccalls++;
@@ -203,7 +223,6 @@ namespace zlua.Core.VirtualMachine
                                 case PCRC:
                                     if (nresults >= 0)
                                         top = ci.top;
-                                    @base = this.@base;
                                     continue;
                                 default:
                                     return;
@@ -213,7 +232,7 @@ namespace zlua.Core.VirtualMachine
                     case Opcode.OP_RETURN: {
                             int b = (int)instr.B;
                             int a = (int)instr.A;
-                            if (b != 0) top = this.@base + a + b - 1;
+                            if (b != 0) top = @base + a + b - 1;
                             PosCall(a);
                             if (--nexeccalls == 0) /* chunk executed, return*/
                                 return;
@@ -223,6 +242,82 @@ namespace zlua.Core.VirtualMachine
                                 goto reentry;
                             }
                         }
+                    // A B C	R(A+1) := R(B); R(A) := R(B)[RK(C)]
+                    // self指令为lua提供了oop范式
+                    // 方法调用obj:f()会生成一条self指令
+                    // self指令的执行分为两步：
+                    // * 从obj表中查找"f"键的值作为被调用方法
+                    // * 将obj设为f的第一个实参
+                    // self指令后会有一条move指令，再是一条call指令
+                    case Opcode.OP_SELF: {
+                            // 将obj设为f的第一个实参
+                            LuaValue rb = RB(instr);
+                            R((int)instr.A + 1).TValue = rb;
+                            // 从obj表中查找"f"键的值作为被调用方法
+                            GetTable(rb, RKC(instr), ra);
+                            continue;
+                        }
+                    // A Bx	R(A) := closure(KPROTO[Bx])
+                    // closure指令的执行分为以下两步：
+                    // * 从内嵌Proto列表中取出Proto实例，来构造Closure实例ncl
+                    // * 提前执行后面的move指令或get upval指令来初始化ncl的upvals
+                    case Opcode.OP_CLOSURE: {
+                            /*用Proto简单new一个LuaClosure，提前执行之后的指令s来初始化upvals*/
+                            Proto p = cl.p.Protos[instr.Bx];
+                            int nup = p.nUpvals;
+                            LuaClosure ncl = new LuaClosure(cl.env, nup, p);
+                            // 后面一定跟着一些getUpval或mov指令用来初始化upvals，分情况讨论，把这些指令在这个周期就执行掉
+                            for (int j = 0; j < nup; j++, pc++) {
+                                Bytecode next_instr = codes[pc];
+                                // 从父Proto的upvals直接取upvals
+                                if (next_instr.Opcode == Opcode.OP_GETUPVAL)
+                                    ncl.upvals[j] = cl.upvals[(int)codes[pc].B];
+                                // 否则得用复杂的方法确定upval的位置
+                                else {
+                                    Debug.Assert(codes[pc].Opcode == Opcode.OP_MOVE);
+                                    // TODO
+                                    //ncl.upvals[j] = lfunc.FindUpval(this, this.baseIndex + next_instr.B);
+                                }
+                            }
+                            ra.Cl = ncl;
+                            continue;
+                        }
+                    // A B	R(A), R(A+1), ..., R(A+B-2) = vararg
+                    // 将vararg加载到连续多个寄存器中
+                    // 开始索引为A，个数为B
+                    // vararg指令很像call指令
+                    case Opcode.OP_VARARG: {
+                            int a = (int)instr.A;
+                            int b = (int)instr.B - 1;
+                            CallInfo ci = this.ci;
+                            int n = ci.@base - ci.funcIndex - cl.p.numparams;
+                            if (b == LUA_MULTRET) {
+                                stack.check(n);
+                                ra = RA(instr);  /* previous call may change the stack */
+                                b = n;
+                                top = a + n;
+                            }
+                            for (int j = 0; j < b; j++) {
+                                if (j < n) {
+                                    Stack[a + j].TValue = Stack[ci.@base - n + j];
+                                } else {
+                                    Stack[a + j].SetNil();
+                                }
+                            }
+                            continue;
+                        }
+                    // A B C	return R(A)(R(A+1), ... ,R(A+B-1))
+                    // 形如return f()的返回语句被优化成尾递归
+                    case Opcode.OP_TAILCALL: {
+                            // TODO clua太多了，书上没讲
+                            continue;
+                        }
+                    // A B	R(A) := UpValue[B]
+                    case Opcode.OP_GETUPVAL: {
+                            RA(instr).TValue = UpValueB(instr);
+                            continue;
+                        }
+
                     //case Opcode.LoadBool:
                     //    ra.B = Convert.ToBoolean(instr.B);
                     //    if (Convert.ToBoolean(instr.C)) pc++;
@@ -269,12 +364,7 @@ namespace zlua.Core.VirtualMachine
                             //ra.Table = new TTable(c, b);
                             continue;
                         }
-                    case Opcode.OP_SELF: {
-                            //LuaValue rb = RB(instr);
-                            //R(instr.A + 1).TVal = rb;
-                            //GetTable(rb, RKC(instr), ra);
-                            continue;
-                        }
+
                     case Opcode.OP_ADD: {
                             Arith(instr, (a, b) => a + b, MMType.Add);
                             continue;
@@ -337,22 +427,7 @@ namespace zlua.Core.VirtualMachine
                             continue;
                         }
 
-                    case Opcode.OP_CLOSURE: { /*用Proto简单new一个LuaClosure，提前执行之后的指令s来初始化upvals*/
-                            //Proto p = cl.p.pp[instr.Bx];
-                            //LuaClosure ncl = new LuaClosure(cl.env, p.nUpvals, p);
-                            //// 后面一定跟着一些getUpval或mov指令用来初始化upvals，分情况讨论，把这些指令在这个周期就执行掉
-                            //for (int j = 0; j < p.nUpvals; j++, pc++) { /*从父函数的upvals直接取upvals*/
-                            //    var next_instr = codes[pc];
-                            //    if (next_instr.Opcode == Opcodes.GetUpVal)
-                            //        ncl.upvals[j] = cl.upvals[codes[pc].B];
-                            //    else { /*否则得用复杂的方法确定upval的位置*/
-                            //        Debug.Assert(codes[pc].Opcode == Opcodes.Move);
-                            //        //ncl.upvals[j] = lfunc.FindUpval(this, this.baseIndex + next_instr.B);
-                            //    }
-                            //}
-                            //ra.Cl = ncl as Closure;
-                            continue;
-                        }
+
 
                     default:
                         continue;
@@ -383,7 +458,6 @@ namespace zlua.Core.VirtualMachine
             for (int i = Stack.Count; i < size; i++)
                 Stack.Add(new LuaValue());
         }
-
 
         #region other things
 
@@ -525,7 +599,6 @@ namespace zlua.Core.VirtualMachine
         #endregion other things
 
         private LuaStack stack;
-
     }
 
     /// 栈帧信息，或者说是一次调用的信息
@@ -533,7 +606,7 @@ namespace zlua.Core.VirtualMachine
     {
         public int funcIndex;
 
-        public int BaseIndex {
+        public int @base {
             get {
                 return funcIndex + 1;
             }

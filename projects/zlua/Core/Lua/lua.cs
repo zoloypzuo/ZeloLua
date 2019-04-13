@@ -5,6 +5,7 @@
 
 using System;
 using System.IO;
+
 using zlua.Compiler.CodeGenerator;
 using zlua.Compiler.Lexer;
 using zlua.Compiler.Parser;
@@ -14,8 +15,6 @@ using zlua.Core.Undumper;
 
 namespace zlua.Core.VirtualMachine
 {
-
-
     // 见鬼了异常，因为有些分支根本不可能走到，用于占位
     internal class GodDamnException : Exception
     { }
@@ -28,7 +27,6 @@ namespace zlua.Core.VirtualMachine
         }
     }
 
-    /// lua接口
     public partial class LuaState
     {
         public const string Version = "zlua v0.1 based on clua5.3";
@@ -42,25 +40,30 @@ namespace zlua.Core.VirtualMachine
         public void dofile(string path)
         {
             loadfile(path);
-            Call(0);
+            Call(0, LUA_MULTRET);
         }
 
         // luaL_loadfile
         public void loadfile(string path)
         {
             Proto p;
-            using (var f = new FileStream(path, FileMode.Open)) {
-                // TODO check and throw file open error
-                char c = (char)f.ReadByte();
-                // reset stream
-                f.Position = 0;
-                if (c == luaU.FirstChar) {
-                    p = luaU.Undump(f);
-                } else {
-                    // TODO parse
-                    p = null;
-                }
+            if (IsBinaryChunk(path)) {
+                p = luaU.Undump(new FileStream(path, FileMode.Open));
+            } else {
+                p = DoInput(File.ReadAllText(path, System.Text.Encoding.UTF8), $"@{path}");
             }
+            /*
+             * TODO
+             	c := newLuaClosure(proto)
+	            self.stack.push(c)
+	            
+                ????
+                if len(proto.Upvalues) > 0 {
+                    // table[2]
+		            env := self.registry.get(LUA_RIDX_GLOBALS)
+		            c.upvals[0] = &upvalue{&env}
+	            }
+             */
             LuaClosure cl = new LuaClosure(null, 1, p);
             if (p.Upvalues.Length > 0) {
                 var env = new TTable(1, 1);
@@ -80,18 +83,14 @@ namespace zlua.Core.VirtualMachine
             stack.push(new LuaValue(cl));
         }
 
-        public void dostring(string luaCode)
+        public void dostring(string chunk)
         {
             // * 编译源文本生成Proto实例tf
             // * 使用tf构造Closure实例cl
             // * 初始化cl的upval
             // * 将cl压栈
             // * 调用Call方法执行cl
-            LuaLexer lexer = new LuaLexer(luaCode, "");
-            TokenStream tokenStream = new TokenStream(lexer);
-            LuaParser parser = new LuaParser(tokenStream);
-            LuaVisitor visitor = new LuaVisitor();
-            visitor.Visit_block(parser.ParseChunk());
+            DoInput(chunk, chunk);
             // TODO 规范api，block上创建visit chunk方法
             // TODO 从visitor取得proto
             // 我还是愿意创建chunkproto这个类
@@ -110,5 +109,27 @@ namespace zlua.Core.VirtualMachine
 
         /// 基于L.top，压函数，压args，返回1个值
         public delegate void CSharpFunction(LuaState L);
+
+
+        private Proto DoInput(string chunk, string chunkName)
+        {
+            LuaLexer lexer = new LuaLexer(chunk, chunkName);
+            TokenStream tokenStream = new TokenStream(lexer);
+            LuaParser parser = new LuaParser(tokenStream);
+            LuaVisitor visitor = new LuaVisitor();
+            blockContext block = parser.Parse();
+            visitor.Visit_block(block);
+            // TODO
+            return null;
+        }
+
+        private bool IsBinaryChunk(string path)
+        {
+            using (var f = new FileStream(path, FileMode.Open)) {
+                // TODO check and throw file open error
+                char c = (char)f.ReadByte();
+                return c == luaU.FirstChar;
+            }
+        }
     }
 }

@@ -16,9 +16,11 @@ namespace zlua.Compiler.Parser
             TokenStream = tokenStream;
         }
 
-        // 顶层解析方法
-        // chunk -> block $
-        public blockContext ParseChunk()
+        // chunk ::= block EOF
+        //
+        // * 顶层解析方法
+        // * 不创建chunkContext了，没必要
+        public blockContext Parse()
         {
             var block = Parse_block();
             AssertAndRead(TokenKind.TOKEN_EOF);

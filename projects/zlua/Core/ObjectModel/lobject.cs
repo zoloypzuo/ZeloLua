@@ -3,7 +3,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
+
 using zlua.Core.Lua;
 using zlua.Core.VirtualMachine;
 
@@ -63,16 +63,18 @@ namespace zlua.Core.ObjectModel
     public class TTable : LuaReference, IEnumerable<KeyValuePair<LuaValue, LuaValue>>
     {
         public TTable metatable;
-        Dictionary<LuaValue, LuaValue> hashTablePart;
-        List<LuaValue> arrayPart;
+        private Dictionary<LuaValue, LuaValue> hashTablePart;
+        private List<LuaValue> arrayPart;
 
         public TTable(int sizeArrayPart, int sizeHashTablePart)
         {
             hashTablePart = new Dictionary<LuaValue, LuaValue>(sizeHashTablePart);
             arrayPart = new List<LuaValue>(sizeArrayPart);
         }
-        static int Double2Integer(double d)
+
+        private static int Double2Integer(double d)
            => (int)Math.Round(d, MidpointRounding.AwayFromZero); //目前来说只有这里需要用
+
         /// <summary>
         /// luaH_get
         /// </summary>
@@ -82,6 +84,7 @@ namespace zlua.Core.ObjectModel
                 case LuaTypes.Nil: return LuaValue.NilObject;
                 case LuaTypes.String:
                     return GetByStr(key.TStr);
+
                 case LuaTypes.Number:
                     double n = key.N;
                     int k = Double2Integer(n);
@@ -94,6 +97,7 @@ namespace zlua.Core.ObjectModel
                     return LuaValue.NilObject;
             }
         }
+
         /// <summary>
         /// luaH_set, return tvalue found with `key,
         /// else create a new pair and return the new tvalue
@@ -110,6 +114,7 @@ namespace zlua.Core.ObjectModel
                 return new_val;
             }
         }
+
         public LuaValue GetByStr(TString key)
         {
             var k = new LuaValue(key);
@@ -117,6 +122,7 @@ namespace zlua.Core.ObjectModel
                 return hashTablePart[k];
             return LuaValue.NilObject;
         }
+
         /// <summary>
         /// luaH_getnum
         /// </summary>
@@ -130,7 +136,8 @@ namespace zlua.Core.ObjectModel
                 return LuaValue.NilObject;
             }
         }
-        LuaValue SetStr(TString key)
+
+        private LuaValue SetStr(TString key)
         {
             var tval = GetByStr(key);
             if (tval != LuaValue.NilObject)
@@ -141,7 +148,8 @@ namespace zlua.Core.ObjectModel
                 return new_val;
             }
         }
-        LuaValue SetInt(LuaInteger key)
+
+        private LuaValue SetInt(LuaInteger key)
         {
             var tval = GetByInt(key);
             if (tval != LuaValue.NilObject) return tval;
@@ -172,8 +180,12 @@ namespace zlua.Core.ObjectModel
             }
         }
 
-        public IEnumerator GetEnumerator() { return this.GetEnumerator(); }
+        public IEnumerator GetEnumerator()
+        {
+            return this.GetEnumerator();
+        }
     }
+
     internal class Upvalue : LuaReference
     {
         public LuaValue val;

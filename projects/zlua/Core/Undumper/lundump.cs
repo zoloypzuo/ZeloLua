@@ -63,6 +63,7 @@ namespace zlua.Core.Undumper
         #region 公有属性
 
         public static bool IsSizeofCSizeT8 { get; private set; } = true;
+
         // chunk文件首字符，用于/loadfile/检查文件是否是chunk
         public const char FirstChar = '\x1b'; // LUA_SIGNATURE[0]
 
@@ -187,7 +188,7 @@ namespace zlua.Core.Undumper
                 Source = source,
                 LineDefined = reader.ReadUInt32(),
                 LastLineDefined = reader.ReadUInt32(),
-                NumParams = reader.ReadByte(),
+                numparams = reader.ReadByte(),
                 IsVararg = reader.ReadByte(),
                 MaxStackSize = reader.ReadByte(),
                 Code = ReadCode(reader),

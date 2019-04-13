@@ -243,6 +243,7 @@ namespace zlua.Core.ObjectModel
             Type = LuaTypes.Function;
             ReferenceValue = closure;
         }
+
         #endregion 构造函数
 
         #region 类型谓词

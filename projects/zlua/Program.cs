@@ -2,8 +2,6 @@
 using System.Linq;
 
 using zlua.Compiler.Lexer;
-using zlua.Compiler.Parser;
-using zlua.Core.Lua;
 using zlua.Core.Undumper;
 using zlua.Core.VirtualMachine;
 

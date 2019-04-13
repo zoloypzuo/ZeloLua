@@ -3,7 +3,6 @@
 using System;
 using System.Diagnostics;
 
-using zlua.Core.Lua;
 using zlua.Core.VirtualMachine;
 
 namespace zlua.Core.Instruction

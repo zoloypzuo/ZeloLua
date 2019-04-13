@@ -2,6 +2,7 @@
 
 using System;
 using System.Diagnostics;
+
 using zlua.Core.Configuration;
 using zlua.Core.MetaMethod;
 using zlua.Core.ObjectModel;
@@ -58,7 +59,7 @@ namespace zlua.Core.VirtualMachine
                 funcValue = TryMetaCall(funcIndex);
             }
             // 保存PC
-            this.ci.savedpc = this.savedpc;
+            this.ci.savedpc = this.pc;
             /* Lua function? prepare its call */
             if (funcValue.Cl is LuaClosure) {
                 LuaClosure cl = funcValue.Cl as LuaClosure;
@@ -71,8 +72,8 @@ namespace zlua.Core.VirtualMachine
                 if (ci.top >= this.StackLastFree)
                     Alloc(ci.top + 1);
                 // 更新pc
-                savedpc = 0;
-                Codes = p.Code;
+                pc = 0;
+                codes = p.Code;
                 CallInfoStack.Push(ci);
                 // 栈帧清为nil
                 // 把多余的函数参数设为nil
@@ -101,7 +102,7 @@ namespace zlua.Core.VirtualMachine
         public void PosCall(int resultOffset)
         {
             CallInfo ci = CallInfoStack.Pop();
-            savedpc = this.ci.savedpc;
+            pc = this.ci.savedpc;
             Stack[ci.funcIndex].TValue = Stack[@base + resultOffset];
         }
 

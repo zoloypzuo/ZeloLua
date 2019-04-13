@@ -22,7 +22,7 @@ namespace zlua.Core.ObjectModel
         public uint LastLineDefined;
 
         // 固定参数个数
-        public byte NumParams;
+        public byte numparams;
 
         // 是vararg函数
         public byte IsVararg;
@@ -57,6 +57,10 @@ namespace zlua.Core.ObjectModel
         //
         // * 调试用
         public string[] UpvalueNames;
+
+        #region 公有访问器
+        public int nUpvals { get { return Upvalues.Length; } }
+        #endregion
     }
 
     internal class ChunkProto : Proto

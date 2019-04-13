@@ -222,6 +222,7 @@ namespace zlua.Core.VirtualMachine
                     return true;
             }
         }
+
         #endregion Access*方法 从栈获取值
     }
 
