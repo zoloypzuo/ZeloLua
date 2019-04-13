@@ -6,16 +6,16 @@ namespace zlua.Core.Lua
     // lua浮点数类型
     //
     // 不支持配置成float
-    public struct LuaNumber : IEquatable<LuaNumber>
+    public struct lua_Number : IEquatable<lua_Number>
     {
         public double Value { get; set; }
 
         public override bool Equals(object obj)
         {
-            return obj is LuaNumber && Equals((LuaNumber)obj);
+            return obj is lua_Number && Equals((lua_Number)obj);
         }
 
-        public bool Equals(LuaNumber other)
+        public bool Equals(lua_Number other)
         {
             return Value == other.Value;
         }
@@ -33,24 +33,24 @@ namespace zlua.Core.Lua
             return Value.ToString();
         }
 
-        public static bool operator ==(LuaNumber n1, LuaNumber n2)
+        public static bool operator ==(lua_Number n1, lua_Number n2)
         {
             return n1.Equals(n2);
         }
 
-        public static bool operator !=(LuaNumber n1, LuaNumber n2)
+        public static bool operator !=(lua_Number n1, lua_Number n2)
         {
             return !n1.Equals(n2);
         }
 
-        public static implicit operator LuaNumber(double n)
+        public static implicit operator lua_Number(double n)
         {
-            return new LuaNumber { Value = n };
+            return new lua_Number { Value = n };
         }
 
-        public static implicit operator double(LuaNumber n)
+        public static implicit operator double(lua_Number n)
         {
-            return new LuaNumber { Value = n };
+            return new lua_Number { Value = n };
         }
 
         //public static explicit operator LuaNumber(LuaIn n)
@@ -58,7 +58,7 @@ namespace zlua.Core.Lua
         //    return (Int64)n;
         //}
 
-        public static bool ToFloat(LuaValue val)
+        public static bool ToFloat(TValue val)
         {
             //switch (val.Type) {
             //    case LuaTypes.Number:return val.N;
@@ -67,7 +67,7 @@ namespace zlua.Core.Lua
             return false;
         }
 
-        public static bool TryParse(string s, out LuaNumber n)
+        public static bool TryParse(string s, out lua_Number n)
         {
             double outN;
             bool b;

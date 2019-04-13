@@ -16,7 +16,7 @@ namespace zlua.Core.ObjectModel
     //   enum大小默认4B，可以设置，但是没必要，现在的样子是对齐的
     //
     // TODO light ud没了解足够，先不管
-    public class LuaValue : IEquatable<LuaValue>
+    public class TValue : IEquatable<TValue>
     {
         #region 嵌套类型定义
 
@@ -29,10 +29,10 @@ namespace zlua.Core.ObjectModel
         private struct LuaNumeric
         {
             [FieldOffset(0)]
-            public LuaInteger i;
+            public lua_Integer i;
 
             [FieldOffset(0)]
-            public LuaNumber n;
+            public lua_Number n;
 
             [FieldOffset(0)]
             public bool b;
@@ -55,32 +55,32 @@ namespace zlua.Core.ObjectModel
 
         // 类型标签
         [JsonProperty]
-        public LuaTypes Type { get; private set; }
+        public LuaType Type { get; private set; }
 
         #endregion 公有属性
 
         #region 访问器与设置器
 
         [JsonIgnore]
-        public LuaNumber N {
+        public lua_Number N {
             get {
                 Debug.Assert(IsNumber);
                 return NumericValue.n;
             }
             set {
-                Type = LuaTypes.Number;
+                Type = LuaType.LUA_TNUMBER;
                 NumericValue = new LuaNumeric { n = value };
             }
         }
 
         [JsonIgnore]
-        public LuaInteger I {
+        public lua_Integer I {
             get {
                 Debug.Assert(IsInteger);
                 return NumericValue.i;
             }
             set {
-                Type = LuaTypes.Integer;
+                Type = LuaType.LUA_TNUMINT;
                 NumericValue = new LuaNumeric { i = value };
             }
         }
@@ -92,7 +92,7 @@ namespace zlua.Core.ObjectModel
                 return NumericValue.b;
             }
             set {
-                Type = LuaTypes.Boolean;
+                Type = LuaType.LUA_TBOOLEAN;
                 NumericValue = new LuaNumeric { b = value };
             }
         }
@@ -104,7 +104,7 @@ namespace zlua.Core.ObjectModel
                 return ReferenceValue as TString;
             }
             set {
-                Type = LuaTypes.String;
+                Type = LuaType.LUA_TSTRING;
                 ReferenceValue = value;
             }
         }
@@ -116,7 +116,7 @@ namespace zlua.Core.ObjectModel
                 return (ReferenceValue as TString).str;
             }
             set {
-                Type = LuaTypes.String;
+                Type = LuaType.LUA_TSTRING;
                 var tstr = ReferenceValue as TString;
                 if (tstr != null) {
                     tstr.str = value;
@@ -131,23 +131,23 @@ namespace zlua.Core.ObjectModel
                 return ReferenceValue as Closure;
             }
             set {
-                Type = LuaTypes.Function;
+                Type = LuaType.LUA_TFUNCTION;
                 ReferenceValue = value;
             }
         }
 
-        public LuaState Thread {
-            get { return ReferenceValue as LuaState; }
+        public lua_State Thread {
+            get { return ReferenceValue as lua_State; }
             set {
-                Type = LuaTypes.Thread;
+                Type = LuaType.LUA_TTHREAD;
                 ReferenceValue = value;
             }
         }
 
-        public TTable Table {
-            get { return ReferenceValue as TTable; }
+        public Table Table {
+            get { return ReferenceValue as Table; }
             set {
-                Type = LuaTypes.Table;
+                Type = LuaType.LUA_TTABLE;
                 ReferenceValue = value;
             }
         }
@@ -163,7 +163,7 @@ namespace zlua.Core.ObjectModel
         //}
 
         // 拷贝函数
-        public LuaValue TValue {
+        public TValue Value {
             set {
                 Type = value.Type;
                 NumericValue = value.NumericValue;
@@ -176,7 +176,7 @@ namespace zlua.Core.ObjectModel
 
         public void SetNil()
         {
-            Type = LuaTypes.Nil;
+            Type = LuaType.LUA_TNIL;
             ReferenceValue = null;
         }
 
@@ -185,62 +185,62 @@ namespace zlua.Core.ObjectModel
         #region 构造函数
 
         // 构造nil
-        public LuaValue()
+        public TValue()
         {
-            Type = LuaTypes.Nil;
+            Type = LuaType.LUA_TNIL;
         }
 
-        public LuaValue(LuaNumber n)
+        public TValue(lua_Number n)
         {
-            Type = LuaTypes.Number;
+            Type = LuaType.LUA_TNUMBER;
             NumericValue = new LuaNumeric { n = n };
         }
 
-        public LuaValue(LuaInteger i)
+        public TValue(lua_Integer i)
         {
-            Type = LuaTypes.Integer;
+            Type = LuaType.LUA_TNUMINT;
             NumericValue = new LuaNumeric { i = i };
         }
 
-        public LuaValue(bool b)
+        public TValue(bool b)
         {
-            Type = LuaTypes.Boolean;
+            Type = LuaType.LUA_TBOOLEAN;
             NumericValue = new LuaNumeric { b = b };
         }
 
-        public LuaValue(string s)
+        public TValue(string s)
         {
-            Type = LuaTypes.String;
+            Type = LuaType.LUA_TSTRING;
             ReferenceValue = new TString(s);
         }
 
-        public LuaValue(TString tstr)
+        public TValue(TString tstr)
         {
-            Type = LuaTypes.String;
+            Type = LuaType.LUA_TSTRING;
             ReferenceValue = tstr;
         }
 
-        public LuaValue(TTable table)
+        public TValue(Table table)
         {
-            Type = LuaTypes.Table;
+            Type = LuaType.LUA_TTABLE;
             ReferenceValue = table;
         }
 
-        public LuaValue(LuaState thread)
+        public TValue(lua_State thread)
         {
-            Type = LuaTypes.Thread;
+            Type = LuaType.LUA_TTHREAD;
             ReferenceValue = thread;
         }
 
-        public LuaValue(Userdata userdata)
+        public TValue(Userdata userdata)
         {
-            Type = LuaTypes.Userdata;
+            Type = LuaType.LUA_TUSERDATA;
             ReferenceValue = userdata;
         }
 
-        public LuaValue(Closure closure)
+        public TValue(Closure closure)
         {
-            Type = LuaTypes.Function;
+            Type = LuaType.LUA_TFUNCTION;
             ReferenceValue = closure;
         }
 
@@ -248,25 +248,25 @@ namespace zlua.Core.ObjectModel
 
         #region 类型谓词
 
-        public bool IsNil { get { return Type == LuaTypes.Nil; } }
-        public bool IsInteger { get { return Type == LuaTypes.Integer; } }
-        public bool IsNumber { get { return Type == LuaTypes.Number; } }
-        public bool IsString { get { return Type == LuaTypes.String; } }
-        public bool IsTable { get { return Type == LuaTypes.Table; } }
-        public bool IsProto { get { return Type == LuaTypes.Function; } }
-        public bool IsBool { get { return Type == LuaTypes.Boolean; } }
-        public bool IsUserdata { get { return Type == LuaTypes.Userdata; } }
-        public bool IsThread { get { return Type == LuaTypes.Thread; } }
-        public bool IsLightUserdata { get { return Type == LuaTypes.LightUserdata; } }
-        public bool IsCSharpFunction { get { return Type == LuaTypes.Function && ReferenceValue is CSharpClosure; } }
-        public bool IsLuaFunction { get { return Type == LuaTypes.Function && ReferenceValue is LuaClosure; } }
-        public bool IsFunction { get { return Type == LuaTypes.Function; } }
+        public bool IsNil { get { return Type == LuaType.LUA_TNIL; } }
+        public bool IsInteger { get { return Type == LuaType.LUA_TNUMINT; } }
+        public bool IsNumber { get { return Type == LuaType.LUA_TNUMBER; } }
+        public bool IsString { get { return Type == LuaType.LUA_TSTRING; } }
+        public bool IsTable { get { return Type == LuaType.LUA_TTABLE; } }
+        public bool IsProto { get { return Type == LuaType.LUA_TFUNCTION; } }
+        public bool IsBool { get { return Type == LuaType.LUA_TBOOLEAN; } }
+        public bool IsUserdata { get { return Type == LuaType.LUA_TUSERDATA; } }
+        public bool IsThread { get { return Type == LuaType.LUA_TTHREAD; } }
+        public bool IsLightUserdata { get { return Type == LuaType.LUA_TLIGHTUSERDATA; } }
+        public bool IsCSharpFunction { get { return Type == LuaType.LUA_TFUNCTION && ReferenceValue is CSharpClosure; } }
+        public bool IsLuaFunction { get { return Type == LuaType.LUA_TFUNCTION && ReferenceValue is LuaClosure; } }
+        public bool IsFunction { get { return Type == LuaType.LUA_TFUNCTION; } }
 
         #endregion 类型谓词
 
         #region 其他方法
 
-        public bool IsCollectable { get { return (int)Type >= (int)LuaTypes.String; } }
+        public bool IsCollectable { get { return (int)Type >= (int)LuaType.LUA_TSTRING; } }
 
         // lua值都可以作为条件测试，只有false和nil是条件为假
         public bool IsFalse { get { return IsNil || IsBool && B == false; } }
@@ -275,7 +275,8 @@ namespace zlua.Core.ObjectModel
         public bool IsTrue { get { return !IsFalse; } }
 
         /// luaO_nilobject_; 单例
-        public static readonly LuaValue NilObject = new LuaValue { Type = LuaTypes.Nil };
+        public static readonly TValue NilObject = new TValue { Type = LuaType.LUA_TNIL };
+        internal bool i;
 
         /// luaO_str2d; 简单地包装Parse，返回成功和double
         /// src返回bool用参数返回double，我改了】他除了了x结尾的”hex const“没空研究，放弃
@@ -292,25 +293,25 @@ namespace zlua.Core.ObjectModel
         #region 重载基本方法
 
         // luaO_rawequalObj
-        public bool Equals(LuaValue other)
+        public bool Equals(TValue other)
         {
             if (Type != other.Type)
                 return false;
             else
                 switch (other.Type) {
-                    case LuaTypes.Nil:
+                    case LuaType.LUA_TNIL:
                         return true;
 
-                    case LuaTypes.Number:
+                    case LuaType.LUA_TNUMBER:
                         return I == other.I;
 
-                    case LuaTypes.Integer:
+                    case LuaType.LUA_TNUMINT:
                         return I == other.I;
 
-                    case LuaTypes.Boolean:
+                    case LuaType.LUA_TBOOLEAN:
                         return B == other.B;
 
-                    case LuaTypes.String:
+                    case LuaType.LUA_TSTRING:
                         return Str == other.Str;
 
                     default:
@@ -321,16 +322,16 @@ namespace zlua.Core.ObjectModel
 
         public override bool Equals(object obj)
         {
-            return (obj is LuaValue) && Equals(obj as LuaValue);
+            return (obj is TValue) && Equals(obj as TValue);
         }
 
         public override int GetHashCode()
         {
             switch (Type) {
-                case LuaTypes.Number: return N.GetHashCode();
-                case LuaTypes.Integer: return I.GetHashCode();
-                case LuaTypes.String: return Str.GetHashCode();
-                case LuaTypes.Boolean: return B.GetHashCode();
+                case LuaType.LUA_TNUMBER: return N.GetHashCode();
+                case LuaType.LUA_TNUMINT: return I.GetHashCode();
+                case LuaType.LUA_TSTRING: return Str.GetHashCode();
+                case LuaType.LUA_TBOOLEAN: return B.GetHashCode();
                 default:
                     return ReferenceValue.GetHashCode();
             }
@@ -340,43 +341,43 @@ namespace zlua.Core.ObjectModel
         public override string ToString()
         {
             switch (Type) {
-                case LuaTypes.None:
+                case LuaType.LUA_TNONE:
                     break;
 
-                case LuaTypes.Nil:
+                case LuaType.LUA_TNIL:
                     break;
 
-                case LuaTypes.Boolean:
+                case LuaType.LUA_TBOOLEAN:
                     break;
 
-                case LuaTypes.LightUserdata:
+                case LuaType.LUA_TLIGHTUSERDATA:
                     break;
 
-                case LuaTypes.Number:
+                case LuaType.LUA_TNUMBER:
                     break;
 
-                case LuaTypes.String:
+                case LuaType.LUA_TSTRING:
                     break;
 
-                case LuaTypes.Table:
+                case LuaType.LUA_TTABLE:
                     break;
 
-                case LuaTypes.Function:
+                case LuaType.LUA_TFUNCTION:
                     break;
 
-                case LuaTypes.Userdata:
+                case LuaType.LUA_TUSERDATA:
                     break;
 
-                case LuaTypes.Thread:
+                case LuaType.LUA_TTHREAD:
                     break;
 
-                case LuaTypes.Proto:
+                case LuaType.LUA_TPROTO:
                     break;
 
-                case LuaTypes.Upval:
+                case LuaType.Upval:
                     break;
 
-                case LuaTypes.Integer:
+                case LuaType.LUA_TNUMINT:
                     break;
             }
             return Type.ToString();

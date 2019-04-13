@@ -6,17 +6,16 @@ using System.Diagnostics;
 
 using zlua.Core.Instruction;
 using zlua.Core.Lua;
-using zlua.Core.MetaMethod;
 using zlua.Core.ObjectModel;
 
 namespace zlua.Core.VirtualMachine
 {
     internal class GlobalState
     {
-        public LuaValue registry = new LuaValue(new TTable(sizeHashTablePart: 2, sizeArrayPart: 0));
+        public TValue registry = new TValue(new Table(sizeHashTablePart: 2, sizeArrayPart: 0));
 
         //internal TThread mainThread;
-        internal TTable[] metaTableForBasicType = new TTable[(int)LuaTypes.Thread + 1];
+        internal Table[] metaTableForBasicType = new Table[(int)LuaType.LUA_TTHREAD + 1];
 
         internal TString[] metaMethodNames = new TString[(int)TMS.TM_N];
     }
@@ -24,11 +23,11 @@ namespace zlua.Core.VirtualMachine
     // lua_State
     //
     // * partial是分给lapi
-    public partial class LuaState : LuaReference
+    public partial class lua_State : LuaReference
     {
         #region 私有访问器
 
-        private List<LuaValue> Stack { get { return stack.slots; } }
+        private List<TValue> Stack { get { return stack.slots; } }
 
         /// top指向第一个可用位置，每次push时 top++ = value
         /// 几乎所有文件都要用，因为你用这个来维护栈这个行为
@@ -58,7 +57,7 @@ namespace zlua.Core.VirtualMachine
         private Stack<CallInfo> CallInfoStack { get; }
 
         /// _G
-        public LuaValue GlobalsTable { get; } = new LuaValue(new TTable(sizeHashTablePart: 2, sizeArrayPart: 0));
+        public TValue GlobalsTable { get; } = new TValue(new Table(sizeHashTablePart: 2, sizeArrayPart: 0));
 
         /// saved pc when call a function
         /// index of instruction array；因为src用指针的原因，而zlua必须同时使用codes和pc来获取指令
@@ -71,7 +70,7 @@ namespace zlua.Core.VirtualMachine
         #endregion 私有属性
 
         /// lua_newstate
-        public LuaState()
+        public lua_State()
         {
             const int BasicCiStackSize = 8;
             const int BasicStackSize = 40;
@@ -82,7 +81,7 @@ namespace zlua.Core.VirtualMachine
             CallInfoStack.Push(new CallInfo());
             stack = new LuaStack(20);
             for (int i = 0; i < BasicStackSize; i++) {
-                Stack.Add(new LuaValue());
+                Stack.Add(new TValue());
             }
             top = 0;
 
@@ -105,34 +104,34 @@ namespace zlua.Core.VirtualMachine
         // 缓存k
         //
         // 因为要写辅助方法，所以从局部变量变为字段
-        private LuaValue[] k;
+        private TValue[] k;
 
         #region 从指令取出参数的辅助方法
-        private LuaValue R(int i)
+        private TValue R(int i)
         {
             return Stack[@base + i];
         }
 
         // R(A)
-        private LuaValue RA(Bytecode i)
+        private TValue RA(Bytecode i)
         {
             return Stack[@base + (int)i.A];
         }
 
         // R(B)
-        private LuaValue RB(Bytecode i)
+        private TValue RB(Bytecode i)
         {
             return Stack[@base + (int)i.B];
         }
 
         // R(C)
-        private LuaValue RC(Bytecode i)
+        private TValue RC(Bytecode i)
         {
             return Stack[@base + (int)i.C];
         }
 
         // RK(B)
-        LuaValue RKB(Bytecode i)
+        TValue RKB(Bytecode i)
         {
             int B = (int)i.B;
             var rb = Bytecode.IsK(B) ?
@@ -142,7 +141,7 @@ namespace zlua.Core.VirtualMachine
         }
 
         // RK(C)
-        private LuaValue RKC(Bytecode instr)
+        private TValue RKC(Bytecode instr)
         {
             int C = (int)instr.C;
             var rc = Bytecode.IsK(C) ?
@@ -152,14 +151,14 @@ namespace zlua.Core.VirtualMachine
         }
 
         // UpValue[A]
-        private LuaValue UpValueA(Bytecode instr)
+        private TValue UpValueA(Bytecode instr)
         {
             var upa = cl.upvals[(int)instr.A].val;
             return upa;
         }
 
         // UpValue[B]
-        private LuaValue UpValueB(Bytecode instr)
+        private TValue UpValueB(Bytecode instr)
         {
             var upb = cl.upvals[(int)instr.B].val;
             return upb;
@@ -190,18 +189,18 @@ namespace zlua.Core.VirtualMachine
                 Bytecode instr = codes[pc++];
                 Debug.Assert(@base == ci.@base);
                 Debug.Assert(@base <= top && top < StackLastFree); //这里始终没有。
-                LuaValue ra = RA(instr);
+                TValue ra = RA(instr);
                 switch (instr.Opcode) {
                     #region 数据传输指令
                     case Opcode.OP_MOVE: {
-                            ra.TValue = RB(instr);
+                            ra.Value = RB(instr);
                             continue;
                         }
                     // A Bx	R(A) := Kst(Bx)
                     // 从常量表取出常量写入R(A)
                     case Opcode.OP_LOADK: {
-                            LuaValue rb = k[instr.Bx];
-                            ra.TValue = rb;
+                            TValue rb = k[instr.Bx];
+                            ra.Value = rb;
                             continue;
                         }
                     //case Opcode.LoadBool:
@@ -280,8 +279,8 @@ namespace zlua.Core.VirtualMachine
                     // self指令后会有一条move指令，再是一条call指令
                     case Opcode.OP_SELF: {
                             // 将obj设为f的第一个实参
-                            LuaValue rb = RB(instr);
-                            R((int)instr.A + 1).TValue = rb;
+                            TValue rb = RB(instr);
+                            R((int)instr.A + 1).Value = rb;
                             // 从obj表中查找"f"键的值作为被调用方法
                             GetTable(rb, RKC(instr), ra);
                             continue;
@@ -328,7 +327,7 @@ namespace zlua.Core.VirtualMachine
                             }
                             for (int j = 0; j < b; j++) {
                                 if (j < n) {
-                                    Stack[a + j].TValue = Stack[ci.@base - n + j];
+                                    Stack[a + j].Value = Stack[ci.@base - n + j];
                                 } else {
                                     Stack[a + j].SetNil();
                                 }
@@ -345,12 +344,12 @@ namespace zlua.Core.VirtualMachine
                     #region 闭包相关指令
                     // A B	R(A) := UpValue[B]
                     case Opcode.OP_GETUPVAL: {
-                            RA(instr).TValue = UpValueB(instr);
+                            RA(instr).Value = UpValueB(instr);
                             continue;
                         }
                     // A B	UpValue[B] := R(A)
                     case Opcode.OP_SETUPVAL: {
-                            UpValueB(instr).TValue = RA(instr);
+                            UpValueB(instr).Value = RA(instr);
                             continue;
                         }
                     // A B C	R(A) := UpValue[B][RK(C)]
@@ -358,12 +357,12 @@ namespace zlua.Core.VirtualMachine
                     case Opcode.OP_GETTABUP: {
                             var upval = UpValueA(instr);
                             var rkc = RKC(instr);
-                            ra.TValue = upval.Table.Get(rkc);
+                            ra.Value = upval.Table.Get(rkc);
                             continue;
                         }
                     // A B C	UpValue[A][RK(B)] := RK(C)
                     case Opcode.OP_SETTABUP: {
-                            UpValueA(instr).Table.Get(RKB(instr)).TValue = RKC(instr);
+                            UpValueA(instr).Table.Get(RKB(instr)).Value = RKC(instr);
                             continue;
                         }
                     // A sBx	pc+=sBx; if (A) close all upvalues >= R(A - 1)
@@ -395,7 +394,7 @@ namespace zlua.Core.VirtualMachine
                         }
                     /* float division (always with floats) */
                     case Opcode.OP_DIV: {
-                            Arith(instr, (LuaNumber a, LuaNumber b) => a / b, TMS.TM_DIV);
+                            Arith(instr, (lua_Number a, lua_Number b) => a / b, TMS.TM_DIV);
                             continue;
                         }
 
@@ -412,10 +411,10 @@ namespace zlua.Core.VirtualMachine
                             continue;
                         }
                     case Opcode.OP_UNM: {
-                            LuaValue rb = RB(instr);
-                            LuaNumber nb;
+                            TValue rb = RB(instr);
+                            lua_Number nb;
                             if (rb.IsInteger) {
-                                LuaInteger ib = rb.I;
+                                lua_Integer ib = rb.I;
                                 ra.I = -ib;
                             } else if (tonumber(rb, out nb)) {
                                 ra.N = -nb;
@@ -448,8 +447,8 @@ namespace zlua.Core.VirtualMachine
                             continue;
                         }
                     case Opcode.OP_BNOT: {
-                            LuaValue rb = RB(instr);
-                            LuaInteger ib;
+                            TValue rb = RB(instr);
+                            lua_Integer ib;
                             if (tointeger(rb, out ib)) {
                                 ra.I = ~ib;
                             } else {
@@ -459,11 +458,17 @@ namespace zlua.Core.VirtualMachine
                         }
                     #endregion
                     #region 比较运算符
-
+                    case Opcode.OP_EQ: {
+                            Relation(instr, EqualVal);
+                            continue;
+                        }
+                    case Opcode.OP_LT: {
+                            //Relation(instr,)
+                        }
                     #endregion
                     #region 逻辑运算符
                     case Opcode.OP_NOT: {
-                            LuaValue rb = RB(instr);
+                            TValue rb = RB(instr);
                             bool res = rb.IsFalse;  /* next assignment may change this value */
                             ra.B = res;
                             continue;
@@ -482,28 +487,18 @@ namespace zlua.Core.VirtualMachine
                         }
                     #endregion
                     case Opcode.OP_LEN: {
-                            //LuaValue rb = RB(instr);
-                            //switch (rb.Type) {
-                            //    case LuaType.Table:
-                            //        ra.N = rb.Table.GetN();
-                            //        break;
-
-                            //    case LuaType.String:
-                            //        ra.N = rb.TStr.Len;
-                            //        break;
-
-                            //    default:
-                            //        if (!CallBinaryMetamethod(rb, LuaValue.NilObject, ra, MMType.Len))
-                            //            throw new ArithmeticException("operand cannot be lened");
-                            //        break;
-                            //}
+                            objlen(ra, RB(instr));
                             continue;
                         }
-                    case Opcode.OP_CONCAT: { // RA = String.Join(RB~RC)
-                            //int b = instr.B;
-                            //int c = instr.C;
-                            //Concat(c - b + 1, c);
-                            //RA(instr).TVal = this[this.BaseIndex + b];
+                    case Opcode.OP_CONCAT: {
+                            int b = (int)instr.B;
+                            int c = (int)instr.C;
+                            TValue rb;
+                            top = @base + c + 1;  /* mark the end of concat operands */
+                            concat(c - b + 1);
+                            ra = RA(instr);  /* 'luaV_concat' may invoke TMs and move the stack */
+                            rb = Stack[@base + b];
+                            ra.Value = rb;
                             continue;
                         }
                     default:
@@ -519,7 +514,7 @@ namespace zlua.Core.VirtualMachine
         internal void Alloc(int size)
         {
             for (int i = Stack.Count; i < size; i++)
-                Stack.Add(new LuaValue());
+                Stack.Add(new TValue());
         }
 
         #region other things
@@ -529,59 +524,26 @@ namespace zlua.Core.VirtualMachine
         /// <summary>
         /// luaV_tostring
         /// </summary>
-        public bool ToString(LuaValue obj)
+        public bool ToString(TValue obj)
         {
             return false;
         }
 
-        /// <summary>
-        /// luaV_concat, RA = String.Join(RB~RC)
-        /// </summary>
-        public void Concat(int total, int last)
-        {
-        }
 
-        /// <summary>
-        /// equalobj
-        /// 实现决策】不调用元方法的rawequal作为Equals重载，这个是调用的，单独写一个函数
-        /// </summary>
-        public bool EqualObj(LuaValue o1, LuaValue o2) => (o1.Type == o2.Type) && EqualVal(o1, o2);
-
-        /// <summary>
-        /// luaV_equalval
-        /// </summary>
-        public bool EqualVal(LuaValue t1, LuaValue t2)
-        {
-            Debug.Assert(t1.Type == t2.Type);
-            switch (t1.Type) {
-                case LuaTypes.Nil: return true;
-                case LuaTypes.Number: return t1.N == t2.N;
-                case LuaTypes.Boolean: return t1.B == t2.B; //为什么cast多余，不应该啊。要么得改成字段访问
-                case LuaTypes.Userdata: return false;//TODO 有meta方法
-                case LuaTypes.Table: {
-                        if (t1.Table == t2.Table)
-                            return true;
-                        return false;//TODO metatable compare
-                    }
-                default:
-                    return t1.ReferenceValue == t2.ReferenceValue;
-                    //TODO metatable compare???
-            }
-        }
 
         /// <summary>
         /// luaV_gettable
         /// </summary>
-        public void GetTable(LuaValue t, LuaValue key, LuaValue val)
+        public void GetTable(TValue t, TValue key, TValue val)
         {
             //TODO, 要无限查元表。
         }
 
-        public void SetTable(LuaValue t, LuaValue key, LuaValue val)
+        public void SetTable(TValue t, TValue key, TValue val)
         {
         }
 
-        public bool LessThan(LuaValue lhs, LuaValue rhs)
+        public bool LessThan(TValue lhs, TValue rhs)
         {
             if (lhs.Type != rhs.Type) throw new Exception();
             if (lhs.IsNumber) return lhs.N < rhs.N;
@@ -589,40 +551,7 @@ namespace zlua.Core.VirtualMachine
             else return false; //TODO 调用meta方法
         }
 
-        /// <summary>
-        /// Arith; call metamethod
-        /// 实现决策】src为什么使用亢余的写法。莫名其妙，我把cast str到num的部分转移到execute里了，这个函数删除，直接使用callTMmeta
-        /// </summary>
-        //void Arith(TValue ra, TValue rb, TValue rc, MetamethodTypes metamethodType)
-        //{
-        //}
 
-        /// call_binTM; result = __add(lhs, rhs); __add从lhs和rhs的元表查找出，如果都没找到返回false
-        private bool trybinTM(LuaValue lhs, LuaValue rhs, LuaValue result, TMS metamethodType)
-        {
-            result = null;
-            LuaValue metamethod = LTm.GetMetamethod(this, lhs, metamethodType);
-            if (metamethod.IsNil)
-                metamethod = LTm.GetMetamethod(this, rhs, metamethodType);
-            if (metamethod.IsNil)
-                return false;
-            result.TValue = CallMetamethod(metamethod, lhs, rhs);
-            return true;
-        }
-
-        /// <summary>
-        /// callTMres
-        /// `metamethod(lhs, rhs)，使用lua通用调用协议，可以去Ido.Call的文档看；调用后top恢复到原处，就像没有调用过一样
-        /// </summary>
-        private LuaValue CallMetamethod(LuaValue metamethod, LuaValue lhs, LuaValue rhs)
-        {
-            /* push func and 2 args*/
-            Stack[top++].TValue = metamethod;
-            Stack[top++].TValue = lhs;
-            Stack[top++].TValue = rhs;
-            Call(top - 3);
-            return Stack[--top]; //TODO call做了什么，result放在哪里
-        }
 
         #endregion other things
 
@@ -654,14 +583,14 @@ namespace zlua.Core.VirtualMachine
     // * 栈索引参见p54
     internal class LuaStack
     {
-        public List<LuaValue> slots;
+        public List<TValue> slots;
         public int top;
 
         public LuaStack(int size)
         {
-            slots = new List<LuaValue>(size);
+            slots = new List<TValue>(size);
             for (int i = 0; i < size; i++) {
-                slots.Add(new LuaValue());
+                slots.Add(new TValue());
             }
             top = 0;
         }
@@ -671,12 +600,12 @@ namespace zlua.Core.VirtualMachine
         {
             int free = slots.Count - top;
             for (int i = free; i < n; i++) {
-                slots.Add(new LuaValue());
+                slots.Add(new TValue());
             }
         }
 
         // 压栈，溢出时抛出异常
-        public void push(LuaValue val)
+        public void push(TValue val)
         {
             if (top == slots.Count) {
                 throw new Exception("stack overflow");
@@ -687,14 +616,14 @@ namespace zlua.Core.VirtualMachine
         }
 
         // 弹栈，若栈为空，抛出异常
-        public LuaValue pop()
+        public TValue pop()
         {
             if (top < 1) {
                 throw new Exception("stack underflow");
             } else {
                 top--;
                 var val = slots[top];
-                slots[top] = new LuaValue();
+                slots[top] = new TValue();
                 return val;
             }
         }
@@ -717,18 +646,18 @@ namespace zlua.Core.VirtualMachine
         }
 
         // 取值，索引无效返回nil
-        public LuaValue get(int idx)
+        public TValue get(int idx)
         {
             var absIdx = absIndex(idx);
             if (absIdx > 0 && absIdx <= top) {
                 return slots[absIdx - 1];
             } else {
-                return new LuaValue();
+                return new TValue();
             }
         }
 
         // 写值，索引无效则抛出异常
-        public void set(int idx, LuaValue val)
+        public void set(int idx, TValue val)
         {
             var absIdx = absIndex(idx);
             if (absIdx > 0 && absIdx <= top) {
@@ -742,7 +671,7 @@ namespace zlua.Core.VirtualMachine
                 // 然而b=1，a=b之后a is b，所以我就想不通
                 // 不管，拷贝一定是对的
                 //slots[absIdx - 1] = val;
-                slots[absIdx - 1].TValue = val;
+                slots[absIdx - 1].Value = val;
             } else {
                 throw new Exception("invalid index");
             }

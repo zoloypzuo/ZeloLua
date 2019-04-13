@@ -44,8 +44,8 @@ namespace zlua.Core.Undumper
         private const uint INSTRUCTION_SIZE = 4;
         private const uint LUA_INTEGER_SIZE = 8;
         private const uint LUA_NUMBER_SIZE = 8;
-        private static readonly LuaInteger LUAC_INT = 0x5678;
-        private static readonly LuaNumber LUAC_NUM = 370.5f;
+        private static readonly lua_Integer LUAC_INT = 0x5678;
+        private static readonly lua_Number LUAC_NUM = 370.5f;
 
         #endregion 用于校验的常量
 
@@ -110,12 +110,12 @@ namespace zlua.Core.Undumper
             return new String(reader.ReadChars(size - 1));
         }
 
-        private static LuaInteger ReadLuaInteger(BinaryReader reader)
+        private static lua_Integer ReadLuaInteger(BinaryReader reader)
         {
             return reader.ReadInt64();
         }
 
-        private static LuaNumber ReadLuaNumber(BinaryReader reader)
+        private static lua_Number ReadLuaNumber(BinaryReader reader)
         {
             return reader.ReadDouble();
         }
@@ -255,35 +255,35 @@ namespace zlua.Core.Undumper
             return upvals;
         }
 
-        private static LuaValue[] ReadConstants(BinaryReader reader)
+        private static TValue[] ReadConstants(BinaryReader reader)
         {
-            var k = new LuaValue[reader.ReadUInt32()];
+            var k = new TValue[reader.ReadUInt32()];
             for (int i = 0; i < k.Length; i++) {
                 k[i] = ReadConstant(reader);
             }
             return k;
         }
 
-        private static LuaValue ReadConstant(BinaryReader reader)
+        private static TValue ReadConstant(BinaryReader reader)
         {
             switch (reader.ReadByte()) {
                 case TAG_NIL:
-                    return new LuaValue();
+                    return new TValue();
 
                 case TAG_BOOLEAN:
-                    return new LuaValue(reader.ReadByte() != 0);
+                    return new TValue(reader.ReadByte() != 0);
 
                 case TAG_INTEGER:
-                    return new LuaValue(ReadLuaInteger(reader));
+                    return new TValue(ReadLuaInteger(reader));
 
                 case TAG_NUMBER:
-                    return new LuaValue(ReadLuaNumber(reader));
+                    return new TValue(ReadLuaNumber(reader));
 
                 case TAG_SHORT_STR:
-                    return new LuaValue(ReadString(reader));
+                    return new TValue(ReadString(reader));
 
                 case TAG_LONG_STR:
-                    return new LuaValue(ReadString(reader));
+                    return new TValue(ReadString(reader));
 
                 default:
                     throw new UndumperException("corrupted");

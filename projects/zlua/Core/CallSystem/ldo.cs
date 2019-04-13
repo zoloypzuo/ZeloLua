@@ -4,12 +4,11 @@ using System;
 using System.Diagnostics;
 
 using zlua.Core.Configuration;
-using zlua.Core.MetaMethod;
 using zlua.Core.ObjectModel;
 
 namespace zlua.Core.VirtualMachine
 {
-    public partial class LuaState
+    public partial class lua_State
     {
         // luaD_call
         //
@@ -54,7 +53,7 @@ namespace zlua.Core.VirtualMachine
             // * 根据函数参数个数计算待调用函数的base和top值，存入新的CallInfo中
             // * 切换到新的CallInfo
             //获取函数
-            LuaValue funcValue = Stack[funcIndex];
+            TValue funcValue = Stack[funcIndex];
             if (!funcValue.IsFunction) {
                 funcValue = TryMetaCall(funcIndex);
             }
@@ -103,22 +102,22 @@ namespace zlua.Core.VirtualMachine
         {
             CallInfo ci = CallInfoStack.Pop();
             pc = this.ci.savedpc;
-            Stack[ci.funcIndex].TValue = Stack[@base + resultOffset];
+            Stack[ci.funcIndex].Value = Stack[@base + resultOffset];
         }
 
         /// <summary>
         /// tryfuncTM; 尝试返回元方法__call
         /// 我们暂时不管metacall
         /// </summary>
-        private LuaValue TryMetaCall(int funcIndex)
+        private TValue TryMetaCall(int funcIndex)
         {
-            LuaValue metamethod = LTm.GetMetamethod(this, Stack[funcIndex], TMS.Call);
+            TValue metamethod =GetMetamethod(Stack[funcIndex], TMS.TM_CALL);
             Debug.Assert(metamethod.IsFunction);
             /* Open a hole inside the stack at `func' */
             for (int i = top; i > funcIndex; i--)
-                Stack[i].TValue = Stack[i - 1];
+                Stack[i].Value = Stack[i - 1];
             top++;
-            Stack[funcIndex].TValue = metamethod;/* tag method is the new function to be called */
+            Stack[funcIndex].Value = metamethod;/* tag method is the new function to be called */
             return Stack[funcIndex];
         }
     }

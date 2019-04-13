@@ -17,7 +17,7 @@ using zlua.Core.ObjectModel;
 // TODO namespace和。。还是有点。。爱
 namespace zlua.Core.VirtualMachine
 {
-    public partial class LuaState : LuaReference
+    public partial class lua_State : LuaReference
     {
         public int GetTop()
         {
@@ -115,7 +115,7 @@ namespace zlua.Core.VirtualMachine
                 }
             } else if (n < 0) {
                 for (int i = 0; i > n; i--) {
-                    stack.push(new LuaValue());
+                    stack.push(new TValue());
                 }
             }
         }
@@ -124,57 +124,57 @@ namespace zlua.Core.VirtualMachine
 
         public void PushNil()
         {
-            stack.push(new LuaValue());
+            stack.push(new TValue());
         }
 
         public void PushBoolean(bool b)
         {
-            stack.push(new LuaValue(b));
+            stack.push(new TValue(b));
         }
 
-        public void PushInteger(LuaInteger i)
+        public void PushInteger(lua_Integer i)
         {
-            stack.push(new LuaValue(i));
+            stack.push(new TValue(i));
         }
 
         public void PushNumber(double n)
         {
-            stack.push(new LuaValue(n));
+            stack.push(new TValue(n));
         }
 
         public void PushString(string s)
         {
-            stack.push(new LuaValue(s));
+            stack.push(new TValue(s));
         }
 
         #endregion Push*方法 将某一类型的luaValue压栈
 
         #region Access*方法 从栈获取值
 
-        public string TypeName(LuaTypes type)
+        public string TypeName(LuaType type)
         {
             return type.ToString();
         }
 
         // 无效索引返回LUA_TNONE
-        public LuaTypes Type(int idx)
+        public LuaType Type(int idx)
         {
             if (stack.isValid(idx)) {
                 var val = stack.get(idx);
                 return val.Type;
             } else {
-                return LuaTypes.None;
+                return LuaType.LUA_TNONE;
             }
         }
 
         public bool IsNone(int idx)
         {
-            return Type(idx) == LuaTypes.None;
+            return Type(idx) == LuaType.LUA_TNONE;
         }
 
         public bool IsNil(int idx)
         {
-            return Type(idx) == LuaTypes.Nil;
+            return Type(idx) == LuaType.LUA_TNIL;
         }
 
         public bool IsNoneOrNil(int idx)
@@ -184,13 +184,13 @@ namespace zlua.Core.VirtualMachine
 
         public bool IsBoolean(int idx)
         {
-            return Type(idx) == LuaTypes.Boolean;
+            return Type(idx) == LuaType.LUA_TBOOLEAN;
         }
 
         // 注意lua类型转换规格
         public bool IsString(int idx)
         {
-            return Type(idx) == LuaTypes.Number || Type(idx) == LuaTypes.String;
+            return Type(idx) == LuaType.LUA_TNUMBER || Type(idx) == LuaType.LUA_TSTRING;
         }
 
         public bool IsNumber(int idx)
@@ -201,7 +201,7 @@ namespace zlua.Core.VirtualMachine
 
         public bool IsInteger(int idx)
         {
-            return Type(idx) == LuaTypes.Number;
+            return Type(idx) == LuaType.LUA_TNUMBER;
         }
 
         public bool ToBoolean(int idx)
@@ -209,13 +209,13 @@ namespace zlua.Core.VirtualMachine
             return convertToBoolean(stack.get(idx));
         }
 
-        private bool convertToBoolean(LuaValue luaValue)
+        private bool convertToBoolean(TValue luaValue)
         {
             switch (luaValue.Type) {
-                case LuaTypes.Nil:
+                case LuaType.LUA_TNIL:
                     return false;
 
-                case LuaTypes.Boolean:
+                case LuaType.LUA_TBOOLEAN:
                     return luaValue.B;
 
                 default:

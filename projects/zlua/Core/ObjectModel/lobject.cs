@@ -56,20 +56,20 @@ namespace zlua.Core.ObjectModel
     //TODO
     public class Userdata : LuaReference
     {
-        public TTable metaTable;
-        public TTable env;
+        public Table metaTable;
+        public Table env;
     }
 
-    public class TTable : LuaReference, IEnumerable<KeyValuePair<LuaValue, LuaValue>>
+    public class Table : LuaReference, IEnumerable<KeyValuePair<TValue, TValue>>
     {
-        public TTable metatable;
-        private Dictionary<LuaValue, LuaValue> hashTablePart;
-        private List<LuaValue> arrayPart;
+        public Table metatable;
+        private Dictionary<TValue, TValue> hashTablePart;
+        private List<TValue> arrayPart;
 
-        public TTable(int sizeArrayPart, int sizeHashTablePart)
+        public Table(int sizeArrayPart, int sizeHashTablePart)
         {
-            hashTablePart = new Dictionary<LuaValue, LuaValue>(sizeHashTablePart);
-            arrayPart = new List<LuaValue>(sizeArrayPart);
+            hashTablePart = new Dictionary<TValue, TValue>(sizeHashTablePart);
+            arrayPart = new List<TValue>(sizeArrayPart);
         }
 
         private static int Double2Integer(double d)
@@ -78,14 +78,14 @@ namespace zlua.Core.ObjectModel
         /// <summary>
         /// luaH_get
         /// </summary>
-        public LuaValue Get(LuaValue key)
+        public TValue Get(TValue key)
         {
             switch (key.Type) {
-                case LuaTypes.Nil: return LuaValue.NilObject;
-                case LuaTypes.String:
+                case LuaType.LUA_TNIL: return TValue.NilObject;
+                case LuaType.LUA_TSTRING:
                     return GetByStr(key.TStr);
 
-                case LuaTypes.Number:
+                case LuaType.LUA_TNUMBER:
                     double n = key.N;
                     int k = Double2Integer(n);
                     if (k == n)
@@ -94,7 +94,7 @@ namespace zlua.Core.ObjectModel
                 default:
                     if (hashTablePart.ContainsKey(key))
                         return hashTablePart[key];
-                    return LuaValue.NilObject;
+                    return TValue.NilObject;
             }
         }
 
@@ -102,60 +102,60 @@ namespace zlua.Core.ObjectModel
         /// luaH_set, return tvalue found with `key,
         /// else create a new pair and return the new tvalue
         /// </summary>
-        public LuaValue Set(LuaState L, LuaValue key)
+        public TValue Set(lua_State L, TValue key)
         {
             var tval = Get(key);
-            if (tval != LuaValue.NilObject) return tval;
+            if (tval != TValue.NilObject) return tval;
             else {
                 //Debug.Assert(key.IsNil, "table index is nil");
                 //Debug.Assert(key.IsNumber && Double.IsNaN(key.N), "table index is NaN");
-                var new_val = new LuaValue();
+                var new_val = new TValue();
                 hashTablePart[key] = new_val;
                 return new_val;
             }
         }
 
-        public LuaValue GetByStr(TString key)
+        public TValue GetByStr(TString key)
         {
-            var k = new LuaValue(key);
+            var k = new TValue(key);
             if (hashTablePart.ContainsKey(k))
                 return hashTablePart[k];
-            return LuaValue.NilObject;
+            return TValue.NilObject;
         }
 
         /// <summary>
         /// luaH_getnum
         /// </summary>
-        public LuaValue GetByInt(LuaInteger key)
+        public TValue GetByInt(lua_Integer key)
         {
             if (key - 1 < arrayPart.Count) return arrayPart[(int)key - 1];
             else {
                 double k = (double)key;
-                if (hashTablePart.ContainsKey(new LuaValue(key)))
-                    return hashTablePart[new LuaValue(k)];
-                return LuaValue.NilObject;
+                if (hashTablePart.ContainsKey(new TValue(key)))
+                    return hashTablePart[new TValue(k)];
+                return TValue.NilObject;
             }
         }
 
-        private LuaValue SetStr(TString key)
+        private TValue SetStr(TString key)
         {
             var tval = GetByStr(key);
-            if (tval != LuaValue.NilObject)
+            if (tval != TValue.NilObject)
                 return tval;
             else {
-                var new_val = new LuaValue();
-                hashTablePart[new LuaValue(key)] = new_val;
+                var new_val = new TValue();
+                hashTablePart[new TValue(key)] = new_val;
                 return new_val;
             }
         }
 
-        private LuaValue SetInt(LuaInteger key)
+        private TValue SetInt(lua_Integer key)
         {
             var tval = GetByInt(key);
-            if (tval != LuaValue.NilObject) return tval;
+            if (tval != TValue.NilObject) return tval;
             else {
-                var new_val = new LuaValue();
-                hashTablePart[new LuaValue(key)] = new_val;
+                var new_val = new TValue();
+                hashTablePart[new TValue(key)] = new_val;
                 return new_val; //TODO 这里是错的。应该有分配到arraypart的逻辑
             }
         }
@@ -169,11 +169,11 @@ namespace zlua.Core.ObjectModel
             return 1;
         }
 
-        IEnumerator<KeyValuePair<LuaValue, LuaValue>> IEnumerable<KeyValuePair<LuaValue, LuaValue>>.GetEnumerator()
+        IEnumerator<KeyValuePair<TValue, TValue>> IEnumerable<KeyValuePair<TValue, TValue>>.GetEnumerator()
         {
-            LuaInteger index = 0;
+            lua_Integer index = 0;
             foreach (var item in arrayPart) {
-                yield return new KeyValuePair<LuaValue, LuaValue>(new LuaValue(++index), item);
+                yield return new KeyValuePair<TValue, TValue>(new TValue(++index), item);
             }
             foreach (var item in hashTablePart) {
                 yield return item;
@@ -188,7 +188,7 @@ namespace zlua.Core.ObjectModel
 
     internal class Upvalue : LuaReference
     {
-        public LuaValue val;
+        public TValue val;
         public byte Instack;
         public byte Idx;
     }

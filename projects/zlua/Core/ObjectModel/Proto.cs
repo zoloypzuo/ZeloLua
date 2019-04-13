@@ -34,7 +34,7 @@ namespace zlua.Core.ObjectModel
         public Bytecode[] Code;
 
         // 常量表
-        public LuaValue[] Constants;
+        public TValue[] Constants;
 
         // Upvalue表
         public Upvalue[] Upvalues;

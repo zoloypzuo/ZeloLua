@@ -1,14 +1,14 @@
 ﻿using System.Collections.Generic;
 
-using static zlua.Core.VirtualMachine.LuaState;
+using static zlua.Core.VirtualMachine.lua_State;
 
 namespace zlua.Core.ObjectModel
 {
     public class Closure : LuaReference
     {
-        public TTable env;
+        public Table env;
 
-        public Closure(TTable env)
+        public Closure(Table env)
         {
             this.env = env;
         }
@@ -22,7 +22,7 @@ namespace zlua.Core.ObjectModel
         public int NumUpvals { get { return upvals.Count; } }
 
         // luaF_newLclosure
-        public LuaClosure(TTable env, int nUpvals, Proto p) : base(env)
+        public LuaClosure(Table env, int nUpvals, Proto p) : base(env)
         {
             this.p = p;
             upvals = new List<Upvalue>(nUpvals);
@@ -35,7 +35,7 @@ namespace zlua.Core.ObjectModel
     internal class CSharpClosure : Closure
     {
         public CSharpFunction f;
-        public List<LuaValue> upvals;
+        public List<TValue> upvals;
 
         public int NUpvals {
             get {

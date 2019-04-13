@@ -27,7 +27,7 @@ namespace zlua.Core.VirtualMachine
         }
     }
 
-    public partial class LuaState
+    public partial class lua_State
     {
         public const string Version = "zlua v0.1 based on clua5.3";
 
@@ -66,8 +66,8 @@ namespace zlua.Core.VirtualMachine
              */
             LuaClosure cl = new LuaClosure(null, 1, p);
             if (p.Upvalues.Length > 0) {
-                var env = new TTable(1, 1);
-                env.Set(this, new LuaValue("print")).Cl = new CSharpClosure()
+                var env = new Table(1, 1);
+                env.Set(this, new TValue("print")).Cl = new CSharpClosure()
                 {
                     f = (L) =>
                     {
@@ -77,10 +77,10 @@ namespace zlua.Core.VirtualMachine
                 };
                 cl.upvals.Add(new Upvalue()
                 {
-                    val = new LuaValue(env)
+                    val = new TValue(env)
                 });
             }
-            stack.push(new LuaValue(cl));
+            stack.push(new TValue(cl));
         }
 
         public void dostring(string chunk)
@@ -108,7 +108,7 @@ namespace zlua.Core.VirtualMachine
         }
 
         /// 基于L.top，压函数，压args，返回1个值
-        public delegate void CSharpFunction(LuaState L);
+        public delegate void CSharpFunction(lua_State L);
 
 
         private Proto DoInput(string chunk, string chunkName)

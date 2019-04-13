@@ -5,16 +5,16 @@ namespace zlua.Core.Lua
     // lua整数类型
     //
     // 不支持配置成比如int32
-    public struct LuaInteger : IEquatable<LuaInteger>
+    public struct lua_Integer : IEquatable<lua_Integer>
     {
         public Int64 Value { get; set; }
 
         public override bool Equals(object obj)
         {
-            return obj is LuaInteger && Equals((LuaInteger)obj);
+            return obj is lua_Integer && Equals((lua_Integer)obj);
         }
 
-        public bool Equals(LuaInteger other)
+        public bool Equals(lua_Integer other)
         {
             return Value == other.Value;
         }
@@ -32,33 +32,33 @@ namespace zlua.Core.Lua
             return Value.ToString();
         }
 
-        public static bool operator ==(LuaInteger i1, LuaInteger i2)
+        public static bool operator ==(lua_Integer i1, lua_Integer i2)
         {
             return i1.Equals(i2);
         }
 
-        public static bool operator !=(LuaInteger i1, LuaInteger i2)
+        public static bool operator !=(lua_Integer i1, lua_Integer i2)
         {
             return !i1.Equals(i2);
         }
 
-        public static implicit operator LuaInteger(Int64 i)
+        public static implicit operator lua_Integer(Int64 i)
         {
-            return new LuaInteger { Value = i };
+            return new lua_Integer { Value = i };
         }
 
-        public static implicit operator Int64(LuaInteger i)
+        public static implicit operator Int64(lua_Integer i)
         {
             return i.Value;
         }
 
-        public static explicit operator LuaInteger(LuaNumber n)
+        public static explicit operator lua_Integer(lua_Number n)
         {
             return (Int64)n;
         }
 
         // TODO，先进行词法验证，luanumber也是，lua和c#标准不同
-        public static bool TryParse(string s, out LuaInteger i)
+        public static bool TryParse(string s, out lua_Integer i)
         {
             Int64 outI;
             bool b;
