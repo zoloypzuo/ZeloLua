@@ -133,6 +133,16 @@ namespace zlua.Core.VirtualMachine
             return Stack[@base + (int)i.C];
         }
 
+        // RK(B)
+        LuaValue RKB(Bytecode i)
+        {
+            int B = (int)i.B;
+            var rb = Bytecode.IsK(B) ?
+                k[Bytecode.IndexK(B)] :
+                Stack[@base + B];
+            return rb;
+        }
+
         // RK(C)
         private LuaValue RKC(Bytecode instr)
         {
@@ -195,14 +205,7 @@ namespace zlua.Core.VirtualMachine
                             ra.TValue = rb;
                             continue;
                         }
-                    // A B C	R(A) := UpValue[B][RK(C)]
-                    // UpValue[B]是一个表，RK(C)取得常量，再查表，将结果写入R(A)
-                    case Opcode.OP_GETTABUP: {
-                            var upval = UpValueA(instr);
-                            var rkc = RKC(instr);
-                            ra.TValue = upval.Table.Get(rkc);
-                            continue;
-                        }
+                    #region 函数相关指令
                     // A B C	R(A), ... ,R(A+C-2) := R(A)(R(A+1), ... ,R(A+B-1))
                     // A指定被调用函数对象的寄存器索引
                     // A后面紧跟实参列表，实参个数为B
@@ -312,11 +315,45 @@ namespace zlua.Core.VirtualMachine
                             // TODO clua太多了，书上没讲
                             continue;
                         }
+                    #endregion
+                    #region 闭包相关指令
                     // A B	R(A) := UpValue[B]
                     case Opcode.OP_GETUPVAL: {
                             RA(instr).TValue = UpValueB(instr);
                             continue;
                         }
+                    // A B	UpValue[B] := R(A)
+                    case Opcode.OP_SETUPVAL: {
+                            UpValueB(instr).TValue = RA(instr);
+                            continue;
+                        }
+                    // A B C	R(A) := UpValue[B][RK(C)]
+                    // UpValue[B]是一个表，RK(C)取得常量，再查表，将结果写入R(A)
+                    case Opcode.OP_GETTABUP: {
+                            var upval = UpValueA(instr);
+                            var rkc = RKC(instr);
+                            ra.TValue = upval.Table.Get(rkc);
+                            continue;
+                        }
+                    // A B C	UpValue[A][RK(B)] := RK(C)
+                    case Opcode.OP_SETTABUP: {
+                            UpValueA(instr).Table.Get(RKB(instr)).TValue = RKC(instr);
+                            continue;
+                        }
+                    // A sBx	pc+=sBx; if (A) close all upvalues >= R(A - 1)
+                    // 除了基本的跳转功能外，jmp指令兼顾闭合处于开启状态的upvalue
+                    // 被捕获的变量离开作用域时，编译器会生成一条jmp a 0指令来闭合该变量
+                    // lua5.1只有跳转功能
+                    // 我觉得生成单独的close比较好
+                    case Opcode.OP_JMP: {
+                            pc += instr.SignedBx;
+                            if (instr.A != 0) {
+                                // luaF_close(L, ci->u.l.base + a - 1);
+                            }
+                            continue;
+                        }
+
+                    #endregion
 
                     //case Opcode.LoadBool:
                     //    ra.B = Convert.ToBoolean(instr.B);
@@ -328,11 +365,6 @@ namespace zlua.Core.VirtualMachine
                     //        do {
                     //            R(b--).SetNil();
                     //        } while (b >= a);
-                    //        continue;
-                    //    }
-                    //case Opcode.OP_GETUPVAL: {
-                    //        int b = instr.B;
-                    //        ra.TVal = cl.upvals[b].val;
                     //        continue;
                     //    }
                     //case Opcode.GetGlobal: {
@@ -349,11 +381,6 @@ namespace zlua.Core.VirtualMachine
                     //    Debug.Assert(KBx(instr).IsString);
                     //    SetTable((LuaValue)cl.env, KBx(instr), ra);
                     //    continue;
-                    //case Opcode.OP_SETUPVAL: {
-                    //        Upvalue upval = cl.upvals[instr.B];
-                    //        upval.val.TVal = ra;
-                    //        continue;
-                    //    }
                     case Opcode.OP_SETTABLE:
                         throw new NotImplementedException();
                         //SetTable(ra, RKB(instr), RKC(instr));
