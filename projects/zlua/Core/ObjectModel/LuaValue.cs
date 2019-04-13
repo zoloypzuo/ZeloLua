@@ -268,18 +268,23 @@ namespace zlua.Core.ObjectModel
 
         public bool IsCollectable { get { return (int)Type >= (int)LuaTypes.String; } }
 
+        // lua值都可以作为条件测试，只有false和nil是条件为假
         public bool IsFalse { get { return IsNil || IsBool && B == false; } }
+
+        // lua值都可以作为条件测试，只有false和nil是条件为假
+        public bool IsTrue { get { return !IsFalse; } }
 
         /// luaO_nilobject_; 单例
         public static readonly LuaValue NilObject = new LuaValue { Type = LuaTypes.Nil };
 
         /// luaO_str2d; 简单地包装Parse，返回成功和double
         /// src返回bool用参数返回double，我改了】他除了了x结尾的”hex const“没空研究，放弃
-        public static double Str2Num(string s, out bool canBeConvertedToNum)
+        public static bool Str2Num(string s, out double n)
         {
-            double _ret;
-            canBeConvertedToNum = Double.TryParse(s, out _ret);
-            return _ret;
+            // 类似于这种地方，就暴露了LuaNumber是double
+            // 然而这是没办法的。。
+            // out LuaNumber时无法隐式转换，所以此函数参数使用out double，为了方便
+            return Double.TryParse(s,out n);
         }
 
         #endregion 其他方法

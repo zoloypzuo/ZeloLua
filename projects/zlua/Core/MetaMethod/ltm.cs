@@ -18,7 +18,7 @@ namespace zlua.Core.MetaMethod
         /// luaT_gettmbyobj; get metamethod from `obj，
         /// obj没有元表或没有该元方法返回nilobject；enum和string一一对应，这里从enum开始
         /// </summary>
-        public static LuaValue GetMetamethod(this LuaState L, LuaValue obj, MMType metamethodType)
+        public static LuaValue GetMetamethod(this LuaState L, LuaValue obj, TMS metamethodType)
         {
             TTable metatable;
             switch (obj.Type) {
@@ -40,25 +40,36 @@ namespace zlua.Core.MetaMethod
         }
     }
 
-    internal enum MMType
+    /*
+    * WARNING: if you change the order of this enumeration,
+    * grep "ORDER TM" and "ORDER OP"
+    */
+    enum TMS
     {
-        Index,
-        NewIndex,
-        GC,
-        Mode,
-        Eq,  /* last tag method with `fast' access */
-        Add,
-        Sub,
-        Mul,
-        Div,
-        Mod,
-        Pow,
-        Unm,
-        Len,
-        Lt,
-        Le,
-        Concat,
-        Call,
-        N     /* number of elements in the enum */ //仅用于标记大小。
+        TM_INDEX,
+        TM_NEWINDEX,
+        TM_GC,
+        TM_MODE,
+        TM_LEN,
+        TM_EQ,  /* last tag method with fast access */
+        TM_ADD,
+        TM_SUB,
+        TM_MUL,
+        TM_MOD,
+        TM_POW,
+        TM_DIV,
+        TM_IDIV,
+        TM_BAND,
+        TM_BOR,
+        TM_BXOR,
+        TM_SHL,
+        TM_SHR,
+        TM_UNM,
+        TM_BNOT,
+        TM_LT,
+        TM_LE,
+        TM_CONCAT,
+        TM_CALL,
+        TM_N        /* number of elements in the enum */
     }
 }

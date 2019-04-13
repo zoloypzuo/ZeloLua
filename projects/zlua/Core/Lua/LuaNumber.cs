@@ -1,4 +1,5 @@
 ﻿using System;
+using zlua.Core.ObjectModel;
 
 namespace zlua.Core.Lua
 {
@@ -7,7 +8,7 @@ namespace zlua.Core.Lua
     // 不支持配置成float
     public struct LuaNumber : IEquatable<LuaNumber>
     {
-        public double Value { get; private set; }
+        public double Value { get; set; }
 
         public override bool Equals(object obj)
         {
@@ -50,6 +51,29 @@ namespace zlua.Core.Lua
         public static implicit operator double(LuaNumber n)
         {
             return new LuaNumber { Value = n };
+        }
+
+        //public static explicit operator LuaNumber(LuaIn n)
+        //{
+        //    return (Int64)n;
+        //}
+
+        public static bool ToFloat(LuaValue val)
+        {
+            //switch (val.Type) {
+            //    case LuaTypes.Number:return val.N;
+            //    default:
+            //}
+            return false;
+        }
+
+        public static bool TryParse(string s, out LuaNumber n)
+        {
+            double outN;
+            bool b;
+            b = Double.TryParse(s, out outN);
+            n = outN;
+            return b;
         }
     }
 }

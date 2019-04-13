@@ -7,7 +7,7 @@ namespace zlua.Core.Lua
     // 不支持配置成比如int32
     public struct LuaInteger : IEquatable<LuaInteger>
     {
-        public Int64 Value { get; private set; }
+        public Int64 Value { get; set; }
 
         public override bool Equals(object obj)
         {
@@ -50,6 +50,21 @@ namespace zlua.Core.Lua
         public static implicit operator Int64(LuaInteger i)
         {
             return i.Value;
+        }
+
+        public static explicit operator LuaInteger(LuaNumber n)
+        {
+            return (Int64)n;
+        }
+
+        // TODO，先进行词法验证，luanumber也是，lua和c#标准不同
+        public static bool TryParse(string s, out LuaInteger i)
+        {
+            Int64 outI;
+            bool b;
+            b = Int64.TryParse(s, out outI);
+            i = outI;
+            return b;
         }
     }
 }

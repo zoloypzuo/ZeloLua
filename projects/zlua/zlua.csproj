@@ -74,6 +74,8 @@
     <Compile Include="Core\Lua\LuaType.cs" />
     <Compile Include="Core\ObjectModel\LuaValue.cs" />
     <Compile Include="Core\ObjectModel\Proto.cs" />
+    <Compile Include="Core\VirtualMachine\Operator.cs" />
+    <Compile Include="Core\VirtualMachine\Cast.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">

@@ -112,7 +112,7 @@ namespace zlua.Core.VirtualMachine
         /// </summary>
         private LuaValue TryMetaCall(int funcIndex)
         {
-            LuaValue metamethod = LTm.GetMetamethod(this, Stack[funcIndex], MMType.Call);
+            LuaValue metamethod = LTm.GetMetamethod(this, Stack[funcIndex], TMS.Call);
             Debug.Assert(metamethod.IsFunction);
             /* Open a hole inside the stack at `func' */
             for (int i = top; i > funcIndex; i--)

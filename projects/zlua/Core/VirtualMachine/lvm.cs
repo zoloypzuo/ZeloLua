@@ -18,7 +18,7 @@ namespace zlua.Core.VirtualMachine
         //internal TThread mainThread;
         internal TTable[] metaTableForBasicType = new TTable[(int)LuaTypes.Thread + 1];
 
-        internal TString[] metaMethodNames = new TString[(int)MMType.N];
+        internal TString[] metaMethodNames = new TString[(int)TMS.TM_N];
     }
 
     // lua_State
@@ -70,9 +70,7 @@ namespace zlua.Core.VirtualMachine
 
         #endregion 私有属性
 
-        /// <summary>
         /// lua_newstate
-        /// </summary>
         public LuaState()
         {
             const int BasicCiStackSize = 8;
@@ -194,6 +192,7 @@ namespace zlua.Core.VirtualMachine
                 Debug.Assert(@base <= top && top < StackLastFree); //这里始终没有。
                 LuaValue ra = RA(instr);
                 switch (instr.Opcode) {
+                    #region 数据传输指令
                     case Opcode.OP_MOVE: {
                             ra.TValue = RB(instr);
                             continue;
@@ -205,6 +204,33 @@ namespace zlua.Core.VirtualMachine
                             ra.TValue = rb;
                             continue;
                         }
+                    //case Opcode.LoadBool:
+                    //    ra.B = Convert.ToBoolean(instr.B);
+                    //    if (Convert.ToBoolean(instr.C)) pc++;
+                    //    continue;
+                    //case Opcode.LoadNil: {
+                    //        int a = instr.A;
+                    //        int b = instr.B;
+                    //        do {
+                    //            R(b--).SetNil();
+                    //        } while (b >= a);
+                    //        continue;
+                    //    }
+                    //case Opcode.GetGlobal: {
+                    //        LuaValue rb = KBx(instr);
+                    //        Debug.Assert(rb.IsString);
+                    //        GetTable((LuaValue)cl.env, rb, ra);
+                    //        continue;
+                    //    }
+                    //case Opcode.OP_GETTABLE:
+                    //    throw new NotImplementedException();
+                    //    //GetTable(RB(instr), RKC(instr), ra);
+                    //    continue;
+                    //case Opcode.SetGlobal:
+                    //    Debug.Assert(KBx(instr).IsString);
+                    //    SetTable((LuaValue)cl.env, KBx(instr), ra);
+                    //    continue;
+                    #endregion
                     #region 函数相关指令
                     // A B C	R(A), ... ,R(A+C-2) := R(A)(R(A+1), ... ,R(A+B-1))
                     // A指定被调用函数对象的寄存器索引
@@ -354,33 +380,96 @@ namespace zlua.Core.VirtualMachine
                         }
 
                     #endregion
+                    #region 算术运算符
+                    case Opcode.OP_ADD: {
+                            Arith(instr, (a, b) => a + b, (a, b) => a + b, TMS.TM_ADD);
+                            continue;
+                        }
+                    case Opcode.OP_SUB: {
+                            Arith(instr, (a, b) => a - b, (a, b) => a - b, TMS.TM_SUB);
+                            continue;
+                        }
+                    case Opcode.OP_MUL: {
+                            Arith(instr, (a, b) => a * b, (a, b) => a * b, TMS.TM_MUL);
+                            continue;
+                        }
+                    /* float division (always with floats) */
+                    case Opcode.OP_DIV: {
+                            Arith(instr, (LuaNumber a, LuaNumber b) => a / b, TMS.TM_DIV);
+                            continue;
+                        }
 
-                    //case Opcode.LoadBool:
-                    //    ra.B = Convert.ToBoolean(instr.B);
-                    //    if (Convert.ToBoolean(instr.C)) pc++;
-                    //    continue;
-                    //case Opcode.LoadNil: {
-                    //        int a = instr.A;
-                    //        int b = instr.B;
-                    //        do {
-                    //            R(b--).SetNil();
-                    //        } while (b >= a);
-                    //        continue;
-                    //    }
-                    //case Opcode.GetGlobal: {
-                    //        LuaValue rb = KBx(instr);
-                    //        Debug.Assert(rb.IsString);
-                    //        GetTable((LuaValue)cl.env, rb, ra);
-                    //        continue;
-                    //    }
-                    //case Opcode.OP_GETTABLE:
-                    //    throw new NotImplementedException();
-                    //    //GetTable(RB(instr), RKC(instr), ra);
-                    //    continue;
-                    //case Opcode.SetGlobal:
-                    //    Debug.Assert(KBx(instr).IsString);
-                    //    SetTable((LuaValue)cl.env, KBx(instr), ra);
-                    //    continue;
+                    case Opcode.OP_MOD: {
+                            Arith(instr, IMod, FMod, TMS.TM_MOD);
+                            continue;
+                        }
+                    case Opcode.OP_IDIV: {
+                            Arith(instr, IFloorDiv, FFloorDiv, TMS.TM_IDIV);
+                            continue;
+                        }
+                    case Opcode.OP_POW: {
+                            Arith(instr, Pow, TMS.TM_POW);
+                            continue;
+                        }
+                    case Opcode.OP_UNM: {
+                            LuaValue rb = RB(instr);
+                            LuaNumber nb;
+                            if (rb.IsInteger) {
+                                LuaInteger ib = rb.I;
+                                ra.I = -ib;
+                            } else if (tonumber(rb, out nb)) {
+                                ra.N = -nb;
+                            } else {
+                                // TODO 这样写对不对
+                                trybinTM(rb, rb, ra, TMS.TM_UNM);
+                            }
+                            continue;
+                        }
+                    #endregion
+                    #region 按位运算符
+                    case Opcode.OP_BAND: {
+                            Arith(instr, (a, b) => a & b, TMS.TM_BAND);
+                            continue;
+                        }
+                    case Opcode.OP_BOR: {
+                            Arith(instr, (a, b) => a | b, TMS.TM_BOR);
+                            continue;
+                        }
+                    case Opcode.OP_BXOR: {
+                            Arith(instr, (a, b) => a ^ b, TMS.TM_BXOR);
+                            continue;
+                        }
+                    case Opcode.OP_SHL: {
+                            Arith(instr, ShiftLeft, TMS.TM_SHL);
+                            continue;
+                        }
+                    case Opcode.OP_SHR: {
+                            Arith(instr, ShiftRight, TMS.TM_SHR);
+                            continue;
+                        }
+                    case Opcode.OP_BNOT: {
+                            LuaValue rb = RB(instr);
+                            LuaInteger ib;
+                            if (tointeger(rb, out ib)) {
+                                ra.I = ~ib;
+                            } else {
+                                trybinTM(rb, rb, ra, TMS.TM_BNOT);
+                            }
+                            continue;
+                        }
+                    #endregion
+                    #region 比较运算符
+
+                    #endregion
+                    #region 逻辑运算符
+                    case Opcode.OP_NOT: {
+                            LuaValue rb = RB(instr);
+                            bool res = rb.IsFalse;  /* next assignment may change this value */
+                            ra.B = res;
+                            continue;
+                        }
+                    #endregion
+                    #region 表相关指令
                     case Opcode.OP_SETTABLE:
                         throw new NotImplementedException();
                         //SetTable(ra, RKB(instr), RKC(instr));
@@ -391,43 +480,7 @@ namespace zlua.Core.VirtualMachine
                             //ra.Table = new TTable(c, b);
                             continue;
                         }
-
-                    case Opcode.OP_ADD: {
-                            Arith(instr, (a, b) => a + b, MMType.Add);
-                            continue;
-                        }
-                    case Opcode.OP_SUB: {
-                            Arith(instr, (a, b) => a - b, MMType.Sub);
-                            continue;
-                        }
-                    case Opcode.OP_MUL: {
-                            Arith(instr, (a, b) => a * b, MMType.Mul);
-                            continue;
-                        }
-                    case Opcode.OP_DIV: {
-                            Arith(instr, (a, b) => a / b, MMType.Div);
-                            continue;
-                        }
-                    case Opcode.OP_MOD: {
-                            Arith(instr, (a, b) => a % b, MMType.Mod);
-                            continue;
-                        }
-                    case Opcode.OP_POW: {
-                            Arith(instr, Math.Pow, MMType.Pow);
-                            continue;
-                        }
-                    case Opcode.OP_UNM: {
-                            //LuaValue rb = RB(instr);
-                            ////double nb = (double)ToNumber(rb, out bool b);
-                            //if (b) ra.N = -nb;
-                            //else
-                            //    if (!CallBinaryMetamethod(rb, rb, ra, MMType.Unm))
-                            //    throw new ArithmeticException("operand cannot be unmed");
-                            continue;
-                        }
-                    case Opcode.OP_NOT:
-                        //ra.B = RB(instr).IsFalse; //TODO  /* next assignment may change this value */
-                        continue;
+                    #endregion
                     case Opcode.OP_LEN: {
                             //LuaValue rb = RB(instr);
                             //switch (rb.Type) {
@@ -453,33 +506,16 @@ namespace zlua.Core.VirtualMachine
                             //RA(instr).TVal = this[this.BaseIndex + b];
                             continue;
                         }
-
-
-
                     default:
                         continue;
                 }
             }
         }
 
-        private void Arith(Bytecode instr, Func<double, double, double> func, MMType mtType)
-        {
-            //LuaValue ra = RA(instr); //重算一遍
-            //LuaValue rb = RNB(instr);
-            //LuaValue rc = RNC(instr);
-            //double nb = (double)ToNumber(rb, out bool b); //Tonumber把str转换成double，我分离两种k之后，这里其实没用了
-            //double nc = (double)ToNumber(rc, out bool c); //我也不希望可以随便把str转换成double
-            //if (b && c) ra.N = func(nb, nc);
-            //else if (!CallBinaryMetamethod(rb, rc, ra, mtType))
-            //    throw new OprdTypeException(instr.Opcode);
-            //else
-            //    throw new GodDamnException();
-        }
 
-        /// <summary>
+
         /// 让栈扩展到`size大小
-        /// </summary>
-        /// <param name="topIndex"></param>
+        /// TODO 删除 stack.check
         internal void Alloc(int size)
         {
             for (int i = Stack.Count; i < size; i++)
@@ -488,41 +524,7 @@ namespace zlua.Core.VirtualMachine
 
         #region other things
 
-        // luaV_tonumber
-        // number直接返回，string如果能parse返回新的转成double的TValue，否则返回null
-        // src的参数n是没有必要的
-        //public /*luaValue*/LuaNumber ToNumber(LuaValue obj, out bool convertibleToNum)
-        //{
-        //    // 可以看到混乱，这件事不难，只是规格不清楚
 
-        //    //convertibleToNum = true;
-        //    //switch (obj.Type) {
-        //    //    case LuaType.Number:
-        //    //        return obj.N;
-        //    //    case LuaType.Integer:
-        //    //        return new LuaNumber { Value = obj.I.Value };
-        //    //    case LuaType.String:
-        //    //        //return Double.
-        //    //    default:
-        //    //        return null;
-        //    //}
-        //    //if (obj.IsNumber) {
-        //    //    return obj.n;
-        //    //} else if (obj.IsString) {
-        //    //    double num = luaValue.Str2Num((string)obj, out convertibleToNum);
-        //    //    if (convertibleToNum)
-        //    //        return (luaValue)num;
-        //    //}
-        //    //convertibleToNum = false;
-        //    //return null;
-        //}
-
-        /// <summary>
-        /// tonumber；返回是否能转成number（number和能转的string），如果是后者，原地修改为number类型
-        /// 原来的命名令人困惑，因为他确实是tonumber，有副作用】实现决策】放弃这个函数，没有任何意义，让人困惑。他只是为了短路求值对luaV tonumber包装了
-        /// 而且是错的。我确认过了。他的n没有malloc就访问字段。所以彻底放弃，只实现API为目的
-        /// </summary>
-        //bool TryToNumber(TValue obj) => obj.IsNumber || ToNumber(obj) != null;
 
         /// <summary>
         /// luaV_tostring
@@ -594,10 +596,9 @@ namespace zlua.Core.VirtualMachine
         //void Arith(TValue ra, TValue rb, TValue rc, MetamethodTypes metamethodType)
         //{
         //}
-        /// <summary>
+
         /// call_binTM; result = __add(lhs, rhs); __add从lhs和rhs的元表查找出，如果都没找到返回false
-        /// </summary>
-        private bool CallBinaryMetamethod(LuaValue lhs, LuaValue rhs, LuaValue result, MMType metamethodType)
+        private bool trybinTM(LuaValue lhs, LuaValue rhs, LuaValue result, TMS metamethodType)
         {
             result = null;
             LuaValue metamethod = LTm.GetMetamethod(this, lhs, metamethodType);
