@@ -21,12 +21,12 @@ namespace zlua.Core.VirtualMachine
     {
         public int GetTop()
         {
-            return this.stack.top;
+            return this.LuaStack.top;
         }
 
         public int AbsIndex(int idx)
         {
-            return stack.absIndex(idx);
+            return LuaStack.absIndex(idx);
         }
 
         // lua栈不会自动增长，api调用者必须主动调用/CheckStack/以确保压入更多值不会导致栈溢出
@@ -34,35 +34,35 @@ namespace zlua.Core.VirtualMachine
         // 再次强调，对于c#，栈的容量指count，而不是capacity
         public bool CheckStack(int n)
         {
-            stack.check(n);
+            LuaStack.check(n);
             return true;  // never fails
         }
 
         public void Pop(int n)
         {
             for (int i = 0; i < n; i++) {
-                stack.pop();
+                LuaStack.pop();
             }
         }
 
         public void Copy(int fromIdx, int toIdx)
         {
-            var val = stack.get(fromIdx);
-            stack.set(toIdx, val);
+            var val = LuaStack.get(fromIdx);
+            LuaStack.set(toIdx, val);
         }
 
         // 把索引处的值压栈
         public void PushValue(int idx)
         {
-            var val = stack.get(idx);
-            stack.push(val);
+            var val = LuaStack.get(idx);
+            LuaStack.push(val);
         }
 
         // /PushVale/的逆操作
         public void Replace(int idx)
         {
-            var val = stack.pop();
-            stack.set(idx, val);
+            var val = LuaStack.pop();
+            LuaStack.set(idx, val);
         }
 
         // 弹栈，插入指定位置
@@ -84,17 +84,17 @@ namespace zlua.Core.VirtualMachine
         // 如果不能理解，参见p62
         public void Rotate(int idx, int n)
         {
-            var t = stack.top - 1;
-            var p = stack.absIndex(idx) - 1;
+            var t = LuaStack.top - 1;
+            var p = LuaStack.absIndex(idx) - 1;
             int m;
             if (n >= 0) {
                 m = t - n;
             } else {
                 m = p - n - 1;
             }
-            stack.reverse(p, m);
-            stack.reverse(m + 1, t);
-            stack.reverse(p, t);
+            LuaStack.reverse(p, m);
+            LuaStack.reverse(m + 1, t);
+            LuaStack.reverse(p, t);
         }
 
         // 将栈顶设为/idx/，/idx/小于当前栈顶索引时，相当于弹出或者说截断多余的部分，
@@ -103,19 +103,19 @@ namespace zlua.Core.VirtualMachine
         // /Pop/相当于SetTop(-n-1)
         public void SetTop(int idx)
         {
-            var newTop = stack.absIndex(idx);
+            var newTop = LuaStack.absIndex(idx);
             if (newTop < 0) {
                 throw new Exception("stack underflow");
             }
 
-            int n = stack.top - newTop;
+            int n = LuaStack.top - newTop;
             if (n > 0) {
                 for (int i = 0; i < n; i++) {
-                    stack.pop();
+                    LuaStack.pop();
                 }
             } else if (n < 0) {
                 for (int i = 0; i > n; i--) {
-                    stack.push(new TValue());
+                    LuaStack.push(new TValue());
                 }
             }
         }
@@ -124,27 +124,27 @@ namespace zlua.Core.VirtualMachine
 
         public void PushNil()
         {
-            stack.push(new TValue());
+            LuaStack.push(new TValue());
         }
 
         public void PushBoolean(bool b)
         {
-            stack.push(new TValue(b));
+            LuaStack.push(new TValue(b));
         }
 
         public void PushInteger(lua_Integer i)
         {
-            stack.push(new TValue(i));
+            LuaStack.push(new TValue(i));
         }
 
         public void PushNumber(double n)
         {
-            stack.push(new TValue(n));
+            LuaStack.push(new TValue(n));
         }
 
         public void PushString(string s)
         {
-            stack.push(new TValue(s));
+            LuaStack.push(new TValue(s));
         }
 
         #endregion Push*方法 将某一类型的luaValue压栈
@@ -159,8 +159,8 @@ namespace zlua.Core.VirtualMachine
         // 无效索引返回LUA_TNONE
         public LuaType Type(int idx)
         {
-            if (stack.isValid(idx)) {
-                var val = stack.get(idx);
+            if (LuaStack.isValid(idx)) {
+                var val = LuaStack.get(idx);
                 return val.Type;
             } else {
                 return LuaType.LUA_TNONE;
@@ -206,7 +206,7 @@ namespace zlua.Core.VirtualMachine
 
         public bool ToBoolean(int idx)
         {
-            return convertToBoolean(stack.get(idx));
+            return convertToBoolean(LuaStack.get(idx));
         }
 
         private bool convertToBoolean(TValue luaValue)

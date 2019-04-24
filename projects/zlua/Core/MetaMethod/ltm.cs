@@ -34,7 +34,7 @@ namespace zlua.Core.VirtualMachine
                     break;
             }
             return metatable != null ?
-                metatable.GetByStr(globalState.metaMethodNames[(int)metamethodType]) :
+                metatable.luaH_getstr(globalState.metaMethodNames[(int)metamethodType]) :
                 TValue.NilObject;
         }
 

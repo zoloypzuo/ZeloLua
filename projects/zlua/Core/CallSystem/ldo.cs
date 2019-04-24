@@ -34,7 +34,7 @@ namespace zlua.Core.VirtualMachine
             int funcIndex = top - (nargs + 1);
             // 因为Closure实例cl和实参已经被压栈，可以执行这个cl
             if (PreCall(funcIndex) == PCRLUA) {
-                Execute(1);
+                luaV_execute(1);
             }
             --NumCSharpCalls;
         }

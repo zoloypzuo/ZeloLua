@@ -9,22 +9,28 @@ using zlua.Core.VirtualMachine;
 
 namespace zlua.Core.ObjectModel
 {
-    // lua对象
-    //
-    // * 大小8+8+4=20B
-    //   指针大小4B或8B
-    //   enum大小默认4B，可以设置，但是没必要，现在的样子是对齐的
-    //
     // TODO light ud没了解足够，先不管
+    /// <summary>
+    /// lua对象
+    /// </summary>
+    /// <remarks>大小8+8+4=20B，其中指针大小4B或8B，enum大小默认4B，现在的样子是对齐的</remarks>
     public class TValue : IEquatable<TValue>
     {
         #region 嵌套类型定义
 
-        // lua值类型
-        //
-        // * 大小8B
-        // * 是union，这个特性不允许引用类型，所以TObject放在外面
-        //   https://docs.microsoft.com/en-us/dotnet/api/system.runtime.interopservices.structlayoutattribute?view=netframework-4.7.2
+        // TODO 删除int类型
+        /// <summary>
+        /// lua值类型
+        /// </summary>
+        /// <remarks>
+        /// <list>
+        ///     <item>大小8B</item>
+        ///     <item>
+        ///     是union，这个特性不允许引用类型，所以TObject放在外面
+        ///     https://docs.microsoft.com/en-us/dotnet/api/system.runtime.interopservices.structlayoutattribute?view=netframework-4.7.2    
+        ///     </item>
+        /// </list>
+        /// </remarks>
         [StructLayout(LayoutKind.Explicit)]
         private struct LuaNumeric
         {
@@ -98,10 +104,10 @@ namespace zlua.Core.ObjectModel
         }
 
         [JsonIgnore]
-        public TString TStr {
+        public LuaString TStr {
             get {
                 Debug.Assert(IsString);
-                return ReferenceValue as TString;
+                return ReferenceValue as LuaString;
             }
             set {
                 Type = LuaType.LUA_TSTRING;
@@ -113,15 +119,15 @@ namespace zlua.Core.ObjectModel
         public string Str {
             get {
                 Debug.Assert(IsString);
-                return (ReferenceValue as TString).str;
+                return (ReferenceValue as LuaString).str;
             }
             set {
                 Type = LuaType.LUA_TSTRING;
-                var tstr = ReferenceValue as TString;
+                var tstr = ReferenceValue as LuaString;
                 if (tstr != null) {
                     tstr.str = value;
                 } else {
-                    ReferenceValue = new TString(value);
+                    ReferenceValue = new LuaString(value);
                 }
             }
         }
@@ -211,10 +217,10 @@ namespace zlua.Core.ObjectModel
         public TValue(string s)
         {
             Type = LuaType.LUA_TSTRING;
-            ReferenceValue = new TString(s);
+            ReferenceValue = new LuaString(s);
         }
 
-        public TValue(TString tstr)
+        public TValue(LuaString tstr)
         {
             Type = LuaType.LUA_TSTRING;
             ReferenceValue = tstr;

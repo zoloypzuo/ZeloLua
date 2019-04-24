@@ -1,6 +1,4 @@
-﻿// 虚拟机
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 
@@ -8,32 +6,26 @@ using zlua.Core.Instruction;
 using zlua.Core.Lua;
 using zlua.Core.ObjectModel;
 
+/// <summary>
+/// 虚拟机
+/// </summary>
 namespace zlua.Core.VirtualMachine
 {
-    internal class GlobalState
-    {
-        public TValue registry = new TValue(new Table(sizeHashTablePart: 2, sizeArrayPart: 0));
-
-        //internal TThread mainThread;
-        internal Table[] metaTableForBasicType = new Table[(int)LuaType.LUA_TTHREAD + 1];
-
-        internal TString[] metaMethodNames = new TString[(int)TMS.TM_N];
-    }
-
-    // lua_State
-    //
-    // * partial是分给lapi
+    /// <summary>
+    /// 虚拟机
+    /// </summary>
+    /// <remarks>写成partial是分给各个API类</remarks>
     public partial class lua_State : LuaReference
     {
         #region 私有访问器
 
-        private List<TValue> Stack { get { return stack.slots; } }
+        private List<TValue> Stack { get { return LuaStack.slots; } }
 
         /// top指向第一个可用位置，每次push时 top++ = value
         /// 几乎所有文件都要用，因为你用这个来维护栈这个行为
         private int top {
-            get { return stack.top; }
-            set { stack.top = value; }
+            get { return LuaStack.top; }
+            set { LuaStack.top = value; }
         }
 
         /// 当前函数栈帧的base
@@ -61,11 +53,11 @@ namespace zlua.Core.VirtualMachine
 
         /// saved pc when call a function
         /// index of instruction array；因为src用指针的原因，而zlua必须同时使用codes和pc来获取指令
-        internal int pc;
+        private int pc;
 
         private Bytecode[] codes { get; set; }
         private int NumCSharpCalls { get; set; }
-        internal /*static readonly*/ GlobalState globalState = new GlobalState(); //注册表是一个L一个吗？
+        internal global_State globalState = new global_State(); //注册表是一个L一个吗？
 
         #endregion 私有属性
 
@@ -79,7 +71,7 @@ namespace zlua.Core.VirtualMachine
             // 因为调用函数之前要有一个CallInfo保存savedpc
             // 因此构造LuaState时构造一个基本的CallInfo
             CallInfoStack.Push(new CallInfo());
-            stack = new LuaStack(20);
+            LuaStack = new LuaStack(20);
             for (int i = 0; i < BasicStackSize; i++) {
                 Stack.Add(new TValue());
             }
@@ -95,14 +87,16 @@ namespace zlua.Core.VirtualMachine
             // TODO OpenLibs()
         }
 
-        // 缓存cl
-        //
-        // 因为要写辅助方法，所以从局部变量变为字段
+        /// <summary>
+        /// 缓存cl
+        /// </summary>
+        /// <remarks>因为要写辅助方法，所以从局部变量变为字段</remarks>
         private LuaClosure cl;
 
-        // 缓存k
-        //
-        // 因为要写辅助方法，所以从局部变量变为字段
+        /// <summary>
+        /// 缓存k
+        /// </summary>
+        /// <remarks>因为要写辅助方法，所以从局部变量变为字段</remarks>
         private TValue[] k;
 
         #region 从指令取出参数的辅助方法
@@ -172,10 +166,12 @@ namespace zlua.Core.VirtualMachine
 
         #endregion 从指令取出参数的辅助方法
 
-        // luaV_execute
-        // 执行一个深度为level的lua函数，chunk深度为1
-        // 没有level就不知道什么时候结束了（事实上可以，用callinfo栈）
-        private void Execute(int nexeccalls)
+        /// <summary>
+        /// 执行一个深度为level的lua函数，chunk深度为1
+        /// </summary>
+        /// <remarks>没有level就不知道什么时候结束了（事实上可以，用callinfo栈）</remarks>
+        /// <param name="nexeccalls"></param>
+        private void luaV_execute(int nexeccalls)
         {
             // clua5.3缓存了ci
             // clua5.1缓存了base和pc
@@ -235,19 +231,19 @@ namespace zlua.Core.VirtualMachine
                             TValue g = new TValue(cl.env);
                             TValue rb = KBx(i);
                             Debug.Assert(rb.IsString);
-                            GetTable(g, rb, ra);
+                            luaV_gettable(g, rb, ra);
                             continue;
                         }
                     // A B C R(A) := R(B)[RK(C)]
                     case Opcode.OP_GETTABLE: {
-                            GetTable(RB(i), RKC(i), ra);
+                            luaV_gettable(RB(i), RKC(i), ra);
                             continue;
                         }
                     // A Bx Gbl[Kst(Bx)] := R(A)
                     case Opcode.OP_SETGLOBAL: {
                             TValue g = new TValue(cl.env);
                             Debug.Assert(KBx(i).IsString);
-                            SetTable(g, KBx(i), ra);
+                            luaV_settable(g, KBx(i), ra);
                             continue;
                         }
                     // A B UpValue[B] := R(A)
@@ -258,7 +254,7 @@ namespace zlua.Core.VirtualMachine
                         }
                     // A B C R(A)[RK(B)] := RK(C)
                     case Opcode.OP_SETTABLE: {
-                            SetTable(ra, RKB(i), RKC(i));
+                            luaV_settable(ra, RKB(i), RKC(i));
                             continue;
                         }
 
@@ -283,7 +279,7 @@ namespace zlua.Core.VirtualMachine
                             TValue rb = RB(i);
                             R((int)i.A + 1).Value = rb;
                             // 从obj表中查找"f"键的值作为被调用方法
-                            GetTable(rb, RKC(i), ra);
+                            luaV_gettable(rb, RKC(i), ra);
                             continue;
                         }
 
@@ -532,7 +528,7 @@ namespace zlua.Core.VirtualMachine
                             CallInfo ci = this.ci;
                             int n = ci.@base - ci.funcIndex - cl.p.numparams;
                             if (b == LUA_MULTRET) {
-                                stack.check(n);
+                                LuaStack.check(n);
                                 ra = RA(i);  /* previous call may change the stack */
                                 b = n;
                                 top = a + n;
@@ -571,14 +567,33 @@ namespace zlua.Core.VirtualMachine
         }
 
         /// <summary>
-        /// luaV_gettable
+        /// limit for table tag-method chains (to avoid loops)
         /// </summary>
-        public void GetTable(TValue t, TValue key, TValue val)
+        private const int MAXTAGLOOP = 100;
+
+        /// <summary>
+        /// 无限查元表
+        /// </summary>
+        /// <param name="t"></param>
+        /// <param name="key"></param>
+        /// <param name="val"></param>
+        public void luaV_gettable(TValue t, TValue key, TValue val)
         {
-            //TODO, 要无限查元表。
+            for (int loop = 0; loop < MAXTAGLOOP; loop++) {
+                TValue tm;
+                if (t.IsTable) {
+                    Table h = t.Table;
+                    TValue res = h.luaH_get(key);/* do a primitive get */
+                    if (!res.IsNil ||
+                            false) {
+                        val.Value = res;
+                    }
+                }
+                /* else will try the tag method */
+            }
         }
 
-        public void SetTable(TValue t, TValue key, TValue val)
+        public void luaV_settable(TValue t, TValue key, TValue val)
         {
         }
 
@@ -592,136 +607,6 @@ namespace zlua.Core.VirtualMachine
 
         #endregion other things
 
-        private LuaStack stack;
-    }
-
-    /// 栈帧信息，或者说是一次调用的信息
-    internal class CallInfo
-    {
-        public int funcIndex;
-
-        public int @base {
-            get {
-                return funcIndex + 1;
-            }
-        }
-
-        public int top;
-
-        /// saved pc when call function, index of instruction array
-        /// 调用别的函数时保存LuaState的savedpc
-        public int savedpc;
-    }
-
-    // lua栈
-    //
-    // * 注意还是要手工扩容的
-    //   用数组是不行的，用list后还得手工扩容，扩容是添加新的luaValue实例
-    // * 栈索引参见p54
-    internal class LuaStack
-    {
-        public List<TValue> slots;
-        public int top;
-
-        public LuaStack(int size)
-        {
-            slots = new List<TValue>(size);
-            for (int i = 0; i < size; i++) {
-                slots.Add(new TValue());
-            }
-            top = 0;
-        }
-
-        // 检查栈的空闲空间是否还可以容纳（推入）至少n个值，如若不然，扩容
-        public void check(int n)
-        {
-            int free = slots.Count - top;
-            for (int i = free; i < n; i++) {
-                slots.Add(new TValue());
-            }
-        }
-
-        // 压栈，溢出时抛出异常
-        public void push(TValue val)
-        {
-            if (top == slots.Count) {
-                throw new Exception("stack overflow");
-            } else {
-                slots[top] = val;
-                top++;
-            }
-        }
-
-        // 弹栈，若栈为空，抛出异常
-        public TValue pop()
-        {
-            if (top < 1) {
-                throw new Exception("stack underflow");
-            } else {
-                top--;
-                var val = slots[top];
-                slots[top] = new TValue();
-                return val;
-            }
-        }
-
-        // 转换成绝对索引，不考虑索引是否有效
-        public int absIndex(int idx)
-        {
-            if (idx >= 0) {
-                return idx;
-            } else {
-                return idx + top + 1;
-            }
-        }
-
-        // 索引有效
-        public bool isValid(int idx)
-        {
-            var absIdx = absIndex(idx);
-            return absIdx > 0 && absIdx <= top;
-        }
-
-        // 取值，索引无效返回nil
-        public TValue get(int idx)
-        {
-            var absIdx = absIndex(idx);
-            if (absIdx > 0 && absIdx <= top) {
-                return slots[absIdx - 1];
-            } else {
-                return new TValue();
-            }
-        }
-
-        // 写值，索引无效则抛出异常
-        public void set(int idx, TValue val)
-        {
-            var absIdx = absIndex(idx);
-            if (absIdx > 0 && absIdx <= top) {
-                // 比较下面两种写法
-                // 作者用go object实现lua object
-                // 而这里是拷贝语义，我必须拷贝而不是
-                // set会在类似于lua中的a=b赋值时发生，这里当然是拷贝，两个不是一个对象
-                // a=b时，如果b是引用类型，那么我调用a=1时，不影响b，所以一定是新的luaValue，拷贝而已
-                // python对a=b赋值后a is b，这是怎么回事。。如果copy，是两个luaValue，id应该不同
-                // 所以这个id应该是标识luaValue的引用部分的
-                // 然而b=1，a=b之后a is b，所以我就想不通
-                // 不管，拷贝一定是对的
-                //slots[absIdx - 1] = val;
-                slots[absIdx - 1].Value = val;
-            } else {
-                throw new Exception("invalid index");
-            }
-        }
-
-        internal void reverse(int from, int to)
-        {
-            for (; from < to; from++, to--) {
-                // swap
-                var t = slots[from];
-                slots[from] = slots[to];
-                slots[to] = slots[from];
-            }
-        }
+        private LuaStack LuaStack { get; set; }
     }
 }

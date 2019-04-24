@@ -67,11 +67,11 @@ namespace zlua.Core.VirtualMachine
             LuaClosure cl = new LuaClosure(null, 1, p);
             if (p.Upvalues.Length > 0) {
                 var env = new Table(1, 1);
-                env.Set(this, new TValue("print")).Cl = new CSharpClosure()
+                env.luaH_set(this, new TValue("print")).Cl = new CSharpClosure()
                 {
                     f = (L) =>
                     {
-                        var s = L.stack.pop();
+                        var s = L.LuaStack.pop();
                         Console.WriteLine(s.Str);
                     }
                 };
@@ -80,7 +80,7 @@ namespace zlua.Core.VirtualMachine
                     v = new TValue(env)
                 });
             }
-            stack.push(new TValue(cl));
+            LuaStack.push(new TValue(cl));
         }
 
         public void dostring(string chunk)
@@ -104,7 +104,7 @@ namespace zlua.Core.VirtualMachine
         public void Register(CSharpFunction csFunc, string name)
         {
             var newFunc = new CSharpClosure() { f = csFunc };
-            GlobalsTable.Table.GetByStr((TString)name).Cl = newFunc;
+            GlobalsTable.Table.luaH_getstr((LuaString)name).Cl = newFunc;
         }
 
         /// 基于L.top，压函数，压args，返回1个值
