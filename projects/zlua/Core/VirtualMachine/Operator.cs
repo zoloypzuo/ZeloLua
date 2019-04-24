@@ -14,61 +14,24 @@ namespace zlua.Core.VirtualMachine
         // 算术运算符和按位运算符
         //
         // 辅助函数，没什么为什么
-        private void Arith(
-            Bytecode instr,
-            Func<lua_Integer, lua_Integer, lua_Integer> IOp,
-            Func<lua_Number, lua_Number, lua_Number> FOp,
+        private void arith_op(
+            Bytecode i,
+            Func<lua_Number, lua_Number, lua_Number> op,
             TMS @event)
         {
-            TValue ra = RA(instr);
-            TValue rb = RKB(instr);
-            TValue rc = RKC(instr);
-            if (rb.IsInteger && rc.IsInteger) {
-                ra.I = IOp(rb.I, rc.I);
-            } else {
-                lua_Number nb;
-                lua_Number nc;
-                bool b = tonumber(rb, out nb);
-                bool c = tonumber(rc, out nc);
-                if (b && c) {
-                    ra.N = FOp(nb, nc);
-                } else {
-                    call_binTM(rb, rc, ra, @event);
-                }
-            }
-        }
-
-        private void Arith(
-            Bytecode instr,
-            Func<lua_Integer, lua_Integer, lua_Integer> IOp,
-            TMS @event)
-        {
-            TValue ra = RA(instr);
-            TValue rb = RKB(instr);
-            TValue rc = RKC(instr);
-            if (rb.IsInteger && rc.IsInteger) {
-                ra.I = IOp(rb.I, rc.I);
-            } else {
-                call_binTM(rb, rc, ra, @event);
-            }
-        }
-
-        private void Arith(
-            Bytecode instr,
-            Func<lua_Number, lua_Number, lua_Number> FOp,
-            TMS @event)
-        {
-            TValue ra = RA(instr);
-            TValue rb = RKB(instr);
-            TValue rc = RKC(instr);
+            TValue ra = RA(i);
+            TValue rb = RKB(i);
+            TValue rc = RKC(i);
             lua_Number nb;
             lua_Number nc;
             bool b = tonumber(rb, out nb);
             bool c = tonumber(rc, out nc);
             if (b && c) {
-                ra.N = FOp(nb, nc);
+                ra.N = op(nb, nc);
+            } else if (call_binTM(rb, rc, ra, @event)) {
             } else {
-                call_binTM(rb, rc, ra, @event);
+                //luaG_aritherror(L, rb, rc);
+                throw new Exception();
             }
         }
 
@@ -110,7 +73,7 @@ namespace zlua.Core.VirtualMachine
         }
 
         // float mod
-        public static lua_Number FMod(lua_Number a, lua_Number b)
+        public static lua_Number luai_nummod(lua_Number a, lua_Number b)
         {
             return a - Math.Floor(a / b) * b;
         }
@@ -125,45 +88,12 @@ namespace zlua.Core.VirtualMachine
             return a >> (int)n;
         }
 
-        public static lua_Number Pow(lua_Number a, lua_Number b)
+        public static lua_Number luai_numpow(lua_Number a, lua_Number b)
         {
             return Math.Pow(a, b);
         }
 
-        // luaV_objlen
-        //
-        // Main operation 'ra' = #rb'.
-        public static void objlen(TValue ra, TValue rb)
-        {
-            TValue tm;
-            switch (rb.Type) {
-                case LuaType.LUA_TTABLE: {
-                        Table h = rb.Table;
-                        // TODO
-                        //tm = fasttm(L, h->metatable, TM_LEN);
-                        //if (tm) break;  /* metamethod? break switch to call it */
-                        //setivalue(ra, luaH_getn(h));  /* else primitive len */
-                        return;
-                    }
-                case LuaType.LUA_TSHRSTR: {
-                        // TODO setivalue(ra, tsvalue(rb)->shrlen);
-                        ra.I = rb.Str.Length;
-                        return;
-                    }
-                case LuaType.LUA_TLNGSTR: {
-                        // TODO setivalue(ra, tsvalue(rb)->u.lnglen);
-                        ra.I = rb.Str.Length;
-                        return;
-                    }
-                default: { /* try metamethod */
-                        //tm = luaT_gettmbyobj(L, rb, TM_LEN);
-                        //if (ttisnil(tm))  /* no metamethod? */
-                        //    luaG_typeerror(L, rb, "get length of");
-                        break;
-                    }
-            }
-            //luaT_callTM(L, tm, rb, rb, ra, 1);
-        }
+
 
         // luaV_concat
         /*

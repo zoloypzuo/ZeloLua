@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-
+using System.Text;
 using zlua.Core.Instruction;
 using zlua.Core.Lua;
 using zlua.Core.ObjectModel;
@@ -292,32 +292,32 @@ namespace zlua.Core.VirtualMachine
                             //TODO
                             //arith_op(luai_numadd, TM_ADD);
 
-                            Arith(i, (a, b) => a + b, (a, b) => a + b, TMS.TM_ADD);
+                            arith_op(i, (a, b) => a + b, TMS.TM_ADD);
                             continue;
                         }
                     // A B C R(A) := RK(B) - RK(C)
                     case Opcode.OP_SUB: {
-                            Arith(i, (a, b) => a - b, (a, b) => a - b, TMS.TM_SUB);
+                            arith_op(i, (a, b) => a - b, TMS.TM_SUB);
                             continue;
                         }
                     // A B C R(A) := RK(B) * RK(C)
                     case Opcode.OP_MUL: {
-                            Arith(i, (a, b) => a * b, (a, b) => a * b, TMS.TM_MUL);
+                            arith_op(i, (a, b) => a * b, TMS.TM_MUL);
                             continue;
                         }
                     // A B C R(A) := RK(B) / RK(C)
                     case Opcode.OP_DIV: {
-                            Arith(i, (lua_Number a, lua_Number b) => a / b, TMS.TM_DIV);
+                            arith_op(i, (a, b) => a / b, TMS.TM_DIV);
                             continue;
                         }
                     // A B C R(A) := RK(B) % RK(C)
                     case Opcode.OP_MOD: {
-                            Arith(i, IMod, FMod, TMS.TM_MOD);
+                            arith_op(i, luai_nummod, TMS.TM_MOD);
                             continue;
                         }
                     // A B C R(A) := RK(B) ^ RK(C)
                     case Opcode.OP_POW: {
-                            Arith(i, Pow, TMS.TM_POW);
+                            arith_op(i, luai_numpow, TMS.TM_POW);
                             continue;
                         }
 
@@ -325,15 +325,11 @@ namespace zlua.Core.VirtualMachine
                     case Opcode.OP_UNM: {
                             //TODO
                             TValue rb = RB(i);
-                            lua_Number nb;
-                            if (rb.IsInteger) {
-                                lua_Integer ib = rb.I;
-                                ra.I = -ib;
-                            } else if (tonumber(rb, out nb)) {
+                            if (rb.IsNumber) {
+                                lua_Number nb = rb.N;
                                 ra.N = -nb;
                             } else {
-                                // TODO 这样写对不对
-                                call_binTM(rb, rb, ra, TMS.TM_UNM);
+                                call_binTM(ra, rb, rb, TMS.TM_UNM);
                             }
                             continue;
                         }
@@ -354,14 +350,14 @@ namespace zlua.Core.VirtualMachine
 
                     // A B R(A) := length of R(B)
                     case Opcode.OP_LEN: {
-                            //objlen(ra, RB(i));
                             TValue rb = RB(i);
                             switch (rb.Type) {
                                 case LuaType.LUA_TTABLE: {
-                                        //ra.N
+                                        ra.N = rb.Table.luaH_getn();
                                         break;
                                     }
                                 case LuaType.LUA_TSTRING: {
+                                        ra.N = rb.Str.Length;
                                         break;
                                     }
                                 // try metamethod
@@ -373,15 +369,10 @@ namespace zlua.Core.VirtualMachine
                         }
                     // A B C R(A) := R(B).. ... ..R(C)
                     case Opcode.OP_CONCAT: {
-                            //TODO
                             int b = (int)i.B;
                             int c = (int)i.C;
-                            TValue rb;
-                            top = @base + c + 1;  /* mark the end of concat operands */
-                            concat(c - b + 1);
-                            ra = RA(i);  /* 'luaV_concat' may invoke TMs and move the stack */
-                            rb = Stack[@base + b];
-                            ra.Value = rb;
+                            luaV_concat(c - b + 1, c);
+                            ra.Value = RB(i);
                             continue;
                         }
                     // sBx pc+=sBx
@@ -639,6 +630,43 @@ namespace zlua.Core.VirtualMachine
             //luaG_runerror(L, "loop in settable");
         }
 
+        void luaV_concat(int total, int last)
+        {
+            do {
+                int top = @base + last + 1;
+                int n = 2;  /* number of elements handled in this pass (at least 2) */
+                if (!Stack[top - 2].IsString || Stack[top - 2].IsNumber || !tostring(Stack[top - 1])) {
+                    if (!call_binTM(Stack[top - 2], Stack[top - 1], Stack[top - 2], TMS.TM_CONCAT))
+                        //luaG_concaterror(L, top - 2, top - 1);
+                        throw new Exception();
+                } else if (Stack[top - 1].Str.Length == 0)  /* second op is empty? */
+                    tostring(Stack[top - 2]);  /* result is first op (as string) */
+                else {
+                    /* at least two string values; get as many as possible */
+                    int tl = Stack[top - 1].Str.Length;
+                    StringBuilder buffer=new StringBuilder();
+                    int i;
+                    /* collect total length */
+                    for (n = 1; n < total && tostring(Stack[top - n - 1]); n++) {
+                        int l = Stack[top - n - 1].Str.Length;
+                        if (l >= int.MaxValue - tl)
+                            //luaG_runerror(L, "string length overflow");
+                            throw new Exception();
+                        tl += l;
+                    }
+                    tl = 0;
+                    for (i = n; i > 0; i--) {  /* concat all strings */
+                        int l = Stack[top - i].Str.Length;
+                        buffer.Append(Stack[top - i].Str);
+                        tl += l;
+                    }
+                    Stack[top - n] = new TValue(buffer.ToString());
+                }
+                total -= n - 1;  /* got `n' strings to create 1 new */
+                last -= n - 1;
+            } while (total > 1);  /* repeat until only 1 result left */
+        }
+
         public bool LessThan(TValue lhs, TValue rhs)
         {
             if (lhs.Type != rhs.Type) throw new Exception();
@@ -646,7 +674,20 @@ namespace zlua.Core.VirtualMachine
             if (lhs.IsString) return false;//TODO 字典序。或者你看标准库有没有
             else return false; //TODO 调用meta方法
         }
+        bool tostring(TValue o)
+        {
+            return o.IsString || luaV_tostring(o);
+        }
 
+        bool luaV_tostring(TValue obj)
+        {
+            if (!obj.IsNumber) {
+                return false;
+            } else {
+                obj.Str = obj.N.ToString();
+                return true;
+            }
+        }
         #endregion other things
 
         private LuaStack LuaStack { get; set; }

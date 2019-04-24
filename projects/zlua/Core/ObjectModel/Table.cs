@@ -147,6 +147,60 @@ namespace zlua.Core.ObjectModel
             return newVal;
         }
 
+        /// <summary>
+        /// Try to find a boundary in table `t'. A `boundary' is an integer index
+        /// such that t[i] is non-nil and t[i+1] is nil (and 0 if t[1] is nil).
+        /// 尝试找到表的边界t，边界是一个整数索引，使得t[i]非nil，而t[i+1]是nil，如果t[1]是nil返回0
+        /// </summary>
+        /// <returns></returns>
+        public int luaH_getn()
+        {
+            Table t;
+            int j = array.Count;
+            if (j > 0 && array[j - 1].IsNil) {
+                /* there is a boundary in the array part: (binary) search for it */
+                int i = 0;
+                while (j - i > 1) {
+                    int m = (i + j) / 2;
+                    if (array[m - 1].IsNil) j = m;
+                    else i = m;
+                }
+                return i;
+            }
+            /* else must find a boundary in hash part */
+            else if (hashTablePart.Count == 0)  /* hash part is empty? */
+                return j;  /* that is easy... */
+            else return unbound_search(j);
+        }
+
+        private int unbound_search(int j)
+        {
+            int i = j;  /* i is zero or a present index */
+            j++;
+            /* find `i' and `j' such that i is present and j is not */
+            while (!luaH_getnum(j).IsNil) {
+                i = j;
+                j *= 2;
+                if (j > (2147483647 - 2)) {  /* overflow? */
+                                             /* table was built with bad purposes: resort to linear search */
+                    i = 1;
+                    while (!luaH_getnum(i).IsNil) i++;
+                    return i - 1;
+                }
+            }
+            /* now do a binary search between them */
+            while (j - i > 1) {
+                int m = (i + j) / 2;
+                if (luaH_getnum(m).IsNil) j = m;
+                else i = m;
+            }
+            return i;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         IEnumerator<KeyValuePair<TValue, TValue>> IEnumerable<KeyValuePair<TValue, TValue>>.GetEnumerator()
         {
             lua_Integer index = 0;
