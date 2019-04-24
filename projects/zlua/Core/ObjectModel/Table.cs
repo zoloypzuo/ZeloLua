@@ -3,12 +3,17 @@ using System.Collections;
 using System.Collections.Generic;
 
 using zlua.Core.Lua;
-using zlua.Core.VirtualMachine;
 
 namespace zlua.Core.ObjectModel
 {
     public class Table : LuaReference, IEnumerable<KeyValuePair<TValue, TValue>>
     {
+        /// <summary>
+        /// 用于优化元方法查找的标志
+        /// </summary>
+        /// <remarks>1 left shift p bits means tagmethod(p) is not present</remarks>
+        public byte flags;
+
         public Table metatable;
         private List<TValue> array;
         private Dictionary<TValue, TValue> hashTablePart;
@@ -27,7 +32,7 @@ namespace zlua.Core.ObjectModel
         public TValue luaH_get(TValue key)
         {
             switch (key.Type) {
-                case LuaType.LUA_TNIL: return TValue.NilObject;
+                case LuaType.LUA_TNIL: return lobject.NilObject;
                 case LuaType.LUA_TSTRING:
                     return luaH_getstr(key.TStr);
 
@@ -44,7 +49,7 @@ namespace zlua.Core.ObjectModel
                     if (hashTablePart.TryGetValue(key, out v)) {
                         return v;
                     } else {
-                        return TValue.NilObject;
+                        return lobject.NilObject;
                     }
             }
         }
@@ -52,14 +57,14 @@ namespace zlua.Core.ObjectModel
         /// <summary>
         /// 返回查找到的值，否则创建新的键值对并返回该新创建的值
         /// </summary>
-        public TValue luaH_set(lua_State L, TValue key)
+        public TValue luaH_set(TValue key)
         {
             TValue v = luaH_get(key);
             // 注意这里是比较地址
             // clua中if (p != luaO_nilobject)，c语言没有等于号重载
             // luaO_nilobject被设计为一个单例，专门用于表查找返回时作为未查到的标志
             // 下面的else分支中还检查了IsNil
-            if (Object.ReferenceEquals(v, TValue.NilObject)) {
+            if (Object.ReferenceEquals(v, lobject.NilObject)) {
                 return v;
             } else {
                 if (key.IsNil) {
@@ -80,14 +85,14 @@ namespace zlua.Core.ObjectModel
         /// </summary>
         /// <param name="key"></param>
         /// <returns></returns>
-        public TValue luaH_getstr(LuaString key)
+        public TValue luaH_getstr(TString key)
         {
             TValue k = new TValue(key);
             TValue v;
             if (hashTablePart.TryGetValue(k, out v)) {
                 return v;
             } else {
-                return TValue.NilObject;
+                return lobject.NilObject;
             }
         }
 
@@ -108,15 +113,15 @@ namespace zlua.Core.ObjectModel
                 if (hashTablePart.TryGetValue(k, out v)) {
                     return v;
                 } else {
-                    return TValue.NilObject;
+                    return lobject.NilObject;
                 }
             }
         }
 
-        public TValue luaH_setstr(LuaString key)
+        public TValue luaH_setstr(TString key)
         {
             var v = luaH_getstr(key);
-            if (Object.ReferenceEquals(v, TValue.NilObject)) {
+            if (Object.ReferenceEquals(v, lobject.NilObject)) {
                 return v;
             } else {
                 TValue k = new TValue(key);
@@ -127,7 +132,7 @@ namespace zlua.Core.ObjectModel
         public TValue luaH_setnum(int key)
         {
             TValue v = luaH_getnum(key);
-            if (Object.ReferenceEquals(v, TValue.NilObject)) {
+            if (Object.ReferenceEquals(v, lobject.NilObject)) {
                 return v;
             } else {
                 TValue k = new TValue((lua_Number)key);

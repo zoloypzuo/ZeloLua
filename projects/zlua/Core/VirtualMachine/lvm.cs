@@ -333,7 +333,7 @@ namespace zlua.Core.VirtualMachine
                                 ra.N = -nb;
                             } else {
                                 // TODO 这样写对不对
-                                trybinTM(rb, rb, ra, TMS.TM_UNM);
+                                call_binTM(rb, rb, ra, TMS.TM_UNM);
                             }
                             continue;
                         }
@@ -417,7 +417,7 @@ namespace zlua.Core.VirtualMachine
                             continue;
                         }
 
-                    #endregion 比较运算符
+                    #endregion 比较运算符 关系逻辑类指令
 
                     #region 函数相关指令
 
@@ -483,7 +483,8 @@ namespace zlua.Core.VirtualMachine
                     case Opcode.OP_TFORLOOP: {
                             continue;
                         }
-                    #endregion
+
+                    #endregion 循环类指令
 
                     // A B C R(A)[(C-1)*FPF+i] := R(A+i), 1 <= i <= B
                     case Opcode.OP_SETLIST: {
@@ -584,17 +585,58 @@ namespace zlua.Core.VirtualMachine
                 if (t.IsTable) {
                     Table h = t.Table;
                     TValue res = h.luaH_get(key);/* do a primitive get */
-                    if (!res.IsNil ||
-                            false) {
+                    tm = fasttm(h.metatable, TMS.TM_INDEX);
+                    if (!res.IsNil ||  /* result is no nil? */
+                            tm == null) {  /* or no TM? */
                         val.Value = res;
+                        return;
+                    }
+                    /* else will try the tag method */
+                } else {
+                    tm = luaT_gettmbyobj(t, TMS.TM_INDEX);
+                    if (tm.IsNil) {
+                        //TODO
+                        //luaG_typeerror(L, t, "index");
+                        throw new Exception();
+                    } else if (tm.IsFunction) {
+                        callTMres(val, tm, t, key);
+                        return;
+                    } else {
+                        t = tm; /* else repeat with `tm' */
                     }
                 }
-                /* else will try the tag method */
             }
+            //TODO
+            //luaG_runerror(L, "loop in gettable");
         }
 
         public void luaV_settable(TValue t, TValue key, TValue val)
         {
+            for (int loop = 0; loop < MAXTAGLOOP; loop++) {
+                TValue tm;
+                if (t.IsTable) {
+                    Table h = t.Table;
+                    TValue oldval = h.luaH_set(key);  /* do a primitive set */
+                    tm = fasttm(h.metatable, TMS.TM_NEWINDEX);
+                    if (!oldval.IsNil ||
+                        tm == null) {
+                        oldval.Value = val;
+                        return;
+                    }
+                    /* else will try the tag method */
+                } else {
+                    tm = luaT_gettmbyobj(t, TMS.TM_NEWINDEX);
+                    if (tm.IsNil) {
+                        //luaG_typeerror(L, t, "index");
+                    } else if (tm.IsFunction) {
+                        callTM(tm, t, key, val);
+                        return;
+                    } else {
+                        t = tm;  /* else repeat with `tm' */
+                    }
+                }
+            }
+            //luaG_runerror(L, "loop in settable");
         }
 
         public bool LessThan(TValue lhs, TValue rhs)

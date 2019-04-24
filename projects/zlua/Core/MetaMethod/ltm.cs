@@ -1,11 +1,13 @@
-﻿using zlua.Core.Lua;
+﻿using System.Diagnostics;
+
+using zlua.Core.Lua;
 using zlua.Core.ObjectModel;
 
 namespace zlua.Core.VirtualMachine
 {
     public partial class lua_State
     {
-        public static readonly string[] names = new string[] {
+        private static string[] luaT_eventname { get; } = new string[] {
             "__index", "__newindex",
             "__gc", "__mode", "__eq",
             "__add", "__sub", "__mul", "__div", "__mod",
@@ -13,62 +15,105 @@ namespace zlua.Core.VirtualMachine
             "__concat", "__call"
         };
 
+        private void luaT_init()
+        {
+            for (int i = 0; i < (int)TMS.TM_N; i++) {
+                globalState.tmname[i] = new TString(luaT_eventname[i]);
+            }
+        }
+
         /// <summary>
-        /// luaT_gettmbyobj; get metamethod from `obj，
+        /// get metamethod from `obj，
         /// obj没有元表或没有该元方法返回nilobject；enum和string一一对应，这里从enum开始
         /// </summary>
-        private TValue GetMetamethod(TValue obj, TMS metamethodType)
+        private TValue luaT_gettmbyobj(TValue o, TMS @event)
         {
-            Table metatable;
-            switch (obj.Type) {
+            Table mt;
+            switch (o.Type) {
                 case LuaType.LUA_TTABLE:
-                    metatable = obj.Table.metatable;
+                    mt = o.Table.metatable;
                     break;
-
                 //case LuaType.Userdata:
                 //    metatable = obj.Userdata.metaTable;
                 //    break;
-
                 default:
-                    metatable = globalState.metaTableForBasicType[(int)obj.Type];
+                    mt = globalState.mt[(int)o.Type];
                     break;
             }
-            return metatable != null ?
-                metatable.luaH_getstr(globalState.metaMethodNames[(int)metamethodType]) :
-                TValue.NilObject;
+            return mt != null ?
+                mt.luaH_getstr(globalState.tmname[(int)@event]) :
+                lobject.NilObject;
         }
 
-        /// call_binTM; result = __add(lhs, rhs); __add从lhs和rhs的元表查找出，如果都没找到返回false
-        private bool trybinTM(TValue lhs, TValue rhs, TValue result, TMS metamethodType)
+        /// <summary>
+        /// <paramref name="res"/>=<paramref name="f"/>(<paramref name="p1"/>,<paramref name="p2"/>)
+        /// </summary>
+        /// <param name="res"></param>
+        /// <param name="f"></param>
+        /// <param name="p1"></param>
+        /// <param name="p2"></param>
+        private void callTMres(TValue res, TValue f, TValue p1, TValue p2)
         {
-            result = null;
-            TValue metamethod = GetMetamethod(lhs, metamethodType);
-            if (metamethod.IsNil)
-                metamethod = GetMetamethod(rhs, metamethodType);
-            if (metamethod.IsNil)
+            LuaStack.push(f);
+            LuaStack.push(p1);
+            LuaStack.push(p2);
+            luaD_call(top - 3, 1);
+            top--;
+            res.Value = Stack[top];
+        }
+
+        private void callTM(TValue f, TValue p1, TValue p2, TValue p3)
+        {
+            LuaStack.push(f);
+            LuaStack.push(p1);
+            LuaStack.push(p2);
+            LuaStack.push(p3);
+            luaD_call(top - 4, 0);
+        }
+
+        /// ; result = __add(lhs, rhs); __add从lhs和rhs的元表查找出，如果都没找到返回false
+        private bool call_binTM(TValue p1, TValue p2, TValue res/*result*/, TMS @event)
+        {
+            res = null;
+            TValue tm = luaT_gettmbyobj(p1, @event);
+            if (tm.IsNil) {  /* try first operand */
+                tm = luaT_gettmbyobj(p2, @event);
+            }
+            if (tm.IsNil) {  /* try second operand */
                 return false;
-            result.Value = callTMres(metamethod, lhs, rhs);
+            }
+            callTMres(res, tm, p1, p2);
             return true;
         }
 
-        /// callTMres
-        /// `metamethod(lhs, rhs)
-        /// 使用lua通用调用协议，可以去Ido.Call的文档看；调用后top恢复到原处，就像没有调用过一样
-        private TValue callTMres(TValue metamethod, TValue lhs, TValue rhs)
+        /// <summary>
+        /// function to be used with macro "fasttm": optimized for absence of tag methods
+        /// </summary>
+        /// <param name="events"></param>
+        /// <param name="event"></param>
+        /// <param name="ename"></param>
+        /// <returns></returns>
+        private static TValue luaT_gettm(/*this*/Table events, TMS @event, TString ename)
         {
-            /* push func and 2 args*/
-            Stack[top++].Value = metamethod;
-            Stack[top++].Value = lhs;
-            Stack[top++].Value = rhs;
-            Call(top - 3);
-            return Stack[--top]; //TODO call做了什么，result放在哪里
+            TValue tm = events.luaH_getstr(ename);
+            Debug.Assert((int)@event <= (int)TMS.TM_EQ);
+            if (tm.IsNil) {  /* no tag method? */
+                events.flags |= (byte)(1 << (int)@event);  /* cache this fact */
+                return null;
+            } else {
+                return tm;
+            }
+        }
+
+        private TValue fasttm(Table et, TMS e)
+        {
+            return et == null ?
+                null :
+                    (et.flags & (1 << (int)e)) != 0 ?
+                        null :
+                        luaT_gettm(et, e, globalState.tmname[(int)e]);
         }
     }
-
-    /*
-    * WARNING: if you change the order of this enumeration,
-    * grep "ORDER TM" and "ORDER OP"
-    */
 
     internal enum TMS
     {

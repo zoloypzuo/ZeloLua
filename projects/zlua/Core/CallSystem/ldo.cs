@@ -10,8 +10,6 @@ namespace zlua.Core.VirtualMachine
 {
     public partial class lua_State
     {
-        // luaD_call
-        //
         // * 调用函数，函数可以是c#函数或lua函数
         // * 调用协议如下：
         //   调用/Call/前，Closure实例和实参被依次压栈
@@ -25,7 +23,7 @@ namespace zlua.Core.VirtualMachine
         /// lua_call 函数和args已经压栈，调用它；是一次C发起的调用
         /// 这个特殊的call不是lua实现内部使用的，他会用api来push func，push args然后调用
         /// 一个例子是每次启动chunk时，push chunk，call it，funcindex=topindex-1
-        public void Call(int nargs = 0, int nresults = LUA_MULTRET)
+        public void luaD_call(int nargs = 0, int nresults = LUA_MULTRET)
         {
             ++NumCSharpCalls;
             if (NumCSharpCalls >= LuaConfiguration.MaxCalls)
@@ -111,7 +109,7 @@ namespace zlua.Core.VirtualMachine
         /// </summary>
         private TValue TryMetaCall(int funcIndex)
         {
-            TValue metamethod = GetMetamethod(Stack[funcIndex], TMS.TM_CALL);
+            TValue metamethod = luaT_gettmbyobj(Stack[funcIndex], TMS.TM_CALL);
             Debug.Assert(metamethod.IsFunction);
             /* Open a hole inside the stack at `func' */
             for (int i = top; i > funcIndex; i--)

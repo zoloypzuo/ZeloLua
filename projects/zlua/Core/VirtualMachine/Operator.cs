@@ -33,7 +33,7 @@ namespace zlua.Core.VirtualMachine
                 if (b && c) {
                     ra.N = FOp(nb, nc);
                 } else {
-                    trybinTM(rb, rc, ra, @event);
+                    call_binTM(rb, rc, ra, @event);
                 }
             }
         }
@@ -49,7 +49,7 @@ namespace zlua.Core.VirtualMachine
             if (rb.IsInteger && rc.IsInteger) {
                 ra.I = IOp(rb.I, rc.I);
             } else {
-                trybinTM(rb, rc, ra, @event);
+                call_binTM(rb, rc, ra, @event);
             }
         }
 
@@ -68,7 +68,7 @@ namespace zlua.Core.VirtualMachine
             if (b && c) {
                 ra.N = FOp(nb, nc);
             } else {
-                trybinTM(rb, rc, ra, @event);
+                call_binTM(rb, rc, ra, @event);
             }
         }
 
@@ -179,7 +179,7 @@ namespace zlua.Core.VirtualMachine
             int n = 2;  /* number of elements handled in this pass (at least 2) */
             var o = Stack[top - 2];
             if (!(o.IsString) || o.IsNumber || !Stack[top - 1].IsString)
-                trybinTM(Stack[top - 2], Stack[top - 1], Stack[top - 2], TMS.TM_CONCAT);
+                call_binTM(Stack[top - 2], Stack[top - 1], Stack[top - 2], TMS.TM_CONCAT);
             //else if (isemptystr(top - 1))  /* second operand is empty? */
             //  cast_void(tostring(L, top - 2));  /* result is first operand */
             //else if (isemptystr(top - 2)) {  /* first operand is an empty string? */

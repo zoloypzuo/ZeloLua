@@ -27,7 +27,7 @@ namespace zlua.Core.ObjectModel
         ///     <item>大小8B</item>
         ///     <item>
         ///     是union，这个特性不允许引用类型，所以TObject放在外面
-        ///     https://docs.microsoft.com/en-us/dotnet/api/system.runtime.interopservices.structlayoutattribute?view=netframework-4.7.2    
+        ///     https://docs.microsoft.com/en-us/dotnet/api/system.runtime.interopservices.structlayoutattribute?view=netframework-4.7.2
         ///     </item>
         /// </list>
         /// </remarks>
@@ -104,10 +104,10 @@ namespace zlua.Core.ObjectModel
         }
 
         [JsonIgnore]
-        public LuaString TStr {
+        public TString TStr {
             get {
                 Debug.Assert(IsString);
-                return ReferenceValue as LuaString;
+                return ReferenceValue as TString;
             }
             set {
                 Type = LuaType.LUA_TSTRING;
@@ -119,15 +119,15 @@ namespace zlua.Core.ObjectModel
         public string Str {
             get {
                 Debug.Assert(IsString);
-                return (ReferenceValue as LuaString).str;
+                return (ReferenceValue as TString).str;
             }
             set {
                 Type = LuaType.LUA_TSTRING;
-                var tstr = ReferenceValue as LuaString;
+                var tstr = ReferenceValue as TString;
                 if (tstr != null) {
                     tstr.str = value;
                 } else {
-                    ReferenceValue = new LuaString(value);
+                    ReferenceValue = new TString(value);
                 }
             }
         }
@@ -217,10 +217,10 @@ namespace zlua.Core.ObjectModel
         public TValue(string s)
         {
             Type = LuaType.LUA_TSTRING;
-            ReferenceValue = new LuaString(s);
+            ReferenceValue = new TString(s);
         }
 
-        public TValue(LuaString tstr)
+        public TValue(TString tstr)
         {
             Type = LuaType.LUA_TSTRING;
             ReferenceValue = tstr;
@@ -279,9 +279,6 @@ namespace zlua.Core.ObjectModel
 
         // lua值都可以作为条件测试，只有false和nil是条件为假
         public bool IsTrue { get { return !IsFalse; } }
-
-        /// luaO_nilobject_; 单例
-        public static readonly TValue NilObject = new TValue { Type = LuaType.LUA_TNIL };
 
         internal bool i;
 
