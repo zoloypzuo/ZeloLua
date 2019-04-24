@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 using zlua.Core.Lua;
 using zlua.Core.ObjectModel;
 
@@ -23,14 +20,17 @@ namespace zlua.Core.VirtualMachine
                 case LuaType.LUA_TNUMINT:
                     n = (double)val.I;
                     return true;
+
                 case LuaType.LUA_TNUMBER:
                     n = val.N;
                     return true;
+
                 case LuaType.LUA_TSTRING:
                     double outN;
                     bool b = TValue.Str2Num(val.Str, out outN);
                     n = outN;
                     return b;
+
                 default:
                     n = 0;
                     return false;
@@ -44,11 +44,14 @@ namespace zlua.Core.VirtualMachine
                 case LuaType.LUA_TNUMINT:
                     i = val.I;
                     return true;
+
                 case LuaType.LUA_TNUMBER:
                     FloatToInteger(val.N, out i);
                     return true;
+
                 case LuaType.LUA_TSTRING:
                     return lua_Integer.TryParse(val.Str, out i);
+
                 default:
                     i = 0;
                     return false;

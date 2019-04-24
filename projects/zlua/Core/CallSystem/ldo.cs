@@ -111,7 +111,7 @@ namespace zlua.Core.VirtualMachine
         /// </summary>
         private TValue TryMetaCall(int funcIndex)
         {
-            TValue metamethod =GetMetamethod(Stack[funcIndex], TMS.TM_CALL);
+            TValue metamethod = GetMetamethod(Stack[funcIndex], TMS.TM_CALL);
             Debug.Assert(metamethod.IsFunction);
             /* Open a hole inside the stack at `func' */
             for (int i = top; i > funcIndex; i--)

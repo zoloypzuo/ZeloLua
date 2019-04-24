@@ -56,7 +56,7 @@ namespace zlua.Core.VirtualMachine
              * TODO
              	c := newLuaClosure(proto)
 	            self.stack.push(c)
-	            
+
                 ????
                 if len(proto.Upvalues) > 0 {
                     // table[2]
@@ -75,9 +75,9 @@ namespace zlua.Core.VirtualMachine
                         Console.WriteLine(s.Str);
                     }
                 };
-                cl.upvals.Add(new Upvalue()
+                cl.upvals.Add(new UpVal()
                 {
-                    val = new TValue(env)
+                    v = new TValue(env)
                 });
             }
             stack.push(new TValue(cl));
@@ -109,7 +109,6 @@ namespace zlua.Core.VirtualMachine
 
         /// 基于L.top，压函数，压args，返回1个值
         public delegate void CSharpFunction(lua_State L);
-
 
         private Proto DoInput(string chunk, string chunkName)
         {

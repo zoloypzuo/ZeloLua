@@ -242,11 +242,11 @@ namespace zlua.Core.Undumper
             return protos;
         }
 
-        private static Upvalue[] ReadUpvalues(BinaryReader reader)
+        private static UpVal[] ReadUpvalues(BinaryReader reader)
         {
-            var upvals = new Upvalue[reader.ReadUInt32()];
+            var upvals = new UpVal[reader.ReadUInt32()];
             for (int i = 0; i < upvals.Length; i++) {
-                upvals[i] = new Upvalue
+                upvals[i] = new UpVal
                 {
                     Instack = reader.ReadByte(),
                     Idx = reader.ReadByte()

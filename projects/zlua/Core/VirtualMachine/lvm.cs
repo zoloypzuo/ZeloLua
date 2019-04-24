@@ -92,7 +92,6 @@ namespace zlua.Core.VirtualMachine
             //}
             //lua.Register(this, Assert, "assert");
 
-
             // TODO OpenLibs()
         }
 
@@ -107,6 +106,7 @@ namespace zlua.Core.VirtualMachine
         private TValue[] k;
 
         #region 从指令取出参数的辅助方法
+
         private TValue R(int i)
         {
             return Stack[@base + i];
@@ -131,7 +131,7 @@ namespace zlua.Core.VirtualMachine
         }
 
         // RK(B)
-        TValue RKB(Bytecode i)
+        private TValue RKB(Bytecode i)
         {
             int B = (int)i.B;
             var rb = Bytecode.IsK(B) ?
@@ -153,15 +153,21 @@ namespace zlua.Core.VirtualMachine
         // UpValue[A]
         private TValue UpValueA(Bytecode instr)
         {
-            var upa = cl.upvals[(int)instr.A].val;
+            var upa = cl.upvals[(int)instr.A].v;
             return upa;
         }
 
         // UpValue[B]
         private TValue UpValueB(Bytecode instr)
         {
-            var upb = cl.upvals[(int)instr.B].val;
+            var upb = cl.upvals[(int)instr.B].v;
             return upb;
+        }
+
+        private TValue KBx(Bytecode i)
+        {
+            Debug.Assert(BytecodeTool.GetOpConstraint(i.Opcode).ArgBMode == OperandMode.OpArgK);
+            return k[i.Bx];
         }
 
         #endregion 从指令取出参数的辅助方法
@@ -186,52 +192,240 @@ namespace zlua.Core.VirtualMachine
             // 缓存savedpc
 
             while (true) {
-                Bytecode instr = codes[pc++];
+                Bytecode i = codes[pc++];
                 Debug.Assert(@base == ci.@base);
                 Debug.Assert(@base <= top && top < StackLastFree); //这里始终没有。
-                TValue ra = RA(instr);
-                switch (instr.Opcode) {
-                    #region 数据传输指令
+                TValue ra = RA(i);
+                switch (i.Opcode) {
+
+                    #region 赋值类指令 数据传输指令
+
+                    // A B R(A) := R(B)
                     case Opcode.OP_MOVE: {
-                            ra.Value = RB(instr);
+                            ra.Value = RB(i);
                             continue;
                         }
-                    // A Bx	R(A) := Kst(Bx)
+                    // A Bx R(A) := Kst(Bx)
                     // 从常量表取出常量写入R(A)
                     case Opcode.OP_LOADK: {
-                            TValue rb = k[instr.Bx];
+                            ra.Value = KBx(i);
+                            continue;
+                        }
+                    // A B C R(A) := (Bool)B; if (C) pc++
+                    case Opcode.OP_LOADBOOL: {
+                            ra.B = i.B != 0;
+                            continue;
+                        }
+                    // A B R(A) := ... := R(B) := nil
+                    case Opcode.OP_LOADNIL: {
+                            int raIndex = (int)i.A;
+                            int rbIndex = (int)i.B;
+                            do {
+                                Stack[rbIndex--].SetNil();
+                            } while (rbIndex >= raIndex);
+                            continue;
+                        }
+                    // A B R(A) := UpValue[B]
+                    case Opcode.OP_GETUPVAL: {
+                            ra.Value = UpValueB(i);
+                            continue;
+                        }
+                    // A Bx R(A) := Gbl[Kst(Bx)]
+                    case Opcode.OP_GETGLOBAL: {
+                            TValue g = new TValue(cl.env);
+                            TValue rb = KBx(i);
+                            Debug.Assert(rb.IsString);
+                            GetTable(g, rb, ra);
+                            continue;
+                        }
+                    // A B C R(A) := R(B)[RK(C)]
+                    case Opcode.OP_GETTABLE: {
+                            GetTable(RB(i), RKC(i), ra);
+                            continue;
+                        }
+                    // A Bx Gbl[Kst(Bx)] := R(A)
+                    case Opcode.OP_SETGLOBAL: {
+                            TValue g = new TValue(cl.env);
+                            Debug.Assert(KBx(i).IsString);
+                            SetTable(g, KBx(i), ra);
+                            continue;
+                        }
+                    // A B UpValue[B] := R(A)
+                    case Opcode.OP_SETUPVAL: {
+                            UpVal uv = cl.upvals[(int)i.B];
+                            uv.v.Value = ra;
+                            continue;
+                        }
+                    // A B C R(A)[RK(B)] := RK(C)
+                    case Opcode.OP_SETTABLE: {
+                            SetTable(ra, RKB(i), RKC(i));
+                            continue;
+                        }
+
+                    // A B C R(A) := {} (size = B,C)
+                    case Opcode.OP_NEWTABLE: {
+                            int b = (int)i.B;
+                            int c = (int)i.C;
+                            ra.Table = new Table(b, c);
+                            //TODO
+                            //ra.Table= luaH_new(L, luaO_fb2int(b), luaO_fb2int(c)));
+                            continue;
+                        }
+                    // A B C R(A+1) := R(B); R(A) := R(B)[RK(C)]
+                    // self指令为lua提供了oop范式
+                    // 方法调用obj:f()会生成一条self指令
+                    // self指令的执行分为两步：
+                    // * 从obj表中查找"f"键的值作为被调用方法
+                    // * 将obj设为f的第一个实参
+                    // self指令后会有一条move指令，再是一条call指令
+                    case Opcode.OP_SELF: {
+                            // 将obj设为f的第一个实参
+                            TValue rb = RB(i);
+                            R((int)i.A + 1).Value = rb;
+                            // 从obj表中查找"f"键的值作为被调用方法
+                            GetTable(rb, RKC(i), ra);
+                            continue;
+                        }
+
+                    #endregion 赋值类指令 数据传输指令
+
+                    #region 算术运算符 数值计算类指令
+
+                    // A B C R(A) := RK(B) + RK(C)
+                    case Opcode.OP_ADD: {
+                            //TODO
+                            //arith_op(luai_numadd, TM_ADD);
+
+                            Arith(i, (a, b) => a + b, (a, b) => a + b, TMS.TM_ADD);
+                            continue;
+                        }
+                    // A B C R(A) := RK(B) - RK(C)
+                    case Opcode.OP_SUB: {
+                            Arith(i, (a, b) => a - b, (a, b) => a - b, TMS.TM_SUB);
+                            continue;
+                        }
+                    // A B C R(A) := RK(B) * RK(C)
+                    case Opcode.OP_MUL: {
+                            Arith(i, (a, b) => a * b, (a, b) => a * b, TMS.TM_MUL);
+                            continue;
+                        }
+                    // A B C R(A) := RK(B) / RK(C)
+                    case Opcode.OP_DIV: {
+                            Arith(i, (lua_Number a, lua_Number b) => a / b, TMS.TM_DIV);
+                            continue;
+                        }
+                    // A B C R(A) := RK(B) % RK(C)
+                    case Opcode.OP_MOD: {
+                            Arith(i, IMod, FMod, TMS.TM_MOD);
+                            continue;
+                        }
+                    // A B C R(A) := RK(B) ^ RK(C)
+                    case Opcode.OP_POW: {
+                            Arith(i, Pow, TMS.TM_POW);
+                            continue;
+                        }
+
+                    // A B R(A) := -R(B)
+                    case Opcode.OP_UNM: {
+                            //TODO
+                            TValue rb = RB(i);
+                            lua_Number nb;
+                            if (rb.IsInteger) {
+                                lua_Integer ib = rb.I;
+                                ra.I = -ib;
+                            } else if (tonumber(rb, out nb)) {
+                                ra.N = -nb;
+                            } else {
+                                // TODO 这样写对不对
+                                trybinTM(rb, rb, ra, TMS.TM_UNM);
+                            }
+                            continue;
+                        }
+
+                    #endregion 算术运算符 数值计算类指令
+
+                    #region 逻辑运算符
+
+                    // A B R(A) := not R(B)
+                    case Opcode.OP_NOT: {
+                            TValue rb = RB(i);
+                            bool res = rb.IsFalse;  /* next assignment may change this value */
+                            ra.B = res;
+                            continue;
+                        }
+
+                    #endregion 逻辑运算符
+
+                    // A B R(A) := length of R(B)
+                    case Opcode.OP_LEN: {
+                            //objlen(ra, RB(i));
+                            TValue rb = RB(i);
+                            switch (rb.Type) {
+                                case LuaType.LUA_TTABLE: {
+                                        //ra.N
+                                        break;
+                                    }
+                                case LuaType.LUA_TSTRING: {
+                                        break;
+                                    }
+                                // try metamethod
+                                default: {
+                                        break;
+                                    }
+                            }
+                            continue;
+                        }
+                    // A B C R(A) := R(B).. ... ..R(C)
+                    case Opcode.OP_CONCAT: {
+                            //TODO
+                            int b = (int)i.B;
+                            int c = (int)i.C;
+                            TValue rb;
+                            top = @base + c + 1;  /* mark the end of concat operands */
+                            concat(c - b + 1);
+                            ra = RA(i);  /* 'luaV_concat' may invoke TMs and move the stack */
+                            rb = Stack[@base + b];
                             ra.Value = rb;
                             continue;
                         }
-                    //case Opcode.LoadBool:
-                    //    ra.B = Convert.ToBoolean(instr.B);
-                    //    if (Convert.ToBoolean(instr.C)) pc++;
-                    //    continue;
-                    //case Opcode.LoadNil: {
-                    //        int a = instr.A;
-                    //        int b = instr.B;
-                    //        do {
-                    //            R(b--).SetNil();
-                    //        } while (b >= a);
-                    //        continue;
-                    //    }
-                    //case Opcode.GetGlobal: {
-                    //        LuaValue rb = KBx(instr);
-                    //        Debug.Assert(rb.IsString);
-                    //        GetTable((LuaValue)cl.env, rb, ra);
-                    //        continue;
-                    //    }
-                    //case Opcode.OP_GETTABLE:
-                    //    throw new NotImplementedException();
-                    //    //GetTable(RB(instr), RKC(instr), ra);
-                    //    continue;
-                    //case Opcode.SetGlobal:
-                    //    Debug.Assert(KBx(instr).IsString);
-                    //    SetTable((LuaValue)cl.env, KBx(instr), ra);
-                    //    continue;
-                    #endregion
+                    // sBx pc+=sBx
+                    case Opcode.OP_JMP: {
+                            pc += i.SignedBx;
+                            if (i.A != 0) {
+                                // luaF_close(L, ci->u.l.base + a - 1);
+                            }
+                            continue;
+                        }
+
+                    #region 比较运算符 关系逻辑类指令
+
+                    // A B C if ((RK(B) == RK(C)) ~= A) then pc++
+                    case Opcode.OP_EQ: {
+                            Relation(i, EqualVal);
+                            continue;
+                        }
+                    // A B C if ((RK(B) <  RK(C)) ~= A) then pc++
+                    case Opcode.OP_LT: {
+                            continue;
+                        }
+                    // A B C if ((RK(B) <= RK(C)) ~= A) then pc++
+                    case Opcode.OP_LE: {
+                            continue;
+                        }
+                    // A C if not (R(A) <=> C) then pc++
+                    case Opcode.OP_TEST: {
+                            continue;
+                        }
+                    // A B C if (R(B) <=> C) then R(A) := R(B) else pc++
+                    case Opcode.OP_TESTSET: {
+                            continue;
+                        }
+
+                    #endregion 比较运算符
+
                     #region 函数相关指令
-                    // A B C	R(A), ... ,R(A+C-2) := R(A)(R(A+1), ... ,R(A+B-1))
+
+                    // A B C R(A), ... ,R(A+C-2) := R(A)(R(A+1), ... ,R(A+B-1))
                     // A指定被调用函数对象的寄存器索引
                     // A后面紧跟实参列表，实参个数为B
                     // 返回值个数为C
@@ -239,9 +433,9 @@ namespace zlua.Core.VirtualMachine
                     // 执行完该指令后，被调用函数和它的栈帧被清空，返回值被留在栈上
                     // 《自己动手实现Lua》p154
                     case Opcode.OP_CALL: {
-                            int b = (int)instr.B;
-                            int nresults = (int)instr.C - 1;
-                            int func = @base + (int)instr.A;
+                            int b = (int)i.B;
+                            int nresults = (int)i.C - 1;
+                            int func = @base + (int)i.A;
                             if (b != 0) top = func + b;  /* else previous instruction set top */
                             switch (PreCall(func, nresults)) {
                                 case PCRLUA: {
@@ -256,10 +450,10 @@ namespace zlua.Core.VirtualMachine
                                     return;
                             }
                         }
-                    // A B	return R(A), ... ,R(A+B-2)	(see note)
+                    // A B return R(A), ... ,R(A+B-2) (see note)
                     case Opcode.OP_RETURN: {
-                            int b = (int)instr.B;
-                            int a = (int)instr.A;
+                            int b = (int)i.B;
+                            int a = (int)i.A;
                             if (b != 0) top = @base + a + b - 1;
                             PosCall(a);
                             if (--nexeccalls == 0) /* chunk executed, return*/
@@ -270,28 +464,46 @@ namespace zlua.Core.VirtualMachine
                                 goto reentry;
                             }
                         }
-                    // A B C	R(A+1) := R(B); R(A) := R(B)[RK(C)]
-                    // self指令为lua提供了oop范式
-                    // 方法调用obj:f()会生成一条self指令
-                    // self指令的执行分为两步：
-                    // * 从obj表中查找"f"键的值作为被调用方法
-                    // * 将obj设为f的第一个实参
-                    // self指令后会有一条move指令，再是一条call指令
-                    case Opcode.OP_SELF: {
-                            // 将obj设为f的第一个实参
-                            TValue rb = RB(instr);
-                            R((int)instr.A + 1).Value = rb;
-                            // 从obj表中查找"f"键的值作为被调用方法
-                            GetTable(rb, RKC(instr), ra);
+                    // A B C return R(A)(R(A+1), ... ,R(A+B-1))
+                    // 形如return f()的返回语句被优化成尾递归
+                    case Opcode.OP_TAILCALL: {
+                            // TODO clua太多了，书上没讲
                             continue;
                         }
-                    // A Bx	R(A) := closure(KPROTO[Bx])
+
+                    #endregion 函数相关指令
+
+                    #region 循环类指令
+
+                    // A sBx R(A)+=R(A+2); if R(A) <?= R(A+1) then { pc+=sBx; R(A+3)=R(A) }
+                    case Opcode.OP_FORLOOP: {
+                            continue;
+                        }
+                    // A sBx R(A)-=R(A+2); pc+=sBx
+                    case Opcode.OP_FORPREP: {
+                            continue;
+                        }
+                    // A C R(A+3), ... ,R(A+2+C) := R(A)(R(A+1), R(A+2)); if R(A+3) ~= nil then R(A+2)=R(A+3) else pc++
+                    case Opcode.OP_TFORLOOP: {
+                            continue;
+                        }
+                    #endregion
+
+                    // A B C R(A)[(C-1)*FPF+i] := R(A+i), 1 <= i <= B
+                    case Opcode.OP_SETLIST: {
+                            continue;
+                        }
+                    // A  close all variables in the stack up to (>=) R(A)
+                    case Opcode.OP_CLOSE: {
+                            continue;
+                        }
+                    // A Bx R(A) := closure(KPROTO[Bx], R(A), ... ,R(A+n))
                     // closure指令的执行分为以下两步：
                     // * 从内嵌Proto列表中取出Proto实例，来构造Closure实例ncl
                     // * 提前执行后面的move指令或get upval指令来初始化ncl的upvals
                     case Opcode.OP_CLOSURE: {
                             /*用Proto简单new一个LuaClosure，提前执行之后的指令s来初始化upvals*/
-                            Proto p = cl.p.Protos[instr.Bx];
+                            Proto p = cl.p.Protos[i.Bx];
                             int nup = p.nUpvals;
                             LuaClosure ncl = new LuaClosure(cl.env, nup, p);
                             // 后面一定跟着一些getUpval或mov指令用来初始化upvals，分情况讨论，把这些指令在这个周期就执行掉
@@ -310,18 +522,18 @@ namespace zlua.Core.VirtualMachine
                             ra.Cl = ncl;
                             continue;
                         }
-                    // A B	R(A), R(A+1), ..., R(A+B-2) = vararg
+                    // A B R(A), R(A+1), ..., R(A+B-1) = vararg
                     // 将vararg加载到连续多个寄存器中
                     // 开始索引为A，个数为B
                     // vararg指令很像call指令
                     case Opcode.OP_VARARG: {
-                            int a = (int)instr.A;
-                            int b = (int)instr.B - 1;
+                            int a = (int)i.A;
+                            int b = (int)i.B - 1;
                             CallInfo ci = this.ci;
                             int n = ci.@base - ci.funcIndex - cl.p.numparams;
                             if (b == LUA_MULTRET) {
                                 stack.check(n);
-                                ra = RA(instr);  /* previous call may change the stack */
+                                ra = RA(i);  /* previous call may change the stack */
                                 b = n;
                                 top = a + n;
                             }
@@ -334,180 +546,11 @@ namespace zlua.Core.VirtualMachine
                             }
                             continue;
                         }
-                    // A B C	return R(A)(R(A+1), ... ,R(A+B-1))
-                    // 形如return f()的返回语句被优化成尾递归
-                    case Opcode.OP_TAILCALL: {
-                            // TODO clua太多了，书上没讲
-                            continue;
-                        }
-                    #endregion
-                    #region 闭包相关指令
-                    // A B	R(A) := UpValue[B]
-                    case Opcode.OP_GETUPVAL: {
-                            RA(instr).Value = UpValueB(instr);
-                            continue;
-                        }
-                    // A B	UpValue[B] := R(A)
-                    case Opcode.OP_SETUPVAL: {
-                            UpValueB(instr).Value = RA(instr);
-                            continue;
-                        }
-                    // A B C	R(A) := UpValue[B][RK(C)]
-                    // UpValue[B]是一个表，RK(C)取得常量，再查表，将结果写入R(A)
-                    case Opcode.OP_GETTABUP: {
-                            var upval = UpValueA(instr);
-                            var rkc = RKC(instr);
-                            ra.Value = upval.Table.Get(rkc);
-                            continue;
-                        }
-                    // A B C	UpValue[A][RK(B)] := RK(C)
-                    case Opcode.OP_SETTABUP: {
-                            UpValueA(instr).Table.Get(RKB(instr)).Value = RKC(instr);
-                            continue;
-                        }
-                    // A sBx	pc+=sBx; if (A) close all upvalues >= R(A - 1)
-                    // 除了基本的跳转功能外，jmp指令兼顾闭合处于开启状态的upvalue
-                    // 被捕获的变量离开作用域时，编译器会生成一条jmp a 0指令来闭合该变量
-                    // lua5.1只有跳转功能
-                    // 我觉得生成单独的close比较好
-                    case Opcode.OP_JMP: {
-                            pc += instr.SignedBx;
-                            if (instr.A != 0) {
-                                // luaF_close(L, ci->u.l.base + a - 1);
-                            }
-                            continue;
-                        }
-
-                    #endregion
-                    #region 算术运算符
-                    case Opcode.OP_ADD: {
-                            Arith(instr, (a, b) => a + b, (a, b) => a + b, TMS.TM_ADD);
-                            continue;
-                        }
-                    case Opcode.OP_SUB: {
-                            Arith(instr, (a, b) => a - b, (a, b) => a - b, TMS.TM_SUB);
-                            continue;
-                        }
-                    case Opcode.OP_MUL: {
-                            Arith(instr, (a, b) => a * b, (a, b) => a * b, TMS.TM_MUL);
-                            continue;
-                        }
-                    /* float division (always with floats) */
-                    case Opcode.OP_DIV: {
-                            Arith(instr, (lua_Number a, lua_Number b) => a / b, TMS.TM_DIV);
-                            continue;
-                        }
-
-                    case Opcode.OP_MOD: {
-                            Arith(instr, IMod, FMod, TMS.TM_MOD);
-                            continue;
-                        }
-                    case Opcode.OP_IDIV: {
-                            Arith(instr, IFloorDiv, FFloorDiv, TMS.TM_IDIV);
-                            continue;
-                        }
-                    case Opcode.OP_POW: {
-                            Arith(instr, Pow, TMS.TM_POW);
-                            continue;
-                        }
-                    case Opcode.OP_UNM: {
-                            TValue rb = RB(instr);
-                            lua_Number nb;
-                            if (rb.IsInteger) {
-                                lua_Integer ib = rb.I;
-                                ra.I = -ib;
-                            } else if (tonumber(rb, out nb)) {
-                                ra.N = -nb;
-                            } else {
-                                // TODO 这样写对不对
-                                trybinTM(rb, rb, ra, TMS.TM_UNM);
-                            }
-                            continue;
-                        }
-                    #endregion
-                    #region 按位运算符
-                    case Opcode.OP_BAND: {
-                            Arith(instr, (a, b) => a & b, TMS.TM_BAND);
-                            continue;
-                        }
-                    case Opcode.OP_BOR: {
-                            Arith(instr, (a, b) => a | b, TMS.TM_BOR);
-                            continue;
-                        }
-                    case Opcode.OP_BXOR: {
-                            Arith(instr, (a, b) => a ^ b, TMS.TM_BXOR);
-                            continue;
-                        }
-                    case Opcode.OP_SHL: {
-                            Arith(instr, ShiftLeft, TMS.TM_SHL);
-                            continue;
-                        }
-                    case Opcode.OP_SHR: {
-                            Arith(instr, ShiftRight, TMS.TM_SHR);
-                            continue;
-                        }
-                    case Opcode.OP_BNOT: {
-                            TValue rb = RB(instr);
-                            lua_Integer ib;
-                            if (tointeger(rb, out ib)) {
-                                ra.I = ~ib;
-                            } else {
-                                trybinTM(rb, rb, ra, TMS.TM_BNOT);
-                            }
-                            continue;
-                        }
-                    #endregion
-                    #region 比较运算符
-                    case Opcode.OP_EQ: {
-                            Relation(instr, EqualVal);
-                            continue;
-                        }
-                    case Opcode.OP_LT: {
-                            //Relation(instr,)
-                        }
-                    #endregion
-                    #region 逻辑运算符
-                    case Opcode.OP_NOT: {
-                            TValue rb = RB(instr);
-                            bool res = rb.IsFalse;  /* next assignment may change this value */
-                            ra.B = res;
-                            continue;
-                        }
-                    #endregion
-                    #region 表相关指令
-                    case Opcode.OP_SETTABLE:
-                        throw new NotImplementedException();
-                        //SetTable(ra, RKB(instr), RKC(instr));
-                        continue;
-                    case Opcode.OP_NEWTABLE: {
-                            //int b = instr.B;
-                            //int c = instr.C;
-                            //ra.Table = new TTable(c, b);
-                            continue;
-                        }
-                    #endregion
-                    case Opcode.OP_LEN: {
-                            objlen(ra, RB(instr));
-                            continue;
-                        }
-                    case Opcode.OP_CONCAT: {
-                            int b = (int)instr.B;
-                            int c = (int)instr.C;
-                            TValue rb;
-                            top = @base + c + 1;  /* mark the end of concat operands */
-                            concat(c - b + 1);
-                            ra = RA(instr);  /* 'luaV_concat' may invoke TMs and move the stack */
-                            rb = Stack[@base + b];
-                            ra.Value = rb;
-                            continue;
-                        }
                     default:
                         continue;
                 }
             }
         }
-
-
 
         /// 让栈扩展到`size大小
         /// TODO 删除 stack.check
@@ -519,8 +562,6 @@ namespace zlua.Core.VirtualMachine
 
         #region other things
 
-
-
         /// <summary>
         /// luaV_tostring
         /// </summary>
@@ -528,8 +569,6 @@ namespace zlua.Core.VirtualMachine
         {
             return false;
         }
-
-
 
         /// <summary>
         /// luaV_gettable
@@ -550,8 +589,6 @@ namespace zlua.Core.VirtualMachine
             if (lhs.IsString) return false;//TODO 字典序。或者你看标准库有没有
             else return false; //TODO 调用meta方法
         }
-
-
 
         #endregion other things
 

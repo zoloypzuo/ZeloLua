@@ -276,6 +276,7 @@ namespace zlua.Core.ObjectModel
 
         /// luaO_nilobject_; 单例
         public static readonly TValue NilObject = new TValue { Type = LuaType.LUA_TNIL };
+
         internal bool i;
 
         /// luaO_str2d; 简单地包装Parse，返回成功和double
@@ -285,7 +286,7 @@ namespace zlua.Core.ObjectModel
             // 类似于这种地方，就暴露了LuaNumber是double
             // 然而这是没办法的。。
             // out LuaNumber时无法隐式转换，所以此函数参数使用out double，为了方便
-            return Double.TryParse(s,out n);
+            return Double.TryParse(s, out n);
         }
 
         #endregion 其他方法

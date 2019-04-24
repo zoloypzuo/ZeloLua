@@ -37,7 +37,7 @@ namespace zlua.Core.ObjectModel
         public TValue[] Constants;
 
         // Upvalue表
-        public Upvalue[] Upvalues;
+        public UpVal[] Upvalues;
 
         // 内嵌Proto表
         public Proto[] Protos;
@@ -59,8 +59,10 @@ namespace zlua.Core.ObjectModel
         public string[] UpvalueNames;
 
         #region 公有访问器
+
         public int nUpvals { get { return Upvalues.Length; } }
-        #endregion
+
+        #endregion 公有访问器
     }
 
     internal class ChunkProto : Proto

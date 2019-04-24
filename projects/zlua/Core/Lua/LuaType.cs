@@ -62,8 +62,8 @@
         LUA_TLNGSTR = LUA_TSTRING | (1 << 4),  /* long strings */
         /* Variant tags for numbers */
         LUA_TNUMFLT = LUA_TNUMBER | (0 << 4),  /* float numbers */
+
         // lua5.3新增的整数类型
         LUA_TNUMINT = LUA_TNUMBER | (1 << 4),  /* integer numbers */
     }
-
 }

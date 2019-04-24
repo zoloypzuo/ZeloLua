@@ -1,6 +1,5 @@
 ﻿using zlua.Core.Lua;
 using zlua.Core.ObjectModel;
-using zlua.Core.VirtualMachine;
 
 namespace zlua.Core.VirtualMachine
 {
@@ -39,14 +38,13 @@ namespace zlua.Core.VirtualMachine
                 TValue.NilObject;
         }
 
-
         /// call_binTM; result = __add(lhs, rhs); __add从lhs和rhs的元表查找出，如果都没找到返回false
         private bool trybinTM(TValue lhs, TValue rhs, TValue result, TMS metamethodType)
         {
             result = null;
-            TValue metamethod = GetMetamethod( lhs, metamethodType);
+            TValue metamethod = GetMetamethod(lhs, metamethodType);
             if (metamethod.IsNil)
-                metamethod = GetMetamethod( rhs, metamethodType);
+                metamethod = GetMetamethod(rhs, metamethodType);
             if (metamethod.IsNil)
                 return false;
             result.Value = callTMres(metamethod, lhs, rhs);
@@ -71,7 +69,8 @@ namespace zlua.Core.VirtualMachine
     * WARNING: if you change the order of this enumeration,
     * grep "ORDER TM" and "ORDER OP"
     */
-    enum TMS
+
+    internal enum TMS
     {
         TM_INDEX,
         TM_NEWINDEX,
@@ -99,6 +98,4 @@ namespace zlua.Core.VirtualMachine
         TM_CALL,
         TM_N        /* number of elements in the enum */
     }
-
-
 }

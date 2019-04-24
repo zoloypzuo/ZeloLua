@@ -186,9 +186,9 @@ namespace zlua.Core.ObjectModel
         }
     }
 
-    internal class Upvalue : LuaReference
+    internal class UpVal : LuaReference
     {
-        public TValue val;
+        public TValue v;
         public byte Instack;
         public byte Idx;
     }

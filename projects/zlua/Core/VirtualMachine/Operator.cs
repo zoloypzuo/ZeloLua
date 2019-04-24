@@ -2,6 +2,7 @@
 
 using System;
 using System.Diagnostics;
+
 using zlua.Core.Instruction;
 using zlua.Core.Lua;
 using zlua.Core.ObjectModel;
@@ -52,7 +53,7 @@ namespace zlua.Core.VirtualMachine
             }
         }
 
-        void Arith(
+        private void Arith(
             Bytecode instr,
             Func<lua_Number, lua_Number, lua_Number> FOp,
             TMS @event)
@@ -71,7 +72,7 @@ namespace zlua.Core.VirtualMachine
             }
         }
 
-        void Relation(Bytecode instr, Func<TValue, TValue, bool> predicate)
+        private void Relation(Bytecode instr, Func<TValue, TValue, bool> predicate)
         {
             TValue rb = RKB(instr);
             TValue rc = RKC(instr);
@@ -84,7 +85,6 @@ namespace zlua.Core.VirtualMachine
                 }
                 pc += instr.SignedBx + 1;
             }
-
         }
 
         // int floor div
@@ -170,6 +170,7 @@ namespace zlua.Core.VirtualMachine
         ** Main operation for concatenation: concat 'total' values in the stack,
         ** from 'L->top - total' up to 'L->top - 1'.
         */
+
         // TODO 太复杂了
         public void concat(int total)
         {

@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace zlua.Core.Instruction
+﻿namespace zlua.Core.Instruction
 {
     // 将指令编码和解码成虚拟机需要的格式
     //
@@ -65,15 +63,6 @@ namespace zlua.Core.Instruction
         public static OpConstraint GetOpConstraint(Opcode opcode)
         {
             return OpcodeConstraints[(int)opcode];
-        }
-
-        public static List<Bytecode> Gen(uint[] hexs)
-        {
-            var a = new List<Bytecode>();
-            foreach (var item in hexs) {
-                a.Add(new Bytecode(item));
-            }
-            return a;
         }
 
         #endregion 公有方法
