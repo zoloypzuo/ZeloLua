@@ -475,14 +475,58 @@ namespace zlua.Core.VirtualMachine
 
                     // A sBx R(A)+=R(A+2); if R(A) <?= R(A+1) then { pc+=sBx; R(A+3)=R(A) }
                     case Opcode.OP_FORLOOP: {
+                            lua_Number step = Stack[(int)i.A + 2].N;
+                            lua_Number idx = ra.N + step; /* increment index */
+                            lua_Number limit = Stack[(int)i.A + 1].N;
+                            if ((0 < step) ? idx <= limit
+                                                    : limit <= idx) {
+                                pc += i.SignedBx;  /* jump back */
+                                ra.N = idx;  /* update internal index... */
+                                Stack[(int)i.A + 3].N = idx;  /* ...and external index */
+                            }
                             continue;
                         }
                     // A sBx R(A)-=R(A+2); pc+=sBx
                     case Opcode.OP_FORPREP: {
+                            TValue init = ra;
+                            TValue plimit = Stack[(int)i.A + 1];
+                            TValue pstep = Stack[(int)i.A + 2];
+                            //savedpc = pc;  /* next steps may throw errors */
+                            lua_Number n1;
+                            lua_Number n2;
+                            lua_Number n3;
+                            if (!tonumber(init, out n1))
+                                //luaG_runerror(L, LUA_QL("for") " initial value must be a number");
+                                throw new Exception();
+                            else if (!tonumber(plimit, out n2))
+                                //luaG_runerror(L, LUA_QL("for") " limit must be a number");
+                                throw new Exception();
+                            else if (!tonumber(pstep, out n3))
+                                //luaG_runerror(L, LUA_QL("for") " step must be a number");
+                                throw new Exception();
+                            init.N = n1;
+                            plimit.N = n2;
+                            pstep.N = n3;
+                            ra.N = ra.N - pstep.N;
+                            pc += i.SignedBx;
                             continue;
                         }
                     // A C R(A+3), ... ,R(A+2+C) := R(A)(R(A+1), R(A+2)); if R(A+3) ~= nil then R(A+2)=R(A+3) else pc++
                     case Opcode.OP_TFORLOOP: {
+                            int a = (int)i.A;
+                            int cb = (int)i.A + 3;  /* call base */
+                            Stack[cb + 2].Value = Stack[a + 2];
+                            Stack[cb + 1].Value = Stack[a + 1];
+                            Stack[cb].Value = ra;
+                            top = cb + 3;  /* func. + 2 args (state and index) */
+                            luaD_call(cb, (int)i.C);
+                            top = ci.top;
+                            //cb = i.A + 3;  /* previous call may change the stack */
+                            if (!Stack[cb].IsNil) {  /* continue loop? */
+                                Stack[cb -1].Value=Stack[cb];  /* save control variable */
+                                pc += codes[pc].SignedBx;  /* jump back */
+                            }
+                            pc++;
                             continue;
                         }
 
