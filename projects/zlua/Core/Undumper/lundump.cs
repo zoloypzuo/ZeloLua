@@ -183,7 +183,6 @@ namespace zlua.Core.Undumper
             if (source == null) {
                 source = parentSource;
             }
-
             var p= new Proto
             {
                 source = source,

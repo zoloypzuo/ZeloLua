@@ -161,7 +161,7 @@ namespace zlua.Core.VirtualMachine
 
         private TValue KBx(Bytecode i)
         {
-            Debug.Assert(BytecodeTool.GetOpConstraint(i.Opcode).ArgBMode == OperandMode.OpArgK);
+            Debug.Assert(BytecodeTool.GetOpmode(i.Opcode).ArgBMode == OperandMode.OpArgK);
             return k[i.Bx];
         }
 

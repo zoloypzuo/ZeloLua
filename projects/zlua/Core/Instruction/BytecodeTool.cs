@@ -1,11 +1,8 @@
 ﻿namespace zlua.Core.Instruction
 {
-    // 将指令编码和解码成虚拟机需要的格式
-    //
-    // 虚拟机要的是操作码和操作数，操作数？？？有一部分还是得写到TThread中
     internal class BytecodeTool
     {
-        private static opmode[] OpcodeConstraints = new opmode[]
+        private static opmode[] luaP_opmodes = new opmode[]
         {
             // 我不是制表大师┑(￣Д ￣)┍
             /*       T  A    B       C     mode		   opcode	*/
@@ -51,9 +48,9 @@
 
         #region 公有方法
 
-        public static opmode GetOpConstraint(Opcode opcode)
+        public static opmode GetOpmode(Opcode opcode)
         {
-            return OpcodeConstraints[(int)opcode];
+            return luaP_opmodes[(int)opcode];
         }
 
         #endregion 公有方法
@@ -170,6 +167,9 @@
         OpArgK
     }
 
+    /// <summary>
+    /// 指令约束
+    /// </summary>
     internal class opmode
     {
         // 是测试指令
@@ -183,7 +183,6 @@
         public OperandMode ArgBMode { get; }
         public OperandMode ArgCMode { get; }
         public OpMode OpMode { get; }
-        public string Name { get; }
 
         public opmode(
             bool isTest, bool setA,

@@ -55,11 +55,11 @@ namespace zlua.Core.Instruction
         [JsonIgnore]
         public uint Ax {
             get {
-                Debug.Assert(BytecodeTool.GetOpConstraint(Opcode).OpMode == OpMode.IAx);
+                Debug.Assert(BytecodeTool.GetOpmode(Opcode).OpMode == OpMode.IAx);
                 return Get(SIZE_Ax, POS_Ax);
             }
             set {
-                Debug.Assert(BytecodeTool.GetOpConstraint(Opcode).OpMode == OpMode.IAx);
+                Debug.Assert(BytecodeTool.GetOpmode(Opcode).OpMode == OpMode.IAx);
                 Set(value, SIZE_Ax, POS_Ax);
             }
         }
@@ -199,7 +199,7 @@ namespace zlua.Core.Instruction
 
         public override string ToString()
         {
-            var c = BytecodeTool.GetOpConstraint(Opcode);
+            var c = BytecodeTool.GetOpmode(Opcode);
             var op = Opcode;
             switch (c.OpMode) {
                 case OpMode.IABC:
