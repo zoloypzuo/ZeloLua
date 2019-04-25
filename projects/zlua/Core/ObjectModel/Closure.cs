@@ -26,9 +26,9 @@ namespace zlua.Core.ObjectModel
         {
             this.p = p;
             upvals = new List<UpVal>(nUpvals);
-            for (int i = 0; i < p.Upvalues.Length; i++) {
-                p.Upvalues[i] = new UpVal();
-            }
+            //for (int i = 0; i < p.Upvalues.Length; i++) {
+            //    p.Upvalues[i] = new UpVal();
+            //}
         }
     }
 

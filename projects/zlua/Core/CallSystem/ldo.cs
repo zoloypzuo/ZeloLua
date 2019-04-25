@@ -64,13 +64,13 @@ namespace zlua.Core.VirtualMachine
                 CallInfo ci = new CallInfo()
                 {
                     funcIndex = funcIndex,
-                    top = funcIndex + p.MaxStackSize
+                    top = funcIndex + p.maxstacksize
                 };
                 if (ci.top >= this.StackLastFree)
                     Alloc(ci.top + 1);
                 // 更新pc
                 pc = 0;
-                codes = p.Code;
+                codes = p.code;
                 CallInfoStack.Push(ci);
                 // 栈帧清为nil
                 // 把多余的函数参数设为nil

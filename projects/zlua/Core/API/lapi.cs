@@ -132,11 +132,6 @@ namespace zlua.Core.VirtualMachine
             LuaStack.push(new TValue(b));
         }
 
-        public void PushInteger(lua_Integer i)
-        {
-            LuaStack.push(new TValue(i));
-        }
-
         public void PushNumber(double n)
         {
             LuaStack.push(new TValue(n));

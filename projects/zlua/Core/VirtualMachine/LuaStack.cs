@@ -10,7 +10,8 @@ namespace zlua.Core.VirtualMachine
     /// </summary>
     /// <remarks>
     /// <list>
-    ///     <item>注意还是要手工扩容的，用数组是不行的，用list后还得手工扩容，扩容是添加新的luaValue实例</item>
+    ///     
+    /// 注意还是要手工扩容的，用数组是不行的，用list后还得手工扩容，扩容是添加新的luaValue实例</item>
     ///     <item>栈索引参见p54</item>
     /// </list>
     /// </remarks>

@@ -8,6 +8,7 @@ using zlua.Core.ObjectModel;
 
 /// <summary>
 /// 虚拟机
+
 /// </summary>
 namespace zlua.Core.VirtualMachine
 {
@@ -184,7 +185,7 @@ namespace zlua.Core.VirtualMachine
             // 缓存cl
             cl = Stack[ci.funcIndex].Cl as LuaClosure;
             // 缓存k
-            k = cl.p.Constants;
+            k = cl.p.k;
             // 缓存savedpc
 
             while (true) {
@@ -525,8 +526,8 @@ namespace zlua.Core.VirtualMachine
                     // * 提前执行后面的move指令或get upval指令来初始化ncl的upvals
                     case Opcode.OP_CLOSURE: {
                             /*用Proto简单new一个LuaClosure，提前执行之后的指令s来初始化upvals*/
-                            Proto p = cl.p.Protos[i.Bx];
-                            int nup = p.nUpvals;
+                            Proto p = cl.p.p[i.Bx];
+                            int nup = p.nups;
                             LuaClosure ncl = new LuaClosure(cl.env, nup, p);
                             // 后面一定跟着一些getUpval或mov指令用来初始化upvals，分情况讨论，把这些指令在这个周期就执行掉
                             for (int j = 0; j < nup; j++, pc++) {

@@ -10,9 +10,9 @@ namespace zlua.Core.ObjectModel
 
     internal class LocVar
     {
-        public string VarName;
-        public uint StartPc;
-        public uint EndPc;
+        public string varname;
+        public int startpc;
+        public int endpc;
     }
 
     // GCObject; base class of all reference type objects in lua

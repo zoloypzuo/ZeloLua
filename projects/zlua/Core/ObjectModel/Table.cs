@@ -221,9 +221,9 @@ namespace zlua.Core.ObjectModel
         {
             lua_Integer index = 0;
             foreach (var item in array) {
-                yield return
-                    new KeyValuePair<TValue, TValue>(
-                        new TValue(++index), item);
+                //yield return
+                //    new KeyValuePair<TValue, TValue>(
+                //        new TValue(++index), item);
             }
             foreach (var item in hashTablePart) {
                 yield return item;

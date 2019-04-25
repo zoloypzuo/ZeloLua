@@ -12,6 +12,10 @@ namespace zlua.Core.ObjectModel
     // TODO light ud没了解足够，先不管
     /// <summary>
     /// lua对象
+    /// <list type="bullet">
+    ///     <item>item1</item>
+    ///     <item>item2</item>
+    /// </list>
     /// </summary>
     /// <remarks>TODO大小8+8+4=20B，其中指针大小4B或8B，enum大小默认4B，现在的样子是对齐的</remarks>
     public class TValue : IEquatable<TValue>
@@ -82,18 +86,6 @@ namespace zlua.Core.ObjectModel
             set {
                 tt = LuaTag.LUA_TNUMBER;
                 NumericValue = new LuaNumeric { n = value };
-            }
-        }
-
-        [JsonIgnore]
-        public lua_Integer I {
-            get {
-                Debug.Assert(IsInteger);
-                return NumericValue.i;
-            }
-            set {
-                tt = LuaTag.LUA_TNUMINT;
-                NumericValue = new LuaNumeric { i = value };
             }
         }
 
@@ -226,12 +218,6 @@ namespace zlua.Core.ObjectModel
             NumericValue = new LuaNumeric { n = n };
         }
 
-        public TValue(lua_Integer i)
-        {
-            tt = LuaTag.LUA_TNUMINT;
-            NumericValue = new LuaNumeric { i = i };
-        }
-
         public TValue(bool b)
         {
             tt = LuaTag.LUA_TBOOLEAN;
@@ -279,7 +265,6 @@ namespace zlua.Core.ObjectModel
         #region 类型谓词
 
         public bool IsNil { get { return tt == LuaTag.LUA_TNIL; } }
-        public bool IsInteger { get { return tt == LuaTag.LUA_TNUMINT; } }
         public bool IsNumber { get { return tt == LuaTag.LUA_TNUMBER; } }
         public bool IsString { get { return tt == LuaTag.LUA_TSTRING; } }
         public bool IsTable { get { return tt == LuaTag.LUA_TTABLE; } }
@@ -320,7 +305,7 @@ namespace zlua.Core.ObjectModel
 
         #region 重载基本方法
 
-        public static bool luaO_rawequalObj(TValue t1,TValue t2)
+        public static bool luaO_rawequalObj(TValue t1, TValue t2)
         {
             if (t1.tt != t2.tt) {
                 return false;
@@ -329,9 +314,7 @@ namespace zlua.Core.ObjectModel
                     case LuaTag.LUA_TNIL:
                         return true;
                     case LuaTag.LUA_TNUMBER:
-                        return t1.I == t2.I;
-                    case LuaTag.LUA_TNUMINT:
-                        return t1.I == t2.I;
+                        return t1.N == t2.N;
                     case LuaTag.LUA_TBOOLEAN:
                         return t1.B == t2.B;
                     case LuaTag.LUA_TSTRING:
@@ -356,7 +339,6 @@ namespace zlua.Core.ObjectModel
         {
             switch (tt) {
                 case LuaTag.LUA_TNUMBER: return N.GetHashCode();
-                case LuaTag.LUA_TNUMINT: return I.GetHashCode();
                 case LuaTag.LUA_TSTRING: return Str.GetHashCode();
                 case LuaTag.LUA_TBOOLEAN: return B.GetHashCode();
                 default:
@@ -370,41 +352,31 @@ namespace zlua.Core.ObjectModel
             switch (tt) {
                 case LuaTag.LUA_TNONE:
                     break;
-
                 case LuaTag.LUA_TNIL:
                     break;
-
                 case LuaTag.LUA_TBOOLEAN:
                     break;
-
                 case LuaTag.LUA_TLIGHTUSERDATA:
                     break;
-
                 case LuaTag.LUA_TNUMBER:
                     break;
-
                 case LuaTag.LUA_TSTRING:
-                    break;
-
+                    return $"{tt} {Str}";
                 case LuaTag.LUA_TTABLE:
                     break;
-
                 case LuaTag.LUA_TFUNCTION:
                     break;
-
                 case LuaTag.LUA_TUSERDATA:
                     break;
-
                 case LuaTag.LUA_TTHREAD:
                     break;
-
                 case LuaTag.LUA_TPROTO:
                     break;
-
-                case LuaTag.Upval:
+                case LuaTag.LUA_TUPVAL:
                     break;
-
-                case LuaTag.LUA_TNUMINT:
+                case LuaTag.LUA_TDEADKEY:
+                    break;
+                default:
                     break;
             }
             return tt.ToString();

@@ -17,20 +17,14 @@ namespace zlua.Core.VirtualMachine
         public static bool tonumber(TValue val, out lua_Number n)
         {
             switch (val.tt) {
-                case LuaTag.LUA_TNUMINT:
-                    n = (double)val.I;
-                    return true;
-
                 case LuaTag.LUA_TNUMBER:
                     n = val.N;
                     return true;
-
                 case LuaTag.LUA_TSTRING:
                     double outN;
                     bool b = TValue.Str2Num(val.Str, out outN);
                     n = outN;
                     return b;
-
                 default:
                     n = 0;
                     return false;
@@ -41,17 +35,11 @@ namespace zlua.Core.VirtualMachine
         public static bool tointeger(TValue val, out lua_Integer i)
         {
             switch (val.tt) {
-                case LuaTag.LUA_TNUMINT:
-                    i = val.I;
-                    return true;
-
                 case LuaTag.LUA_TNUMBER:
                     FloatToInteger(val.N, out i);
                     return true;
-
                 case LuaTag.LUA_TSTRING:
                     return lua_Integer.TryParse(val.Str, out i);
-
                 default:
                     i = 0;
                     return false;

@@ -65,22 +65,22 @@ namespace zlua.Core.VirtualMachine
 	            }
              */
             LuaClosure cl = new LuaClosure(null, 1, p);
-            if (p.Upvalues.Length > 0) {
-                var env = new Table(1, 1);
-                env.luaH_set(new TValue("print")).Cl = new CSharpClosure()
-                {
-                    f = (L) =>
-                    {
-                        var s = L.LuaStack.pop();
-                        Console.WriteLine(s.Str);
-                    }
-                };
-                cl.upvals.Add(new UpVal()
-                {
-                    v = new TValue(env)
-                });
-            }
-            LuaStack.push(new TValue(cl));
+            //if (p.Upvalues.Length > 0) {
+            //    var env = new Table(1, 1);
+            //    env.luaH_set(new TValue("print")).Cl = new CSharpClosure()
+            //    {
+            //        f = (L) =>
+            //        {
+            //            var s = L.LuaStack.pop();
+            //            Console.WriteLine(s.Str);
+            //        }
+            //    };
+            //    cl.upvals.Add(new UpVal()
+            //    {
+            //        v = new TValue(env)
+            //    });
+            //}
+            //LuaStack.push(new TValue(cl));
         }
 
         public void dostring(string chunk)
