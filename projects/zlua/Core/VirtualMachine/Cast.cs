@@ -16,16 +16,16 @@ namespace zlua.Core.VirtualMachine
         // 这里不要参考clua，写的很复杂很乱
         public static bool tonumber(TValue val, out lua_Number n)
         {
-            switch (val.Type) {
-                case LuaType.LUA_TNUMINT:
+            switch (val.tt) {
+                case LuaTag.LUA_TNUMINT:
                     n = (double)val.I;
                     return true;
 
-                case LuaType.LUA_TNUMBER:
+                case LuaTag.LUA_TNUMBER:
                     n = val.N;
                     return true;
 
-                case LuaType.LUA_TSTRING:
+                case LuaTag.LUA_TSTRING:
                     double outN;
                     bool b = TValue.Str2Num(val.Str, out outN);
                     n = outN;
@@ -40,16 +40,16 @@ namespace zlua.Core.VirtualMachine
         // luaV_tointeger
         public static bool tointeger(TValue val, out lua_Integer i)
         {
-            switch (val.Type) {
-                case LuaType.LUA_TNUMINT:
+            switch (val.tt) {
+                case LuaTag.LUA_TNUMINT:
                     i = val.I;
                     return true;
 
-                case LuaType.LUA_TNUMBER:
+                case LuaTag.LUA_TNUMBER:
                     FloatToInteger(val.N, out i);
                     return true;
 
-                case LuaType.LUA_TSTRING:
+                case LuaTag.LUA_TSTRING:
                     return lua_Integer.TryParse(val.Str, out i);
 
                 default:

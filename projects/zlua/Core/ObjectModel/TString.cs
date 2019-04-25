@@ -3,7 +3,7 @@
     /// <summary>
     /// the string type of lua, just warpper of C# string
     /// </summary>
-    public class TString : LuaReference
+    public class TString : GCObject
     {
         public TString(string str)
         {
@@ -31,6 +31,6 @@
 
         public static implicit operator TString(string str) => new TString(str);
 
-        public int Len { get { return str.Length; } }
+        public int len { get { return str.Length; } }
     }
 }

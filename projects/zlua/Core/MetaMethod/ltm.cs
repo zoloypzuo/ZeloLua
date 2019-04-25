@@ -29,15 +29,15 @@ namespace zlua.Core.VirtualMachine
         private TValue luaT_gettmbyobj(TValue o, TMS @event)
         {
             Table mt;
-            switch (o.Type) {
-                case LuaType.LUA_TTABLE:
+            switch (o.tt) {
+                case LuaTag.LUA_TTABLE:
                     mt = o.Table.metatable;
                     break;
                 //case LuaType.Userdata:
                 //    metatable = obj.Userdata.metaTable;
                 //    break;
                 default:
-                    mt = globalState.mt[(int)o.Type];
+                    mt = globalState.mt[(int)o.tt];
                     break;
             }
             return mt != null ?
@@ -113,6 +113,36 @@ namespace zlua.Core.VirtualMachine
                         null :
                         luaT_gettm(et, e, globalState.tmname[(int)e]);
         }
+
+        private TValue get_compTM(Table mt1, Table mt2,
+                                  TMS @event)
+        {
+            TValue tm1 = fasttm(mt1, @event);
+            TValue tm2;
+            if (tm1 == null) return null;  /* no metamethod */
+            if (mt1 == mt2) return tm1;  /* same metatables => same metamethods */
+            tm2 = fasttm(mt2, @event);
+            if (tm2 == null) return null;  /* no metamethod */
+            if (TValue.luaO_rawequalObj(tm1, tm2))  /* same metamethods? */
+                return tm1;
+            return null;
+        }
+
+        // 这里会返回-1,0,1
+        // -1是失败标志，否则返回0或1作为bool值
+        private int call_orderTM(TValue p1, TValue p2,
+                        TMS @event)
+        {
+            TValue tm1 = luaT_gettmbyobj(p1, @event);
+            TValue tm2;
+            if (tm1.IsNil) return -1;  /* no metamethod? */
+            tm2 = luaT_gettmbyobj(p2, @event);
+            if (!TValue.luaO_rawequalObj(tm1, tm2))  /* different metamethods? */
+                return -1;
+            callTMres(Stack[top], tm1, p1, p2);
+            return !Stack[top].IsFalse ? 1 : 0;
+        }
+
     }
 
     internal enum TMS

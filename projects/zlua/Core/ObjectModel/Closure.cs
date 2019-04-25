@@ -4,7 +4,7 @@ using static zlua.Core.VirtualMachine.lua_State;
 
 namespace zlua.Core.ObjectModel
 {
-    public class Closure : LuaReference
+    public class Closure : GCObject
     {
         public Table env;
 

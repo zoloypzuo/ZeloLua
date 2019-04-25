@@ -17,7 +17,7 @@ using zlua.Core.ObjectModel;
 // TODO namespace和。。还是有点。。爱
 namespace zlua.Core.VirtualMachine
 {
-    public partial class lua_State : LuaReference
+    public partial class lua_State : GCObject
     {
         public int GetTop()
         {
@@ -151,30 +151,30 @@ namespace zlua.Core.VirtualMachine
 
         #region Access*方法 从栈获取值
 
-        public string TypeName(LuaType type)
+        public string TypeName(LuaTag type)
         {
             return type.ToString();
         }
 
         // 无效索引返回LUA_TNONE
-        public LuaType Type(int idx)
+        public LuaTag Type(int idx)
         {
             if (LuaStack.isValid(idx)) {
                 var val = LuaStack.get(idx);
-                return val.Type;
+                return val.tt;
             } else {
-                return LuaType.LUA_TNONE;
+                return LuaTag.LUA_TNONE;
             }
         }
 
         public bool IsNone(int idx)
         {
-            return Type(idx) == LuaType.LUA_TNONE;
+            return Type(idx) == LuaTag.LUA_TNONE;
         }
 
         public bool IsNil(int idx)
         {
-            return Type(idx) == LuaType.LUA_TNIL;
+            return Type(idx) == LuaTag.LUA_TNIL;
         }
 
         public bool IsNoneOrNil(int idx)
@@ -184,13 +184,13 @@ namespace zlua.Core.VirtualMachine
 
         public bool IsBoolean(int idx)
         {
-            return Type(idx) == LuaType.LUA_TBOOLEAN;
+            return Type(idx) == LuaTag.LUA_TBOOLEAN;
         }
 
         // 注意lua类型转换规格
         public bool IsString(int idx)
         {
-            return Type(idx) == LuaType.LUA_TNUMBER || Type(idx) == LuaType.LUA_TSTRING;
+            return Type(idx) == LuaTag.LUA_TNUMBER || Type(idx) == LuaTag.LUA_TSTRING;
         }
 
         public bool IsNumber(int idx)
@@ -201,7 +201,7 @@ namespace zlua.Core.VirtualMachine
 
         public bool IsInteger(int idx)
         {
-            return Type(idx) == LuaType.LUA_TNUMBER;
+            return Type(idx) == LuaTag.LUA_TNUMBER;
         }
 
         public bool ToBoolean(int idx)
@@ -211,11 +211,11 @@ namespace zlua.Core.VirtualMachine
 
         private bool convertToBoolean(TValue luaValue)
         {
-            switch (luaValue.Type) {
-                case LuaType.LUA_TNIL:
+            switch (luaValue.tt) {
+                case LuaTag.LUA_TNIL:
                     return false;
 
-                case LuaType.LUA_TBOOLEAN:
+                case LuaTag.LUA_TBOOLEAN:
                     return luaValue.B;
 
                 default:

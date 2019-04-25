@@ -16,18 +16,18 @@ namespace zlua.Core.ObjectModel
     }
 
     // GCObject; base class of all reference type objects in lua
-    public abstract class LuaReference
+    public abstract class GCObject
     {
     }
 
     //TODO
-    public class Userdata : LuaReference
+    public class Userdata : GCObject
     {
-        public Table metaTable;
+        public Table metatable;
         public Table env;
     }
 
-    internal class UpVal : LuaReference
+    internal class UpVal : GCObject
     {
         public TValue v;
         public byte Instack;

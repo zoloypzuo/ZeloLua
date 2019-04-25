@@ -15,7 +15,7 @@ namespace zlua.Core.VirtualMachine
 
         //internal TThread mainThread;
         // mt for basic type
-        internal Table[] mt = new Table[(int)LuaType.LUA_TTHREAD + 1];
+        internal Table[] mt = new Table[(int)LuaTag.LUA_TTHREAD + 1];
 
         /// <summary>
         /// 元方法名字

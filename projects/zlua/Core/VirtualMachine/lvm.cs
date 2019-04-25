@@ -15,7 +15,7 @@ namespace zlua.Core.VirtualMachine
     /// 虚拟机
     /// </summary>
     /// <remarks>写成partial是分给各个API类</remarks>
-    public partial class lua_State : LuaReference
+    public partial class lua_State : GCObject
     {
         #region 私有访问器
 
@@ -351,12 +351,12 @@ namespace zlua.Core.VirtualMachine
                     // A B R(A) := length of R(B)
                     case Opcode.OP_LEN: {
                             TValue rb = RB(i);
-                            switch (rb.Type) {
-                                case LuaType.LUA_TTABLE: {
+                            switch (rb.tt) {
+                                case LuaTag.LUA_TTABLE: {
                                         ra.N = rb.Table.luaH_getn();
                                         break;
                                     }
-                                case LuaType.LUA_TSTRING: {
+                                case LuaTag.LUA_TSTRING: {
                                         ra.N = rb.Str.Length;
                                         break;
                                     }
@@ -378,9 +378,6 @@ namespace zlua.Core.VirtualMachine
                     // sBx pc+=sBx
                     case Opcode.OP_JMP: {
                             pc += i.SignedBx;
-                            if (i.A != 0) {
-                                // luaF_close(L, ci->u.l.base + a - 1);
-                            }
                             continue;
                         }
 
@@ -388,23 +385,36 @@ namespace zlua.Core.VirtualMachine
 
                     // A B C if ((RK(B) == RK(C)) ~= A) then pc++
                     case Opcode.OP_EQ: {
-                            Relation(i, EqualVal);
+                            Relation(i, equalobj);
                             continue;
                         }
                     // A B C if ((RK(B) <  RK(C)) ~= A) then pc++
                     case Opcode.OP_LT: {
+                            Relation(i, luaV_lessthan);
                             continue;
                         }
                     // A B C if ((RK(B) <= RK(C)) ~= A) then pc++
                     case Opcode.OP_LE: {
+                            Relation(i, lessequal);
                             continue;
                         }
                     // A C if not (R(A) <=> C) then pc++
                     case Opcode.OP_TEST: {
+                            if (ra.IsFalse != (i.C == 1 ? true : false)) {
+                                pc += codes[pc].SignedBx;
+                            } else {
+                                pc++;
+                            }
                             continue;
                         }
                     // A B C if (R(B) <=> C) then R(A) := R(B) else pc++
                     case Opcode.OP_TESTSET: {
+                            if (ra.IsFalse != (i.C == 1 ? true : false)) {
+                                ra.Value = RB(i);
+                                pc += codes[pc].SignedBx;
+                            } else {
+                                pc++;
+                            }
                             continue;
                         }
 
@@ -479,10 +489,34 @@ namespace zlua.Core.VirtualMachine
 
                     // A B C R(A)[(C-1)*FPF+i] := R(A+i), 1 <= i <= B
                     case Opcode.OP_SETLIST: {
+                            int n = (int)i.B;
+                            int c = (int)i.C;
+                            int last;
+                            Table h;
+                            if (n == 0) {
+                                n = top - (int)i.A - 1;
+                                top = ci.top;
+                            }
+                            if (c == 0) c = (int)codes[pc++].Value;
+                            // runtime_check
+                            if (!ra.IsTable) {
+                                break;
+                            }
+                            h = ra.Table;
+                            /* number of list items to accumulate before a SETLIST instruction */
+                            const int LFIELDS_PER_FLUSH = 50;
+                            last = ((c - 1) * LFIELDS_PER_FLUSH) + n;
+                            if (last > h.sizearray)  /* needs more space? */
+                                h.luaH_resizearray(last);  /* pre-alloc it at once */
+                            for (; n > 0; n--) {
+                                TValue val = Stack[(int)i.A + n];
+                                h.luaH_setnum(last--).Value = val;
+                            }
                             continue;
                         }
                     // A  close all variables in the stack up to (>=) R(A)
                     case Opcode.OP_CLOSE: {
+                            //luaF_close(ra);
                             continue;
                         }
                     // A Bx R(A) := closure(KPROTO[Bx], R(A), ... ,R(A+n))
@@ -644,7 +678,7 @@ namespace zlua.Core.VirtualMachine
                 else {
                     /* at least two string values; get as many as possible */
                     int tl = Stack[top - 1].Str.Length;
-                    StringBuilder buffer=new StringBuilder();
+                    StringBuilder buffer = new StringBuilder();
                     int i;
                     /* collect total length */
                     for (n = 1; n < total && tostring(Stack[top - n - 1]); n++) {
@@ -669,7 +703,7 @@ namespace zlua.Core.VirtualMachine
 
         public bool LessThan(TValue lhs, TValue rhs)
         {
-            if (lhs.Type != rhs.Type) throw new Exception();
+            if (lhs.tt != rhs.tt) throw new Exception();
             if (lhs.IsNumber) return lhs.N < rhs.N;
             if (lhs.IsString) return false;//TODO 字典序。或者你看标准库有没有
             else return false; //TODO 调用meta方法

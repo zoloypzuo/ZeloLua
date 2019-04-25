@@ -6,7 +6,7 @@ using zlua.Core.Lua;
 
 namespace zlua.Core.ObjectModel
 {
-    public class Table : LuaReference, IEnumerable<KeyValuePair<TValue, TValue>>
+    public class Table : GCObject, IEnumerable<KeyValuePair<TValue, TValue>>
     {
         /// <summary>
         /// 用于优化元方法查找的标志
@@ -31,12 +31,12 @@ namespace zlua.Core.ObjectModel
         /// <returns></returns>
         public TValue luaH_get(TValue key)
         {
-            switch (key.Type) {
-                case LuaType.LUA_TNIL: return lobject.NilObject;
-                case LuaType.LUA_TSTRING:
+            switch (key.tt) {
+                case LuaTag.LUA_TNIL: return lobject.NilObject;
+                case LuaTag.LUA_TSTRING:
                     return luaH_getstr(key.TStr);
 
-                case LuaType.LUA_TNUMBER:
+                case LuaTag.LUA_TNUMBER:
                     lua_Number n = key.N;
                     // clua是(int)n，估计问题不大
                     int k = (int)Math.Round(n, MidpointRounding.AwayFromZero);
@@ -197,6 +197,22 @@ namespace zlua.Core.ObjectModel
             return i;
         }
 
+        public int sizearray { get { return array.Count; } }
+
+        public void luaH_resizearray(int nasize)
+        {
+            //TODO
+            int nsize = (hashTablePart.Count == 0) ? 0 : hashTablePart.Count;
+            resize(nasize, nsize);
+        }
+
+        private void resize(int nasize, int nhsize)
+        {
+            for (int i = array.Count; i < nasize; i++) {
+                array.Add(new TValue());
+            }
+            //TODO
+        }
         /// <summary>
         /// 
         /// </summary>
