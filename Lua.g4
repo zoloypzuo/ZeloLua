@@ -1,45 +1,51 @@
-/*This grammar file derived from:
-    Lua 5.3 Reference Manual
-    http://www.lua.org/manual/5.3/manual.html
-    Lua 5.2 Reference Manual
-    http://www.lua.org/manual/5.2/manual.html
-    Lua 5.1 grammar written by Nicolai Mainiero
-    http://www.antlr3.org/grammar/1178608849736/Lua.g
-Tested by Kazunori Sakamoto with Test suite for Lua 5.2 (http://www.lua.org/tests/5.2/)
-Tested by Alexander Alexeev with Test suite for Lua 5.3 http://www.lua.org/tests/lua-5.3.2-tests.tar.gz
-*/
+// 基于 https://github.com/antlr/grammars-v4/blob/master/lua/Lua.g4
+// 修改说明：
+// * 运算符
+//   * 标点符号被尽量整合到exp语法规则中
+//   * 删除了部分运算符，以符合5.1标准
+// * 语句
+//   * 删除了部分语句，以符合5.1标准
+// * prefixexp被完全重写
+//   * exp，functioncall和var使用prefixexp
+//   * prefixexp被展开，使用star避免了左递归
+// * funcname被改写，否则难以生成代码
+// * parlist以及后面是完整复制，没有改动的
+//   TODO 因此比如字面量规格可能是5.3而不是5.1
 grammar Lua;
-/* #region Top level*/
+
+// 顶层语法符号
 chunk: block EOF;
 
+// 注意返回语句只能出现在block最后
 block: stat* retstat?;
 
 retstat: 'return' explist? ';'?;
-/* #endregion*/
-/* #region Statement*/
+
 stat
     : ';' #emptyStat
-    | lvalue '=' exp #assignStat
-    | functioncall #functioncallStat
+    | varlist '=' explist #assignStat
+    | functioncall #functionCallStat
     | 'break' #breakStat
-    | 'do' block 'end' #doendStat
+    | 'do' block 'end' #doStat
     | 'while' exp 'do' block 'end' #whileStat
-    | 'if' exp 'then' block elseifBlock* elseBlock? 'end' #ifelseStat
-    | 'for' NAME '=' exp ',' exp (',' exp)? 'do' block 'end' #forijkStat
-    | 'for' NAME ',' NAME 'in' exp 'do' block 'end' #forinStat
-    | 'function' funcname funcbody #functiondefStat
-    | 'local' 'function' NAME funcbody #localfunctiondefStat
+    | 'repeat' block 'until' exp #repeatStat
+    | 'if' exp 'then' block elseifBlock* elseBlock? 'end' #ifStat
+    | 'for' NAME '=' exp ',' exp (',' exp)? 'do' block 'end' #forNmericStat
+    | 'for' namelist 'in' exp 'do' block 'end' #forGenericStat
+    | 'function' funcname funcbody #functionDefStat
+    | 'local' 'function' NAME funcbody #localFunctionDefStat
     | 'local' namelist ('=' explist)? #localDeclarationStat;
 
 elseifBlock:'elseif' exp 'then' block;
 
 elseBlock:'else' block;
 
-funcname: NAME tableOrFunc methodname; //任意多次查表得到对象，然后调用方法；最简单的情况下，就是单独一个name
+//TODO
+funcname: NAME dotName* colonName?; //任意多次查表得到对象，然后调用方法；最简单的情况下，就是单独一个name
 
-tableOrFunc:('.' NAME)*;
+dotName: '.' NAME;
 
-methodname:(':' NAME)?;
+colonName: ':' NAME;
 
 varlist: var (',' var)*;
 
@@ -47,168 +53,220 @@ namelist: NAME (',' NAME)*;
 
 explist: exp (',' exp)*;
 
-doc:LONGSTRING; //chunk, function（其实都是proto）和表可以拥有doc
-                //说到这里还是希望向py靠拢，func应该也有元表（用来支持doc）
-                //希望提供正式的class机制，原型的问题在于没有封装原型为class，这点不好。参考LOOP
-                // TODO要考虑几个问题：
-                // 1.是否影响语法解析，不会出错吗
-                // 2.python是怎么做的。是否允许字段有doc呢？
-                // 3.怎么提供一个doc的接口，当然希望导出，否则干嘛 ，
-                // 4.我希望format仍然是lua，利用dofile可以清晰简单地复用lua来处理doc
-/* #endregion*/
-/* #region Expression*/
 exp
-    : nilfalsetrue=('nil'|'false'|'true') #nilfalsetrueExp
+    : 'nil' #nilExp
+    | 'false' #falseExp
+    | 'true' #trueExp
     | number #numberExp
     | string #stringExp
-    | functiondef #functiondefExp
+    | '...' #varargExp
+    | functiondef #functionDefExp
     | prefixexp #prefixexpExp
-    | tableconstructor #tablectorExp
-    | <assoc=right> lhs=exp operatorPower='^' rhs=exp #powExp
-    | operatorUnary=('not' | '#' | '-') exp #unmExp
-    | lhs=exp operatorMulDivMod=('*' | '/' | '%') rhs=exp #muldivExp
-    | lhs=exp operatorAddSub=('+' | '-') rhs=exp #addsubExp
-    | <assoc=right> lhs=exp operatorStrcat='..' rhs=exp #concatExp
-    | lhs=exp operatorComparison=('<' | '>' | '<=' | '>=' | '~=' | '==') rhs=exp #cmpExp
-    | lhs=exp operatorAnd='and' rhs=exp #andExp
-    | lhs=exp operatorOr='or' rhs=exp #orExp;
+    | tableconstructor #tableCtorExp
+    | <assoc=right> lhs=exp '^' rhs=exp #powExp
+    | opUnary exp #unaryExp
+    | lhs=exp opMulOrDivOrMod rhs=exp #mulOrDivOrModExp
+    | lhs=exp opAddOrSub rhs=exp #addOrSubExp
+    | <assoc=right> lhs=exp '..' rhs=exp #concatExp
+    | lhs=exp opCmp rhs=exp #compareExp
+    | lhs=exp 'and' rhs=exp #andExp
+    | lhs=exp 'or' rhs=exp #orExp;
 
-/*keywords*/
-NilKW:'nil';
-FalseKW:'false';
-TrueKW:'true';
+opUnary: NotKW | LenKW | MinusKW;
+
+opMulOrDivOrMod: MulKW | DivKW | ModKW;
+
+opAddOrSub: AddKW | MinusKW;
+
+opCmp: LtKW | MtKW | LeKW | MeKW | NeKW | EqKW;
+
+/*region keywords*/
 NotKW:'not';
 LenKW:'#';
-MinusKW:'-'; //both unary and binary op
+MinusKW:'-';  // both for unary and binary op
 MulKW:'*';
 DivKW:'/';
 ModKW:'%';
 AddKW:'+';
-ConcatKW:'..';
-LtKW:'<'; //less than
-MtKW:'>'; //more than
-LeKW:'<='; //less equal
-MeKW:'>='; //more equal
-NeKW:'~='; //not equal
-EqKW:'=='; //equal
-AndKW:'and';
-OrKW:'or';
+LtKW:'<';  // less than
+MtKW:'>';  // more than
+LeKW:'<=';  // less equal
+MeKW:'>=';  // more equal
+NeKW:'~=';  // not equal
+EqKW:'==';  // equal
+/*endregion keywords*/
 
-prefixexp: varOrExp nameAndArgs*; //var或带括号的exp；注意看下一条，如果有nameAndArgs就是函数调用。
+// 前缀表达式
+//
+// * “前缀”指prefixexp是functioncall和var的前缀
+// * prefixexp是NAME，括号表达式，表或函数
+//prefixexp: ((NAME | '(' exp ')' varSuffix) varSuffix* | '(' exp ')') nameAndArgs*;
+prefixexp: prefixexp0 prefixexp1* ;
 
-functioncall: varOrExp nameAndArgs+;
+prefixexp0
+    : NAME #nameP0
+    | '(' exp ')' #bracedExpP1
+    ;
 
-varOrExp: var | '(' exp ')' ; //其实还是exp，左值也要返回右值的
+prefixexp1
+    : indexer #indexerP1
+    | nameAndArgs #nameAndArgsP1
+    ;
 
-lvalue
-    :NAME #nameLvalue // => set_lug
-    |prefixexp setter #fieldLvalue;
+// 函数调用
+//
+// prefixexp求值得到一个表或函数
+// 表:NAME(...)是方法调用
+// 函数(...)是函数调用
+functioncall: prefixexp nameAndArgs;
 
-setter
-    :'[' exp ']' #normalSetter
-    | '.' NAME #dotSetter;
+// 左值
+//
+// 名字，或表索引器
+var
+    : NAME #nameLvalue
+    | prefixexp indexer #indexerLvalue;
 
-
-getter
-    :'[' exp ']' #normalGetter
-    | '.' NAME #dotGetter;
-
-
-var  //右值。和lvalue匹配的str内容是一样的，但是是右值
-    : NAME varSuffix*  #lvalueVar
-    | '(' exp ')' varSuffix+ #rvalueVar;
-
-varSuffix: nameAndArgs* getter;
+indexer
+    : '[' exp ']' #bracketIndexer
+    | '.' NAME #dotIndexer;
 
 nameAndArgs: (':' NAME)? args;
 
+// 实参列表
 args
-    : '(' explist? ')'  #normalArgs //arg list，一般的或一个表ctor或一个string
+    : '(' explist? ')'  #bracedArgs
 	| tableconstructor #tablectorArgs
 	| string  #stringArgs;
 
-functiondef: 'function' funcbody;  //定义函数;
+// 函数定义
+functiondef: 'function' funcbody;
 
 funcbody: '(' parlist? ')' block 'end';
 
-parlist: namelist; //param list，一堆param后vararg或单独vararg;
+// 形参列表
+parlist
+    : namelist (',' '...')? #namelistParlist
+    | '...' # varargParlist
+    ;
 
-tableconstructor: '{' fieldlist? '}';
+tableconstructor
+    : '{' fieldlist? '}'
+    ;
 
-fieldlist: field (fieldsep field)* fieldsep?;
+fieldlist
+    : field (fieldsep field)* fieldsep?
+    ;
 
 field
-    : '[' exp ']' '=' exp #keyValField
-    | NAME '=' exp  #nameValField
-    | exp #expField; //表ctor的字段初始化;
+    : '[' exp ']' '=' exp | NAME '=' exp | exp
+    ;
 
-fieldsep: ',' | ';' ; //表ctor的字段分隔符;
+fieldsep
+    : ',' | ';'
+    ;
 
-number: INT | HEX | FLOAT /*| HEX_FLOAT dont use that :) */;
+number
+    : INT | HEX | FLOAT | HEX_FLOAT
+    ;
 
-string: NORMALSTRING | CHARSTRING | LONGSTRING; // "..." or '...' or [=[...]=]
-/* #endregion*/
-
+string
+    : NORMALSTRING | CHARSTRING | LONGSTRING
+    ;
 
 // LEXER
-NAME: [a-zA-Z_][a-zA-Z_0-9]*;
 
-NORMALSTRING: '"' ( EscapeSequence | ~('\\'|'"') )* '"';
+NAME
+    : [a-zA-Z_][a-zA-Z_0-9]*
+    ;
 
-CHARSTRING: '\'' ( EscapeSequence | ~('\''|'\\') )* '\'';
+NORMALSTRING
+    : '"' ( EscapeSequence | ~('\\'|'"') )* '"'
+    ;
 
-LONGSTRING: '[' NESTED_STR ']';
+CHARSTRING
+    : '\'' ( EscapeSequence | ~('\''|'\\') )* '\''
+    ;
+
+LONGSTRING
+    : '[' NESTED_STR ']'
+    ;
 
 fragment
-NESTED_STR  // =[ ... ]=， =可以任意多，[]标志了str的界
+NESTED_STR
     : '=' NESTED_STR '='
-    | '[' .*? ']';
+    | '[' .*? ']'
+    ;
 
-INT: Digit+;
+INT
+    : Digit+
+    ;
 
-HEX: '0' [xX] HexDigit+;
+HEX
+    : '0' [xX] HexDigit+
+    ;
 
-FLOAT: Digit+ '.' Digit* ExponentPart?
+FLOAT
+    : Digit+ '.' Digit* ExponentPart?
     | '.' Digit+ ExponentPart?
-    | Digit+ ExponentPart;
+    | Digit+ ExponentPart
+    ;
 
-/*
-HEX_FLOAT: '0' [xX] HexDigit+ '.' HexDigit* HexExponentPart?
+HEX_FLOAT
+    : '0' [xX] HexDigit+ '.' HexDigit* HexExponentPart?
     | '0' [xX] '.' HexDigit+ HexExponentPart?
-    | '0' [xX] HexDigit+ HexExponentPart;
-*/
+    | '0' [xX] HexDigit+ HexExponentPart
+    ;
 
 fragment
-ExponentPart: [eE] [+-]? Digit+;
+ExponentPart
+    : [eE] [+-]? Digit+
+    ;
 
 fragment
-HexExponentPart: [pP] [+-]? Digit+;
+HexExponentPart
+    : [pP] [+-]? Digit+
+    ;
 
 fragment
-EscapeSequence: '\\' [abfnrtvz"'\\]
+EscapeSequence
+    : '\\' [abfnrtvz"'\\]
     | '\\' '\r'? '\n'
     | DecimalEscape
     | HexEscape
-    | UtfEscape;
+    | UtfEscape
+    ;
 
 fragment
-DecimalEscape: '\\' Digit
+DecimalEscape
+    : '\\' Digit
     | '\\' Digit Digit
-    | '\\' [0-2] Digit Digit;
+    | '\\' [0-2] Digit Digit
+    ;
 
 fragment
-HexEscape: '\\' 'x' HexDigit HexDigit;
+HexEscape
+    : '\\' 'x' HexDigit HexDigit
+    ;
 
 fragment
-UtfEscape: '\\' 'u{' HexDigit+ '}';
+UtfEscape
+    : '\\' 'u{' HexDigit+ '}'
+    ;
 
 fragment
-Digit: [0-9];
+Digit
+    : [0-9]
+    ;
 
 fragment
-HexDigit: [0-9a-fA-F];
+HexDigit
+    : [0-9a-fA-F]
+    ;
 
-COMMENT: '--[' NESTED_STR ']' -> channel(HIDDEN); // --[=[...]=]
+COMMENT
+    : '--[' NESTED_STR ']' -> channel(HIDDEN)
+    ;
 
 LINE_COMMENT
     : '--'
@@ -217,8 +275,13 @@ LINE_COMMENT
     | '[' '='* ~('='|'['|'\r'|'\n') ~('\r'|'\n')*   // --[==AA
     | ~('['|'\r'|'\n') ~('\r'|'\n')*                // --AAA
     ) ('\r\n'|'\r'|'\n'|EOF)
-    -> channel(HIDDEN);
+    -> channel(HIDDEN)
+    ;
 
-WS: [ \t\u000C\r\n]+ -> skip;
+WS
+    : [ \t\u000C\r\n]+ -> skip
+    ;
 
-SHEBANG: '#' '!' ~('\n'|'\r')* -> channel(HIDDEN);
+SHEBANG
+    : '#' '!' ~('\n'|'\r')* -> channel(HIDDEN)
+    ;
