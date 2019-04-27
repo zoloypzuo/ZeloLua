@@ -7,15 +7,9 @@ using zlua.Core.VirtualMachine;
 
 namespace zlua.Core.Instruction
 {
-    // byte code instruction，
-    //
-    // [x] 没有搞清楚sbx的问题
-    // [x] 另外我删除了RK机制，不使用这种编码 => 真香，还是按照标准来
-    // * 这个类非常在意uint和int的区别，如果一个变量是非负的话，一定使用uint
-    // * 注意<<运算符的规格
-    //   * https://docs.microsoft.com/zh-cn/dotnet/csharp/language-reference/operators/left-shift-operator
-    //   * rhs必须是int，所以这里要cast
-    //   * <<优先级比-低，所以这里要加括号
+    /// <summary>
+    /// 字节码指令
+    /// </summary>
     internal struct Bytecode
     {
         #region 内嵌类型定义
@@ -52,60 +46,20 @@ namespace zlua.Core.Instruction
 
         #region 访问器和设置器
 
-        // TODO 名字改成Opcode
         [JsonIgnore]
         public Opcode Opcode {
             get { return (Opcode)Get(SizeOp, PosOp); }
             set { Set((uint)value, SizeOp, PosOp); }
         }
 
-        // 想法很好，但是
-        // c#7之前没有解包语法
-        // 没必要传tuple，用单个访问器就很好
-        [JsonIgnore]
-        public Tuple<uint, uint, uint> ABC {
-            get {
-                Debug.Assert(BytecodeTool.GetOpConstraint(Opcode).OpMode == OpMode.IABC);
-                return new Tuple<uint, uint, uint>(A, B, C);
-            }
-            set {
-                Debug.Assert(BytecodeTool.GetOpConstraint(Opcode).OpMode == OpMode.IABC);
-                A = value.Item1; B = value.Item2; C = value.Item3;
-            }
-        }
-
-        [JsonIgnore]
-        public Tuple<uint, uint> ABx {
-            get {
-                Debug.Assert(BytecodeTool.GetOpConstraint(Opcode).OpMode == OpMode.IABx);
-                return new Tuple<uint, uint>(A, C);
-            }
-            set {
-                Debug.Assert(BytecodeTool.GetOpConstraint(Opcode).OpMode == OpMode.IABx);
-                A = value.Item1; Bx = value.Item2;
-            }
-        }
-
-        [JsonIgnore]
-        public Tuple<uint, int> AsBx {
-            get {
-                Debug.Assert(BytecodeTool.GetOpConstraint(Opcode).OpMode == OpMode.IAsBx);
-                return new Tuple<uint, int>(A, SignedBx);
-            }
-            set {
-                Debug.Assert(BytecodeTool.GetOpConstraint(Opcode).OpMode == OpMode.IAsBx);
-                A = value.Item1; SignedBx = value.Item2;
-            }
-        }
-
         [JsonIgnore]
         public uint Ax {
             get {
-                Debug.Assert(BytecodeTool.GetOpConstraint(Opcode).OpMode == OpMode.IAx);
+                Debug.Assert(BytecodeTool.GetOpmode(Opcode).OpMode == OpMode.IAx);
                 return Get(SIZE_Ax, POS_Ax);
             }
             set {
-                Debug.Assert(BytecodeTool.GetOpConstraint(Opcode).OpMode == OpMode.IAx);
+                Debug.Assert(BytecodeTool.GetOpmode(Opcode).OpMode == OpMode.IAx);
                 Set(value, SIZE_Ax, POS_Ax);
             }
         }
@@ -245,8 +199,8 @@ namespace zlua.Core.Instruction
 
         public override string ToString()
         {
-            var c = BytecodeTool.GetOpConstraint(Opcode);
-            var op = c.Name;
+            var c = BytecodeTool.GetOpmode(Opcode);
+            var op = Opcode;
             switch (c.OpMode) {
                 case OpMode.IABC:
                     return $"{op} A: {A} B: {B} C: {C}";

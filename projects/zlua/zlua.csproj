@@ -72,8 +72,13 @@
     <Compile Include="Core\Lua\LuaInteger.cs" />
     <Compile Include="Core\Lua\LuaNumber.cs" />
     <Compile Include="Core\Lua\LuaType.cs" />
-    <Compile Include="Core\ObjectModel\LuaValue.cs" />
+    <Compile Include="Core\ObjectModel\TValue.cs" />
     <Compile Include="Core\ObjectModel\Proto.cs" />
+    <Compile Include="Core\ObjectModel\Table.cs" />
+    <Compile Include="Core\ObjectModel\TString.cs" />
+    <Compile Include="Core\VirtualMachine\CallInfo.cs" />
+    <Compile Include="Core\VirtualMachine\global_State.cs" />
+    <Compile Include="Core\VirtualMachine\LuaStack.cs" />
     <Compile Include="Core\VirtualMachine\Operator.cs" />
     <Compile Include="Core\VirtualMachine\Cast.cs" />
     <Compile Include="Program.cs" />

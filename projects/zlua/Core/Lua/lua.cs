@@ -40,7 +40,7 @@ namespace zlua.Core.VirtualMachine
         public void dofile(string path)
         {
             loadfile(path);
-            Call(0, LUA_MULTRET);
+            luaD_call(0, LUA_MULTRET);
         }
 
         // luaL_loadfile
@@ -65,22 +65,22 @@ namespace zlua.Core.VirtualMachine
 	            }
              */
             LuaClosure cl = new LuaClosure(null, 1, p);
-            if (p.Upvalues.Length > 0) {
-                var env = new Table(1, 1);
-                env.Set(this, new TValue("print")).Cl = new CSharpClosure()
-                {
-                    f = (L) =>
-                    {
-                        var s = L.stack.pop();
-                        Console.WriteLine(s.Str);
-                    }
-                };
-                cl.upvals.Add(new UpVal()
-                {
-                    v = new TValue(env)
-                });
-            }
-            stack.push(new TValue(cl));
+            //if (p.Upvalues.Length > 0) {
+            //    var env = new Table(1, 1);
+            //    env.luaH_set(new TValue("print")).Cl = new CSharpClosure()
+            //    {
+            //        f = (L) =>
+            //        {
+            //            var s = L.LuaStack.pop();
+            //            Console.WriteLine(s.Str);
+            //        }
+            //    };
+            //    cl.upvals.Add(new UpVal()
+            //    {
+            //        v = new TValue(env)
+            //    });
+            //}
+            //LuaStack.push(new TValue(cl));
         }
 
         public void dostring(string chunk)
@@ -95,7 +95,7 @@ namespace zlua.Core.VirtualMachine
             // TODO 从visitor取得proto
             // 我还是愿意创建chunkproto这个类
             // 拿到后压栈
-            Call(0);
+            luaD_call(0);
         }
 
         /// 注册一个C#函数，在lua代码中用name调用
@@ -104,7 +104,7 @@ namespace zlua.Core.VirtualMachine
         public void Register(CSharpFunction csFunc, string name)
         {
             var newFunc = new CSharpClosure() { f = csFunc };
-            GlobalsTable.Table.GetByStr((TString)name).Cl = newFunc;
+            GlobalsTable.Table.luaH_getstr((TString)name).Cl = newFunc;
         }
 
         /// 基于L.top，压函数，压args，返回1个值

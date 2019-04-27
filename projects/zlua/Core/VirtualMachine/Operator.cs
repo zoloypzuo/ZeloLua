@@ -14,78 +14,38 @@ namespace zlua.Core.VirtualMachine
         // 算术运算符和按位运算符
         //
         // 辅助函数，没什么为什么
-        private void Arith(
-            Bytecode instr,
-            Func<lua_Integer, lua_Integer, lua_Integer> IOp,
-            Func<lua_Number, lua_Number, lua_Number> FOp,
+        private void arith_op(
+            Bytecode i,
+            Func<lua_Number, lua_Number, lua_Number> op,
             TMS @event)
         {
-            TValue ra = RA(instr);
-            TValue rb = RKB(instr);
-            TValue rc = RKC(instr);
-            if (rb.IsInteger && rc.IsInteger) {
-                ra.I = IOp(rb.I, rc.I);
-            } else {
-                lua_Number nb;
-                lua_Number nc;
-                bool b = tonumber(rb, out nb);
-                bool c = tonumber(rc, out nc);
-                if (b && c) {
-                    ra.N = FOp(nb, nc);
-                } else {
-                    trybinTM(rb, rc, ra, @event);
-                }
-            }
-        }
-
-        private void Arith(
-            Bytecode instr,
-            Func<lua_Integer, lua_Integer, lua_Integer> IOp,
-            TMS @event)
-        {
-            TValue ra = RA(instr);
-            TValue rb = RKB(instr);
-            TValue rc = RKC(instr);
-            if (rb.IsInteger && rc.IsInteger) {
-                ra.I = IOp(rb.I, rc.I);
-            } else {
-                trybinTM(rb, rc, ra, @event);
-            }
-        }
-
-        private void Arith(
-            Bytecode instr,
-            Func<lua_Number, lua_Number, lua_Number> FOp,
-            TMS @event)
-        {
-            TValue ra = RA(instr);
-            TValue rb = RKB(instr);
-            TValue rc = RKC(instr);
+            TValue ra = RA(i);
+            TValue rb = RKB(i);
+            TValue rc = RKC(i);
             lua_Number nb;
             lua_Number nc;
             bool b = tonumber(rb, out nb);
             bool c = tonumber(rc, out nc);
             if (b && c) {
-                ra.N = FOp(nb, nc);
+                ra.N = op(nb, nc);
+            } else if (call_binTM(rb, rc, ra, @event)) {
             } else {
-                trybinTM(rb, rc, ra, @event);
+                //luaG_aritherror(L, rb, rc);
+                throw new Exception();
             }
         }
 
-        private void Relation(Bytecode instr, Func<TValue, TValue, bool> predicate)
+        private void Relation(Bytecode i, Func<TValue, TValue, bool> predicate)
         {
-            TValue rb = RKB(instr);
-            TValue rc = RKC(instr);
-            if (predicate(rb, rc) != (instr.A != 0)) {
+            TValue rb = RKB(i);
+            TValue rc = RKC(i);
+            if (predicate(rb, rc) != (i.A != 0)) {
                 pc++;
             } else {
-                int a = (int)instr.A;
-                if (a != 0) {
-                    //  luaF_close(L, ci->u.l.base + a - 1);
-                }
-                pc += instr.SignedBx + 1;
+                pc += codes[pc].SignedBx;
             }
         }
+
 
         // int floor div
         public static lua_Integer IFloorDiv(lua_Integer a, lua_Integer b)
@@ -110,7 +70,7 @@ namespace zlua.Core.VirtualMachine
         }
 
         // float mod
-        public static lua_Number FMod(lua_Number a, lua_Number b)
+        public static lua_Number luai_nummod(lua_Number a, lua_Number b)
         {
             return a - Math.Floor(a / b) * b;
         }
@@ -125,113 +85,106 @@ namespace zlua.Core.VirtualMachine
             return a >> (int)n;
         }
 
-        public static lua_Number Pow(lua_Number a, lua_Number b)
+        public static lua_Number luai_numpow(lua_Number a, lua_Number b)
         {
             return Math.Pow(a, b);
         }
 
-        // luaV_objlen
-        //
-        // Main operation 'ra' = #rb'.
-        public static void objlen(TValue ra, TValue rb)
+        /// 实现决策】不调用元方法的rawequal作为Equals重载，这个是调用的，单独写一个函数
+        public bool equalobj(TValue o1, TValue o2)
+        {
+            return (o1.tt == o2.tt) && luaV_equalval(o1, o2);
+        }
+
+        public bool luaV_equalval(TValue t1, TValue t2)
         {
             TValue tm;
-            switch (rb.Type) {
-                case LuaType.LUA_TTABLE: {
-                        Table h = rb.Table;
-                        // TODO
-                        //tm = fasttm(L, h->metatable, TM_LEN);
-                        //if (tm) break;  /* metamethod? break switch to call it */
-                        //setivalue(ra, luaH_getn(h));  /* else primitive len */
-                        return;
-                    }
-                case LuaType.LUA_TSHRSTR: {
-                        // TODO setivalue(ra, tsvalue(rb)->shrlen);
-                        ra.I = rb.Str.Length;
-                        return;
-                    }
-                case LuaType.LUA_TLNGSTR: {
-                        // TODO setivalue(ra, tsvalue(rb)->u.lnglen);
-                        ra.I = rb.Str.Length;
-                        return;
-                    }
-                default: { /* try metamethod */
-                        //tm = luaT_gettmbyobj(L, rb, TM_LEN);
-                        //if (ttisnil(tm))  /* no metamethod? */
-                        //    luaG_typeerror(L, rb, "get length of");
-                        break;
-                    }
-            }
-            //luaT_callTM(L, tm, rb, rb, ra, 1);
-        }
-
-        // luaV_concat
-        /*
-        ** Main operation for concatenation: concat 'total' values in the stack,
-        ** from 'L->top - total' up to 'L->top - 1'.
-        */
-
-        // TODO 太复杂了
-        public void concat(int total)
-        {
-            Debug.Assert(total >= 2);
-            //do {
-            int n = 2;  /* number of elements handled in this pass (at least 2) */
-            var o = Stack[top - 2];
-            if (!(o.IsString) || o.IsNumber || !Stack[top - 1].IsString)
-                trybinTM(Stack[top - 2], Stack[top - 1], Stack[top - 2], TMS.TM_CONCAT);
-            //else if (isemptystr(top - 1))  /* second operand is empty? */
-            //  cast_void(tostring(L, top - 2));  /* result is first operand */
-            //else if (isemptystr(top - 2)) {  /* first operand is an empty string? */
-            //  setobjs2s(L, top - 2, top - 1);  /* result is second op. */
-            //    }
-            //    else {
-            //        /* at least two non-empty string values; get as many as possible */
-            //        int tl = Stop - 1);
-            //        TString* ts;
-            //        /* collect total length and number of strings */
-            //        for (n = 1; n < total && tostring(L, top - n - 1); n++) {
-            //            size_t l = vslen(top - n - 1);
-            //            if (l >= (MAX_SIZE / sizeof(char)) - tl)
-            //                luaG_runerror(L, "string length overflow");
-            //            tl += l;
-            //        }
-            //        if (tl <= LUAI_MAXSHORTLEN) {  /* is result a short string? */
-            //            char buff[LUAI_MAXSHORTLEN];
-            //            copy2buff(top, n, buff);  /* copy strings to buffer */
-            //            ts = luaS_newlstr(L, buff, tl);
-            //        } else {  /* long string; copy strings directly to final result */
-            //            ts = luaS_createlngstrobj(L, tl);
-            //            copy2buff(top, n, getstr(ts));
-            //        }
-            //        setsvalue2s(L, top - n, ts);  /* create result */
-            //    }
-            //    total -= n - 1;  /* got 'n' strings to create 1 new */
-            //    L->top -= n - 1;  /* popped 'n' strings and pushed one */
-            //} while (total > 1);  /* repeat until only 1 result left */
-        }
-
-        /// equalobj
-        /// 实现决策】不调用元方法的rawequal作为Equals重载，这个是调用的，单独写一个函数
-        public bool EqualObj(TValue o1, TValue o2) => (o1.Type == o2.Type) && EqualVal(o1, o2);
-
-        /// luaV_equalval
-        public bool EqualVal(TValue t1, TValue t2)
-        {
-            Debug.Assert(t1.Type == t2.Type);
-            switch (t1.Type) {
-                case LuaType.LUA_TNIL: return true;
-                case LuaType.LUA_TNUMBER: return t1.N == t2.N;
-                case LuaType.LUA_TBOOLEAN: return t1.B == t2.B; //为什么cast多余，不应该啊。要么得改成字段访问
-                case LuaType.LUA_TUSERDATA: return false;//TODO 有meta方法
-                case LuaType.LUA_TTABLE: {
-                        if (t1.Table == t2.Table)
+            Debug.Assert(t1.tt == t2.tt);
+            switch (t1.tt) {
+                case LuaTag.LUA_TNIL: return true;
+                case LuaTag.LUA_TNUMBER: return t1.N == t2.N;
+                case LuaTag.LUA_TBOOLEAN: return t1.B == t2.B;
+                case LuaTag.LUA_TLIGHTUSERDATA: return Object.ReferenceEquals(t1.LightUserdata, t2.LightUserdata);
+                case LuaTag.LUA_TUSERDATA: {
+                        if (Object.ReferenceEquals(t1.Userdata, t2.Userdata)) {
                             return true;
-                        return false;//TODO metatable compare
+                        }
+                        tm = get_compTM(t1.Userdata.metatable, t2.Userdata.metatable, TMS.TM_EQ);
+                        break;  /* will try TM */
                     }
-                default:
-                    return t1.ReferenceValue == t2.ReferenceValue;
-                    //TODO metatable compare???
+                case LuaTag.LUA_TTABLE: {
+                        if (Object.ReferenceEquals(t1.Table, t2.tt)) return true;
+                        tm = get_compTM(t1.Table.metatable, t2.Table.metatable, TMS.TM_EQ);
+                        break;  /* will try TM */
+                    }
+                default: return Object.ReferenceEquals(t1.gc, t2.gc);
+            }
+            if (tm == null) return false;  /* no TM? */
+            callTMres(Stack[top], tm, t1, t2);  /* call TM */
+            return !Stack[top].IsFalse;
+        }
+
+        public bool luaV_lessthan(TValue l, TValue r)
+        {
+            if (l.tt != r.tt)
+                //return luaG_ordererror(L, l, r);
+                throw new Exception();
+            else if (l.IsNumber)
+                return l.N < r.N;
+            else if (l.IsString)
+                return l_strcmp(l.TStr, r.TStr) < 0;
+            else {
+                int res = call_orderTM(l, r, TMS.TM_LT);
+                if (res != -1) {
+                    return res == 1 ? false : true;
+                } else {
+                    //return luaG_ordererror(L, l, r);
+                    throw new Exception();
+                }
+            }
+        }
+
+        private int l_strcmp(TString ls, TString rs)
+        {
+            string l = ls.str;
+            int ll = ls.len;
+            string r = rs.str;
+            int lr = rs.len;
+            for (; ; ) {
+                // http://www.cplusplus.com/reference/cstring/strcoll/
+                // https://docs.microsoft.com/en-us/dotnet/api/system.string.compare?view=netframework-4.8
+                int temp = String.Compare(l, r);
+                if (temp != 0) return temp;
+                else {  /* strings are equal up to a `\0' */
+                    int len = l.Length;  /* index of first `\0' in both strings */
+                    if (len == lr)  /* r is finished? */
+                        return (len == ll) ? 0 : 1;
+                    else if (len == ll)  /* l is finished? */
+                        return -1;  /* l is smaller than r (because r is not finished) */
+                                    /* both strings longer than `len'; go on comparing (after the `\0') */
+                    len++;
+                    l += len; ll -= len; r += len; lr -= len;
+                }
+            }
+        }
+
+        private bool lessequal(TValue l, TValue r)
+        {
+            int res;
+            if (l.tt != r.tt)
+                //return luaG_ordererror(L, l, r);
+                throw new Exception();
+            else if (l.IsNumber)
+                return l.N <= r.N;
+            else if (l.IsString)
+                return l_strcmp(l.TStr, r.TStr) <= 0;
+            else if ((res = call_orderTM(l, r, TMS.TM_LE)) != -1)  /* first try `le' */
+                return res == 1 ? true : false;
+            else if ((res = call_orderTM(r, l, TMS.TM_LT)) != -1)  /* else try `lt' */
+                return res == 0 ? true : false;
+            else {
+                //return luaG_ordererror(L, l, r);
+                throw new Exception();
             }
         }
     }

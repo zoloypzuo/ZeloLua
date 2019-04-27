@@ -4,65 +4,84 @@ using zlua.Core.Instruction;
 
 namespace zlua.Core.ObjectModel
 {
-    // binchunk中函数原型
-    //
-    // 字段顺序对应binchunk中的字段顺序
-    // s gcobject, but is not a primitive type
+    /// <summary>
+    /// 函数原型
+    /// </summary>
     internal class Proto
     {
-        // 源文件名
-        //
-        // * 调试用
-        // * 没必要继承出ChunkProto类
-        public string Source;
+        /// <summary>
+        /// 源文件名
+        /// </summary>
+        /// <remarks>
+        /// 调试用，只有chunk才有值，其他函数都是空串
+        /// 不过没有必要设计一个ChunkProto类
+        /// </remarks>
+        public string source;
 
-        // 起止行号
-        public uint LineDefined;
+        /// <summary>
+        /// 开始行号
+        /// </summary>
+        public int linedefined;
 
-        public uint LastLineDefined;
+        /// <summary>
+        /// 结束行号
+        /// </summary>
+        public int lastlinedefined;
 
-        // 固定参数个数
+        /// <summary>
+        /// Upvalue数量
+        /// </summary>
+        public byte nups;  /* number of upvalues */
+
+        /// <summary>
+        /// 固定参数个数
+        /// </summary>
         public byte numparams;
 
-        // 是vararg函数
-        public byte IsVararg;
+        /// <summary>
+        /// 是vararg函数
+        /// </summary>
+        public byte is_vararg;
 
-        // 寄存器数量
-        public byte MaxStackSize;
+        /// <summary>
+        /// 寄存器数量
+        /// </summary>
+        public byte maxstacksize;
 
-        // 指令表
-        public Bytecode[] Code;
+        /// <summary>
+        /// 指令表
+        /// </summary>
+        public Bytecode[] code;
 
-        // 常量表
-        public TValue[] Constants;
+        /// <summary>
+        /// 常量表
+        /// </summary>
+        public TValue[] k;
 
-        // Upvalue表
-        public UpVal[] Upvalues;
+        /// <summary>
+        /// 内嵌Proto表
+        /// </summary>
+        public Proto[] p;
 
-        // 内嵌Proto表
-        public Proto[] Protos;
+        #region 调试信息
 
-        // 行号表
-        //
-        // * 指令与对应的源文本行号
-        // * 调试用
-        public uint[] LineInfo;
+        /// <summary>
+        /// 行号表
+        /// </summary>
+        /// <remarks>指令与对应的源文本行号</remarks>
+        public int[] lineinfo;
 
-        // 局部变量表
-        //
-        // * 调试用
-        public LocVar[] LocVars;
+        /// <summary>
+        /// 局部变量表
+        /// </summary>
+        public LocVar[] locvars;
 
-        // Upvalue名字表
-        //
-        // * 调试用
-        public string[] UpvalueNames;
+        /// <summary>
+        /// Upvalue名字表
+        /// </summary>
+        public string[] upvalues;
 
-        #region 公有访问器
-
-        public int nUpvals { get { return Upvalues.Length; } }
-
-        #endregion 公有访问器
+        #endregion
     }
 
     internal class ChunkProto : Proto

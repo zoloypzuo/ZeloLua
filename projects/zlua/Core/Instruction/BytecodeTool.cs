@@ -1,68 +1,56 @@
 ﻿namespace zlua.Core.Instruction
 {
-    // 将指令编码和解码成虚拟机需要的格式
-    //
-    // 虚拟机要的是操作码和操作数，操作数？？？有一部分还是得写到TThread中
     internal class BytecodeTool
     {
-        private static OpConstraint[] OpcodeConstraints = new OpConstraint[]
+        private static opmode[] luaP_opmodes = new opmode[]
         {
             // 我不是制表大师┑(￣Д ￣)┍
-            /*     T  A    B       C     mode         name    */
-			new OpConstraint(false, true, OperandMode.OpArgR, OperandMode.OpArgN, OpMode.IABC , "MOVE    "), // R(A) := R(B)
-			new OpConstraint(false, true, OperandMode.OpArgK, OperandMode.OpArgN, OpMode.IABx , "LOADK   "), // R(A) := Kst(Bx)
-			new OpConstraint(false, true, OperandMode.OpArgN, OperandMode.OpArgN, OpMode.IABx , "LOADKX  "), // R(A) := Kst(extra arg)
-			new OpConstraint(false, true, OperandMode.OpArgU, OperandMode.OpArgU, OpMode.IABC , "LOADBOOL"), // R(A) := (bool)B; if (C) pc++
-			new OpConstraint(false, true, OperandMode.OpArgU, OperandMode.OpArgN, OpMode.IABC , "LOADNIL "), // R(A), R(A+true), ..., R(A+B) := nil
-			new OpConstraint(false, true, OperandMode.OpArgU, OperandMode.OpArgN, OpMode.IABC , "GETUPVAL"), // R(A) := UpValue[B]
-			new OpConstraint(false, true, OperandMode.OpArgU, OperandMode.OpArgK, OpMode.IABC , "GETTABUP"), // R(A) := UpValue[B][RK(C)]
-			new OpConstraint(false, true, OperandMode.OpArgR, OperandMode.OpArgK, OpMode.IABC , "GETTABLE"), // R(A) := R(B)[RK(C)]
-			new OpConstraint(false, false, OperandMode.OpArgK, OperandMode.OpArgK, OpMode.IABC , "SETTABUP"), // UpValue[A][RK(B)] := RK(C)
-			new OpConstraint(false, false, OperandMode.OpArgU, OperandMode.OpArgN, OpMode.IABC , "SETUPVAL"), // UpValue[B] := R(A)
-			new OpConstraint(false, false, OperandMode.OpArgK, OperandMode.OpArgK, OpMode.IABC , "SETTABLE"), // R(A)[RK(B)] := RK(C)
-			new OpConstraint(false, true, OperandMode.OpArgU, OperandMode.OpArgU, OpMode.IABC , "NEWTABLE"), // R(A) := () (size = B,C)
-			new OpConstraint(false, true, OperandMode.OpArgR, OperandMode.OpArgK, OpMode.IABC , "SELF    "), // R(A+true) := R(B); R(A) := R(B)[RK(C)]
-			new OpConstraint(false, true, OperandMode.OpArgK, OperandMode.OpArgK, OpMode.IABC , "ADD     "), // R(A) := RK(B) + RK(C)
-			new OpConstraint(false, true, OperandMode.OpArgK, OperandMode.OpArgK, OpMode.IABC , "SUB     "), // R(A) := RK(B) - RK(C)
-			new OpConstraint(false, true, OperandMode.OpArgK, OperandMode.OpArgK, OpMode.IABC , "MUL     "), // R(A) := RK(B) * RK(C)
-			new OpConstraint(false, true, OperandMode.OpArgK, OperandMode.OpArgK, OpMode.IABC , "MOD     "), // R(A) := RK(B) % RK(C)
-			new OpConstraint(false, true, OperandMode.OpArgK, OperandMode.OpArgK, OpMode.IABC , "POW     "), // R(A) := RK(B) ^ RK(C)
-			new OpConstraint(false, true, OperandMode.OpArgK, OperandMode.OpArgK, OpMode.IABC , "DIV     "), // R(A) := RK(B) / RK(C)
-			new OpConstraint(false, true, OperandMode.OpArgK, OperandMode.OpArgK, OpMode.IABC , "IDIV    "), // R(A) := RK(B) // RK(C)
-			new OpConstraint(false, true, OperandMode.OpArgK, OperandMode.OpArgK, OpMode.IABC , "BAND    "), // R(A) := RK(B) & RK(C)
-			new OpConstraint(false, true, OperandMode.OpArgK, OperandMode.OpArgK, OpMode.IABC , "BOR     "), // R(A) := RK(B) | RK(C)
-			new OpConstraint(false, true, OperandMode.OpArgK, OperandMode.OpArgK, OpMode.IABC , "BXOR    "), // R(A) := RK(B) ~ RK(C)
-			new OpConstraint(false, true, OperandMode.OpArgK, OperandMode.OpArgK, OpMode.IABC , "SHL     "), // R(A) := RK(B) << RK(C)
-			new OpConstraint(false, true, OperandMode.OpArgK, OperandMode.OpArgK, OpMode.IABC , "SHR     "), // R(A) := RK(B) >> RK(C)
-			new OpConstraint(false, true, OperandMode.OpArgR, OperandMode.OpArgN, OpMode.IABC , "UNM     "), // R(A) := -R(B)
-			new OpConstraint(false, true, OperandMode.OpArgR, OperandMode.OpArgN, OpMode.IABC , "BNOT    "), // R(A) := ~R(B)
-			new OpConstraint(false, true, OperandMode.OpArgR, OperandMode.OpArgN, OpMode.IABC , "NOT     "), // R(A) := not R(B)
-			new OpConstraint(false, true, OperandMode.OpArgR, OperandMode.OpArgN, OpMode.IABC , "LEN     "), // R(A) := length of R(B)
-			new OpConstraint(false, true, OperandMode.OpArgR, OperandMode.OpArgR, OpMode.IABC , "CONCAT  "), // R(A) := R(B).. ... ..R(C)
-			new OpConstraint(false, false, OperandMode.OpArgR, OperandMode.OpArgN, OpMode.IAsBx , "JMP     "), // pc+=sBx; if (A) close all upvalues >= R(A - true)
-			new OpConstraint(true, false, OperandMode.OpArgK, OperandMode.OpArgK, OpMode.IABC , "EQ      "), // if ((RK(B) == RK(C)) ~= A) then pc++
-			new OpConstraint(true, false, OperandMode.OpArgK, OperandMode.OpArgK, OpMode.IABC , "LT      "), // if ((RK(B) <  RK(C)) ~= A) then pc++
-			new OpConstraint(true, false, OperandMode.OpArgK, OperandMode.OpArgK, OpMode.IABC , "LE      "), // if ((RK(B) <= RK(C)) ~= A) then pc++
-			new OpConstraint(true, false, OperandMode.OpArgN, OperandMode.OpArgU, OpMode.IABC , "TEST    "), // if not (R(A) <=> C) then pc++
-			new OpConstraint(true, true, OperandMode.OpArgR, OperandMode.OpArgU, OpMode.IABC , "TESTSET "), // if (R(B) <=> C) then R(A) := R(B) else pc++
-			new OpConstraint(false, true, OperandMode.OpArgU, OperandMode.OpArgU, OpMode.IABC , "CALL    "), // R(A), ... ,R(A+C-2) := R(A)(R(A+true), ... ,R(A+B-true))
-			new OpConstraint(false, true, OperandMode.OpArgU, OperandMode.OpArgU, OpMode.IABC , "TAILCALL"), // return R(A)(R(A+true), ... ,R(A+B-true))
-			new OpConstraint(false, false, OperandMode.OpArgU, OperandMode.OpArgN, OpMode.IABC , "RETURN  "), // return R(A), ... ,R(A+B-2)
-			new OpConstraint(false, true, OperandMode.OpArgR, OperandMode.OpArgN, OpMode.IAsBx , "FORLOOP "), // R(A)+=R(A+2); if R(A) <?= R(A+true) then ( pc+=sBx; R(A+3)=R(A) )
-			new OpConstraint(false, true, OperandMode.OpArgR, OperandMode.OpArgN, OpMode.IAsBx , "FORPREP "), // R(A)-=R(A+2); pc+=sBx
-			new OpConstraint(false, false, OperandMode.OpArgN, OperandMode.OpArgU, OpMode.IABC , "TFORCALL"), // R(A+3), ... ,R(A+2+C) := R(A)(R(A+true), R(A+2));
-			new OpConstraint(false, true, OperandMode.OpArgR, OperandMode.OpArgN, OpMode.IAsBx , "TFORLOOP"), // if R(A+true) ~= nil then ( R(A)=R(A+true); pc += sBx )
-			new OpConstraint(false, false, OperandMode.OpArgU, OperandMode.OpArgU, OpMode.IABC , "SETLIST "), // R(A)[(C-true)*FPF+i] := R(A+i), true <= i <= B
-			new OpConstraint(false, true, OperandMode.OpArgU, OperandMode.OpArgN, OpMode.IABx , "CLOSURE "), // R(A) := closure(KPROTO[Bx])
-			new OpConstraint(false, true, OperandMode.OpArgU, OperandMode.OpArgN, OpMode.IABC , "VARARG  "), // R(A), R(A+true), ..., R(A+B-2) = vararg
-			new OpConstraint(false, false, OperandMode.OpArgU, OperandMode.OpArgU, OpMode.IAx , "EXTRAARG"), // extra (larger) argument for previous new OpcodeConstraint
+            /*       T  A    B       C     mode		   opcode	*/
+              new opmode(false, true, OperandMode.OpArgR, OperandMode.OpArgN, OpMode.IABC) 		/* OP_MOVE */
+             ,new opmode(false, true, OperandMode.OpArgK, OperandMode.OpArgN, OpMode.IABx)		/* OP_LOADK */
+             ,new opmode(false, true, OperandMode.OpArgU, OperandMode.OpArgU, OpMode.IABC)		/* OP_LOADBOOL */
+             ,new opmode(false, true, OperandMode.OpArgR, OperandMode.OpArgN, OpMode.IABC)		/* OP_LOADNIL */
+             ,new opmode(false, true, OperandMode.OpArgU, OperandMode.OpArgN, OpMode.IABC)		/* OP_GETUPVAL */
+             ,new opmode(false, true, OperandMode.OpArgK, OperandMode.OpArgN, OpMode.IABx)		/* OP_GETGLOBAL */
+             ,new opmode(false, true, OperandMode.OpArgR, OperandMode.OpArgK, OpMode.IABC)		/* OP_GETTABLE */
+             ,new opmode(false, false, OperandMode.OpArgK, OperandMode.OpArgN, OpMode.IABx)		/* OP_SETGLOBAL */
+             ,new opmode(false, false, OperandMode.OpArgU, OperandMode.OpArgN, OpMode.IABC)		/* OP_SETUPVAL */
+             ,new opmode(false, false, OperandMode.OpArgK, OperandMode.OpArgK, OpMode.IABC)		/* OP_SETTABLE */
+             ,new opmode(false, true, OperandMode.OpArgU, OperandMode.OpArgU, OpMode.IABC)		/* OP_NEWTABLE */
+             ,new opmode(false, true, OperandMode.OpArgR, OperandMode.OpArgK, OpMode.IABC)		/* OP_SELF */
+             ,new opmode(false, true, OperandMode.OpArgK, OperandMode.OpArgK, OpMode.IABC)		/* OP_ADD */
+             ,new opmode(false, true, OperandMode.OpArgK, OperandMode.OpArgK, OpMode.IABC)		/* OP_SUB */
+             ,new opmode(false, true, OperandMode.OpArgK, OperandMode.OpArgK, OpMode.IABC)		/* OP_MUL */
+             ,new opmode(false, true, OperandMode.OpArgK, OperandMode.OpArgK, OpMode.IABC)		/* OP_DIV */
+             ,new opmode(false, true, OperandMode.OpArgK, OperandMode.OpArgK, OpMode.IABC)		/* OP_MOD */
+             ,new opmode(false, true, OperandMode.OpArgK, OperandMode.OpArgK, OpMode.IABC)		/* OP_POW */
+             ,new opmode(false, true, OperandMode.OpArgR, OperandMode.OpArgN, OpMode.IABC)		/* OP_UNM */
+             ,new opmode(false, true, OperandMode.OpArgR, OperandMode.OpArgN, OpMode.IABC)		/* OP_NOT */
+             ,new opmode(false, true, OperandMode.OpArgR, OperandMode.OpArgN, OpMode.IABC)		/* OP_LEN */
+             ,new opmode(false, true, OperandMode.OpArgR, OperandMode.OpArgR, OpMode.IABC)		/* OP_CONCAT */
+             ,new opmode(false, false, OperandMode.OpArgR, OperandMode.OpArgN, OpMode.IAsBx)		/* OP_JMP */
+             ,new opmode(true, false, OperandMode.OpArgK, OperandMode.OpArgK, OpMode.IABC)		/* OP_EQ */
+             ,new opmode(true, false, OperandMode.OpArgK, OperandMode.OpArgK, OpMode.IABC)		/* OP_LT */
+             ,new opmode(true, false, OperandMode.OpArgK, OperandMode.OpArgK, OpMode.IABC)		/* OP_LE */
+             ,new opmode(true, true, OperandMode.OpArgR, OperandMode.OpArgU, OpMode.IABC)		/* OP_TEST */
+             ,new opmode(true, true, OperandMode.OpArgR, OperandMode.OpArgU, OpMode.IABC)		/* OP_TESTSET */
+             ,new opmode(false, true, OperandMode.OpArgU, OperandMode.OpArgU, OpMode.IABC)		/* OP_CALL */
+             ,new opmode(false, true, OperandMode.OpArgU, OperandMode.OpArgU, OpMode.IABC)		/* OP_TAILCALL */
+             ,new opmode(false, false, OperandMode.OpArgU, OperandMode.OpArgN, OpMode.IABC)		/* OP_RETURN */
+             ,new opmode(false, true, OperandMode.OpArgR, OperandMode.OpArgN, OpMode.IAsBx)		/* OP_FORLOOP */
+             ,new opmode(false, true, OperandMode.OpArgR, OperandMode.OpArgN, OpMode.IAsBx)		/* OP_FORPREP */
+             ,new opmode(true, false, OperandMode.OpArgN, OperandMode.OpArgU, OpMode.IABC)		/* OP_TFORLOOP */
+             ,new opmode(false, false, OperandMode.OpArgU, OperandMode.OpArgU, OpMode.IABC)		/* OP_SETLIST */
+             ,new opmode(false, false, OperandMode.OpArgN, OperandMode.OpArgN, OpMode.IABC)		/* OP_CLOSE */
+             ,new opmode(false, true, OperandMode.OpArgU, OperandMode.OpArgN, OpMode.IABx)		/* OP_CLOSURE */
+             ,new opmode(false, true, OperandMode.OpArgU, OperandMode.OpArgN, OpMode.IABC)		/* OP_VARARG */
         };
 
         #region 公有方法
 
-        public static OpConstraint GetOpConstraint(Opcode opcode)
+        public static opmode GetOpmode(Opcode opcode)
         {
-            return OpcodeConstraints[(int)opcode];
+            return luaP_opmodes[(int)opcode];
         }
 
         #endregion 公有方法
@@ -179,7 +167,10 @@
         OpArgK
     }
 
-    internal class OpConstraint
+    /// <summary>
+    /// 指令约束
+    /// </summary>
+    internal class opmode
     {
         // 是测试指令
         //
@@ -192,19 +183,17 @@
         public OperandMode ArgBMode { get; }
         public OperandMode ArgCMode { get; }
         public OpMode OpMode { get; }
-        public string Name { get; }
 
-        public OpConstraint(
+        public opmode(
             bool isTest, bool setA,
             OperandMode argBMode, OperandMode argCMode,
-            OpMode opMode, string name)
+            OpMode opMode)
         {
             IsTest = isTest;
             SetA = setA;
             ArgBMode = argBMode;
             ArgCMode = argCMode;
             OpMode = opMode;
-            Name = name;
         }
     }
 }

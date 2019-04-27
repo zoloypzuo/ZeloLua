@@ -1,39 +1,32 @@
-﻿// 虚拟机
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-
+using System.Text;
 using zlua.Core.Instruction;
 using zlua.Core.Lua;
 using zlua.Core.ObjectModel;
 
+/// <summary>
+/// 虚拟机
+
+/// </summary>
 namespace zlua.Core.VirtualMachine
 {
-    internal class GlobalState
-    {
-        public TValue registry = new TValue(new Table(sizeHashTablePart: 2, sizeArrayPart: 0));
-
-        //internal TThread mainThread;
-        internal Table[] metaTableForBasicType = new Table[(int)LuaType.LUA_TTHREAD + 1];
-
-        internal TString[] metaMethodNames = new TString[(int)TMS.TM_N];
-    }
-
-    // lua_State
-    //
-    // * partial是分给lapi
-    public partial class lua_State : LuaReference
+    /// <summary>
+    /// 虚拟机
+    /// </summary>
+    /// <remarks>写成partial是分给各个API类</remarks>
+    public partial class lua_State : GCObject
     {
         #region 私有访问器
 
-        private List<TValue> Stack { get { return stack.slots; } }
+        private List<TValue> Stack { get { return LuaStack.slots; } }
 
         /// top指向第一个可用位置，每次push时 top++ = value
         /// 几乎所有文件都要用，因为你用这个来维护栈这个行为
         private int top {
-            get { return stack.top; }
-            set { stack.top = value; }
+            get { return LuaStack.top; }
+            set { LuaStack.top = value; }
         }
 
         /// 当前函数栈帧的base
@@ -61,11 +54,11 @@ namespace zlua.Core.VirtualMachine
 
         /// saved pc when call a function
         /// index of instruction array；因为src用指针的原因，而zlua必须同时使用codes和pc来获取指令
-        internal int pc;
+        private int pc;
 
         private Bytecode[] codes { get; set; }
         private int NumCSharpCalls { get; set; }
-        internal /*static readonly*/ GlobalState globalState = new GlobalState(); //注册表是一个L一个吗？
+        internal global_State globalState = new global_State(); //注册表是一个L一个吗？
 
         #endregion 私有属性
 
@@ -79,7 +72,7 @@ namespace zlua.Core.VirtualMachine
             // 因为调用函数之前要有一个CallInfo保存savedpc
             // 因此构造LuaState时构造一个基本的CallInfo
             CallInfoStack.Push(new CallInfo());
-            stack = new LuaStack(20);
+            LuaStack = new LuaStack(20);
             for (int i = 0; i < BasicStackSize; i++) {
                 Stack.Add(new TValue());
             }
@@ -95,14 +88,16 @@ namespace zlua.Core.VirtualMachine
             // TODO OpenLibs()
         }
 
-        // 缓存cl
-        //
-        // 因为要写辅助方法，所以从局部变量变为字段
+        /// <summary>
+        /// 缓存cl
+        /// </summary>
+        /// <remarks>因为要写辅助方法，所以从局部变量变为字段</remarks>
         private LuaClosure cl;
 
-        // 缓存k
-        //
-        // 因为要写辅助方法，所以从局部变量变为字段
+        /// <summary>
+        /// 缓存k
+        /// </summary>
+        /// <remarks>因为要写辅助方法，所以从局部变量变为字段</remarks>
         private TValue[] k;
 
         #region 从指令取出参数的辅助方法
@@ -166,16 +161,18 @@ namespace zlua.Core.VirtualMachine
 
         private TValue KBx(Bytecode i)
         {
-            Debug.Assert(BytecodeTool.GetOpConstraint(i.Opcode).ArgBMode == OperandMode.OpArgK);
+            Debug.Assert(BytecodeTool.GetOpmode(i.Opcode).ArgBMode == OperandMode.OpArgK);
             return k[i.Bx];
         }
 
         #endregion 从指令取出参数的辅助方法
 
-        // luaV_execute
-        // 执行一个深度为level的lua函数，chunk深度为1
-        // 没有level就不知道什么时候结束了（事实上可以，用callinfo栈）
-        private void Execute(int nexeccalls)
+        /// <summary>
+        /// 执行一个深度为level的lua函数，chunk深度为1
+        /// </summary>
+        /// <remarks>没有level就不知道什么时候结束了（事实上可以，用callinfo栈）</remarks>
+        /// <param name="nexeccalls"></param>
+        private void luaV_execute(int nexeccalls)
         {
             // clua5.3缓存了ci
             // clua5.1缓存了base和pc
@@ -188,7 +185,7 @@ namespace zlua.Core.VirtualMachine
             // 缓存cl
             cl = Stack[ci.funcIndex].Cl as LuaClosure;
             // 缓存k
-            k = cl.p.Constants;
+            k = cl.p.k;
             // 缓存savedpc
 
             while (true) {
@@ -235,19 +232,19 @@ namespace zlua.Core.VirtualMachine
                             TValue g = new TValue(cl.env);
                             TValue rb = KBx(i);
                             Debug.Assert(rb.IsString);
-                            GetTable(g, rb, ra);
+                            luaV_gettable(g, rb, ra);
                             continue;
                         }
                     // A B C R(A) := R(B)[RK(C)]
                     case Opcode.OP_GETTABLE: {
-                            GetTable(RB(i), RKC(i), ra);
+                            luaV_gettable(RB(i), RKC(i), ra);
                             continue;
                         }
                     // A Bx Gbl[Kst(Bx)] := R(A)
                     case Opcode.OP_SETGLOBAL: {
                             TValue g = new TValue(cl.env);
                             Debug.Assert(KBx(i).IsString);
-                            SetTable(g, KBx(i), ra);
+                            luaV_settable(g, KBx(i), ra);
                             continue;
                         }
                     // A B UpValue[B] := R(A)
@@ -258,7 +255,7 @@ namespace zlua.Core.VirtualMachine
                         }
                     // A B C R(A)[RK(B)] := RK(C)
                     case Opcode.OP_SETTABLE: {
-                            SetTable(ra, RKB(i), RKC(i));
+                            luaV_settable(ra, RKB(i), RKC(i));
                             continue;
                         }
 
@@ -283,7 +280,7 @@ namespace zlua.Core.VirtualMachine
                             TValue rb = RB(i);
                             R((int)i.A + 1).Value = rb;
                             // 从obj表中查找"f"键的值作为被调用方法
-                            GetTable(rb, RKC(i), ra);
+                            luaV_gettable(rb, RKC(i), ra);
                             continue;
                         }
 
@@ -296,32 +293,32 @@ namespace zlua.Core.VirtualMachine
                             //TODO
                             //arith_op(luai_numadd, TM_ADD);
 
-                            Arith(i, (a, b) => a + b, (a, b) => a + b, TMS.TM_ADD);
+                            arith_op(i, (a, b) => a + b, TMS.TM_ADD);
                             continue;
                         }
                     // A B C R(A) := RK(B) - RK(C)
                     case Opcode.OP_SUB: {
-                            Arith(i, (a, b) => a - b, (a, b) => a - b, TMS.TM_SUB);
+                            arith_op(i, (a, b) => a - b, TMS.TM_SUB);
                             continue;
                         }
                     // A B C R(A) := RK(B) * RK(C)
                     case Opcode.OP_MUL: {
-                            Arith(i, (a, b) => a * b, (a, b) => a * b, TMS.TM_MUL);
+                            arith_op(i, (a, b) => a * b, TMS.TM_MUL);
                             continue;
                         }
                     // A B C R(A) := RK(B) / RK(C)
                     case Opcode.OP_DIV: {
-                            Arith(i, (lua_Number a, lua_Number b) => a / b, TMS.TM_DIV);
+                            arith_op(i, (a, b) => a / b, TMS.TM_DIV);
                             continue;
                         }
                     // A B C R(A) := RK(B) % RK(C)
                     case Opcode.OP_MOD: {
-                            Arith(i, IMod, FMod, TMS.TM_MOD);
+                            arith_op(i, luai_nummod, TMS.TM_MOD);
                             continue;
                         }
                     // A B C R(A) := RK(B) ^ RK(C)
                     case Opcode.OP_POW: {
-                            Arith(i, Pow, TMS.TM_POW);
+                            arith_op(i, luai_numpow, TMS.TM_POW);
                             continue;
                         }
 
@@ -329,15 +326,11 @@ namespace zlua.Core.VirtualMachine
                     case Opcode.OP_UNM: {
                             //TODO
                             TValue rb = RB(i);
-                            lua_Number nb;
-                            if (rb.IsInteger) {
-                                lua_Integer ib = rb.I;
-                                ra.I = -ib;
-                            } else if (tonumber(rb, out nb)) {
+                            if (rb.IsNumber) {
+                                lua_Number nb = rb.N;
                                 ra.N = -nb;
                             } else {
-                                // TODO 这样写对不对
-                                trybinTM(rb, rb, ra, TMS.TM_UNM);
+                                call_binTM(ra, rb, rb, TMS.TM_UNM);
                             }
                             continue;
                         }
@@ -358,14 +351,14 @@ namespace zlua.Core.VirtualMachine
 
                     // A B R(A) := length of R(B)
                     case Opcode.OP_LEN: {
-                            //objlen(ra, RB(i));
                             TValue rb = RB(i);
-                            switch (rb.Type) {
-                                case LuaType.LUA_TTABLE: {
-                                        //ra.N
+                            switch (rb.tt) {
+                                case LuaTag.LUA_TTABLE: {
+                                        ra.N = rb.Table.luaH_getn();
                                         break;
                                     }
-                                case LuaType.LUA_TSTRING: {
+                                case LuaTag.LUA_TSTRING: {
+                                        ra.N = rb.Str.Length;
                                         break;
                                     }
                                 // try metamethod
@@ -377,23 +370,15 @@ namespace zlua.Core.VirtualMachine
                         }
                     // A B C R(A) := R(B).. ... ..R(C)
                     case Opcode.OP_CONCAT: {
-                            //TODO
                             int b = (int)i.B;
                             int c = (int)i.C;
-                            TValue rb;
-                            top = @base + c + 1;  /* mark the end of concat operands */
-                            concat(c - b + 1);
-                            ra = RA(i);  /* 'luaV_concat' may invoke TMs and move the stack */
-                            rb = Stack[@base + b];
-                            ra.Value = rb;
+                            luaV_concat(c - b + 1, c);
+                            ra.Value = RB(i);
                             continue;
                         }
                     // sBx pc+=sBx
                     case Opcode.OP_JMP: {
                             pc += i.SignedBx;
-                            if (i.A != 0) {
-                                // luaF_close(L, ci->u.l.base + a - 1);
-                            }
                             continue;
                         }
 
@@ -401,27 +386,40 @@ namespace zlua.Core.VirtualMachine
 
                     // A B C if ((RK(B) == RK(C)) ~= A) then pc++
                     case Opcode.OP_EQ: {
-                            Relation(i, EqualVal);
+                            Relation(i, equalobj);
                             continue;
                         }
                     // A B C if ((RK(B) <  RK(C)) ~= A) then pc++
                     case Opcode.OP_LT: {
+                            Relation(i, luaV_lessthan);
                             continue;
                         }
                     // A B C if ((RK(B) <= RK(C)) ~= A) then pc++
                     case Opcode.OP_LE: {
+                            Relation(i, lessequal);
                             continue;
                         }
                     // A C if not (R(A) <=> C) then pc++
                     case Opcode.OP_TEST: {
+                            if (ra.IsFalse != (i.C == 1 ? true : false)) {
+                                pc += codes[pc].SignedBx;
+                            } else {
+                                pc++;
+                            }
                             continue;
                         }
                     // A B C if (R(B) <=> C) then R(A) := R(B) else pc++
                     case Opcode.OP_TESTSET: {
+                            if (ra.IsFalse != (i.C == 1 ? true : false)) {
+                                ra.Value = RB(i);
+                                pc += codes[pc].SignedBx;
+                            } else {
+                                pc++;
+                            }
                             continue;
                         }
 
-                    #endregion 比较运算符
+                    #endregion 比较运算符 关系逻辑类指令
 
                     #region 函数相关指令
 
@@ -477,24 +475,93 @@ namespace zlua.Core.VirtualMachine
 
                     // A sBx R(A)+=R(A+2); if R(A) <?= R(A+1) then { pc+=sBx; R(A+3)=R(A) }
                     case Opcode.OP_FORLOOP: {
+                            lua_Number step = Stack[(int)i.A + 2].N;
+                            lua_Number idx = ra.N + step; /* increment index */
+                            lua_Number limit = Stack[(int)i.A + 1].N;
+                            if ((0 < step) ? idx <= limit
+                                                    : limit <= idx) {
+                                pc += i.SignedBx;  /* jump back */
+                                ra.N = idx;  /* update internal index... */
+                                Stack[(int)i.A + 3].N = idx;  /* ...and external index */
+                            }
                             continue;
                         }
                     // A sBx R(A)-=R(A+2); pc+=sBx
                     case Opcode.OP_FORPREP: {
+                            TValue init = ra;
+                            TValue plimit = Stack[(int)i.A + 1];
+                            TValue pstep = Stack[(int)i.A + 2];
+                            //savedpc = pc;  /* next steps may throw errors */
+                            lua_Number n1;
+                            lua_Number n2;
+                            lua_Number n3;
+                            if (!tonumber(init, out n1))
+                                //luaG_runerror(L, LUA_QL("for") " initial value must be a number");
+                                throw new Exception();
+                            else if (!tonumber(plimit, out n2))
+                                //luaG_runerror(L, LUA_QL("for") " limit must be a number");
+                                throw new Exception();
+                            else if (!tonumber(pstep, out n3))
+                                //luaG_runerror(L, LUA_QL("for") " step must be a number");
+                                throw new Exception();
+                            init.N = n1;
+                            plimit.N = n2;
+                            pstep.N = n3;
+                            ra.N = ra.N - pstep.N;
+                            pc += i.SignedBx;
                             continue;
                         }
                     // A C R(A+3), ... ,R(A+2+C) := R(A)(R(A+1), R(A+2)); if R(A+3) ~= nil then R(A+2)=R(A+3) else pc++
                     case Opcode.OP_TFORLOOP: {
+                            int a = (int)i.A;
+                            int cb = (int)i.A + 3;  /* call base */
+                            Stack[cb + 2].Value = Stack[a + 2];
+                            Stack[cb + 1].Value = Stack[a + 1];
+                            Stack[cb].Value = ra;
+                            top = cb + 3;  /* func. + 2 args (state and index) */
+                            luaD_call(cb, (int)i.C);
+                            top = ci.top;
+                            //cb = i.A + 3;  /* previous call may change the stack */
+                            if (!Stack[cb].IsNil) {  /* continue loop? */
+                                Stack[cb -1].Value=Stack[cb];  /* save control variable */
+                                pc += codes[pc].SignedBx;  /* jump back */
+                            }
+                            pc++;
                             continue;
                         }
-                    #endregion
+
+                    #endregion 循环类指令
 
                     // A B C R(A)[(C-1)*FPF+i] := R(A+i), 1 <= i <= B
                     case Opcode.OP_SETLIST: {
+                            int n = (int)i.B;
+                            int c = (int)i.C;
+                            int last;
+                            Table h;
+                            if (n == 0) {
+                                n = top - (int)i.A - 1;
+                                top = ci.top;
+                            }
+                            if (c == 0) c = (int)codes[pc++].Value;
+                            // runtime_check
+                            if (!ra.IsTable) {
+                                break;
+                            }
+                            h = ra.Table;
+                            /* number of list items to accumulate before a SETLIST instruction */
+                            const int LFIELDS_PER_FLUSH = 50;
+                            last = ((c - 1) * LFIELDS_PER_FLUSH) + n;
+                            if (last > h.sizearray)  /* needs more space? */
+                                h.luaH_resizearray(last);  /* pre-alloc it at once */
+                            for (; n > 0; n--) {
+                                TValue val = Stack[(int)i.A + n];
+                                h.luaH_setnum(last--).Value = val;
+                            }
                             continue;
                         }
                     // A  close all variables in the stack up to (>=) R(A)
                     case Opcode.OP_CLOSE: {
+                            //luaF_close(ra);
                             continue;
                         }
                     // A Bx R(A) := closure(KPROTO[Bx], R(A), ... ,R(A+n))
@@ -503,8 +570,8 @@ namespace zlua.Core.VirtualMachine
                     // * 提前执行后面的move指令或get upval指令来初始化ncl的upvals
                     case Opcode.OP_CLOSURE: {
                             /*用Proto简单new一个LuaClosure，提前执行之后的指令s来初始化upvals*/
-                            Proto p = cl.p.Protos[i.Bx];
-                            int nup = p.nUpvals;
+                            Proto p = cl.p.p[i.Bx];
+                            int nup = p.nups;
                             LuaClosure ncl = new LuaClosure(cl.env, nup, p);
                             // 后面一定跟着一些getUpval或mov指令用来初始化upvals，分情况讨论，把这些指令在这个周期就执行掉
                             for (int j = 0; j < nup; j++, pc++) {
@@ -532,7 +599,7 @@ namespace zlua.Core.VirtualMachine
                             CallInfo ci = this.ci;
                             int n = ci.@base - ci.funcIndex - cl.p.numparams;
                             if (b == LUA_MULTRET) {
-                                stack.check(n);
+                                LuaStack.check(n);
                                 ra = RA(i);  /* previous call may change the stack */
                                 b = n;
                                 top = a + n;
@@ -571,157 +638,137 @@ namespace zlua.Core.VirtualMachine
         }
 
         /// <summary>
-        /// luaV_gettable
+        /// limit for table tag-method chains (to avoid loops)
         /// </summary>
-        public void GetTable(TValue t, TValue key, TValue val)
+        private const int MAXTAGLOOP = 100;
+
+        /// <summary>
+        /// 无限查元表
+        /// </summary>
+        /// <param name="t"></param>
+        /// <param name="key"></param>
+        /// <param name="val"></param>
+        public void luaV_gettable(TValue t, TValue key, TValue val)
         {
-            //TODO, 要无限查元表。
+            for (int loop = 0; loop < MAXTAGLOOP; loop++) {
+                TValue tm;
+                if (t.IsTable) {
+                    Table h = t.Table;
+                    TValue res = h.luaH_get(key);/* do a primitive get */
+                    tm = fasttm(h.metatable, TMS.TM_INDEX);
+                    if (!res.IsNil ||  /* result is no nil? */
+                            tm == null) {  /* or no TM? */
+                        val.Value = res;
+                        return;
+                    }
+                    /* else will try the tag method */
+                } else {
+                    tm = luaT_gettmbyobj(t, TMS.TM_INDEX);
+                    if (tm.IsNil) {
+                        //TODO
+                        //luaG_typeerror(L, t, "index");
+                        throw new Exception();
+                    } else if (tm.IsFunction) {
+                        callTMres(val, tm, t, key);
+                        return;
+                    } else {
+                        t = tm; /* else repeat with `tm' */
+                    }
+                }
+            }
+            //TODO
+            //luaG_runerror(L, "loop in gettable");
         }
 
-        public void SetTable(TValue t, TValue key, TValue val)
+        public void luaV_settable(TValue t, TValue key, TValue val)
         {
+            for (int loop = 0; loop < MAXTAGLOOP; loop++) {
+                TValue tm;
+                if (t.IsTable) {
+                    Table h = t.Table;
+                    TValue oldval = h.luaH_set(key);  /* do a primitive set */
+                    tm = fasttm(h.metatable, TMS.TM_NEWINDEX);
+                    if (!oldval.IsNil ||
+                        tm == null) {
+                        oldval.Value = val;
+                        return;
+                    }
+                    /* else will try the tag method */
+                } else {
+                    tm = luaT_gettmbyobj(t, TMS.TM_NEWINDEX);
+                    if (tm.IsNil) {
+                        //luaG_typeerror(L, t, "index");
+                    } else if (tm.IsFunction) {
+                        callTM(tm, t, key, val);
+                        return;
+                    } else {
+                        t = tm;  /* else repeat with `tm' */
+                    }
+                }
+            }
+            //luaG_runerror(L, "loop in settable");
+        }
+
+        void luaV_concat(int total, int last)
+        {
+            do {
+                int top = @base + last + 1;
+                int n = 2;  /* number of elements handled in this pass (at least 2) */
+                if (!Stack[top - 2].IsString || Stack[top - 2].IsNumber || !tostring(Stack[top - 1])) {
+                    if (!call_binTM(Stack[top - 2], Stack[top - 1], Stack[top - 2], TMS.TM_CONCAT))
+                        //luaG_concaterror(L, top - 2, top - 1);
+                        throw new Exception();
+                } else if (Stack[top - 1].Str.Length == 0)  /* second op is empty? */
+                    tostring(Stack[top - 2]);  /* result is first op (as string) */
+                else {
+                    /* at least two string values; get as many as possible */
+                    int tl = Stack[top - 1].Str.Length;
+                    StringBuilder buffer = new StringBuilder();
+                    int i;
+                    /* collect total length */
+                    for (n = 1; n < total && tostring(Stack[top - n - 1]); n++) {
+                        int l = Stack[top - n - 1].Str.Length;
+                        if (l >= int.MaxValue - tl)
+                            //luaG_runerror(L, "string length overflow");
+                            throw new Exception();
+                        tl += l;
+                    }
+                    tl = 0;
+                    for (i = n; i > 0; i--) {  /* concat all strings */
+                        int l = Stack[top - i].Str.Length;
+                        buffer.Append(Stack[top - i].Str);
+                        tl += l;
+                    }
+                    Stack[top - n] = new TValue(buffer.ToString());
+                }
+                total -= n - 1;  /* got `n' strings to create 1 new */
+                last -= n - 1;
+            } while (total > 1);  /* repeat until only 1 result left */
         }
 
         public bool LessThan(TValue lhs, TValue rhs)
         {
-            if (lhs.Type != rhs.Type) throw new Exception();
+            if (lhs.tt != rhs.tt) throw new Exception();
             if (lhs.IsNumber) return lhs.N < rhs.N;
             if (lhs.IsString) return false;//TODO 字典序。或者你看标准库有没有
             else return false; //TODO 调用meta方法
         }
+        bool tostring(TValue o)
+        {
+            return o.IsString || luaV_tostring(o);
+        }
 
+        bool luaV_tostring(TValue obj)
+        {
+            if (!obj.IsNumber) {
+                return false;
+            } else {
+                obj.Str = obj.N.ToString();
+                return true;
+            }
+        }
         #endregion other things
 
-        private LuaStack stack;
-    }
-
-    /// 栈帧信息，或者说是一次调用的信息
-    internal class CallInfo
-    {
-        public int funcIndex;
-
-        public int @base {
-            get {
-                return funcIndex + 1;
-            }
-        }
-
-        public int top;
-
-        /// saved pc when call function, index of instruction array
-        /// 调用别的函数时保存LuaState的savedpc
-        public int savedpc;
-    }
-
-    // lua栈
-    //
-    // * 注意还是要手工扩容的
-    //   用数组是不行的，用list后还得手工扩容，扩容是添加新的luaValue实例
-    // * 栈索引参见p54
-    internal class LuaStack
-    {
-        public List<TValue> slots;
-        public int top;
-
-        public LuaStack(int size)
-        {
-            slots = new List<TValue>(size);
-            for (int i = 0; i < size; i++) {
-                slots.Add(new TValue());
-            }
-            top = 0;
-        }
-
-        // 检查栈的空闲空间是否还可以容纳（推入）至少n个值，如若不然，扩容
-        public void check(int n)
-        {
-            int free = slots.Count - top;
-            for (int i = free; i < n; i++) {
-                slots.Add(new TValue());
-            }
-        }
-
-        // 压栈，溢出时抛出异常
-        public void push(TValue val)
-        {
-            if (top == slots.Count) {
-                throw new Exception("stack overflow");
-            } else {
-                slots[top] = val;
-                top++;
-            }
-        }
-
-        // 弹栈，若栈为空，抛出异常
-        public TValue pop()
-        {
-            if (top < 1) {
-                throw new Exception("stack underflow");
-            } else {
-                top--;
-                var val = slots[top];
-                slots[top] = new TValue();
-                return val;
-            }
-        }
-
-        // 转换成绝对索引，不考虑索引是否有效
-        public int absIndex(int idx)
-        {
-            if (idx >= 0) {
-                return idx;
-            } else {
-                return idx + top + 1;
-            }
-        }
-
-        // 索引有效
-        public bool isValid(int idx)
-        {
-            var absIdx = absIndex(idx);
-            return absIdx > 0 && absIdx <= top;
-        }
-
-        // 取值，索引无效返回nil
-        public TValue get(int idx)
-        {
-            var absIdx = absIndex(idx);
-            if (absIdx > 0 && absIdx <= top) {
-                return slots[absIdx - 1];
-            } else {
-                return new TValue();
-            }
-        }
-
-        // 写值，索引无效则抛出异常
-        public void set(int idx, TValue val)
-        {
-            var absIdx = absIndex(idx);
-            if (absIdx > 0 && absIdx <= top) {
-                // 比较下面两种写法
-                // 作者用go object实现lua object
-                // 而这里是拷贝语义，我必须拷贝而不是
-                // set会在类似于lua中的a=b赋值时发生，这里当然是拷贝，两个不是一个对象
-                // a=b时，如果b是引用类型，那么我调用a=1时，不影响b，所以一定是新的luaValue，拷贝而已
-                // python对a=b赋值后a is b，这是怎么回事。。如果copy，是两个luaValue，id应该不同
-                // 所以这个id应该是标识luaValue的引用部分的
-                // 然而b=1，a=b之后a is b，所以我就想不通
-                // 不管，拷贝一定是对的
-                //slots[absIdx - 1] = val;
-                slots[absIdx - 1].Value = val;
-            } else {
-                throw new Exception("invalid index");
-            }
-        }
-
-        internal void reverse(int from, int to)
-        {
-            for (; from < to; from++, to--) {
-                // swap
-                var t = slots[from];
-                slots[from] = slots[to];
-                slots[to] = slots[from];
-            }
-        }
+        private LuaStack LuaStack { get; set; }
     }
 }
