@@ -6,9 +6,6 @@
 using System;
 using System.IO;
 
-using zlua.Compiler.CodeGenerator;
-using zlua.Compiler.Lexer;
-using zlua.Compiler.Parser;
 using zlua.Core.Instruction;
 using zlua.Core.ObjectModel;
 using zlua.Core.Undumper;
@@ -112,12 +109,12 @@ namespace zlua.Core.VirtualMachine
 
         private Proto DoInput(string chunk, string chunkName)
         {
-            LuaLexer lexer = new LuaLexer(chunk, chunkName);
-            TokenStream tokenStream = new TokenStream(lexer);
-            LuaParser parser = new LuaParser(tokenStream);
-            LuaVisitor visitor = new LuaVisitor();
-            blockContext block = parser.Parse();
-            visitor.Visit_block(block);
+            //LuaLexer lexer = new LuaLexer(chunk, chunkName);
+            //TokenStream tokenStream = new TokenStream(lexer);
+            //LuaParser parser = new LuaParser(tokenStream);
+            //LuaVisitor visitor = new LuaVisitor();
+            //blockContext block = parser.Parse();
+            //visitor.Visit_block(block);
             // TODO
             return null;
         }

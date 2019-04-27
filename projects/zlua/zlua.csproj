@@ -48,15 +48,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Compiler\CodeGenerator\CodeGenerator.cs" />
-    <Compile Include="Compiler\CodeGenerator\lcode.cs" />
-    <Compile Include="Compiler\Lexer\llex.cs" />
-    <Compile Include="Compiler\Lexer\LuaLexer.cs" />
-    <Compile Include="Compiler\Lexer\Token.cs" />
-    <Compile Include="Compiler\Lexer\TokenKind.cs" />
-    <Compile Include="Compiler\Lexer\TokenStream.cs" />
-    <Compile Include="Compiler\Parser\Context.cs" />
-    <Compile Include="Compiler\Parser\LuaParser.cs" />
     <Compile Include="Core\Instruction\Bytecode.cs" />
     <Compile Include="Core\Instruction\BytecodeTool.cs" />
     <Compile Include="Core\Instruction\Opcode.cs" />
@@ -66,7 +57,6 @@
     <Compile Include="Core\ObjectModel\Closure.cs" />
     <Compile Include="Core\ObjectModel\lobject.cs" />
     <Compile Include="Core\Instruction\lopcodes.cs" />
-    <Compile Include="Compiler\Parser\lparser.cs" />
     <Compile Include="Core\Lua\lua.cs" />
     <Compile Include="Core\Configuration\luaconf.cs" />
     <Compile Include="Core\Lua\LuaInteger.cs" />
@@ -112,9 +102,15 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Compiler\" />
     <Folder Include="Library\" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Antlr4">
+      <Version>4.6.6</Version>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
     <PackageReference Include="Newtonsoft.Json">
       <Version>12.0.1</Version>
     </PackageReference>
