@@ -1,14 +1,16 @@
 ﻿// zlua v0.1 基于 clua5.3
 //
-
 // lua解释器
 
+using zlua.Compiler;
 using System;
 using System.IO;
 
 using zlua.Core.Instruction;
 using zlua.Core.ObjectModel;
 using zlua.Core.Undumper;
+using Antlr4.Runtime;
+using zlua.Compiler.CodeGenerator;
 
 namespace zlua.Core.VirtualMachine
 {
@@ -26,28 +28,23 @@ namespace zlua.Core.VirtualMachine
 
     public partial class lua_State
     {
-        public const string Version = "zlua v0.1 based on clua5.3";
-
         /* option for multiple returns in 'lua_pcall' and 'lua_call' */
         public const int LUA_MULTRET = -1;
 
-        // luaL_dofile
-        //
         // 《Lua设计与实现》p39
-        public void dofile(string path)
+        public void luaL_dofile(string path)
         {
-            loadfile(path);
+            luaL_loadfile(path);
             luaD_call(0, LUA_MULTRET);
         }
 
-        // luaL_loadfile
-        public void loadfile(string path)
+        public void luaL_loadfile(string path)
         {
             Proto p;
             if (IsBinaryChunk(path)) {
                 p = luaU.Undump(new FileStream(path, FileMode.Open));
             } else {
-                p = DoInput(File.ReadAllText(path, System.Text.Encoding.UTF8), $"@{path}");
+                p = DoInput(new AntlrFileStream(path, System.Text.Encoding.UTF8), $"@{path}");
             }
             /*
              * TODO
@@ -87,7 +84,7 @@ namespace zlua.Core.VirtualMachine
             // * 初始化cl的upval
             // * 将cl压栈
             // * 调用Call方法执行cl
-            DoInput(chunk, chunk);
+            DoInput(new AntlrInputStream(chunk), chunk);
             // TODO 规范api，block上创建visit chunk方法
             // TODO 从visitor取得proto
             // 我还是愿意创建chunkproto这个类
@@ -107,15 +104,14 @@ namespace zlua.Core.VirtualMachine
         /// 基于L.top，压函数，压args，返回1个值
         public delegate void CSharpFunction(lua_State L);
 
-        private Proto DoInput(string chunk, string chunkName)
+        private Proto DoInput(ICharStream chunk, string chunkName)
         {
-            //LuaLexer lexer = new LuaLexer(chunk, chunkName);
-            //TokenStream tokenStream = new TokenStream(lexer);
-            //LuaParser parser = new LuaParser(tokenStream);
-            //LuaVisitor visitor = new LuaVisitor();
-            //blockContext block = parser.Parse();
-            //visitor.Visit_block(block);
-            // TODO
+            LuaLexer lexer = new LuaLexer(chunk);
+            CommonTokenStream tokenStream = new CommonTokenStream(lexer);
+            LuaParser parser = new LuaParser(tokenStream);
+            var tree = parser.chunk();
+            LuaCodeGenerator codeGenerator = new LuaCodeGenerator();
+            codeGenerator.Visit(tree);
             return null;
         }
 

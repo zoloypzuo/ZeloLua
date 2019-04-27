@@ -21,7 +21,7 @@ namespace zlua
             var p = luaU.Undump(new FileStream(
                 @"C:\Users\91018\Documents\GitHub\zlua\data\luac.out",
                 FileMode.Open));
-            new lua_State().dofile(@"C:\Users\91018\Documents\GitHub\zlua\data\lua\ch02\hello_world.out");
+            new lua_State().luaL_dofile(@"C:\Users\91018\Documents\GitHub\zlua\data\lua\ch02\hello_world.out");
         }
     }
 }

@@ -84,6 +84,10 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <Antlr4 Include="Compiler\Lua.g4">
+      <Generator>MSBuild:Compile</Generator>
+      <CustomToolNamespace>zlua.Compiler</CustomToolNamespace>
+    </Antlr4>
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
@@ -102,7 +106,6 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Compiler\" />
     <Folder Include="Library\" />
   </ItemGroup>
   <ItemGroup>
