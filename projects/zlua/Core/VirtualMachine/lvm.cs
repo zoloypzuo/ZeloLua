@@ -28,13 +28,13 @@ namespace zlua.Core.VirtualMachine
         /// 当前函数栈帧的base
         /// 是相对于栈底的偏移，所有函数内索引局部变量以这个为基准
         /// </summary>
-        private int @base { get { return ci.@base; } }
+        private int @base { get; set; }
 
 
         /// <summary>
         /// 当前函数
         /// </summary>
-        private CallInfo ci { get { return CallInfoStack.Peek(); } }
+        private CallInfo ci { get { return CallStack.Peek(); } }
 
         /// <summary>
         /// last free slot in the stack
@@ -42,14 +42,14 @@ namespace zlua.Core.VirtualMachine
         /// </summary>
         private int stack_last { get { return stack.Count; } }
 
-        private Stack<CallInfo> CallInfoStack { get; }
+        private Stack<CallInfo> CallStack { get; }
 
 
         /// saved pc when call a function
         /// index of instruction array；因为src用指针的原因，而zlua必须同时使用codes和pc来获取指令
-        private int pc;
+        private int savedpc { get; set; }
 
-        private Bytecode[] codes { get; set; }
+        private Bytecode[] code { get; set; }
 
         const int BasicStackSize = 40;
 
@@ -57,11 +57,11 @@ namespace zlua.Core.VirtualMachine
         public lua_State() : this(BasicStackSize)
         {
             const int BasicCiStackSize = 8;
-            CallInfoStack = new Stack<CallInfo>(BasicCiStackSize);
+            CallStack = new Stack<CallInfo>(BasicCiStackSize);
             // 基本的CallInfo，在chunk之前
             // 因为调用函数之前要有一个CallInfo保存savedpc
             // 因此构造LuaState时构造一个基本的CallInfo
-            CallInfoStack.Push(new CallInfo());
+            CallStack.Push(new CallInfo());
             for (int i = 0; i < BasicStackSize; i++) {
                 stack.Add(new TValue());
             }
@@ -163,26 +163,16 @@ namespace zlua.Core.VirtualMachine
         /// <param name="nexeccalls"></param>
         private void luaV_execute(int nexeccalls)
         {
-            // clua5.3缓存了ci
-            // clua5.1缓存了base和pc
-            // 我们都不缓存，因为这造成了代码混乱
-            //CallInfo ci = this.ci;
-            //int @base;
-            //int pc;
             reentry:
-            Debug.Assert(stack[ci.funcIndex].IsLuaFunction);
-            // 缓存cl
-            cl = stack[ci.funcIndex].Cl as LuaClosure;
-            // 缓存k
+            Debug.Assert(stack[ci.func].IsLuaFunction);
+            int pc = this.savedpc;
+            cl = stack[ci.func].Cl as LuaClosure;
+            int @base = this.@base;
             k = cl.p.k;
-            // 缓存savedpc
-
             while (true) {
-                Bytecode i = codes[pc++];
-                Debug.Assert(@base == ci.@base);
-                //TODO helloworld程序在call指令执行后这个断言失败，top=0，base=1
-                //getg，loadk，call执行了两次，然后栈帧为空，
-                //Debug.Assert(@base <= top && top < StackLastFree); //这里始终没有。
+                Bytecode i = code[pc++];
+                Debug.Assert(@base == ci.@base&&@base==ci.@base);
+                Debug.Assert(@base <= top && top < stack.Count); //这里始终没有。
                 TValue ra = RA(i);
                 switch (i.Opcode) {
 
@@ -393,7 +383,7 @@ namespace zlua.Core.VirtualMachine
                     // 与testset类似
                     case Opcode.OP_TEST: {
                             if (ra.IsFalse != (i.C == 1 ? true : false)) {
-                                pc += codes[pc].SignedBx;
+                                pc += code[pc].SignedBx;
                             } else {
                                 pc++;
                             }
@@ -405,7 +395,7 @@ namespace zlua.Core.VirtualMachine
                     case Opcode.OP_TESTSET: {
                             if (ra.IsFalse != (i.C == 1 ? true : false)) {
                                 ra.Value = RB(i);
-                                pc += codes[pc].SignedBx;
+                                pc += code[pc].SignedBx;
                             } else {
                                 pc++;
                             }
@@ -424,42 +414,79 @@ namespace zlua.Core.VirtualMachine
                     // 执行完该指令后，被调用函数和它的栈帧被清空，返回值被留在栈上
                     // 《自己动手实现Lua》p154
                     case Opcode.OP_CALL: {
+                            int a = (int)i.A;
                             int b = (int)i.B;
                             int nresults = (int)i.C - 1;
-                            int func = @base + (int)i.A;
-                            if (b != 0) top = func + b;  /* else previous instruction set top */
-                            switch (luaD_precall(func, nresults)) {
+                            if (b != 0) top = @base + a + b;  /* else previous instruction set top */
+                            switch (luaD_precall(@base + a, nresults)) {
                                 case PCRLUA: {
                                         nexeccalls++;
                                         goto reentry;  /* restart luaV_execute over new Lua function */
                                     }
-                                case PCRC:
-                                    if (nresults >= 0)
-                                        top = ci.top;
-                                    continue;
-                                default:
-                                    return;
+                                case PCRC: {
+                                        /* it was a C function (`precall' called it); adjust results */
+                                        if (nresults >= 0) top = ci.top;
+                                        continue;
+                                    }
+                                default: {
+                                        return;  /* yield */
+                                    }
                             }
                         }
                     // A B return R(A), ... ,R(A+B-2) (see note)
                     case Opcode.OP_RETURN: {
-                            int b = (int)i.B;
                             int a = (int)i.A;
+                            int b = (int)i.B;
                             if (b != 0) top = @base + a + b - 1;
-                            luaD_poscall(a);
-                            if (--nexeccalls == 0) /* chunk executed, return*/
-                                return;
-                            else { /*continue the execution*/
-                                //if (i != 0)
-                                //    topIndex = Ci.topIndex;
+                            //TODO
+                            //if (L->openupval) luaF_close(L, base);
+                            b = luaD_poscall(@base + a);
+                            if (--nexeccalls == 0)  /* was previous function running `here'? */
+                                return;  /* no: return */
+                            else {  /* yes: continue its execution */
+                                if (b != 0) top = ci.top;
+                                Debug.Assert(stack[ci.func].IsLuaFunction);
+                                Debug.Assert(code[ci.savedpc - 1].Opcode == Opcode.OP_CALL);
                                 goto reentry;
                             }
                         }
                     // A B C return R(A)(R(A+1), ... ,R(A+B-1))
                     // 形如return f()的返回语句被优化成尾递归
                     case Opcode.OP_TAILCALL: {
-                            // TODO clua太多了，书上没讲
-                            continue;
+                            int a = (int)i.A;
+                            int b = (int)i.B;
+                            int nresults = (int)i.C - 1;
+                            if (b != 0) top = @base + a + b;  /* else previous instruction set top */
+                            Debug.Assert((int)i.C - 1 == LUA_MULTRET);
+                            switch (luaD_precall(@base + a, LUA_MULTRET)) {
+                                case PCRLUA: {
+                                        /* tail call: put new frame in place of previous one */
+                                        CallInfo ciplus1 = CallStack.Pop();
+                                        CallInfo ci = this.ci;/* previous frame */
+                                        CallStack.Push(ciplus1);
+                                        int aux;
+                                        int func = ci.func;
+                                        int pfunc = ciplus1.func;  /* previous function index */
+                                        //if (L->openupval) luaF_close(L, ci.@base);
+                                        @base = ci.func + ciplus1.@base - pfunc;
+                                        ci.@base = @base;
+                                        for (aux = 0; pfunc + aux < top; aux++)  /* move frame down */
+                                            stack[func + aux] = stack[pfunc + aux];
+                                        top = func + aux;  /* correct top */
+                                        ci.top=top;
+                                        Debug.Assert(top == @base + (stack[func].Cl as LuaClosure).p.maxstacksize);
+                                        ci.savedpc = pc;
+                                        ci.tailcalls++;  /* one more call lost */
+                                        CallStack.Pop();  /* remove new frame */
+                                        goto reentry;
+                                    }
+                                case PCRC: {  /* it was a C function (`precall' called it) */
+                                        continue;
+                                    }
+                                default: {
+                                        return;  /* yield */
+                                    }
+                            }
                         }
 
                     #endregion 函数相关指令
@@ -522,7 +549,7 @@ namespace zlua.Core.VirtualMachine
                             //cb = i.A + 3;  /* previous call may change the stack */
                             if (!stack[cb].IsNil) {  /* continue loop? */
                                 stack[cb - 1].Value = stack[cb];  /* save control variable */
-                                pc += codes[pc].SignedBx;  /* jump back */
+                                pc += code[pc].SignedBx;  /* jump back */
                             }
                             pc++;
                             continue;
@@ -540,7 +567,7 @@ namespace zlua.Core.VirtualMachine
                                 n = top - (int)i.A - 1;
                                 top = ci.top;
                             }
-                            if (c == 0) c = (int)codes[pc++].Value;
+                            if (c == 0) c = (int)code[pc++].Value;
                             // runtime_check
                             if (!ra.IsTable) {
                                 break;
@@ -573,13 +600,13 @@ namespace zlua.Core.VirtualMachine
                             LuaClosure ncl = new LuaClosure(cl.env, nup, p);
                             // 后面一定跟着一些getUpval或mov指令用来初始化upvals，分情况讨论，把这些指令在这个周期就执行掉
                             for (int j = 0; j < nup; j++, pc++) {
-                                Bytecode next_instr = codes[pc];
+                                Bytecode next_instr = code[pc];
                                 // 从父Proto的upvals直接取upvals
                                 if (next_instr.Opcode == Opcode.OP_GETUPVAL)
-                                    ncl.upvals[j] = cl.upvals[(int)codes[pc].B];
+                                    ncl.upvals[j] = cl.upvals[(int)code[pc].B];
                                 // 否则得用复杂的方法确定upval的位置
                                 else {
-                                    Debug.Assert(codes[pc].Opcode == Opcode.OP_MOVE);
+                                    Debug.Assert(code[pc].Opcode == Opcode.OP_MOVE);
                                     // TODO
                                     //ncl.upvals[j] = lfunc.FindUpval(this, this.baseIndex + next_instr.B);
                                 }
@@ -595,7 +622,7 @@ namespace zlua.Core.VirtualMachine
                             int a = (int)i.A;
                             int b = (int)i.B - 1;
                             CallInfo ci = this.ci;
-                            int n = ci.@base - ci.funcIndex - cl.p.numparams;
+                            int n = ci.@base - ci.func - cl.p.numparams;
                             if (b == LUA_MULTRET) {
                                 check(n);
                                 ra = RA(i);  /* previous call may change the stack */

@@ -5,8 +5,8 @@
     /// </summary>
     internal class CallInfo
     {
-        public int @base { get { return funcIndex + 1; } }/* base for this function */
-        public int funcIndex;/* function index in the stack */
+        public int @base;/* base for this function */
+        public int func;/* function index in the stack */
         public int top; /* top for this function */
         /// saved pc when call function, index of instruction array
         /// 调用别的函数时保存LuaState的savedpc

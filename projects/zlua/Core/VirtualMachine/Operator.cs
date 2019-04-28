@@ -40,9 +40,9 @@ namespace zlua.Core.VirtualMachine
             TValue rb = RKB(i);
             TValue rc = RKC(i);
             if (predicate(rb, rc) != (i.A != 0)) {
-                pc++;
+                savedpc++;
             } else {
-                pc += codes[pc].SignedBx;
+                savedpc += code[savedpc].SignedBx;
             }
         }
 

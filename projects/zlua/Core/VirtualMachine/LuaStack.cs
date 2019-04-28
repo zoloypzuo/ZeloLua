@@ -26,7 +26,6 @@ namespace zlua.Core.VirtualMachine
             for (int i = 0; i < size; i++) {
                 stack.Add(new TValue());
             }
-            top = 0;
         }
 
         // 检查栈的空闲空间是否还可以容纳（推入）至少n个值，如若不然，扩容

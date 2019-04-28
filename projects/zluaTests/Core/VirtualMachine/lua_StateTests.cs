@@ -53,6 +53,12 @@ namespace zlua.Core.VirtualMachine.Tests
             string empty = "";
         }
 
+        [TestMethod()]
+        public void HelloworldChunkTest()
+        {
+            t00("helloworld/helloworld");
+        }
+
         /// <summary>
         /// 《自己动手实现Lua》p131+
         /// </summary>
@@ -71,6 +77,12 @@ namespace zlua.Core.VirtualMachine.Tests
             string setlist1 = "t = {1,2,f()}";
         }
 
+        [TestMethod()]
+        public void FunctionCallChunkTest()
+        {
+            t00("functionCall/call");
+        }
+
         /// <summary>
         /// 《自己动手实现Lua》p152+
         /// </summary>
@@ -81,9 +93,8 @@ namespace zlua.Core.VirtualMachine.Tests
                 "local a,b,c\n" +
                 "local function f() end\n" +
                 "local g = fucntion() end\n";
-            //TODO 确保代码应该正确执行，然后书中的代码不能。。
-            //TODO 你可以试一试捕获这些异常并忽略
-            string call = $"local a,b,c = f(1,2,3,4)";
+            string ctx0 = "local function f() end\n";
+            string call = $"{ctx0}local a,b,c = f(1,2,3,4)";
             string @return = "local a,b; return 1,a,b";
             string vararg = "local a,b,c,d,e = 100, ...";
             string tailcall = "return f(a,b,c)";

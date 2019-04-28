@@ -43,6 +43,8 @@ namespace zlua.Core.ObjectModel
         /// </summary>
         public byte is_vararg;
 
+        public bool IsVararg { get { return is_vararg != 0; } }
+
         /// <summary>
         /// 寄存器数量
         /// </summary>
