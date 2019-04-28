@@ -33,7 +33,7 @@ namespace zlua.Core.VirtualMachine.Tests
         void t00(string filename)
         {
             const string basePath = "../../../../data/chunk/";
-            new lua_State().luaL_dofile($"{basePath}{filename}.out");
+            lua_State.lua_newstate().luaL_dofile($"{basePath}{filename}.out");
         }
 
         [TestMethod()]

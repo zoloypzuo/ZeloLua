@@ -53,9 +53,10 @@ namespace zlua.Core.VirtualMachine
             //g->uvhead.u.l.prev = &g->uvhead;
             //g->uvhead.u.l.next = &g->uvhead;
             // f_luaopen
-            L.gt.Table = new Table(0, 2);
+            L.gt = new TValue(new Table(0, 2));
             L.registry.Table = new Table(0, 2);
             L.luaT_init();
+            return L;
         }
     }
 }

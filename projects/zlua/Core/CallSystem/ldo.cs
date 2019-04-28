@@ -25,16 +25,23 @@ namespace zlua.Core.VirtualMachine
         /// 一个例子是每次启动chunk时，push chunk，call it，funcindex=topindex-1
         public void luaD_call(int nargs = 0, int nresults = LUA_MULTRET)
         {
-            ++NumCSharpCalls;
-            if (NumCSharpCalls >= LuaConfiguration.MaxCalls)
-                throw new Exception("CSharp stack overflow");
-            // 对于chunk，top-(0+1)
+            //TODO
+            //if (++L->nCcalls >= LUAI_MAXCCALLS) {
+            //    if (L->nCcalls == LUAI_MAXCCALLS)
+            //        luaG_runerror(L, "C stack overflow");
+            //    else if (L->nCcalls >= (LUAI_MAXCCALLS + (LUAI_MAXCCALLS >> 3)))
+            //        luaD_throw(L, LUA_ERRERR);  /* error while handing stack error */
+            //}
+            ++nCcalls;
+            if (nCcalls >= LuaConfiguration.LUAI_MAXCCALLS)
+                throw new Exception("C stack overflow");
+            // 对于chunk，1-(0+1)
             int funcIndex = top - (nargs + 1);
             // 因为Closure实例cl和实参已经被压栈，可以执行这个cl
-            if (PreCall(funcIndex) == PCRLUA) {
+            if (luaD_precall(funcIndex) == PCRLUA) {
                 luaV_execute(1);
             }
-            --NumCSharpCalls;
+            --nCcalls;
         }
 
         /* results from luaD_precall */
@@ -45,7 +52,7 @@ namespace zlua.Core.VirtualMachine
         //
         // * 同时也是call指令实现
         // * funindex是相对于base的偏移
-        public int PreCall(int funcIndex, int nresults = LUA_MULTRET)
+        public int luaD_precall(int funcIndex, int nresults = LUA_MULTRET)
         {
             // * 保存this.savedpc到当前CallInfo的savedpc中
             // * 根据函数参数个数计算待调用函数的base和top值，存入新的CallInfo中

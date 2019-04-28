@@ -53,7 +53,6 @@ namespace zlua.Core.VirtualMachine
         private int pc;
 
         private Bytecode[] codes { get; set; }
-        private int NumCSharpCalls { get; set; }
 
         const int BasicStackSize = 40;
 
@@ -432,7 +431,7 @@ namespace zlua.Core.VirtualMachine
                             int nresults = (int)i.C - 1;
                             int func = @base + (int)i.A;
                             if (b != 0) top = func + b;  /* else previous instruction set top */
-                            switch (PreCall(func, nresults)) {
+                            switch (luaD_precall(func, nresults)) {
                                 case PCRLUA: {
                                         nexeccalls++;
                                         goto reentry;  /* restart luaV_execute over new Lua function */
