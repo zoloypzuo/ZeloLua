@@ -54,6 +54,7 @@ namespace zlua.Core.VirtualMachine
                 {
                     var s = L.pop();
                     Console.WriteLine(s.Str);
+                    return 0;
                 }
             };
             LuaClosure cl = new LuaClosure(env, 1, p);
@@ -84,8 +85,8 @@ namespace zlua.Core.VirtualMachine
             gt.Table.luaH_getstr((TString)name).Cl = newFunc;
         }
 
-        /// 基于L.top，压函数，压args，返回1个值
-        public delegate void lua_CFunction(lua_State L);
+        /// 基于L.top，压函数，压args，返回n个值
+        public delegate int lua_CFunction(lua_State L);
 
         private Proto DoInput(ICharStream chunk, string chunkName)
         {

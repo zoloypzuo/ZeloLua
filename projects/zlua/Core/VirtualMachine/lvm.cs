@@ -28,10 +28,7 @@ namespace zlua.Core.VirtualMachine
         /// 当前函数栈帧的base
         /// 是相对于栈底的偏移，所有函数内索引局部变量以这个为基准
         /// </summary>
-        private int @base {
-            get { return ci.@base; }
-            set { /*CallInfo.BaseIndex = value;*/ }
-        }
+        private int @base { get { return ci.@base; } }
 
 
         /// <summary>
@@ -449,7 +446,7 @@ namespace zlua.Core.VirtualMachine
                             int b = (int)i.B;
                             int a = (int)i.A;
                             if (b != 0) top = @base + a + b - 1;
-                            PosCall(a);
+                            luaD_poscall(a);
                             if (--nexeccalls == 0) /* chunk executed, return*/
                                 return;
                             else { /*continue the execution*/

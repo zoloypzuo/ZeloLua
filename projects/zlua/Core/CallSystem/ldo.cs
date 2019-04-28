@@ -38,7 +38,7 @@ namespace zlua.Core.VirtualMachine
             // 对于chunk，1-(0+1)
             int funcIndex = top - (nargs + 1);
             // 因为Closure实例cl和实参已经被压栈，可以执行这个cl
-            if (luaD_precall(funcIndex) == PCRLUA) {
+            if (luaD_precall(funcIndex, nresults) == PCRLUA) {
                 luaV_execute(1);
             }
             --nCcalls;
@@ -52,7 +52,7 @@ namespace zlua.Core.VirtualMachine
         //
         // * 同时也是call指令实现
         // * funindex是相对于base的偏移
-        public int luaD_precall(int funcIndex, int nresults = LUA_MULTRET)
+        public int luaD_precall(int funcIndex, int nresults)
         {
             // * 保存this.savedpc到当前CallInfo的savedpc中
             // * 根据函数参数个数计算待调用函数的base和top值，存入新的CallInfo中
@@ -88,26 +88,63 @@ namespace zlua.Core.VirtualMachine
             }
             /* if is a C function, call it */
             else {
+                int n;
                 CallInfo ci = new CallInfo();
-                const int MinStackSizeForCSharpFunction = 20;
-                if (top + MinStackSizeForCSharpFunction >= stack_last)
-                    Alloc(top + MinStackSizeForCSharpFunction + 1);
-                // 调用C函数
-                (stack[funcIndex].Cl as CSharpClosure).f(this);
-                // 调用结束之后的处理
-                PosCall(top - @base);
-                return PCRC;
+                CallInfoStack.Push(ci); /* now `enter' new function */
+                const int LUA_MINSTACK = 20;
+                luaD_checkstack(LUA_MINSTACK);  /* ensure minimum stack size */
+                ci.funcIndex = funcIndex;
+                ci.top = top + LUA_MINSTACK;
+                Debug.Assert(ci.top <= stack_last);
+                ci.nresults = nresults;
+                n = (stack[funcIndex].Cl as CSharpClosure).f(this);  /* do the actual call */
+                if (n < 0)  /* yielding? */
+                    return PCRYIELD;
+                else {
+                    luaD_poscall(top - n);
+                    return PCRC;
+                }
             }
         }
 
-        /// <summary>
-        /// 从C或lua函数返回;`resultIndex是返回值相对于L.base的偏移(很容易错，因为没有指针）
-        /// </summary>
-        public void PosCall(int resultOffset)
+        const int PCRYIELD = 0;
+
+        void luaD_checkstack(int n)
         {
+            if (stack_last - top <= (n))
+                luaD_growstack(n);
+            //else condhardstacktests(luaD_reallocstack(L, L->stacksize - EXTRA_STACK - 1));
+        }
+
+        void luaD_growstack(int n)
+        {
+            //if (n <= stack.Count)  /* double size is enough? */
+            //    luaD_reallocstack(L, 2 * L->stacksize);
+            //else
+            //    luaD_reallocstack(L, L->stacksize + n);
+        }
+
+        /// <summary>
+        /// 从C或lua函数返回
+        /// `resultIndex是返回值相对于L.base的偏移(很容易错，因为没有指针）
+        /// </summary>
+        public int luaD_poscall(int firstResultOffset)
+        {
+            int res;
+            int wanted, i;
+            // ci退栈
             CallInfo ci = CallInfoStack.Pop();
-            pc = this.ci.savedpc;
-            stack[ci.funcIndex].Value = stack[@base + resultOffset];
+            res = ci.funcIndex;  /* res == final position of 1st result */
+            wanted = ci.nresults;
+            CallInfo caller = CallInfoStack.Peek();
+            pc = caller.savedpc;  /* restore savedpc */
+                                  /* move results to correct place */
+            for (i = wanted; i != 0 && firstResultOffset < top; i--)
+                stack[res++].Value = stack[firstResultOffset++];
+            while (i-- > 0)
+                stack[res++].SetNil();
+            top = res;
+            return (wanted - LUA_MULTRET);  /* 0 iff wanted == LUA_MULTRET */
         }
 
         /// <summary>
