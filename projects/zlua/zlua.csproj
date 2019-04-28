@@ -48,6 +48,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Compiler\CodeGenerator\lcode.cs" />
+    <Compile Include="Compiler\CodeGenerator\LuaBaseVisitor.cs" />
+    <Compile Include="Compiler\CodeGenerator\LuaCodeGenerator.cs" />
+    <Compile Include="Compiler\CodeGenerator\LuaLexer.cs" />
+    <Compile Include="Compiler\CodeGenerator\LuaParser.cs" />
+    <Compile Include="Compiler\CodeGenerator\LuaVisitor.cs" />
     <Compile Include="Core\Instruction\Bytecode.cs" />
     <Compile Include="Core\Instruction\BytecodeTool.cs" />
     <Compile Include="Core\Instruction\Opcode.cs" />
@@ -84,10 +90,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <Antlr4 Include="Compiler\Lua.g4">
+    <None Include="Compiler\Lua.g4">
       <Generator>MSBuild:Compile</Generator>
       <CustomToolNamespace>zlua.Compiler</CustomToolNamespace>
-    </Antlr4>
+      <Abstract>False</Abstract>
+      <Listener>False</Listener>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
@@ -113,6 +121,9 @@
       <Version>4.6.6</Version>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="Antlr4.Runtime">
+      <Version>4.6.6</Version>
     </PackageReference>
     <PackageReference Include="Newtonsoft.Json">
       <Version>12.0.1</Version>

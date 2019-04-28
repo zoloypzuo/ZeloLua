@@ -142,7 +142,6 @@ namespace zlua.Core.VirtualMachine
             callTMres(Stack[top], tm1, p1, p2);
             return !Stack[top].IsFalse ? 1 : 0;
         }
-
     }
 
     internal enum TMS

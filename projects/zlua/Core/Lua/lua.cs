@@ -2,15 +2,16 @@
 //
 // lua解释器
 
-using zlua.Compiler;
+using Antlr4.Runtime;
+
 using System;
 using System.IO;
 
+using zlua.Compiler;
+using zlua.Compiler.CodeGenerator;
 using zlua.Core.Instruction;
 using zlua.Core.ObjectModel;
 using zlua.Core.Undumper;
-using Antlr4.Runtime;
-using zlua.Compiler.CodeGenerator;
 
 namespace zlua.Core.VirtualMachine
 {
@@ -46,35 +47,17 @@ namespace zlua.Core.VirtualMachine
             } else {
                 p = DoInput(new AntlrFileStream(path, System.Text.Encoding.UTF8), $"@{path}");
             }
-            /*
-             * TODO
-             	c := newLuaClosure(proto)
-	            self.stack.push(c)
-
-                ????
-                if len(proto.Upvalues) > 0 {
-                    // table[2]
-		            env := self.registry.get(LUA_RIDX_GLOBALS)
-		            c.upvals[0] = &upvalue{&env}
-	            }
-             */
-            LuaClosure cl = new LuaClosure(null, 1, p);
-            //if (p.Upvalues.Length > 0) {
-            //    var env = new Table(1, 1);
-            //    env.luaH_set(new TValue("print")).Cl = new CSharpClosure()
-            //    {
-            //        f = (L) =>
-            //        {
-            //            var s = L.LuaStack.pop();
-            //            Console.WriteLine(s.Str);
-            //        }
-            //    };
-            //    cl.upvals.Add(new UpVal()
-            //    {
-            //        v = new TValue(env)
-            //    });
-            //}
-            //LuaStack.push(new TValue(cl));
+            var env = new Table(1, 1);
+            env.luaH_set(new TValue("print")).Cl = new CSharpClosure()
+            {
+                f = (L) =>
+                {
+                    var s = L.LuaStack.pop();
+                    Console.WriteLine(s.Str);
+                }
+            };
+            LuaClosure cl = new LuaClosure(env, 1, p);
+            LuaStack.push(new TValue(cl));
         }
 
         public void dostring(string chunk)

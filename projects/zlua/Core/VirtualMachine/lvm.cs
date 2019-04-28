@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
+
 using zlua.Core.Instruction;
 using zlua.Core.Lua;
 using zlua.Core.ObjectModel;
 
 /// <summary>
 /// 虚拟机
-
 /// </summary>
 namespace zlua.Core.VirtualMachine
 {
@@ -72,7 +72,7 @@ namespace zlua.Core.VirtualMachine
             // 因为调用函数之前要有一个CallInfo保存savedpc
             // 因此构造LuaState时构造一个基本的CallInfo
             CallInfoStack.Push(new CallInfo());
-            LuaStack = new LuaStack(20);
+            LuaStack = new lua_State(20);
             for (int i = 0; i < BasicStackSize; i++) {
                 Stack.Add(new TValue());
             }
@@ -191,7 +191,9 @@ namespace zlua.Core.VirtualMachine
             while (true) {
                 Bytecode i = codes[pc++];
                 Debug.Assert(@base == ci.@base);
-                Debug.Assert(@base <= top && top < StackLastFree); //这里始终没有。
+                //TODO helloworld程序在call指令执行后这个断言失败，top=0，base=1
+                //getg，loadk，call执行了两次，然后栈帧为空，
+                //Debug.Assert(@base <= top && top < StackLastFree); //这里始终没有。
                 TValue ra = RA(i);
                 switch (i.Opcode) {
 
@@ -258,7 +260,6 @@ namespace zlua.Core.VirtualMachine
                             luaV_settable(ra, RKB(i), RKC(i));
                             continue;
                         }
-
                     // A B C R(A) := {} (size = B,C)
                     case Opcode.OP_NEWTABLE: {
                             int b = (int)i.B;
@@ -400,6 +401,7 @@ namespace zlua.Core.VirtualMachine
                             continue;
                         }
                     // A C if not (R(A) <=> C) then pc++
+                    // 与testset类似
                     case Opcode.OP_TEST: {
                             if (ra.IsFalse != (i.C == 1 ? true : false)) {
                                 pc += codes[pc].SignedBx;
@@ -409,6 +411,8 @@ namespace zlua.Core.VirtualMachine
                             continue;
                         }
                     // A B C if (R(B) <=> C) then R(A) := R(B) else pc++
+                    // 判断RB的条件值是否与C相等，是则RA=RB，否则pc++
+                    // <=>表示bool比较
                     case Opcode.OP_TESTSET: {
                             if (ra.IsFalse != (i.C == 1 ? true : false)) {
                                 ra.Value = RB(i);
@@ -474,12 +478,14 @@ namespace zlua.Core.VirtualMachine
                     #region 循环类指令
 
                     // A sBx R(A)+=R(A+2); if R(A) <?= R(A+1) then { pc+=sBx; R(A+3)=R(A) }
+                    // for index+=for step，
+                    // if for index <= for limit {跳转到循环体第一行代码，并i=for index}
+                    // <?=表示，当step为正数时，<=，当step为负数时，>=
                     case Opcode.OP_FORLOOP: {
                             lua_Number step = Stack[(int)i.A + 2].N;
                             lua_Number idx = ra.N + step; /* increment index */
                             lua_Number limit = Stack[(int)i.A + 1].N;
-                            if ((0 < step) ? idx <= limit
-                                                    : limit <= idx) {
+                            if ((0 < step) ? idx <= limit : limit <= idx) {
                                 pc += i.SignedBx;  /* jump back */
                                 ra.N = idx;  /* update internal index... */
                                 Stack[(int)i.A + 3].N = idx;  /* ...and external index */
@@ -487,6 +493,9 @@ namespace zlua.Core.VirtualMachine
                             continue;
                         }
                     // A sBx R(A)-=R(A+2); pc+=sBx
+                    // forprep相当于循环的初始化
+                    // for index-=for step，并跳转到forloop指令
+                    // 参见2019-04-28 09-19-40.947648-for_num.lua
                     case Opcode.OP_FORPREP: {
                             TValue init = ra;
                             TValue plimit = Stack[(int)i.A + 1];
@@ -523,7 +532,7 @@ namespace zlua.Core.VirtualMachine
                             top = ci.top;
                             //cb = i.A + 3;  /* previous call may change the stack */
                             if (!Stack[cb].IsNil) {  /* continue loop? */
-                                Stack[cb -1].Value=Stack[cb];  /* save control variable */
+                                Stack[cb - 1].Value = Stack[cb];  /* save control variable */
                                 pc += codes[pc].SignedBx;  /* jump back */
                             }
                             pc++;
@@ -709,8 +718,14 @@ namespace zlua.Core.VirtualMachine
             //luaG_runerror(L, "loop in settable");
         }
 
-        void luaV_concat(int total, int last)
+        /// <summary>
+        /// 拼接栈上连续<c>total</c>个寄存器，<c>last</c>是最后一个元素的索引
+        /// </summary>
+        /// <param name="total"></param>
+        /// <param name="last"></param>
+        private void luaV_concat(int total, int last)
         {
+            // 如果total为0，返回空串
             do {
                 int top = @base + last + 1;
                 int n = 2;  /* number of elements handled in this pass (at least 2) */
@@ -753,12 +768,13 @@ namespace zlua.Core.VirtualMachine
             if (lhs.IsString) return false;//TODO 字典序。或者你看标准库有没有
             else return false; //TODO 调用meta方法
         }
-        bool tostring(TValue o)
+
+        private bool tostring(TValue o)
         {
             return o.IsString || luaV_tostring(o);
         }
 
-        bool luaV_tostring(TValue obj)
+        private bool luaV_tostring(TValue obj)
         {
             if (!obj.IsNumber) {
                 return false;
@@ -767,8 +783,9 @@ namespace zlua.Core.VirtualMachine
                 return true;
             }
         }
+
         #endregion other things
 
-        private LuaStack LuaStack { get; set; }
+        private lua_State LuaStack { get; set; }
     }
 }

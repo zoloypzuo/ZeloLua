@@ -6,6 +6,16 @@ using zlua.Core.Lua;
 
 namespace zlua.Core.ObjectModel
 {
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <remarks>
+    /// <list type="bullet">
+    /// <item>键值非nil和NaN的lua值，值是任意lua值</item>
+    /// <item>数组索引从1开始</item>
+    /// <item></item>
+    /// </list>
+    /// </remarks>
     public class Table : GCObject, IEnumerable<KeyValuePair<TValue, TValue>>
     {
         /// <summary>
@@ -18,6 +28,11 @@ namespace zlua.Core.ObjectModel
         private List<TValue> array;
         private Dictionary<TValue, TValue> hashTablePart;
 
+        /// <summary>
+        /// 预估数组部分和哈希表部分的容量
+        /// </summary>
+        /// <param name="sizeArrayPart"></param>
+        /// <param name="sizeHashTablePart"></param>
         public Table(int sizeArrayPart, int sizeHashTablePart)
         {
             hashTablePart = new Dictionary<TValue, TValue>(sizeHashTablePart);
@@ -213,8 +228,9 @@ namespace zlua.Core.ObjectModel
             }
             //TODO
         }
+
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <returns></returns>
         IEnumerator<KeyValuePair<TValue, TValue>> IEnumerable<KeyValuePair<TValue, TValue>>.GetEnumerator()

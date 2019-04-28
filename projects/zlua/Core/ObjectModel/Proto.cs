@@ -81,7 +81,7 @@ namespace zlua.Core.ObjectModel
         /// </summary>
         public string[] upvalues;
 
-        #endregion
+        #endregion 调试信息
     }
 
     internal class ChunkProto : Proto

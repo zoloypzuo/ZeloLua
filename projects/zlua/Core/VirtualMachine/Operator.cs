@@ -46,7 +46,6 @@ namespace zlua.Core.VirtualMachine
             }
         }
 
-
         // int floor div
         public static lua_Integer IFloorDiv(lua_Integer a, lua_Integer b)
         {

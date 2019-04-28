@@ -20,11 +20,13 @@ namespace zlua.Core.VirtualMachine
                 case LuaTag.LUA_TNUMBER:
                     n = val.N;
                     return true;
+
                 case LuaTag.LUA_TSTRING:
                     double outN;
                     bool b = TValue.Str2Num(val.Str, out outN);
                     n = outN;
                     return b;
+
                 default:
                     n = 0;
                     return false;
@@ -38,8 +40,10 @@ namespace zlua.Core.VirtualMachine
                 case LuaTag.LUA_TNUMBER:
                     FloatToInteger(val.N, out i);
                     return true;
+
                 case LuaTag.LUA_TSTRING:
                     return lua_Integer.TryParse(val.Str, out i);
+
                 default:
                     i = 0;
                     return false;

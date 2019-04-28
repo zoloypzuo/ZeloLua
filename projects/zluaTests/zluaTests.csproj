@@ -62,6 +62,7 @@
   <ItemGroup>
     <Compile Include="Compiler\LexerTests.cs" />
     <Compile Include="Core\BinaryChunkTests.cs" />
+    <Compile Include="Core\VirtualMachine\lua_StateTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
