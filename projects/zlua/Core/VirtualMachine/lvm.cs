@@ -20,14 +20,9 @@ namespace zlua.Core.VirtualMachine
     {
         #region 私有访问器
 
-        private List<TValue> Stack { get { return LuaStack.slots; } }
-
         /// top指向第一个可用位置，每次push时 top++ = value
         /// 几乎所有文件都要用，因为你用这个来维护栈这个行为
-        private int top {
-            get { return LuaStack.top; }
-            set { LuaStack.top = value; }
-        }
+        private int top { get; set; }
 
         /// 当前函数栈帧的base
         /// Ido要使用，我希望他是private
@@ -38,7 +33,7 @@ namespace zlua.Core.VirtualMachine
         }
 
         /// 标记分配的大小,topIndex永远小于stackLastFree
-        private int StackLastFree { get { return Stack.Count; } }
+        private int StackLastFree { get { return stack.Count; } }
 
         /// 当前函数
         private CallInfo ci { get { return CallInfoStack.Peek(); } }
@@ -62,19 +57,19 @@ namespace zlua.Core.VirtualMachine
 
         #endregion 私有属性
 
+        const int BasicStackSize = 40;
+
         /// lua_newstate
-        public lua_State()
+        public lua_State() : this(BasicStackSize)
         {
             const int BasicCiStackSize = 8;
-            const int BasicStackSize = 40;
             CallInfoStack = new Stack<CallInfo>(BasicCiStackSize);
             // 基本的CallInfo，在chunk之前
             // 因为调用函数之前要有一个CallInfo保存savedpc
             // 因此构造LuaState时构造一个基本的CallInfo
             CallInfoStack.Push(new CallInfo());
-            LuaStack = new lua_State(20);
             for (int i = 0; i < BasicStackSize; i++) {
-                Stack.Add(new TValue());
+                stack.Add(new TValue());
             }
             top = 0;
 
@@ -104,25 +99,25 @@ namespace zlua.Core.VirtualMachine
 
         private TValue R(int i)
         {
-            return Stack[@base + i];
+            return stack[@base + i];
         }
 
         // R(A)
         private TValue RA(Bytecode i)
         {
-            return Stack[@base + (int)i.A];
+            return stack[@base + (int)i.A];
         }
 
         // R(B)
         private TValue RB(Bytecode i)
         {
-            return Stack[@base + (int)i.B];
+            return stack[@base + (int)i.B];
         }
 
         // R(C)
         private TValue RC(Bytecode i)
         {
-            return Stack[@base + (int)i.C];
+            return stack[@base + (int)i.C];
         }
 
         // RK(B)
@@ -131,7 +126,7 @@ namespace zlua.Core.VirtualMachine
             int B = (int)i.B;
             var rb = Bytecode.IsK(B) ?
                 k[Bytecode.IndexK(B)] :
-                Stack[@base + B];
+                stack[@base + B];
             return rb;
         }
 
@@ -141,7 +136,7 @@ namespace zlua.Core.VirtualMachine
             int C = (int)instr.C;
             var rc = Bytecode.IsK(C) ?
                 k[Bytecode.IndexK(C)] :
-                Stack[@base + C];
+                stack[@base + C];
             return rc;
         }
 
@@ -181,9 +176,9 @@ namespace zlua.Core.VirtualMachine
             //int @base;
             //int pc;
             reentry:
-            Debug.Assert(Stack[ci.funcIndex].IsLuaFunction);
+            Debug.Assert(stack[ci.funcIndex].IsLuaFunction);
             // 缓存cl
-            cl = Stack[ci.funcIndex].Cl as LuaClosure;
+            cl = stack[ci.funcIndex].Cl as LuaClosure;
             // 缓存k
             k = cl.p.k;
             // 缓存savedpc
@@ -220,7 +215,7 @@ namespace zlua.Core.VirtualMachine
                             int raIndex = (int)i.A;
                             int rbIndex = (int)i.B;
                             do {
-                                Stack[rbIndex--].SetNil();
+                                stack[rbIndex--].SetNil();
                             } while (rbIndex >= raIndex);
                             continue;
                         }
@@ -482,13 +477,13 @@ namespace zlua.Core.VirtualMachine
                     // if for index <= for limit {跳转到循环体第一行代码，并i=for index}
                     // <?=表示，当step为正数时，<=，当step为负数时，>=
                     case Opcode.OP_FORLOOP: {
-                            lua_Number step = Stack[(int)i.A + 2].N;
+                            lua_Number step = stack[(int)i.A + 2].N;
                             lua_Number idx = ra.N + step; /* increment index */
-                            lua_Number limit = Stack[(int)i.A + 1].N;
+                            lua_Number limit = stack[(int)i.A + 1].N;
                             if ((0 < step) ? idx <= limit : limit <= idx) {
                                 pc += i.SignedBx;  /* jump back */
                                 ra.N = idx;  /* update internal index... */
-                                Stack[(int)i.A + 3].N = idx;  /* ...and external index */
+                                stack[(int)i.A + 3].N = idx;  /* ...and external index */
                             }
                             continue;
                         }
@@ -498,8 +493,8 @@ namespace zlua.Core.VirtualMachine
                     // 参见2019-04-28 09-19-40.947648-for_num.lua
                     case Opcode.OP_FORPREP: {
                             TValue init = ra;
-                            TValue plimit = Stack[(int)i.A + 1];
-                            TValue pstep = Stack[(int)i.A + 2];
+                            TValue plimit = stack[(int)i.A + 1];
+                            TValue pstep = stack[(int)i.A + 2];
                             //savedpc = pc;  /* next steps may throw errors */
                             lua_Number n1;
                             lua_Number n2;
@@ -524,15 +519,15 @@ namespace zlua.Core.VirtualMachine
                     case Opcode.OP_TFORLOOP: {
                             int a = (int)i.A;
                             int cb = (int)i.A + 3;  /* call base */
-                            Stack[cb + 2].Value = Stack[a + 2];
-                            Stack[cb + 1].Value = Stack[a + 1];
-                            Stack[cb].Value = ra;
+                            stack[cb + 2].Value = stack[a + 2];
+                            stack[cb + 1].Value = stack[a + 1];
+                            stack[cb].Value = ra;
                             top = cb + 3;  /* func. + 2 args (state and index) */
                             luaD_call(cb, (int)i.C);
                             top = ci.top;
                             //cb = i.A + 3;  /* previous call may change the stack */
-                            if (!Stack[cb].IsNil) {  /* continue loop? */
-                                Stack[cb - 1].Value = Stack[cb];  /* save control variable */
+                            if (!stack[cb].IsNil) {  /* continue loop? */
+                                stack[cb - 1].Value = stack[cb];  /* save control variable */
                                 pc += codes[pc].SignedBx;  /* jump back */
                             }
                             pc++;
@@ -563,7 +558,7 @@ namespace zlua.Core.VirtualMachine
                             if (last > h.sizearray)  /* needs more space? */
                                 h.luaH_resizearray(last);  /* pre-alloc it at once */
                             for (; n > 0; n--) {
-                                TValue val = Stack[(int)i.A + n];
+                                TValue val = stack[(int)i.A + n];
                                 h.luaH_setnum(last--).Value = val;
                             }
                             continue;
@@ -608,16 +603,16 @@ namespace zlua.Core.VirtualMachine
                             CallInfo ci = this.ci;
                             int n = ci.@base - ci.funcIndex - cl.p.numparams;
                             if (b == LUA_MULTRET) {
-                                LuaStack.check(n);
+                                check(n);
                                 ra = RA(i);  /* previous call may change the stack */
                                 b = n;
                                 top = a + n;
                             }
                             for (int j = 0; j < b; j++) {
                                 if (j < n) {
-                                    Stack[a + j].Value = Stack[ci.@base - n + j];
+                                    stack[a + j].Value = stack[ci.@base - n + j];
                                 } else {
-                                    Stack[a + j].SetNil();
+                                    stack[a + j].SetNil();
                                 }
                             }
                             continue;
@@ -632,8 +627,8 @@ namespace zlua.Core.VirtualMachine
         /// TODO 删除 stack.check
         internal void Alloc(int size)
         {
-            for (int i = Stack.Count; i < size; i++)
-                Stack.Add(new TValue());
+            for (int i = stack.Count; i < size; i++)
+                stack.Add(new TValue());
         }
 
         #region other things
@@ -729,20 +724,20 @@ namespace zlua.Core.VirtualMachine
             do {
                 int top = @base + last + 1;
                 int n = 2;  /* number of elements handled in this pass (at least 2) */
-                if (!Stack[top - 2].IsString || Stack[top - 2].IsNumber || !tostring(Stack[top - 1])) {
-                    if (!call_binTM(Stack[top - 2], Stack[top - 1], Stack[top - 2], TMS.TM_CONCAT))
+                if (!stack[top - 2].IsString || stack[top - 2].IsNumber || !tostring(stack[top - 1])) {
+                    if (!call_binTM(stack[top - 2], stack[top - 1], stack[top - 2], TMS.TM_CONCAT))
                         //luaG_concaterror(L, top - 2, top - 1);
                         throw new Exception();
-                } else if (Stack[top - 1].Str.Length == 0)  /* second op is empty? */
-                    tostring(Stack[top - 2]);  /* result is first op (as string) */
+                } else if (stack[top - 1].Str.Length == 0)  /* second op is empty? */
+                    tostring(stack[top - 2]);  /* result is first op (as string) */
                 else {
                     /* at least two string values; get as many as possible */
-                    int tl = Stack[top - 1].Str.Length;
+                    int tl = stack[top - 1].Str.Length;
                     StringBuilder buffer = new StringBuilder();
                     int i;
                     /* collect total length */
-                    for (n = 1; n < total && tostring(Stack[top - n - 1]); n++) {
-                        int l = Stack[top - n - 1].Str.Length;
+                    for (n = 1; n < total && tostring(stack[top - n - 1]); n++) {
+                        int l = stack[top - n - 1].Str.Length;
                         if (l >= int.MaxValue - tl)
                             //luaG_runerror(L, "string length overflow");
                             throw new Exception();
@@ -750,11 +745,11 @@ namespace zlua.Core.VirtualMachine
                     }
                     tl = 0;
                     for (i = n; i > 0; i--) {  /* concat all strings */
-                        int l = Stack[top - i].Str.Length;
-                        buffer.Append(Stack[top - i].Str);
+                        int l = stack[top - i].Str.Length;
+                        buffer.Append(stack[top - i].Str);
                         tl += l;
                     }
-                    Stack[top - n] = new TValue(buffer.ToString());
+                    stack[top - n] = new TValue(buffer.ToString());
                 }
                 total -= n - 1;  /* got `n' strings to create 1 new */
                 last -= n - 1;
@@ -785,7 +780,5 @@ namespace zlua.Core.VirtualMachine
         }
 
         #endregion other things
-
-        private lua_State LuaStack { get; set; }
     }
 }

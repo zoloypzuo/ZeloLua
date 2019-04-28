@@ -51,7 +51,7 @@ namespace zlua.Core.VirtualMachine
             // * 根据函数参数个数计算待调用函数的base和top值，存入新的CallInfo中
             // * 切换到新的CallInfo
             //获取函数
-            TValue funcValue = Stack[funcIndex];
+            TValue funcValue = stack[funcIndex];
             if (!funcValue.IsFunction) {
                 funcValue = TryMetaCall(funcIndex);
             }
@@ -75,7 +75,7 @@ namespace zlua.Core.VirtualMachine
                 // 栈帧清为nil
                 // 把多余的函数参数设为nil
                 for (int st = top; st < ci.top; st++) //st是stacktop
-                    Stack[st].SetNil();
+                    stack[st].SetNil();
                 top = ci.top;  //L.top指向栈帧分配好的空间之后
                 return PCRLUA;
             }
@@ -86,7 +86,7 @@ namespace zlua.Core.VirtualMachine
                 if (top + MinStackSizeForCSharpFunction >= StackLastFree)
                     Alloc(top + MinStackSizeForCSharpFunction + 1);
                 // 调用C函数
-                (Stack[funcIndex].Cl as CSharpClosure).f(this);
+                (stack[funcIndex].Cl as CSharpClosure).f(this);
                 // 调用结束之后的处理
                 PosCall(top - @base);
                 return PCRC;
@@ -100,7 +100,7 @@ namespace zlua.Core.VirtualMachine
         {
             CallInfo ci = CallInfoStack.Pop();
             pc = this.ci.savedpc;
-            Stack[ci.funcIndex].Value = Stack[@base + resultOffset];
+            stack[ci.funcIndex].Value = stack[@base + resultOffset];
         }
 
         /// <summary>
@@ -109,14 +109,14 @@ namespace zlua.Core.VirtualMachine
         /// </summary>
         private TValue TryMetaCall(int funcIndex)
         {
-            TValue metamethod = luaT_gettmbyobj(Stack[funcIndex], TMS.TM_CALL);
+            TValue metamethod = luaT_gettmbyobj(stack[funcIndex], TMS.TM_CALL);
             Debug.Assert(metamethod.IsFunction);
             /* Open a hole inside the stack at `func' */
             for (int i = top; i > funcIndex; i--)
-                Stack[i].Value = Stack[i - 1];
+                stack[i].Value = stack[i - 1];
             top++;
-            Stack[funcIndex].Value = metamethod;/* tag method is the new function to be called */
-            return Stack[funcIndex];
+            stack[funcIndex].Value = metamethod;/* tag method is the new function to be called */
+            return stack[funcIndex];
         }
     }
 }

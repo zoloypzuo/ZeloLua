@@ -60,8 +60,6 @@
     <Otherwise />
   </Choose>
   <ItemGroup>
-    <Compile Include="Compiler\LexerTests.cs" />
-    <Compile Include="Core\BinaryChunkTests.cs" />
     <Compile Include="Core\VirtualMachine\lua_StateTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -73,6 +71,9 @@
       <Project>{FE00E8B4-594A-46F0-957B-A3AF643243B9}</Project>
       <Name>zlua</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Compiler\" />
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

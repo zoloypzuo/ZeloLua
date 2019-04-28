@@ -54,20 +54,20 @@ namespace zlua.Core.VirtualMachine
         /// <param name="p2"></param>
         private void callTMres(TValue res, TValue f, TValue p1, TValue p2)
         {
-            LuaStack.push(f);
-            LuaStack.push(p1);
-            LuaStack.push(p2);
+            push(f);
+            push(p1);
+            push(p2);
             luaD_call(top - 3, 1);
             top--;
-            res.Value = Stack[top];
+            res.Value = stack[top];
         }
 
         private void callTM(TValue f, TValue p1, TValue p2, TValue p3)
         {
-            LuaStack.push(f);
-            LuaStack.push(p1);
-            LuaStack.push(p2);
-            LuaStack.push(p3);
+            push(f);
+            push(p1);
+            push(p2);
+            push(p3);
             luaD_call(top - 4, 0);
         }
 
@@ -139,8 +139,8 @@ namespace zlua.Core.VirtualMachine
             tm2 = luaT_gettmbyobj(p2, @event);
             if (!TValue.luaO_rawequalObj(tm1, tm2))  /* different metamethods? */
                 return -1;
-            callTMres(Stack[top], tm1, p1, p2);
-            return !Stack[top].IsFalse ? 1 : 0;
+            callTMres(stack[top], tm1, p1, p2);
+            return !stack[top].IsFalse ? 1 : 0;
         }
     }
 

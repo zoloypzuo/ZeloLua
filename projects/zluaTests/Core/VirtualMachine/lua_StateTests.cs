@@ -8,13 +8,49 @@ using System.Threading.Tasks;
 
 namespace zlua.Core.VirtualMachine.Tests
 {
+    /// <summary>
+    /// 测试虚拟机
+    /// </summary>
+    /// <remarks>
+    /// <list type="bullet">
+    /// <item>
+    /// 首先用luac编译出chunk，用undumper加载喂给虚拟机执行，这是一步打桩，用于独立地测试虚拟机
+    /// 工作流：zlua_lab反汇编源文本，这里就有luac.out，复制到data/chunk下，
+    /// 创建文件夹，重命名文件，这很重要，因为测试是手写的，一开始就制定目录规范，一开始麻烦一些
+    /// </item>
+    /// </list>
+    /// </remarks>
     [TestClass()]
     public class lua_StateTests
     {
+        /// <summary>
+        /// 执行chunk文件
+        /// </summary>
+        /// <param name="filename"></param>
+        /// <example>
+        ///     <code>t00("empty/empty");</code>
+        /// </example>
+        void t00(string filename)
+        {
+            const string basePath = "../../../../data/chunk/";
+            new lua_State().luaL_dofile($"{basePath}{filename}.out");
+        }
+
         [TestMethod()]
         public void lua_StateTest()
         {
+        }
 
+        [TestMethod()]
+        public void EmptyChunkTest()
+        {
+            t00("empty/empty");
+        }
+
+        [TestMethod()]
+        public void EmptyTest()
+        {
+            string empty = "";
         }
 
         /// <summary>

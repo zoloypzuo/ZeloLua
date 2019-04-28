@@ -14,13 +14,17 @@ namespace zlua.Core.VirtualMachine
     /// </remarks>
     public partial class lua_State
     {
-        public List<TValue> slots;
+        public List<TValue> stack { get; }
 
-        public lua_State(int size)
+        /// <summary>
+        /// 初始化该分部类，由lvm模块的ctor调用
+        /// </summary>
+        /// <param name="size"></param>
+        private lua_State(int size)
         {
-            slots = new List<TValue>(size);
+            stack = new List<TValue>(size);
             for (int i = 0; i < size; i++) {
-                slots.Add(new TValue());
+                stack.Add(new TValue());
             }
             top = 0;
         }
@@ -28,19 +32,19 @@ namespace zlua.Core.VirtualMachine
         // 检查栈的空闲空间是否还可以容纳（推入）至少n个值，如若不然，扩容
         public void check(int n)
         {
-            int free = slots.Count - top;
+            int free = stack.Count - top;
             for (int i = free; i < n; i++) {
-                slots.Add(new TValue());
+                stack.Add(new TValue());
             }
         }
 
         // 压栈，溢出时抛出异常
         public void push(TValue val)
         {
-            if (top == slots.Count) {
+            if (top == stack.Count) {
                 throw new Exception("stack overflow");
             } else {
-                slots[top] = val;
+                stack[top] = val;
                 top++;
             }
         }
@@ -52,8 +56,8 @@ namespace zlua.Core.VirtualMachine
                 throw new Exception("stack underflow");
             } else {
                 top--;
-                var val = slots[top];
-                slots[top] = new TValue();
+                var val = stack[top];
+                stack[top] = new TValue();
                 return val;
             }
         }
@@ -80,7 +84,7 @@ namespace zlua.Core.VirtualMachine
         {
             var absIdx = absIndex(idx);
             if (absIdx > 0 && absIdx <= top) {
-                return slots[absIdx - 1];
+                return stack[absIdx - 1];
             } else {
                 return new TValue();
             }
@@ -101,7 +105,7 @@ namespace zlua.Core.VirtualMachine
                 // 然而b=1，a=b之后a is b，所以我就想不通
                 // 不管，拷贝一定是对的
                 //slots[absIdx - 1] = val;
-                slots[absIdx - 1].Value = val;
+                stack[absIdx - 1].Value = val;
             } else {
                 throw new Exception("invalid index");
             }
@@ -111,9 +115,9 @@ namespace zlua.Core.VirtualMachine
         {
             for (; from < to; from++, to--) {
                 // swap
-                var t = slots[from];
-                slots[from] = slots[to];
-                slots[to] = slots[from];
+                var t = stack[from];
+                stack[from] = stack[to];
+                stack[to] = stack[from];
             }
         }
     }

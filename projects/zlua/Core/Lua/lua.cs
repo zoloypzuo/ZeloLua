@@ -52,12 +52,12 @@ namespace zlua.Core.VirtualMachine
             {
                 f = (L) =>
                 {
-                    var s = L.LuaStack.pop();
+                    var s = L.pop();
                     Console.WriteLine(s.Str);
                 }
             };
             LuaClosure cl = new LuaClosure(env, 1, p);
-            LuaStack.push(new TValue(cl));
+            push(new TValue(cl));
         }
 
         public void dostring(string chunk)
