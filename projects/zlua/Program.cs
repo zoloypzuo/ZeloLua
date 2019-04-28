@@ -10,14 +10,8 @@ namespace zlua
     {
         public static void Main(string[] args)
         {
-            //C: \Users\91018\Documents\GitHub\clua\bin\lua5_1_4_CompilerDebug > lua5_1_4_Compiler - l  hello_world.lua
-            //
-            //main < hello_world.lua:0,0 > (4 instructions, 16 bytes at 0000024E1C5F25B0)
-            //0 + params, 2 slots, 0 upvalues, 0 locals, 2 constants, 0 functions
-            //        1[1]     GETGLOBAL       0 - 1; print
-            //        2[1]     LOADK           1 - 2; "Hello World!"
-            //        3[1]     CALL            0 2 1
-            //        4[1]     RETURN          0 1
+            //库是在dofile外面打开的
+            //luaL_openlibs(L);  /* open libraries */
             new lua_State().luaL_dofile(@"C:\Users\91018\Documents\GitHub\zlua\data\luac.out");
         }
     }

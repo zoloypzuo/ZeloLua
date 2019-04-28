@@ -18,34 +18,35 @@ namespace zlua.Core.VirtualMachine
     /// <remarks>写成partial是分给各个API类</remarks>
     public partial class lua_State : GCObject
     {
-        #region 私有访问器
 
+        /// <summary>
         /// top指向第一个可用位置，每次push时 top++ = value
-        /// 几乎所有文件都要用，因为你用这个来维护栈这个行为
+        /// </summary>
         private int top { get; set; }
 
+        /// <summary>
         /// 当前函数栈帧的base
-        /// Ido要使用，我希望他是private
         /// 是相对于栈底的偏移，所有函数内索引局部变量以这个为基准
+        /// </summary>
         private int @base {
             get { return ci.@base; }
             set { /*CallInfo.BaseIndex = value;*/ }
         }
 
-        /// 标记分配的大小,topIndex永远小于stackLastFree
-        private int StackLastFree { get { return stack.Count; } }
 
+        /// <summary>
         /// 当前函数
+        /// </summary>
         private CallInfo ci { get { return CallInfoStack.Peek(); } }
 
-        #endregion 私有访问器
-
-        #region 私有属性
+        /// <summary>
+        /// last free slot in the stack
+        /// 标记分配的大小,topIndex永远小于stackLastFree
+        /// </summary>
+        private int stack_last { get { return stack.Count; } }
 
         private Stack<CallInfo> CallInfoStack { get; }
 
-        /// _G
-        public TValue GlobalsTable { get; } = new TValue(new Table(sizeHashTablePart: 2, sizeArrayPart: 0));
 
         /// saved pc when call a function
         /// index of instruction array；因为src用指针的原因，而zlua必须同时使用codes和pc来获取指令
@@ -53,9 +54,6 @@ namespace zlua.Core.VirtualMachine
 
         private Bytecode[] codes { get; set; }
         private int NumCSharpCalls { get; set; }
-        internal global_State globalState = new global_State(); //注册表是一个L一个吗？
-
-        #endregion 私有属性
 
         const int BasicStackSize = 40;
 

@@ -18,7 +18,7 @@ namespace zlua.Core.VirtualMachine
         private void luaT_init()
         {
             for (int i = 0; i < (int)TMS.TM_N; i++) {
-                globalState.tmname[i] = new TString(luaT_eventname[i]);
+                G.tmname[i] = new TString(luaT_eventname[i]);
             }
         }
 
@@ -37,11 +37,11 @@ namespace zlua.Core.VirtualMachine
                 //    metatable = obj.Userdata.metaTable;
                 //    break;
                 default:
-                    mt = globalState.mt[(int)o.tt];
+                    mt = G.mt[(int)o.tt];
                     break;
             }
             return mt != null ?
-                mt.luaH_getstr(globalState.tmname[(int)@event]) :
+                mt.luaH_getstr(G.tmname[(int)@event]) :
                 lobject.NilObject;
         }
 
@@ -111,7 +111,7 @@ namespace zlua.Core.VirtualMachine
                 null :
                     (et.flags & (1 << (int)e)) != 0 ?
                         null :
-                        luaT_gettm(et, e, globalState.tmname[(int)e]);
+                        luaT_gettm(et, e, G.tmname[(int)e]);
         }
 
         private TValue get_compTM(Table mt1, Table mt2,

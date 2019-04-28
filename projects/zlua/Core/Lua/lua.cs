@@ -78,14 +78,14 @@ namespace zlua.Core.VirtualMachine
         /// 注册一个C#函数，在lua代码中用name调用
         /// 被调用函数被包装成closure，在G中，key是`name
         /// no upval，你要自己设置（永远用不到）
-        public void Register(CSharpFunction csFunc, string name)
+        public void Register(lua_CFunction csFunc, string name)
         {
             var newFunc = new CSharpClosure() { f = csFunc };
-            GlobalsTable.Table.luaH_getstr((TString)name).Cl = newFunc;
+            gt.Table.luaH_getstr((TString)name).Cl = newFunc;
         }
 
         /// 基于L.top，压函数，压args，返回1个值
-        public delegate void CSharpFunction(lua_State L);
+        public delegate void lua_CFunction(lua_State L);
 
         private Proto DoInput(ICharStream chunk, string chunkName)
         {

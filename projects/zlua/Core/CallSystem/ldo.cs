@@ -66,7 +66,7 @@ namespace zlua.Core.VirtualMachine
                     funcIndex = funcIndex,
                     top = funcIndex + p.maxstacksize
                 };
-                if (ci.top >= this.StackLastFree)
+                if (ci.top >= this.stack_last)
                     Alloc(ci.top + 1);
                 // 更新pc
                 pc = 0;
@@ -83,7 +83,7 @@ namespace zlua.Core.VirtualMachine
             else {
                 CallInfo ci = new CallInfo();
                 const int MinStackSizeForCSharpFunction = 20;
-                if (top + MinStackSizeForCSharpFunction >= StackLastFree)
+                if (top + MinStackSizeForCSharpFunction >= stack_last)
                     Alloc(top + MinStackSizeForCSharpFunction + 1);
                 // 调用C函数
                 (stack[funcIndex].Cl as CSharpClosure).f(this);
