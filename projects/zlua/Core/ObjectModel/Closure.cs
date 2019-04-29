@@ -34,7 +34,7 @@ namespace zlua.Core.ObjectModel
 
     internal class CSharpClosure : Closure
     {
-        public CSharpFunction f;
+        public lua_CFunction f;
         public List<TValue> upvals;
 
         public int NUpvals {

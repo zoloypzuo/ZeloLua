@@ -1,9 +1,8 @@
-﻿
-using System;
+﻿using System;
 using System.IO;
 using System.Text;
 
-using zlua.Core.Instruction;
+using zlua.Core.InstructionSet;
 using zlua.Core.Lua;
 using zlua.Core.ObjectModel;
 
@@ -13,7 +12,7 @@ using zlua.Core.ObjectModel;
 namespace zlua.Core.Undumper
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <remarks>
     /// 《Lua设计与实现》p57
@@ -183,7 +182,7 @@ namespace zlua.Core.Undumper
             if (source == null) {
                 source = parentSource;
             }
-            var p= new Proto
+            var p = new Proto
             {
                 source = source,
                 linedefined = reader.ReadInt32(),
@@ -270,12 +269,16 @@ namespace zlua.Core.Undumper
             switch ((LuaTag)reader.ReadByte()) {
                 case LuaTag.LUA_TNIL:
                     return new TValue();
+
                 case LuaTag.LUA_TBOOLEAN:
                     return new TValue(reader.ReadByte() != 0);
+
                 case LuaTag.LUA_TNUMBER:
                     return new TValue(ReadLuaNumber(reader));
+
                 case LuaTag.LUA_TSTRING:
                     return new TValue(ReadString(reader));
+
                 default:
                     throw new UndumpException("bad constant");
             }

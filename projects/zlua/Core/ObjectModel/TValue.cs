@@ -196,6 +196,7 @@ namespace zlua.Core.ObjectModel
             }
         }
 
+        [DebuggerStepThrough]
         public void SetNil()
         {
             tt = LuaTag.LUA_TNIL;
@@ -313,12 +314,16 @@ namespace zlua.Core.ObjectModel
                 switch (t2.tt) {
                     case LuaTag.LUA_TNIL:
                         return true;
+
                     case LuaTag.LUA_TNUMBER:
                         return t1.N == t2.N;
+
                     case LuaTag.LUA_TBOOLEAN:
                         return t1.B == t2.B;
+
                     case LuaTag.LUA_TSTRING:
                         return t1.Str == t2.Str;
+
                     default:
                         Debug.Assert(t2.IsCollectable);
                         return t1.gc == t2.gc;
@@ -352,30 +357,43 @@ namespace zlua.Core.ObjectModel
             switch (tt) {
                 case LuaTag.LUA_TNONE:
                     break;
+
                 case LuaTag.LUA_TNIL:
                     break;
+
                 case LuaTag.LUA_TBOOLEAN:
                     break;
+
                 case LuaTag.LUA_TLIGHTUSERDATA:
                     break;
+
                 case LuaTag.LUA_TNUMBER:
                     break;
+
                 case LuaTag.LUA_TSTRING:
                     return $"{tt} {Str}";
+
                 case LuaTag.LUA_TTABLE:
                     break;
+
                 case LuaTag.LUA_TFUNCTION:
                     break;
+
                 case LuaTag.LUA_TUSERDATA:
                     break;
+
                 case LuaTag.LUA_TTHREAD:
                     break;
+
                 case LuaTag.LUA_TPROTO:
                     break;
+
                 case LuaTag.LUA_TUPVAL:
                     break;
+
                 case LuaTag.LUA_TDEADKEY:
                     break;
+
                 default:
                     break;
             }

@@ -1,25 +1,33 @@
 ﻿using zlua.Core.Lua;
 using zlua.Core.ObjectModel;
+using static zlua.Core.VirtualMachine.lua_State;
 
 namespace zlua.Core.VirtualMachine
 {
     /// <summary>
     /// `global state', shared by all threads of this state
     /// </summary>
-#pragma warning disable IDE1006 // Naming Styles
-
     internal class global_State
-#pragma warning restore IDE1006 // Naming Styles
     {
-        public TValue registry = new TValue(new Table(sizeHashTablePart: 2, sizeArrayPart: 0));
-
-        //internal TThread mainThread;
-        // mt for basic type
-        internal Table[] mt = new Table[(int)LuaTag.LUA_TTHREAD + 1];
-
+        public lua_CFunction panic;  /* to be called in unprotected errors */
+        public TValue l_registry;
+        public lua_State mainthread;
+        public UpVal uvhead;  /* head of double-linked list of all open upvalues */
+        /// <summary>
+        /// metatables for basic types
+        /// </summary>
+        public Table[] mt;
         /// <summary>
         /// 元方法名字
+        /// array with tag-method names
         /// </summary>
-        internal TString[] tmname = new TString[(int)TMS.TM_N];
+        public TString[] tmname;
+
+        public global_State()
+        {
+            mt = new Table[luaO.NUM_TAGS];
+            tmname = new TString[(int)TMS.TM_N];
+            l_registry = new TValue();
+        }
     }
 }

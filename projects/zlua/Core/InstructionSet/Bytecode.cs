@@ -1,11 +1,10 @@
 ﻿using Newtonsoft.Json;
 
-using System;
 using System.Diagnostics;
 
 using zlua.Core.VirtualMachine;
 
-namespace zlua.Core.Instruction
+namespace zlua.Core.InstructionSet
 {
     /// <summary>
     /// 字节码指令

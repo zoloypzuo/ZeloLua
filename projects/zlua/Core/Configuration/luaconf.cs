@@ -10,7 +10,7 @@ namespace zlua.Core.Configuration
         /// LUAI_MAXCALLS limits the number of nested calls.
         /// its only purpose is to stop infinite recursion before exhausting memory.
         /// </summary>
-        public const int MaxCalls = 20000;
+        public const int LUAI_MAXCCALLS = 20000;
 
         /// <summary>
         /// LUAI_MAXCCALLS is the maximum depth for nested C calls (short) and

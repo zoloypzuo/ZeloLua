@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-using zlua.Core.Instruction;
+using zlua.Core.InstructionSet;
 
 namespace zlua.Core.ObjectModel
 {
@@ -43,6 +43,8 @@ namespace zlua.Core.ObjectModel
         /// </summary>
         public byte is_vararg;
 
+        public bool IsVararg { get { return is_vararg != 0; } }
+
         /// <summary>
         /// 寄存器数量
         /// </summary>
@@ -81,7 +83,7 @@ namespace zlua.Core.ObjectModel
         /// </summary>
         public string[] upvalues;
 
-        #endregion
+        #endregion 调试信息
     }
 
     internal class ChunkProto : Proto

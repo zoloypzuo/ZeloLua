@@ -48,30 +48,27 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Compiler\CodeGenerator\CodeGenerator.cs" />
     <Compile Include="Compiler\CodeGenerator\lcode.cs" />
-    <Compile Include="Compiler\Lexer\llex.cs" />
-    <Compile Include="Compiler\Lexer\LuaLexer.cs" />
-    <Compile Include="Compiler\Lexer\Token.cs" />
-    <Compile Include="Compiler\Lexer\TokenKind.cs" />
-    <Compile Include="Compiler\Lexer\TokenStream.cs" />
-    <Compile Include="Compiler\Parser\Context.cs" />
-    <Compile Include="Compiler\Parser\LuaParser.cs" />
-    <Compile Include="Core\Instruction\Bytecode.cs" />
-    <Compile Include="Core\Instruction\BytecodeTool.cs" />
-    <Compile Include="Core\Instruction\Opcode.cs" />
+    <Compile Include="Compiler\CodeGenerator\LuaBaseVisitor.cs" />
+    <Compile Include="Compiler\CodeGenerator\LuaCodeGenerator.cs" />
+    <Compile Include="Compiler\CodeGenerator\LuaLexer.cs" />
+    <Compile Include="Compiler\CodeGenerator\LuaParser.cs" />
+    <Compile Include="Compiler\CodeGenerator\LuaVisitor.cs" />
+    <Compile Include="Core\InstructionSet\Bytecode.cs" />
+    <Compile Include="Core\InstructionSet\BytecodeTool.cs" />
+    <Compile Include="Core\InstructionSet\Opcode.cs" />
     <Compile Include="Core\API\lapi.cs" />
     <Compile Include="Core\CallSystem\ldo.cs" />
     <Compile Include="Core\MetaMethod\ltm.cs" />
     <Compile Include="Core\ObjectModel\Closure.cs" />
     <Compile Include="Core\ObjectModel\lobject.cs" />
-    <Compile Include="Core\Instruction\lopcodes.cs" />
-    <Compile Include="Compiler\Parser\lparser.cs" />
+    <Compile Include="Core\InstructionSet\lopcodes.cs" />
     <Compile Include="Core\Lua\lua.cs" />
     <Compile Include="Core\Configuration\luaconf.cs" />
     <Compile Include="Core\Lua\LuaInteger.cs" />
     <Compile Include="Core\Lua\LuaNumber.cs" />
     <Compile Include="Core\Lua\LuaType.cs" />
+    <Compile Include="Core\ObjectModel\lua_State.cs" />
     <Compile Include="Core\ObjectModel\TValue.cs" />
     <Compile Include="Core\ObjectModel\Proto.cs" />
     <Compile Include="Core\ObjectModel\Table.cs" />
@@ -81,6 +78,8 @@
     <Compile Include="Core\VirtualMachine\LuaStack.cs" />
     <Compile Include="Core\VirtualMachine\Operator.cs" />
     <Compile Include="Core\VirtualMachine\Cast.cs" />
+    <Compile Include="Core\VirtualMachine\StkId.cs" />
+    <Compile Include="Library\AuxLib\lauxlib.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
@@ -94,6 +93,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="Compiler\Lua.g4">
+      <Generator>MSBuild:Compile</Generator>
+      <CustomToolNamespace>zlua.Compiler</CustomToolNamespace>
+      <Abstract>False</Abstract>
+      <Listener>False</Listener>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
@@ -111,10 +116,16 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
-    <Folder Include="Library\" />
-  </ItemGroup>
-  <ItemGroup>
+    <PackageReference Include="Antlr4">
+      <Version>4.6.6</Version>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="Antlr4.Runtime">
+      <Version>4.6.6</Version>
+    </PackageReference>
     <PackageReference Include="Newtonsoft.Json">
       <Version>12.0.1</Version>
     </PackageReference>

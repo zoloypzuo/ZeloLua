@@ -18,7 +18,7 @@ namespace zlua.Core.VirtualMachine
         private void luaT_init()
         {
             for (int i = 0; i < (int)TMS.TM_N; i++) {
-                globalState.tmname[i] = new TString(luaT_eventname[i]);
+                G.tmname[i] = new TString(luaT_eventname[i]);
             }
         }
 
@@ -37,11 +37,11 @@ namespace zlua.Core.VirtualMachine
                 //    metatable = obj.Userdata.metaTable;
                 //    break;
                 default:
-                    mt = globalState.mt[(int)o.tt];
+                    mt = G.mt[(int)o.tt];
                     break;
             }
             return mt != null ?
-                mt.luaH_getstr(globalState.tmname[(int)@event]) :
+                mt.luaH_getstr(G.tmname[(int)@event]) :
                 lobject.NilObject;
         }
 
@@ -54,20 +54,20 @@ namespace zlua.Core.VirtualMachine
         /// <param name="p2"></param>
         private void callTMres(TValue res, TValue f, TValue p1, TValue p2)
         {
-            LuaStack.push(f);
-            LuaStack.push(p1);
-            LuaStack.push(p2);
+            push(f);
+            push(p1);
+            push(p2);
             luaD_call(top - 3, 1);
             top--;
-            res.Value = Stack[top];
+            res.Value = top;
         }
 
         private void callTM(TValue f, TValue p1, TValue p2, TValue p3)
         {
-            LuaStack.push(f);
-            LuaStack.push(p1);
-            LuaStack.push(p2);
-            LuaStack.push(p3);
+            push(f);
+            push(p1);
+            push(p2);
+            push(p3);
             luaD_call(top - 4, 0);
         }
 
@@ -111,7 +111,7 @@ namespace zlua.Core.VirtualMachine
                 null :
                     (et.flags & (1 << (int)e)) != 0 ?
                         null :
-                        luaT_gettm(et, e, globalState.tmname[(int)e]);
+                        luaT_gettm(et, e, G.tmname[(int)e]);
         }
 
         private TValue get_compTM(Table mt1, Table mt2,
@@ -139,10 +139,9 @@ namespace zlua.Core.VirtualMachine
             tm2 = luaT_gettmbyobj(p2, @event);
             if (!TValue.luaO_rawequalObj(tm1, tm2))  /* different metamethods? */
                 return -1;
-            callTMres(Stack[top], tm1, p1, p2);
-            return !Stack[top].IsFalse ? 1 : 0;
+            callTMres(top, tm1, p1, p2);
+            return !stack[top.index].IsFalse ? 1 : 0;
         }
-
     }
 
     internal enum TMS
@@ -151,26 +150,19 @@ namespace zlua.Core.VirtualMachine
         TM_NEWINDEX,
         TM_GC,
         TM_MODE,
-        TM_LEN,
-        TM_EQ,  /* last tag method with fast access */
+        TM_EQ,  /* last tag method with `fast' access */
         TM_ADD,
         TM_SUB,
         TM_MUL,
+        TM_DIV,
         TM_MOD,
         TM_POW,
-        TM_DIV,
-        TM_IDIV,
-        TM_BAND,
-        TM_BOR,
-        TM_BXOR,
-        TM_SHL,
-        TM_SHR,
         TM_UNM,
-        TM_BNOT,
+        TM_LEN,
         TM_LT,
         TM_LE,
         TM_CONCAT,
         TM_CALL,
-        TM_N        /* number of elements in the enum */
+        TM_N		/* number of elements in the enum */
     }
 }

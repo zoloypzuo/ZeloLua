@@ -3,7 +3,7 @@
 using System;
 using System.Diagnostics;
 
-using zlua.Core.Instruction;
+using zlua.Core.InstructionSet;
 using zlua.Core.Lua;
 using zlua.Core.ObjectModel;
 
@@ -40,12 +40,11 @@ namespace zlua.Core.VirtualMachine
             TValue rb = RKB(i);
             TValue rc = RKC(i);
             if (predicate(rb, rc) != (i.A != 0)) {
-                pc++;
+                savedpc++;
             } else {
-                pc += codes[pc].SignedBx;
+                savedpc += code[savedpc].SignedBx;
             }
         }
-
 
         // int floor div
         public static lua_Integer IFloorDiv(lua_Integer a, lua_Integer b)
@@ -120,8 +119,8 @@ namespace zlua.Core.VirtualMachine
                 default: return Object.ReferenceEquals(t1.gc, t2.gc);
             }
             if (tm == null) return false;  /* no TM? */
-            callTMres(Stack[top], tm, t1, t2);  /* call TM */
-            return !Stack[top].IsFalse;
+            callTMres(top, tm, t1, t2);  /* call TM */
+            return !stack[top.index].IsFalse;
         }
 
         public bool luaV_lessthan(TValue l, TValue r)
