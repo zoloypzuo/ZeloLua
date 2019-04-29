@@ -63,8 +63,10 @@ namespace zlua.Core.VirtualMachine
         };
 
 
-        private void f_call(object ud)
+        private void f_call(lua_State L, object ud)
         {
+            // lua_State内的PFunc的L只是装饰，一定传入this
+            Debug.Assert(Object.ReferenceEquals(L, this));
             // 这里不是很清楚为什么要多定义一个CallS
             CallS c = (CallS)ud;
             luaD_call(c.func, c.nresults);
@@ -76,17 +78,19 @@ namespace zlua.Core.VirtualMachine
         {
             CallS c;
             int status;
-            int func;
+            // errfunc，不实现
+            int func = 0;
 
-            api_checknelems(nargs + 1);
+            //TODO dofile这里没有通过断言。。1<=0-0
+            //api_checknelems(nargs + 1);
             checkresults(nargs, nresults);
-            if (errfunc == 0)
-                func = 0;
-            else {
-                //StkId o = index2adr(errfunc);
-                //api_checkvalidindex( o);
-                //func = savestack(o);
-            }
+            //if (errfunc == 0)
+            //    func = 0;
+            //else {
+            //StkId o = index2adr(errfunc);
+            //api_checkvalidindex( o);
+            //func = savestack(o);
+            //}
             c.func = top - (nargs + 1);  /* function to be called */
             c.nresults = nresults;
             status = luaD_pcall(f_call, c, savestack(c.func), func);

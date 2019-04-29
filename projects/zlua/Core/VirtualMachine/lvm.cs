@@ -60,20 +60,18 @@ namespace zlua.Core.VirtualMachine
             // 基本的CallInfo，在chunk之前
             // 因为调用函数之前要有一个CallInfo保存savedpc
             // 因此构造LuaState时构造一个基本的CallInfo
-            CallStack.Push(new CallInfo());
+            CallInfo ci = new CallInfo
+            {
+                @base = newStkId(0),
+                top = newStkId(0),
+                func = newStkId(0)
+            };
+            CallStack.Push(ci);
             for (int i = 0; i < BasicStackSize; i++) {
                 stack.Add(new TValue());
             }
-            //top = 0;
-
-            //注册assert，这样可以测试了
-            //void Assert(LuaState L)
-            //{
-            //    Debug.Assert(L[L.topIndex - 1].B);
-            //}
-            //lua.Register(this, Assert, "assert");
-
-            // TODO OpenLibs()
+            top = newStkId(0);
+            @base = top;
         }
 
         /// <summary>
@@ -90,27 +88,36 @@ namespace zlua.Core.VirtualMachine
 
         #region 从指令取出参数的辅助方法
 
+        [DebuggerStepThrough]
+        int GETARG_A(Bytecode i) { return (int)i.A; }
+
+        [DebuggerStepThrough]
+        int GETARG_B(Bytecode i) { return (int)i.B; }
+
+        [DebuggerStepThrough]
+        int GETARG_C(Bytecode i) { return (int)i.C; }
+
         private TValue R(int i)
         {
-            return stack[@base + i];
+            return @base + i;
         }
 
         // R(A)
         private TValue RA(Bytecode i)
         {
-            return stack[@base + (int)i.A];
+            return @base + (int)i.A;
         }
 
         // R(B)
         private TValue RB(Bytecode i)
         {
-            return stack[@base + (int)i.B];
+            return @base + (int)i.B;
         }
 
         // R(C)
         private TValue RC(Bytecode i)
         {
-            return stack[@base + (int)i.C];
+            return @base + (int)i.C;
         }
 
         // RK(B)
@@ -119,7 +126,7 @@ namespace zlua.Core.VirtualMachine
             int B = (int)i.B;
             var rb = Bytecode.IsK(B) ?
                 k[Bytecode.IndexK(B)] :
-                stack[@base + B];
+                @base + B;
             return rb;
         }
 
@@ -129,7 +136,7 @@ namespace zlua.Core.VirtualMachine
             int C = (int)instr.C;
             var rc = Bytecode.IsK(C) ?
                 k[Bytecode.IndexK(C)] :
-                stack[@base + C];
+                @base + C;
             return rc;
         }
 
@@ -162,16 +169,26 @@ namespace zlua.Core.VirtualMachine
         /// <param name="nexeccalls"></param>
         private void luaV_execute(int nexeccalls)
         {
+            int pc = 0;
+            StkId @base;
+            Action<Action> Protect =
+                (Action action) =>
+                {
+                    savedpc = pc;
+                    action();
+                    @base = this.@base;
+                };
             reentry:
-            Debug.Assert(stack[ci.func].IsLuaFunction);
-            int pc = this.savedpc;
-            cl = stack[ci.func].Cl as LuaClosure;
-            int @base = this.@base;
+            TValue funcValue = ci.func;
+            Debug.Assert(funcValue.IsLuaFunction);
+            pc = this.savedpc;
+            cl = funcValue.Cl as LuaClosure;
+            @base = this.@base;
             k = cl.p.k;
             while (true) {
                 Bytecode i = code[pc++];
-                Debug.Assert(@base == ci.@base && @base == ci.@base);
-                Debug.Assert(@base <= top && top < stack.Count); //这里始终没有。
+                Debug.Assert(@base == this.@base && this.@base == ci.@base);
+                Debug.Assert(@base <= top && top < newStkId(stack.Count)); //这里始终没有。
                 TValue ra = RA(i);
                 switch (i.Opcode) {
 
@@ -191,6 +208,7 @@ namespace zlua.Core.VirtualMachine
                     // A B C R(A) := (Bool)B; if (C) pc++
                     case Opcode.OP_LOADBOOL: {
                             ra.B = i.B != 0;
+                            if (GETARG_C(i) != 0) pc++;
                             continue;
                         }
                     // A B R(A) := ... := R(B) := nil
@@ -269,9 +287,6 @@ namespace zlua.Core.VirtualMachine
 
                     // A B C R(A) := RK(B) + RK(C)
                     case Opcode.OP_ADD: {
-                            //TODO
-                            //arith_op(luai_numadd, TM_ADD);
-
                             arith_op(i, (a, b) => a + b, TMS.TM_ADD);
                             continue;
                         }
@@ -413,11 +428,13 @@ namespace zlua.Core.VirtualMachine
                     // 执行完该指令后，被调用函数和它的栈帧被清空，返回值被留在栈上
                     // 《自己动手实现Lua》p154
                     case Opcode.OP_CALL: {
-                            int a = (int)i.A;
-                            int b = (int)i.B;
-                            int nresults = (int)i.C - 1;
-                            if (b != 0) top = @base + a + b;  /* else previous instruction set top */
-                            switch (luaD_precall(@base + a, nresults)) {
+                            int a = GETARG_A(i);
+                            int b = GETARG_B(i);
+                            int nresults = GETARG_C(i) - 1;
+                            StkId raIndex = @base + a;
+                            if (b != 0) top = raIndex + b;  /* else previous instruction set top */
+                            savedpc = pc;
+                            switch (luaD_precall(raIndex, nresults)) {
                                 case PCRLUA: {
                                         nexeccalls++;
                                         goto reentry;  /* restart luaV_execute over new Lua function */
@@ -425,6 +442,7 @@ namespace zlua.Core.VirtualMachine
                                 case PCRC: {
                                         /* it was a C function (`precall' called it); adjust results */
                                         if (nresults >= 0) top = ci.top;
+                                        @base = this.@base;
                                         continue;
                                     }
                                 default: {
@@ -434,9 +452,11 @@ namespace zlua.Core.VirtualMachine
                         }
                     // A B return R(A), ... ,R(A+B-2) (see note)
                     case Opcode.OP_RETURN: {
-                            int a = (int)i.A;
-                            int b = (int)i.B;
-                            if (b != 0) top = @base + a + b - 1;
+                            int a = GETARG_A(i);
+                            int b = GETARG_B(i);
+                            StkId raIndex = @base + a;
+                            if (b != 0) top = raIndex + b - 1;
+                            this.savedpc = pc;
                             //TODO
                             //if (L->openupval) luaF_close(L, base);
                             b = luaD_poscall(@base + a);
@@ -444,7 +464,7 @@ namespace zlua.Core.VirtualMachine
                                 return;  /* no: return */
                             else {  /* yes: continue its execution */
                                 if (b != 0) top = ci.top;
-                                Debug.Assert(stack[ci.func].IsLuaFunction);
+                                Debug.Assert(((TValue)ci.func).IsLuaFunction);
                                 Debug.Assert(code[ci.savedpc - 1].Opcode == Opcode.OP_CALL);
                                 goto reentry;
                             }
@@ -452,29 +472,31 @@ namespace zlua.Core.VirtualMachine
                     // A B C return R(A)(R(A+1), ... ,R(A+B-1))
                     // 形如return f()的返回语句被优化成尾递归
                     case Opcode.OP_TAILCALL: {
-                            int a = (int)i.A;
-                            int b = (int)i.B;
+                            int a = GETARG_A(i);
+                            int b = GETARG_B(i);
                             int nresults = (int)i.C - 1;
-                            if (b != 0) top = @base + a + b;  /* else previous instruction set top */
+                            StkId raIndex = @base + a;
+                            if (b != 0) top = raIndex + b;  /* else previous instruction set top */
+                            this.savedpc = pc;
                             Debug.Assert((int)i.C - 1 == LUA_MULTRET);
-                            switch (luaD_precall(@base + a, LUA_MULTRET)) {
+                            switch (luaD_precall(raIndex, LUA_MULTRET)) {
                                 case PCRLUA: {
                                         /* tail call: put new frame in place of previous one */
                                         CallInfo ciplus1 = CallStack.Pop();
                                         CallInfo ci = this.ci;/* previous frame */
                                         CallStack.Push(ciplus1);
                                         int aux;
-                                        int func = ci.func;
-                                        int pfunc = ciplus1.func;  /* previous function index */
+                                        StkId func = ci.func;
+                                        StkId pfunc = ciplus1.func;  /* previous function index */
                                         //if (L->openupval) luaF_close(L, ci.@base);
-                                        @base = ci.func + ciplus1.@base - pfunc;
-                                        ci.@base = @base;
+                                        this.@base = ci.func + (ciplus1.@base - pfunc);
+                                        ci.@base = this.@base;
                                         for (aux = 0; pfunc + aux < top; aux++)  /* move frame down */
-                                            stack[func + aux] = stack[pfunc + aux];
+                                            (func + aux).Set(pfunc + aux);
                                         top = func + aux;  /* correct top */
                                         ci.top = top;
-                                        Debug.Assert(top == @base + (stack[func].Cl as LuaClosure).p.maxstacksize);
-                                        ci.savedpc = pc;
+                                        Debug.Assert(top == this.@base + (((TValue)func).Cl as LuaClosure).p.maxstacksize);
+                                        ci.savedpc = this.savedpc;
                                         ci.tailcalls++;  /* one more call lost */
                                         CallStack.Pop();  /* remove new frame */
                                         goto reentry;
@@ -515,7 +537,7 @@ namespace zlua.Core.VirtualMachine
                             TValue init = ra;
                             TValue plimit = stack[(int)i.A + 1];
                             TValue pstep = stack[(int)i.A + 2];
-                            //savedpc = pc;  /* next steps may throw errors */
+                            savedpc = pc;  /* next steps may throw errors */
                             lua_Number n1;
                             lua_Number n2;
                             lua_Number n3;
@@ -538,16 +560,18 @@ namespace zlua.Core.VirtualMachine
                     // A C R(A+3), ... ,R(A+2+C) := R(A)(R(A+1), R(A+2)); if R(A+3) ~= nil then R(A+2)=R(A+3) else pc++
                     case Opcode.OP_TFORLOOP: {
                             int a = (int)i.A;
-                            int cb = (int)i.A + 3;  /* call base */
-                            stack[cb + 2].Value = stack[a + 2];
-                            stack[cb + 1].Value = stack[a + 1];
-                            stack[cb].Value = ra;
+                            StkId raIndex = @base + a;
+                            StkId cb = @base + a + 3;  /* call base */
+                            (cb + 2).Set(raIndex + 2);
+                            (cb + 1).Set(raIndex + 1);
+                            cb.Set(raIndex);
                             top = cb + 3;  /* func. + 2 args (state and index) */
-                            luaD_call(cb, (int)i.C);
+                            luaD_call(cb, GETARG_C(i));
                             top = ci.top;
-                            //cb = i.A + 3;  /* previous call may change the stack */
-                            if (!stack[cb].IsNil) {  /* continue loop? */
-                                stack[cb - 1].Value = stack[cb];  /* save control variable */
+                            raIndex = @base + a;
+                            cb = raIndex + 3;  /* previous call may change the stack */
+                            if (!((TValue)cb).IsNil) {  /* continue loop? */
+                                (cb - 1).Set(cb);  /* save control variable */
                                 pc += code[pc].SignedBx;  /* jump back */
                             }
                             pc++;
@@ -558,16 +582,18 @@ namespace zlua.Core.VirtualMachine
 
                     // A B C R(A)[(C-1)*FPF+i] := R(A+i), 1 <= i <= B
                     case Opcode.OP_SETLIST: {
-                            int n = (int)i.B;
-                            int c = (int)i.C;
+                            int a = GETARG_A(i);
+                            int n = GETARG_B(i);
+                            int c = GETARG_C(i);
+                            StkId raIndex = @base + a;
                             int last;
                             Table h;
                             if (n == 0) {
-                                n = top - (int)i.A - 1;
+                                n = (top - raIndex) - 1;
                                 top = ci.top;
                             }
                             if (c == 0) c = (int)code[pc++].Value;
-                            // runtime_check
+                            // runtime_check，只用这里一次，就内联了
                             if (!ra.IsTable) {
                                 break;
                             }
@@ -578,7 +604,7 @@ namespace zlua.Core.VirtualMachine
                             if (last > h.sizearray)  /* needs more space? */
                                 h.luaH_resizearray(last);  /* pre-alloc it at once */
                             for (; n > 0; n--) {
-                                TValue val = stack[(int)i.A + n];
+                                TValue val = raIndex + n;
                                 h.luaH_setnum(last--).Value = val;
                             }
                             continue;
@@ -618,23 +644,23 @@ namespace zlua.Core.VirtualMachine
                     // 开始索引为A，个数为B
                     // vararg指令很像call指令
                     case Opcode.OP_VARARG: {
-                            int a = (int)i.A;
-                            int b = (int)i.B - 1;
-                            CallInfo ci = this.ci;
-                            int n = ci.@base - ci.func - cl.p.numparams;
-                            if (b == LUA_MULTRET) {
-                                check(n);
-                                ra = RA(i);  /* previous call may change the stack */
-                                b = n;
-                                top = a + n;
-                            }
-                            for (int j = 0; j < b; j++) {
-                                if (j < n) {
-                                    stack[a + j].Value = stack[ci.@base - n + j];
-                                } else {
-                                    stack[a + j].SetNil();
-                                }
-                            }
+                            //int a = (int)i.A;
+                            //int b = (int)i.B - 1;
+                            //CallInfo ci = this.ci;
+                            //int n = ci.@base - ci.func - cl.p.numparams;
+                            //if (b == LUA_MULTRET) {
+                            //    //check(n);
+                            //    ra = RA(i);  /* previous call may change the stack */
+                            //    b = n;
+                            //    top = a + n;
+                            //}
+                            //for (int j = 0; j < b; j++) {
+                            //    if (j < n) {
+                            //        stack[a + j].Value = stack[ci.@base - n + j];
+                            //    } else {
+                            //        stack[a + j].SetNil();
+                            //    }
+                            //}
                             continue;
                         }
                     default:
@@ -742,7 +768,8 @@ namespace zlua.Core.VirtualMachine
         {
             // 如果total为0，返回空串
             do {
-                int top = @base + last + 1;
+                // 这里因为。。不改成StkId，除非不对
+                int top = @base.index + last + 1;
                 int n = 2;  /* number of elements handled in this pass (at least 2) */
                 if (!stack[top - 2].IsString || stack[top - 2].IsNumber || !tostring(stack[top - 1])) {
                     if (!call_binTM(stack[top - 2], stack[top - 1], stack[top - 2], TMS.TM_CONCAT))

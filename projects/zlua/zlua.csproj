@@ -56,7 +56,6 @@
     <Compile Include="Compiler\CodeGenerator\LuaVisitor.cs" />
     <Compile Include="Core\InstructionSet\Bytecode.cs" />
     <Compile Include="Core\InstructionSet\BytecodeTool.cs" />
-    <Compile Include="Core\InstructionSet\Instruction.cs" />
     <Compile Include="Core\InstructionSet\Opcode.cs" />
     <Compile Include="Core\API\lapi.cs" />
     <Compile Include="Core\CallSystem\ldo.cs" />

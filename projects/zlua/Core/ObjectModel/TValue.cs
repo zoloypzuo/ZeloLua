@@ -196,6 +196,7 @@ namespace zlua.Core.ObjectModel
             }
         }
 
+        [DebuggerStepThrough]
         public void SetNil()
         {
             tt = LuaTag.LUA_TNIL;

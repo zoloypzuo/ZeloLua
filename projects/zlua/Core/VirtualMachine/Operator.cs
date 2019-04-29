@@ -119,8 +119,8 @@ namespace zlua.Core.VirtualMachine
                 default: return Object.ReferenceEquals(t1.gc, t2.gc);
             }
             if (tm == null) return false;  /* no TM? */
-            callTMres(stack[top], tm, t1, t2);  /* call TM */
-            return !stack[top].IsFalse;
+            callTMres(top, tm, t1, t2);  /* call TM */
+            return !stack[top.index].IsFalse;
         }
 
         public bool luaV_lessthan(TValue l, TValue r)

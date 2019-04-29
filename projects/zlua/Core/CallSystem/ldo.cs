@@ -40,7 +40,7 @@ namespace zlua.Core.VirtualMachine
 
 
         /* type of protected functions, to be ran by `runprotected' */
-        delegate void Pfunc(object ud);
+        delegate void Pfunc(lua_State L, object ud);
 
         // header public api
         // int luaD_protectedparser (lua_State *L, ZIO *z, const char *name);
@@ -145,7 +145,7 @@ namespace zlua.Core.VirtualMachine
             if (nCcalls >= LuaConfiguration.LUAI_MAXCCALLS)
                 throw new Exception("C stack overflow");
             // 因为Closure实例cl和实参已经被压栈，可以执行这个cl
-            if (luaD_precall(funcIndex, nResults) == PCRLUA) {
+            if (luaD_precall(func, nResults) == PCRLUA) {
                 luaV_execute(1);
             }
             --nCcalls;
@@ -159,7 +159,7 @@ namespace zlua.Core.VirtualMachine
         // * 保存this.savedpc到当前CallInfo的savedpc中
         // * 根据函数参数个数计算待调用函数的base和top值，存入新的CallInfo中
         // * 切换到新的CallInfo
-        public int luaD_precall(StkId func, int nresults)
+        int luaD_precall(StkId func, int nresults)
         {
             TValue funcValue = func;
             if (!funcValue.IsFunction) { /* `func' is not a function? */
@@ -229,12 +229,6 @@ namespace zlua.Core.VirtualMachine
             }
         }
 
-
-
-
-
-
-
         /// <summary>
         /// 从C或lua函数返回
         /// `resultIndex是返回值相对于L.base的偏移(很容易错，因为没有指针）
@@ -247,10 +241,10 @@ namespace zlua.Core.VirtualMachine
             CallInfo ci = CallStack.Pop();
             res = ci.func;  /* res == final position of 1st result */
             wanted = ci.nresults;
-            @base = this.ci.@base;
+            @base = this.ci.@base; /* restore base */
             TValue funcValue = this.ci.func;
             LuaClosure cl = funcValue.Cl as LuaClosure;
-            code = cl.p.code;
+            code = cl.p.code; /* restore savedpc */
             savedpc = this.ci.savedpc;
             /* move results to correct place */
             for (i = wanted; i != 0 && firstResult < top; i--)
@@ -262,7 +256,55 @@ namespace zlua.Core.VirtualMachine
         }
 
 
+        /// <summary>
+        /// 调用<c>func</c>，参数是<c>u</c>
+        /// </summary>
+        /// <param name="L"></param>
+        /// <param name="func"></param>
+        /// <param name="u"></param>
+        /// <param name="old_top"></param>
+        /// <param name="ef"></param>
+        /// <returns></returns>
+        int luaD_pcall(Pfunc func, object u,
+                int old_top, int ef)
+        {
+            // 同样的，注释掉的代码太复杂了，都是错误处理
+            int status;
+            //unsigned short oldnCcalls = L->nCcalls;
+            //ptrdiff_t old_ci = saveci(L, L->ci);
+            //lu_byte old_allowhooks = L->allowhook;
+            //ptrdiff_t old_errfunc = L->errfunc;
+            //L->errfunc = ef;
+            status = luaD_rawrunprotected(func, u);
+            //if (status != 0) {  /* an error occurred? */
+            //    StkId oldtop = restorestack(L, old_top);
+            //    luaF_close(L, oldtop);  /* close eventual pending closures */
+            //    luaD_seterrorobj(L, status, oldtop);
+            //    L->nCcalls = oldnCcalls;
+            //    L->ci = restoreci(L, old_ci);
+            //    L->base = L->ci->base;
+            //    L->savedpc = L->ci->savedpc;
+            //    L->allowhook = old_allowhooks;
+            //    restore_stack_limit(L);
+            //}
+            //L->errfunc = old_errfunc;
+            return status;
+        }
 
-
+        int luaD_rawrunprotected(Pfunc f, object ud)
+        {
+            //struct lua_longjmp lj;
+            //lj.status = 0;
+            //lj.previous = L->errorJmp;  /* chain new error handler */
+            //L->errorJmp = &lj;
+            // LUAI_TRY太复杂了，涉及longjmp错误处理
+            //  LUAI_TRY(&lj,
+            //    (f)(ud);
+            //);
+            //L->errorJmp = lj.previous;  /* restore old error handler */
+            //return lj.status;
+            f(this, ud);
+            return 0;
+        }
     }
 }

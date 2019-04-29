@@ -8,15 +8,27 @@ namespace zlua.Core.VirtualMachine
     public partial class lua_State
     {
         /// <summary>
+        /// helper，绑定此lua_State的stack和StkId
+        /// </summary>
+        /// <param name="index"></param>
+        /// <returns></returns>
+        private StkId newStkId(int index)
+        {
+            return new StkId(stack, index);
+        }
+
+        /// <summary>
         /// 模拟指针运算
         /// </summary>
-        class StkId
+        struct StkId : IEquatable<StkId>
         {
             List<TValue> stack;
             public int index;
 
             public StkId(List<TValue> stack, int index)
             {
+                // 出错了，断言一下
+                Debug.Assert(stack != null);
                 this.stack = stack;
                 this.index = index;
             }
@@ -77,12 +89,14 @@ namespace zlua.Core.VirtualMachine
 
             public static StkId operator ++(StkId stkId)
             {
-                return new StkId(stkId.stack, stkId.index++);
+                stkId.index++;
+                return stkId;
             }
 
             public static StkId operator --(StkId stkId)
             {
-                return new StkId(stkId.stack, stkId.index--);
+                stkId.index--;
+                return stkId;
             }
 
             /// <summary>
@@ -112,6 +126,38 @@ namespace zlua.Core.VirtualMachine
             public static bool operator >=(StkId l, StkId r)
             {
                 return Object.ReferenceEquals(l.stack, r.stack) && l.index >= r.index;
+            }
+
+            public static bool operator ==(StkId l, StkId r)
+            {
+                return l.Equals(r);
+            }
+
+            public static bool operator !=(StkId l, StkId r)
+            {
+                return !l.Equals(r);
+            }
+
+            public override string ToString()
+            {
+                return this.index.ToString();
+            }
+
+            public override bool Equals(object obj)
+            {
+                return obj is StkId && Equals((StkId)obj);
+            }
+
+            public bool Equals(StkId other)
+            {
+                // stkid是内部实现细节，因此错误是断言不是异常
+                Debug.Assert(Object.ReferenceEquals(this.stack, other.stack));
+                return index == other.index;
+            }
+
+            public override int GetHashCode()
+            {
+                return -1982729373 + index.GetHashCode();
             }
         }
     }

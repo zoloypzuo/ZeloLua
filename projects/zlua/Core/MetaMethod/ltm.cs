@@ -59,7 +59,7 @@ namespace zlua.Core.VirtualMachine
             push(p2);
             luaD_call(top - 3, 1);
             top--;
-            res.Value = stack[top];
+            res.Value = top;
         }
 
         private void callTM(TValue f, TValue p1, TValue p2, TValue p3)
@@ -139,8 +139,8 @@ namespace zlua.Core.VirtualMachine
             tm2 = luaT_gettmbyobj(p2, @event);
             if (!TValue.luaO_rawequalObj(tm1, tm2))  /* different metamethods? */
                 return -1;
-            callTMres(stack[top], tm1, p1, p2);
-            return !stack[top].IsFalse ? 1 : 0;
+            callTMres(top, tm1, p1, p2);
+            return !stack[top.index].IsFalse ? 1 : 0;
         }
     }
 

@@ -54,7 +54,7 @@ namespace zlua.Core.VirtualMachine
             {
                 f = (L) =>
                 {
-                    var s = L.pop();
+                    TValue s = L.pop();
                     Console.WriteLine(s.Str);
                     return 0;
                 }
