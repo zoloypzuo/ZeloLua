@@ -2,7 +2,7 @@
 using System.IO;
 using System.Text;
 
-using zlua.Core.Instruction;
+using zlua.Core.InstructionSet;
 using zlua.Core.Lua;
 using zlua.Core.ObjectModel;
 

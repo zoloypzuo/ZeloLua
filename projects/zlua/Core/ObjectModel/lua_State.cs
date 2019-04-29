@@ -10,7 +10,7 @@ namespace zlua.Core.VirtualMachine
     /// <summary>
     /// lstate模块
     /// </summary>
-    public partial class lua_State
+    public partial class lua_State : GCObject
     {
         byte status;
         /// <summary>

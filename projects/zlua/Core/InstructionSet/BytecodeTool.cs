@@ -1,4 +1,4 @@
-﻿namespace zlua.Core.Instruction
+﻿namespace zlua.Core.InstructionSet
 {
     internal class BytecodeTool
     {

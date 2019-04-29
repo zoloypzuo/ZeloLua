@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
 
-using zlua.Core.Instruction;
+using zlua.Core.InstructionSet;
 using zlua.Core.Lua;
 using zlua.Core.ObjectModel;
 
@@ -16,19 +16,19 @@ namespace zlua.Core.VirtualMachine
     /// 虚拟机
     /// </summary>
     /// <remarks>写成partial是分给各个API类</remarks>
-    public partial class lua_State : GCObject
+    public partial class lua_State
     {
 
         /// <summary>
         /// top指向第一个可用位置，每次push时 top++ = value
         /// </summary>
-        private int top { get; set; }
+        private StkId top { get; set; }
 
         /// <summary>
         /// 当前函数栈帧的base
         /// 是相对于栈底的偏移，所有函数内索引局部变量以这个为基准
         /// </summary>
-        private int @base { get; set; }
+        private StkId @base { get; set; }
 
 
         /// <summary>
@@ -40,16 +40,15 @@ namespace zlua.Core.VirtualMachine
         /// last free slot in the stack
         /// 标记分配的大小,topIndex永远小于stackLastFree
         /// </summary>
-        private int stack_last { get { return stack.Count; } }
+        private StkId stack_last { get { return new StkId(stack, stack.Count); } }
 
         private Stack<CallInfo> CallStack { get; }
 
+        private Bytecode[] code;
 
         /// saved pc when call a function
         /// index of instruction array；因为src用指针的原因，而zlua必须同时使用codes和pc来获取指令
-        private int savedpc { get; set; }
-
-        private Bytecode[] code { get; set; }
+        private int savedpc;
 
         const int BasicStackSize = 40;
 
@@ -65,7 +64,7 @@ namespace zlua.Core.VirtualMachine
             for (int i = 0; i < BasicStackSize; i++) {
                 stack.Add(new TValue());
             }
-            top = 0;
+            //top = 0;
 
             //注册assert，这样可以测试了
             //void Assert(LuaState L)
@@ -171,7 +170,7 @@ namespace zlua.Core.VirtualMachine
             k = cl.p.k;
             while (true) {
                 Bytecode i = code[pc++];
-                Debug.Assert(@base == ci.@base&&@base==ci.@base);
+                Debug.Assert(@base == ci.@base && @base == ci.@base);
                 Debug.Assert(@base <= top && top < stack.Count); //这里始终没有。
                 TValue ra = RA(i);
                 switch (i.Opcode) {
@@ -473,7 +472,7 @@ namespace zlua.Core.VirtualMachine
                                         for (aux = 0; pfunc + aux < top; aux++)  /* move frame down */
                                             stack[func + aux] = stack[pfunc + aux];
                                         top = func + aux;  /* correct top */
-                                        ci.top=top;
+                                        ci.top = top;
                                         Debug.Assert(top == @base + (stack[func].Cl as LuaClosure).p.maxstacksize);
                                         ci.savedpc = pc;
                                         ci.tailcalls++;  /* one more call lost */

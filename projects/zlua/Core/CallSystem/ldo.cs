@@ -1,4 +1,5 @@
 ﻿// 调用系统
+// Stack and Call structure of Lua
 
 using System;
 using System.Diagnostics;
@@ -10,6 +11,114 @@ namespace zlua.Core.VirtualMachine
 {
     public partial class lua_State
     {
+        void luaD_checkstack(int n)
+        {
+            if (stack_last - top <= (n))
+                luaD_growstack(n);
+            //else condhardstacktests(luaD_reallocstack(L, L->stacksize - EXTRA_STACK - 1));
+        }
+
+        void incr_top() { luaD_checkstack(1); top++; }
+
+        [DebuggerStepThrough]
+        int savestack(StkId p) { return p.index; }
+
+        [DebuggerStepThrough]
+        StkId restorestack(int n) { return new StkId(stack, n); }
+
+        //#define saveci(L,p)		((char *)(p) - (char *)L->base_ci)
+        //#define restoreci(L,n)		((CallInfo *)((char *)L->base_ci + (n)))
+
+        ///* results from luaD_precall */
+        //internal const int PCRLUA = 0;   /* 说明precall初始化了一个lua函数：initiated a call to a Lua function */
+        //internal const int PCRC = 1;    /* 说明precall调用了一个c函数：did a call to a C function */
+        //const int PCRYIELD = 2;
+        /* results from luaD_precall */
+        const int PCRLUA = 0;   /* initiated a call to a Lua function */
+        const int PCRC = 1; /* did a call to a C function */
+        const int PCRYIELD = 2;	/* C funtion yielded */
+
+
+        /* type of protected functions, to be ran by `runprotected' */
+        delegate void Pfunc(object ud);
+
+        // header public api
+        // int luaD_protectedparser (lua_State *L, ZIO *z, const char *name);
+        // void luaD_callhook (lua_State *L, int event, int line);
+        // int luaD_precall (lua_State *L, StkId func, int nresults);
+        // void luaD_call (lua_State *L, StkId func, int nResults);
+        // int luaD_pcall (lua_State *L, Pfunc func, void *u,
+        //                                        ptrdiff_t oldtop, ptrdiff_t ef);
+        // int luaD_poscall (lua_State *L, StkId firstResult);
+        // void luaD_reallocCI (lua_State *L, int newsize);
+        // void luaD_reallocstack (lua_State *L, int newsize);
+        // void luaD_growstack (lua_State *L, int n);
+
+        // void luaD_throw (lua_State *L, int errcode);
+        // int luaD_rawrunprotected (lua_State *L, Pfunc f, void *ud);
+
+        // void luaD_seterrorobj (lua_State *L, int errcode, StkId oldtop);
+
+        private void luaD_growstack(int n)
+        {
+            //if (n <= stack.Count)  /* double size is enough? */
+            //    luaD_reallocstack(L, 2 * L->stacksize);
+            //else
+            //    luaD_reallocstack(L, L->stacksize + n);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="p"></param>
+        /// <param name="actual"></param>
+        /// <returns></returns>
+        /// <remarks>旧式vararg可以用arg访问，zlua不支持</remarks>
+        private StkId adjust_varargs(Proto p, int actual)
+        {
+            int i;
+            int nfixargs = p.numparams;
+            StkId @base, @fixed;
+            for (; actual < nfixargs; ++actual)
+                (top++).SetNil();
+            /* move fixed parameters to final position */
+            @fixed = top - actual;  /* first fixed argument */
+            @base = top;  /* final position of first argument */
+            for (i = 0; i < nfixargs; i++) {
+                (top++).Set(@fixed + i);
+                (@fixed + i).SetNil();
+            }
+            return @base;
+        }
+
+        /// <summary>
+        /// tryfuncTM; 尝试返回元方法__call
+        /// 我们暂时不管metacall
+        /// </summary>
+        private StkId tryfuncTM(StkId func)
+        {
+            TValue tm = luaT_gettmbyobj(func, TMS.TM_CALL);
+            int funcr = savestack(func);
+            if (!tm.IsFunction)
+                //luaG_typeerror(L, func, "call");
+                throw new Exception();
+            /* Open a hole inside the stack at `func' */
+            for (StkId p = top; p > func; p--)
+                p.Set(p - 1);
+            top++;
+            //TODO clua中save和restore是保存func指针
+            //我感觉是多余的，防止编程错误
+            func = restorestack(funcr);/* previous call may change stack */
+            func.Set(tm);/* tag method is the new function to be called */
+            return func;
+        }
+
+        /*
+        ** Call a function (C or Lua). The function to be called is at *func.
+        ** The arguments are on the stack, right after the function.
+        ** When returns, all the results are on the stack, starting at the original
+        ** function position.
+        */
         // * 调用函数，函数可以是c#函数或lua函数
         // * 调用协议如下：
         //   调用/Call/前，Closure实例和实参被依次压栈
@@ -23,7 +132,7 @@ namespace zlua.Core.VirtualMachine
         /// lua_call 函数和args已经压栈，调用它；是一次C发起的调用
         /// 这个特殊的call不是lua实现内部使用的，他会用api来push func，push args然后调用
         /// 一个例子是每次启动chunk时，push chunk，call it，funcindex=topindex-1
-        public void luaD_call(int nargs = 0, int nresults = LUA_MULTRET)
+        void luaD_call(StkId func, int nResults)
         {
             //TODO
             //if (++L->nCcalls >= LUAI_MAXCCALLS) {
@@ -35,19 +144,14 @@ namespace zlua.Core.VirtualMachine
             ++nCcalls;
             if (nCcalls >= LuaConfiguration.LUAI_MAXCCALLS)
                 throw new Exception("C stack overflow");
-            // 对于chunk，1-(0+1)
-            int funcIndex = top - (nargs + 1);
             // 因为Closure实例cl和实参已经被压栈，可以执行这个cl
-            if (luaD_precall(funcIndex, nresults) == PCRLUA) {
+            if (luaD_precall(funcIndex, nResults) == PCRLUA) {
                 luaV_execute(1);
             }
             --nCcalls;
         }
 
-        /* results from luaD_precall */
-        internal const int PCRLUA = 0;   /* 说明precall初始化了一个lua函数：initiated a call to a Lua function */
-        internal const int PCRC = 1;    /* 说明precall调用了一个c函数：did a call to a C function */
-        const int PCRYIELD = 2;
+
         // luaD_precall
         //
         // * 同时也是call指令实现
@@ -55,18 +159,18 @@ namespace zlua.Core.VirtualMachine
         // * 保存this.savedpc到当前CallInfo的savedpc中
         // * 根据函数参数个数计算待调用函数的base和top值，存入新的CallInfo中
         // * 切换到新的CallInfo
-        public int luaD_precall(int func, int nresults)
+        public int luaD_precall(StkId func, int nresults)
         {
-            // 获取函数
-            TValue funcValue = stack[func];
+            TValue funcValue = func;
             if (!funcValue.IsFunction) { /* `func' is not a function? */
-                funcValue = tryfuncTM(func);/* check the `function' tag method */
+                func = tryfuncTM(func);/* check the `function' tag method */
             }
             int funcr = savestack(func);
-            int @base;
+            ci.savedpc = savedpc;
             /* Lua function? prepare its call */
             if (funcValue.Cl is LuaClosure) {
                 LuaClosure cl = funcValue.Cl as LuaClosure;
+                StkId @base;
                 Proto p = cl.p;
                 luaD_checkstack(p.maxstacksize);
                 func = restorestack(funcr);
@@ -83,26 +187,27 @@ namespace zlua.Core.VirtualMachine
                 {
                     func = func,
                     @base = @base,
-                    top = @base + p.maxstacksize
+                    top = this.@base + p.maxstacksize
                 };
                 this.@base = @base;
                 CallStack.Push(ci); /* now `enter' new function */
                 Debug.Assert(ci.top <= stack_last);
                 code = p.code;  /* starting point */
+                savedpc = 0;
                 ci.tailcalls = 0;
                 ci.nresults = nresults;
                 // 栈帧清为nil
                 // 把多余的函数参数设为nil
                 // st是stacktop
-                for (int st = top; st < ci.top; st++)
-                    stack[st].SetNil();
+                for (StkId st = top; st < ci.top; st++)
+                    st.SetNil();
                 return PCRLUA;
             }
             /* if is a C function, call it */
             else {
-                const int LUA_MINSTACK = 20;
                 luaD_checkstack(LUA_MINSTACK);  /* ensure minimum stack size */
-                @base = func + 1;
+                func = restorestack(funcr);
+                StkId @base = func + 1;
                 CallInfo ci = new CallInfo()
                 {
                     func = func,
@@ -113,7 +218,8 @@ namespace zlua.Core.VirtualMachine
                 this.@base = @base;
                 CallStack.Push(ci); /* now `enter' new function */
                 Debug.Assert(ci.top <= stack_last);
-                int n = (stack[func].Cl as CSharpClosure).f(this);  /* do the actual call */
+                funcValue = func;
+                int n = (funcValue.Cl as CSharpClosure).f(this);  /* do the actual call */
                 if (n < 0)  /* yielding? */
                     return PCRYIELD;
                 else {
@@ -123,107 +229,40 @@ namespace zlua.Core.VirtualMachine
             }
         }
 
-        private int adjust_varargs(Proto p, int actual)
-        {
-            int i;
-            int nfixargs = p.numparams;
-            Table htab = null;
-            int @base, @fixed;
-            for (; actual < nfixargs; ++actual)
-                stack[top++].SetNil();
-            /*
-            @@ LUA_COMPAT_VARARG controls compatibility with old vararg feature.
-            ** CHANGE it to undefined as soon as your programs use only '...' to
-            ** access vararg parameters (instead of the old 'arg' table).
-            */
-            //#define LUA_COMPAT_VARARG
-            //#if defined(LUA_COMPAT_VARARG)
-            //          if (p->is_vararg & VARARG_NEEDSARG) { /* compat. with old-style vararg? */
-            //  int nvar = actual - nfixargs;  /* number of extra arguments */
-            //  lua_assert(p->is_vararg & VARARG_HASARG);
-            //  luaC_checkGC(L);
-            //  htab = luaH_new(L, nvar, 1);  /* create `arg' table */
-            //  for (i=0; i<nvar; i++)  /* put extra arguments into `arg' table */
-            //    setobj2n(L, luaH_setnum(L, htab, i+1), L->top - nvar + i);
-            //  /* store counter in field `n' */
-            //  setnvalue(luaH_setstr(L, htab, luaS_newliteral(L, "n")), cast_num(nvar));
-            //}
-            //#endif
-            /* move fixed parameters to final position */
-            @fixed = top - actual;  /* first fixed argument */
-            @base = top;  /* final position of first argument */
-            for (i = 0; i < nfixargs; i++) {
-                stack[top++] = stack[@fixed + i];
-                stack[@fixed + i].SetNil();
-            }
-            /* add `arg' parameter */
-            if (htab != null) {
-                stack[top++].Table = htab;
-            }
-            return @base;
-        }
 
-        void luaD_checkstack(int n)
-        {
-            if (stack_last - top <= (n))
-                luaD_growstack(n);
-            //else condhardstacktests(luaD_reallocstack(L, L->stacksize - EXTRA_STACK - 1));
-        }
 
-        void luaD_growstack(int n)
-        {
-            //if (n <= stack.Count)  /* double size is enough? */
-            //    luaD_reallocstack(L, 2 * L->stacksize);
-            //else
-            //    luaD_reallocstack(L, L->stacksize + n);
-        }
+
+
+
 
         /// <summary>
         /// 从C或lua函数返回
         /// `resultIndex是返回值相对于L.base的偏移(很容易错，因为没有指针）
         /// </summary>
-        public int luaD_poscall(int firstResult)
+        int luaD_poscall(StkId firstResult)
         {
-            int res;
+            StkId res;
             int wanted, i;
             // ci退栈
-            CallInfo currci = CallStack.Pop();
-            res = currci.func;  /* res == final position of 1st result */
-            wanted = currci.nresults;
-            @base = ci.@base;
-            savedpc = ci.savedpc;
+            CallInfo ci = CallStack.Pop();
+            res = ci.func;  /* res == final position of 1st result */
+            wanted = ci.nresults;
+            @base = this.ci.@base;
+            TValue funcValue = this.ci.func;
+            LuaClosure cl = funcValue.Cl as LuaClosure;
+            code = cl.p.code;
+            savedpc = this.ci.savedpc;
             /* move results to correct place */
             for (i = wanted; i != 0 && firstResult < top; i--)
-                stack[res++].Value = stack[firstResult++];
+                (res++).Set(firstResult++);
             while (i-- > 0)
-                stack[res++].SetNil();
+                (res++).SetNil();
             top = res;
             return (wanted - LUA_MULTRET);  /* 0 iff wanted == LUA_MULTRET */
         }
 
-        /// <summary>
-        /// tryfuncTM; 尝试返回元方法__call
-        /// 我们暂时不管metacall
-        /// </summary>
-        private TValue tryfuncTM(int func)
-        {
-            TValue tm = luaT_gettmbyobj(stack[func], TMS.TM_CALL);
-            int funcr = savestack(func);
-            if (!tm.IsFunction)
-                //luaG_typeerror(L, func, "call");
-                throw new Exception();
-            /* Open a hole inside the stack at `func' */
-            for (int p = top; p > func; p--)
-                stack[p].Value = stack[p - 1];
-            top++;
-            //TODO clua中save和restore是保存func指针
-            //我感觉是多余的，防止编程错误
-            func = restorestack(funcr);/* previous call may change stack */
-            stack[func].Value = tm;/* tag method is the new function to be called */
-            return stack[func];
-        }
 
-        int savestack(int p) { return p; }
-        int restorestack(int n) { return n; }
+
+
     }
 }

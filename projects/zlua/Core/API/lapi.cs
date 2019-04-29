@@ -8,7 +8,7 @@
 // 显然，partial会好一些，这是api，不是辅助api，不是单纯包装，因此必须要在类内，namespace肯定要一样，至于怎么构建namespace之后在考虑
 
 using System;
-
+using System.Diagnostics;
 using zlua.Core.Lua;
 using zlua.Core.ObjectModel;
 
@@ -17,8 +17,83 @@ using zlua.Core.ObjectModel;
 // TODO namespace和。。还是有点。。爱
 namespace zlua.Core.VirtualMachine
 {
-    public partial class lua_State : GCObject
+    public partial class lua_State
     {
+        [DebuggerStepThrough]
+        void api_checknelems(int n)
+        {
+            // clua实现最后相当于空语句，因此是断言不是异常
+            Debug.Assert(n <= top - @base);
+        }
+
+        /*
+        ** `load' and `call' functions (run Lua code)
+        */
+
+        [DebuggerStepThrough]
+        void adjustresults(int nres)
+        {
+            if (nres == LUA_MULTRET && top >= ci.top) ci.top = top;
+        }
+
+
+        [DebuggerStepThrough]
+        void checkresults(int na, int nr)
+        {
+            Debug.Assert((nr) == LUA_MULTRET || (ci.top - top >= (nr) - (na)));
+        }
+
+        void lua_call(int nargs, int nresults)
+        {
+            StkId func;
+            api_checknelems(nargs + 1);
+            checkresults(nargs, nresults);
+            func = top - (nargs + 1);
+            luaD_call(func, nresults);
+            adjustresults(nresults);
+        }
+
+        /*
+        ** Execute a protected call.
+        */
+        struct CallS
+        {  /* data to `f_call' */
+            public StkId func;
+            public int nresults;
+        };
+
+
+        private void f_call(object ud)
+        {
+            // 这里不是很清楚为什么要多定义一个CallS
+            CallS c = (CallS)ud;
+            luaD_call(c.func, c.nresults);
+        }
+
+        //luaL_dofile调用如下
+        //lua_pcall(nargs: 0, nresults: LUA_MULTRET, errfunc: 0);
+        int lua_pcall(int nargs, int nresults, int errfunc)
+        {
+            CallS c;
+            int status;
+            int func;
+
+            api_checknelems(nargs + 1);
+            checkresults(nargs, nresults);
+            if (errfunc == 0)
+                func = 0;
+            else {
+                //StkId o = index2adr(errfunc);
+                //api_checkvalidindex( o);
+                //func = savestack(o);
+            }
+            c.func = top - (nargs + 1);  /* function to be called */
+            c.nresults = nresults;
+            status = luaD_pcall(f_call, c, savestack(c.func), func);
+            adjustresults(nresults);
+            return status;
+        }
+
         //public int GetTop()
         //{
         //    return this.LuaStack.top;

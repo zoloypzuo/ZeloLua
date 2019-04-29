@@ -9,7 +9,7 @@ using System.IO;
 
 using zlua.Compiler;
 using zlua.Compiler.CodeGenerator;
-using zlua.Core.Instruction;
+using zlua.Core.InstructionSet;
 using zlua.Core.ObjectModel;
 using zlua.Core.Undumper;
 
@@ -31,12 +31,14 @@ namespace zlua.Core.VirtualMachine
     {
         /* option for multiple returns in 'lua_pcall' and 'lua_call' */
         public const int LUA_MULTRET = -1;
+        /* minimum Lua stack available to a C function */
+        const int LUA_MINSTACK = 20;
 
         // 《Lua设计与实现》p39
         public void luaL_dofile(string path)
         {
             luaL_loadfile(path);
-            luaD_call(0, LUA_MULTRET);
+            lua_pcall(nargs: 0, nresults: LUA_MULTRET, errfunc: 0);
         }
 
         public void luaL_loadfile(string path)
@@ -61,20 +63,22 @@ namespace zlua.Core.VirtualMachine
             push(new TValue(cl));
         }
 
-        public void dostring(string chunk)
-        {
-            // * 编译源文本生成Proto实例tf
-            // * 使用tf构造Closure实例cl
-            // * 初始化cl的upval
-            // * 将cl压栈
-            // * 调用Call方法执行cl
-            DoInput(new AntlrInputStream(chunk), chunk);
-            // TODO 规范api，block上创建visit chunk方法
-            // TODO 从visitor取得proto
-            // 我还是愿意创建chunkproto这个类
-            // 拿到后压栈
-            luaD_call(0);
-        }
+        //public void dostring(string chunk)
+        //{
+        // * 编译源文本生成Proto实例tf
+        // * 使用tf构造Closure实例cl
+        // * 初始化cl的upval
+        // * 将cl压栈
+        // * 调用Call方法执行cl
+        //DoInput(new AntlrInputStream(chunk), chunk);
+        // TODO 规范api，block上创建visit chunk方法
+        // TODO 从visitor取得proto
+        // 我还是愿意创建chunkproto这个类
+        // 拿到后压栈
+        // 对于chunk，1-(0+1)
+        //int funcIndex = top - (nargs + 1);
+        //luaD_call(top-(narg)
+        //}
 
         /// 注册一个C#函数，在lua代码中用name调用
         /// 被调用函数被包装成closure，在G中，key是`name

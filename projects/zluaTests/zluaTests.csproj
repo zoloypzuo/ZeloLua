@@ -61,6 +61,7 @@
   </Choose>
   <ItemGroup>
     <Compile Include="Core\VirtualMachine\lua_StateTests.cs" />
+    <Compile Include="Core\VirtualMachine\StkId.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

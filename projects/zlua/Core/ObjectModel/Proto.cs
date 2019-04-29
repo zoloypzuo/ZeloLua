@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-using zlua.Core.Instruction;
+using zlua.Core.InstructionSet;
 
 namespace zlua.Core.ObjectModel
 {

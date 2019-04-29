@@ -3,7 +3,7 @@
 using System;
 using System.Diagnostics;
 
-using zlua.Core.Instruction;
+using zlua.Core.InstructionSet;
 using zlua.Core.Lua;
 using zlua.Core.ObjectModel;
 

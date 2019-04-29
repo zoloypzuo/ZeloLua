@@ -6,7 +6,7 @@ using System;
 using System.Collections.Generic;
 using Antlr4.Runtime.Misc;
 using Antlr4.Runtime.Tree;
-using zlua.Core.Instruction;
+using zlua.Core.InstructionSet;
 
 namespace zlua.Compiler.CodeGenerator
 {
