@@ -1,3 +1,68 @@
+------------------------------
+function obj:f(a) end
+local a,obj; obj:f(a)
+------------------------------
+success compiling learn.lua
+; source chunk: learn.lua
+; x86 standard (32-bit, little endian, doubles)
+
+; function [0] definition (level 1) 0
+; 0 upvalues, 0 params, is_vararg = 2, 5 stacks
+.function  0 0 2 5
+.local  "a"  ; 0
+.local  "obj"  ; 1
+.const  "obj"  ; 0
+.const  "f"  ; 1
+[1] getglobal  0   0        ; R0 := obj
+[2] closure    1   0        ; R1 := closure(function[0]) 0 upvalues
+[3] settable   0   257 1    ; R0["f"] := R1
+[4] loadnil    0   1        ; R0, R1,  := nil
+[5] self       2   1   257  ; R3 := R1; R2 := R1["f"]
+[6] move       4   0        ; R4 := R0
+[7] call       2   3   1    ;  := R2(R3, R4)
+[8] return     0   1        ; return 
+
+; function [0] definition (level 2) 0_0
+; 0 upvalues, 2 params, is_vararg = 0, 2 stacks
+.function  0 2 0 2
+.local  "self"  ; 0
+.local  "a"  ; 1
+[1] return     0   1        ; return 
+; end of function 0_0
+
+; end of function 0
+
+; source chunk: luac.out
+; x86 standard (32-bit, little endian, doubles)
+
+; function [0] definition (level 1) 0
+; 0 upvalues, 0 params, is_vararg = 2, 5 stacks
+.function  0 0 2 5
+.local  "a"  ; 0
+.local  "obj"  ; 1
+.const  "obj"  ; 0
+.const  "f"  ; 1
+[1] getglobal  0   0        ; R0 := obj
+[2] closure    1   0        ; R1 := closure(function[0]) 0 upvalues
+[3] settable   0   257 1    ; R0["f"] := R1
+[4] loadnil    0   1        ; R0, R1,  := nil
+[5] self       2   1   257  ; R3 := R1; R2 := R1["f"]
+[6] move       4   0        ; R4 := R0
+[7] call       2   3   1    ;  := R2(R3, R4)
+[8] return     0   1        ; return 
+
+; function [0] definition (level 2) 0_0
+; 0 upvalues, 2 params, is_vararg = 0, 2 stacks
+.function  0 2 0 2
+.local  "self"  ; 0
+.local  "a"  ; 1
+[1] return     0   1        ; return 
+; end of function 0_0
+
+; end of function 0
+
+
+------------------------------
 success compiling learn.lua
 Pos   Hex Data           Description or Code
 ------------------------------------------------------------------------

@@ -78,14 +78,14 @@ def join(l): return ''.join(l)
 
 
 def method_def(access, ret_type, method, parlist, code: list):
-    return ['{access} {ret_type} {method}({parlist})'.format(
+    return ['{access} {ret_type} {method}({parlist})\n'.format(
         access=access,
         ret_type=ret_type,
         method=method,
         parlist=','.join(parlist))
            ] + \
            ['{\n'] + \
-           code + \
+           tab(code) + \
            ['}\n']
 
 
@@ -95,7 +95,7 @@ def test_method_attribute(code):
 
 def method_call(o, func, arglist):
     # 静态方法也可
-    return o + '.' + func + '(' + ','.join(arglist) + ');'
+    return o + '.' + func + '(' + ','.join(arglist) + ');\n'
 
 
 def attribute(attribute, code):
@@ -172,8 +172,8 @@ gs("local a,b; return 1,a,b", fc('return'))
 gs("local a,b,c,d,e = 100, ...", fc('vararg'))
 gs("local function f() end\n"
    "return f(a,b,c)", fc('tailcall'))
-gs("function obj:f(a) end]\n"
-   "local a,obj; obj:f(a)", 'self')
+gs("function obj:f(a) end\n"
+   "local a,obj; obj:f(a)", fc('self'))
 
 code = []
 for k, v in css.items():
