@@ -18,6 +18,7 @@ zlua是一个C#实现的lua，以lua5.1.4（下面简称为clua）为参考而�
   * ObjectModel：类型模型
   * Undumper：加载预编译chunk
   * VirtualMachine：虚拟机
+  * State：lua_State类定义
 
 ## 开发进度
 
@@ -39,3 +40,4 @@ zlua是一个C#实现的lua，以lua5.1.4（下面简称为clua）为参考而�
 用5.1标准重写Undumper | 2019年4月25日
 删除手写的编译器，开始打桩测试和修改虚拟机 | 2019年4月27日
 通过helloworld和functioncall的chunk测试 | 2019年4月29日
+构建了一个简单的自动生成测试系统 | 2019年4月30日
