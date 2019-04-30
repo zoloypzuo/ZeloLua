@@ -1,14 +1,11 @@
 ﻿// 测试工具
-//
-// [ ] 因为作为项目，这些特性应该被移除，如果降低性能的话
-// * 暂时放在这里，便于在zlua进行调试
-//
 
 using Newtonsoft.Json;
 
 using System;
 using System.Diagnostics;
 using System.IO;
+using zlua.Core.VirtualMachine;
 
 namespace zluaTests
 {
@@ -49,5 +46,29 @@ namespace zluaTests
             var fullPath = $"{JsonDataPathBase}{subPath}";
             Debug.Assert(actualS == File.ReadAllText(fullPath));
         }
+
+
+        /// <summary>
+        /// 执行chunk文件
+        /// </summary>
+        /// <param name="filename"></param>
+        /// <example>
+        ///     <code>t00("empty/empty");</code>
+        /// </example>
+        public static void t00(string filename)
+        {
+            const string basePath = "../../../../data/chunk/";
+            lua_State.lua_newstate().luaL_dofile($"{basePath}{filename}.out");
+        }
+
+        /// <summary>
+        /// dostring
+        /// </summary>
+        /// <param name="filename"></param>
+        public static void t01(string s)
+        {
+            //lua_State.lua_newstate().luaL_dostring(s);
+        }
+
     }
 }
