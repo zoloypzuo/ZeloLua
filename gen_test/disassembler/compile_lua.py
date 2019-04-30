@@ -106,9 +106,9 @@ def attribute(attribute, code):
 def string(s): return '"' + s.replace('\n', '\\n').replace('"', '\\"') + '"'
 
 
-def up_comment(comment, code):
+def r_comment(comment, s):
     # 空comment被忽略
-    return ['//' + comment + '\n'] + code if comment else code
+    return s.rstrip() + '  // ' + comment + '\n' if comment else s
 
 
 def newline(code: list): code.append('\n')
@@ -175,6 +175,16 @@ gs("local function f() end\n"
 gs("function obj:f(a) end\n"
    "local a,obj; obj:f(a)", fc('self'))
 
+
+def t(s): return 'table/' + s
+
+
+gs("local a,b,c,d; b = {x=1,y=2}", t('newtable'))
+gs("local a,t,k,v,e; v = t[k]; v = t[100]", t('gettable'))
+gs("local a,t,k,v,e; t[k]=v; t[100] = \"foo\"", t('settable'))
+gs("local t = {1,2,3,4}", t('setlist'))
+gs("t = {1,2,f()}", t('setlist1'), '结尾是函数调用或vararg')
+
 code = []
 for k, v in css.items():
     code += test_method_attribute(method_def(
@@ -182,8 +192,8 @@ for k, v in css.items():
         ret_type='void',
         method=k + 'ChunkTest',
         parlist=[],
-        code=[up_comment(i.comment,
-                         method_call('TestTool', 't00', [string(i.path)])) for i in v]
+        code=[r_comment(i.comment,
+                        method_call('TestTool', 't00', [string(i.path)])) for i in v]
     ))
     newline(code)
     code += test_method_attribute(method_def(
@@ -191,7 +201,7 @@ for k, v in css.items():
         ret_type='void',
         method=k + 'Test',
         parlist=[],
-        code=[up_comment(i.comment, method_call('TestTool', 't01', [string(i.lua_code)])) for i in v]
+        code=[r_comment(i.comment, method_call('TestTool', 't01', [string(i.lua_code)])) for i in v]
     ))
     newline(code)
 

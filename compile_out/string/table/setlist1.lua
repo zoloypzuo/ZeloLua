@@ -1,3 +1,49 @@
+------------------------------
+t = {1,2,f()}
+------------------------------
+success compiling learn.lua
+; source chunk: learn.lua
+; x86 standard (32-bit, little endian, doubles)
+
+; function [0] definition (level 1) 0
+; 0 upvalues, 0 params, is_vararg = 2, 4 stacks
+.function  0 0 2 4
+.const  "t"  ; 0
+.const  1  ; 1
+.const  2  ; 2
+.const  "f"  ; 3
+[1] newtable   0   2   0    ; R0 := {} , array=2, hash=0
+[2] loadk      1   1        ; R1 := 1
+[3] loadk      2   2        ; R2 := 2
+[4] getglobal  3   3        ; R3 := f
+[5] call       3   1   0    ; R3 to top := R3()
+[6] setlist    0   0   1    ; R0[1 to top] := R1 to top
+[7] setglobal  0   0        ; t := R0
+[8] return     0   1        ; return 
+; end of function 0
+
+; source chunk: luac.out
+; x86 standard (32-bit, little endian, doubles)
+
+; function [0] definition (level 1) 0
+; 0 upvalues, 0 params, is_vararg = 2, 4 stacks
+.function  0 0 2 4
+.const  "t"  ; 0
+.const  1  ; 1
+.const  2  ; 2
+.const  "f"  ; 3
+[1] newtable   0   2   0    ; R0 := {} , array=2, hash=0
+[2] loadk      1   1        ; R1 := 1
+[3] loadk      2   2        ; R2 := 2
+[4] getglobal  3   3        ; R3 := f
+[5] call       3   1   0    ; R3 to top := R3()
+[6] setlist    0   0   1    ; R0[1 to top] := R1 to top
+[7] setglobal  0   0        ; t := R0
+[8] return     0   1        ; return 
+; end of function 0
+
+
+------------------------------
 success compiling learn.lua
 Pos   Hex Data           Description or Code
 ------------------------------------------------------------------------
