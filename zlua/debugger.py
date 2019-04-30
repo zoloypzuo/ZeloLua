@@ -66,4 +66,4 @@ if __name__ == '__main__':
     t.debugger = d
     d.thread = t
     d._set_breakpoint(1)
-    do_file('../tests/test.lua', t)
+    do_file('../tests/test.file', t)

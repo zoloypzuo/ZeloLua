@@ -1,0 +1,31 @@
+failed to compile learn.lua:1: unexpected symbol near ']'
+; source chunk: luac.out
+; x86 standard (32-bit, little endian, doubles)
+
+; function [0] definition (level 1) 0
+; 0 upvalues, 0 params, is_vararg = 2, 5 stacks
+.function  0 0 2 5
+.local  "f"  ; 0
+.const  "a"  ; 0
+.const  "b"  ; 1
+.const  "c"  ; 2
+; (1)  function obj:f(a) end]
+[1] closure    0   0        ; R0 := closure(function[0]) 0 upvalues
+; (2)  local a,obj; obj:f(a)
+[2] move       1   0        ; R1 := R0
+[3] getglobal  2   0        ; R2 := a
+[4] getglobal  3   1        ; R3 := b
+[5] getglobal  4   2        ; R4 := c
+[6] tailcall   1   4   0    ; R1 to top := R1(R2 to R4)
+[7] return     1   0        ; return R1 to top
+[8] return     0   1        ; return 
+
+; function [0] definition (level 2) 0_0
+; 0 upvalues, 0 params, is_vararg = 0, 2 stacks
+.function  0 0 0 2
+; (1)  function obj:f(a) end]
+[1] return     0   1        ; return 
+; end of function 0_0
+
+; end of function 0
+

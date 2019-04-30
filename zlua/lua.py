@@ -8,7 +8,7 @@ from zlua.compiler import LuaCompiler
 from zlua.type_model import Table
 from zlua.vm import LuaThread, LuaClosure, CallInfo
 
-__version__ = 'zlua based on lua 5.1.4'
+__version__ = 'zlua based on file 5.1.4'
 
 
 def new_thread(*libs):

@@ -3,16 +3,21 @@
     <words>
       <w>&quot;key</w>
       <w>addr</w>
+      <w>arglist</w>
+      <w>chunkspy</w>
       <w>endpc</w>
       <w>exps</w>
       <w>ident</w>
       <w>instrs</w>
+      <w>luac</w>
       <w>mssg</w>
+      <w>parlist</w>
       <w>punc</w>
       <w>setglobal</w>
       <w>setstacksize</w>
       <w>setstacksizes</w>
       <w>startpc</w>
+      <w>tailcall</w>
       <w>tokenization</w>
       <w>upval</w>
       <w>xasm</w>

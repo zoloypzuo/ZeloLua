@@ -1,12 +1,12 @@
 /*This grammar file derived from:
     Lua 5.3 Reference Manual
-    http://www.lua.org/manual/5.3/manual.html
+    http://www.file.org/manual/5.3/manual.html
     Lua 5.2 Reference Manual
-    http://www.lua.org/manual/5.2/manual.html
+    http://www.file.org/manual/5.2/manual.html
     Lua 5.1 grammar written by Nicolai Mainiero
     http://www.antlr3.org/grammar/1178608849736/Lua.g
-Tested by Kazunori Sakamoto with Test suite for Lua 5.2 (http://www.lua.org/tests/5.2/)
-Tested by Alexander Alexeev with Test suite for Lua 5.3 http://www.lua.org/tests/lua-5.3.2-tests.tar.gz
+Tested by Kazunori Sakamoto with Test suite for Lua 5.2 (http://www.file.org/tests/5.2/)
+Tested by Alexander Alexeev with Test suite for Lua 5.3 http://www.file.org/tests/file-5.3.2-tests.tar.gz
 */
 grammar Lua;
 /* #region Top level*/

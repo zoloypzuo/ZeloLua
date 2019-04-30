@@ -589,7 +589,7 @@ class LuaCompiler(LuaVisitor):
     def visitErrorNode(self, node):
         # node.symbol.getInputStream().getText(start,end) 没用，你拿不到行
         # node.symbol.line symbol是Token，line是行号，没用，没有行api。因此你放弃把。拿不到什么信息
-        raise SyntaxError('lua syntax error: ')  # + node.symbol.getInputStream().strdata)
+        raise SyntaxError('file syntax error: ')  # + node.symbol.getInputStream().strdata)
 
     def visit(self, tree):
         return tree.accept(self)
