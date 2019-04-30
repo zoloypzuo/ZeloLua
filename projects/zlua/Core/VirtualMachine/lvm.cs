@@ -450,8 +450,8 @@ namespace zlua.Core.VirtualMachine
                     case Opcode.OP_TAILCALL: {
                             int a = GETARG_A(i);
                             int b = GETARG_B(i);
-                            int nresults = (int)i.C - 1;
                             StkId raIndex = @base + a;
+
                             if (b != 0) top = raIndex + b;  /* else previous instruction set top */
                             this.savedpc = pc;
                             Debug.Assert((int)i.C - 1 == LUA_MULTRET);
@@ -465,12 +465,10 @@ namespace zlua.Core.VirtualMachine
                                         StkId func = ci.func;
                                         StkId pfunc = ciplus1.func;  /* previous function index */
                                         //if (L->openupval) luaF_close(L, ci.@base);
-                                        this.@base = ci.func + (ciplus1.@base - pfunc);
-                                        ci.@base = this.@base;
+                                        this.@base=ci.@base  = ci.func + (ciplus1.@base - pfunc);
                                         for (aux = 0; pfunc + aux < top; aux++)  /* move frame down */
                                             (func + aux).Set(pfunc + aux);
-                                        top = func + aux;  /* correct top */
-                                        ci.top = top;
+                                        ci.top=top = func + aux;  /* correct top */
                                         Debug.Assert(top == this.@base + (((TValue)func).Cl as LuaClosure).p.maxstacksize);
                                         ci.savedpc = this.savedpc;
                                         ci.tailcalls++;  /* one more call lost */
@@ -478,6 +476,7 @@ namespace zlua.Core.VirtualMachine
                                         goto reentry;
                                     }
                                 case PCRC: {  /* it was a C function (`precall' called it) */
+                                        @base = this.@base;
                                         continue;
                                     }
                                 default: {
