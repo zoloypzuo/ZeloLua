@@ -46,9 +46,61 @@ namespace zlua.Core.VirtualMachine
             Proto p;
             if (IsBinaryChunk(path)) {
                 p = luaU.Undump(new FileStream(path, FileMode.Open));
+                var env = new Table(1, 1);
+                env.luaH_set(new TValue("print")).Cl = new CSharpClosure()
+                {
+                    f = (L) =>
+                    {
+                        TValue s = L.pop();
+                        Console.WriteLine(s.Str);
+                        return 0;
+                    }
+                };
+                LuaClosure cl = new LuaClosure(env, 1, p);
+                push(new TValue(cl));
             } else {
-                p = DoInput(new AntlrFileStream(path, System.Text.Encoding.UTF8), $"@{path}");
+                lua_load(new AntlrFileStream(path, System.Text.Encoding.UTF8), $"@{path}");
             }
+        }
+
+        /// <summary>
+        /// zlua和clua这点不同，clua的dofile和dostring都会调用lua_load，后者用lookahead判断是否是二进制，再用parser或unudmp
+        /// zlua的dostring只能parse，不能undump
+        /// 主要是ANTLRStream，太烦了
+        /// </summary>
+        /// <param name="s"></param>
+        public void luaL_dostring(string s)
+        {
+            luaL_loadstring(s);
+            lua_pcall(nargs: 0, nresults: LUA_MULTRET, errfunc: 0);
+        }
+
+        public void luaL_loadstring(string s)
+        {
+            lua_load(new AntlrInputStream(s), s);
+        }
+
+        /// <summary>
+        /// clua是parser或undump，zlua只parse
+        /// </summary>
+        /// <param name=""></param>
+        /// <param name="chunkname"></param>
+        /// <returns></returns>
+        int lua_load(ICharStream chunk, string chunkname)
+        {
+            // status是parser返回的错误码
+            int status = 0;
+
+            if (chunkname == null) chunkname = "?";
+
+            LuaLexer lexer = new LuaLexer(chunk);
+            CommonTokenStream tokenStream = new CommonTokenStream(lexer);
+            LuaParser parser = new LuaParser(tokenStream);
+            var tree = parser.chunk();
+            LuaCodeGenerator codeGenerator = new LuaCodeGenerator();
+            codeGenerator.Visit(tree);
+
+            Proto p = codeGenerator.Chunk;
             var env = new Table(1, 1);
             env.luaH_set(new TValue("print")).Cl = new CSharpClosure()
             {
@@ -61,24 +113,8 @@ namespace zlua.Core.VirtualMachine
             };
             LuaClosure cl = new LuaClosure(env, 1, p);
             push(new TValue(cl));
+            return status;
         }
-
-        //public void dostring(string chunk)
-        //{
-        // * 编译源文本生成Proto实例tf
-        // * 使用tf构造Closure实例cl
-        // * 初始化cl的upval
-        // * 将cl压栈
-        // * 调用Call方法执行cl
-        //DoInput(new AntlrInputStream(chunk), chunk);
-        // TODO 规范api，block上创建visit chunk方法
-        // TODO 从visitor取得proto
-        // 我还是愿意创建chunkproto这个类
-        // 拿到后压栈
-        // 对于chunk，1-(0+1)
-        //int funcIndex = top - (nargs + 1);
-        //luaD_call(top-(narg)
-        //}
 
         /// 注册一个C#函数，在lua代码中用name调用
         /// 被调用函数被包装成closure，在G中，key是`name
@@ -92,16 +128,6 @@ namespace zlua.Core.VirtualMachine
         /// 基于L.top，压函数，压args，返回n个值
         public delegate int lua_CFunction(lua_State L);
 
-        private Proto DoInput(ICharStream chunk, string chunkName)
-        {
-            LuaLexer lexer = new LuaLexer(chunk);
-            CommonTokenStream tokenStream = new CommonTokenStream(lexer);
-            LuaParser parser = new LuaParser(tokenStream);
-            var tree = parser.chunk();
-            LuaCodeGenerator codeGenerator = new LuaCodeGenerator();
-            codeGenerator.Visit(tree);
-            return null;
-        }
 
         private bool IsBinaryChunk(string path)
         {

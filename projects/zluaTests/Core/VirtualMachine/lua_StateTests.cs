@@ -36,22 +36,27 @@ namespace zlua.Core.VirtualMachine.Tests
             lua_State.lua_newstate().luaL_dofile($"{basePath}{filename}.out");
         }
 
-        [TestMethod()]
-        public void lua_StateTest()
+        /// <summary>
+        /// dostring
+        /// </summary>
+        /// <param name="filename"></param>
+        void t01(string s)
         {
+            //lua_State.lua_newstate().luaL_dostring(s);
         }
 
         [TestMethod()]
-        public void EmptyChunkTest()
+        public void emptyChunkTest()
         {
-            t00("empty/empty");
+            t00("string/empty/empty");
+        }
+        [TestMethod()]
+        public void emptyTest()
+        {
+            t01("");
         }
 
-        [TestMethod()]
-        public void EmptyTest()
-        {
-            string empty = "";
-        }
+
 
         [TestMethod()]
         public void HelloworldChunkTest()

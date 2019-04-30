@@ -68,7 +68,6 @@
     <Compile Include="Core\Lua\LuaInteger.cs" />
     <Compile Include="Core\Lua\LuaNumber.cs" />
     <Compile Include="Core\Lua\LuaType.cs" />
-    <Compile Include="Core\ObjectModel\lua_State.cs" />
     <Compile Include="Core\ObjectModel\TValue.cs" />
     <Compile Include="Core\ObjectModel\Proto.cs" />
     <Compile Include="Core\ObjectModel\Table.cs" />

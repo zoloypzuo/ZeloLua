@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using Antlr4.Runtime.Misc;
 using Antlr4.Runtime.Tree;
 using zlua.Core.InstructionSet;
+using zlua.Core.ObjectModel;
 
 namespace zlua.Compiler.CodeGenerator
 {
@@ -15,7 +16,7 @@ namespace zlua.Compiler.CodeGenerator
     {
         // 当前函数
         private funcInfo fi;
-
+        public Proto Chunk { get; }
 
 
 
