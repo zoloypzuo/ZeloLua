@@ -16,17 +16,7 @@ namespace zlua.Core.VirtualMachine
     {
         public List<TValue> stack { get; }
 
-        /// <summary>
-        /// 初始化该分部类，由lvm模块的ctor调用
-        /// </summary>
-        /// <param name="size"></param>
-        private lua_State(int size)
-        {
-            stack = new List<TValue>(size);
-            for (int i = 0; i < size; i++) {
-                stack.Add(new TValue());
-            }
-        }
+
 
         //// 检查栈的空闲空间是否还可以容纳（推入）至少n个值，如若不然，扩容
         //public void check(int n)

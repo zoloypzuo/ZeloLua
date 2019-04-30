@@ -41,22 +41,6 @@ namespace zlua.Core.VirtualMachine
 
         TValue registry { get { return G.l_registry; } }
 
-        /// <summary>
-        /// lua_newstate
-        /// </summary>
-        public static lua_State lua_newstate()
-        {
-            lua_State L = new lua_State();
-            global_State g = new global_State();
-            L.G = g;
-            g.mainthread = L;
-            //g->uvhead.u.l.prev = &g->uvhead;
-            //g->uvhead.u.l.next = &g->uvhead;
-            // f_luaopen
-            L.gt = new TValue(new Table(0, 2));
-            L.registry.Table = new Table(0, 2);
-            L.luaT_init();
-            return L;
-        }
+
     }
 }

@@ -73,6 +73,7 @@
     <Compile Include="Core\ObjectModel\Proto.cs" />
     <Compile Include="Core\ObjectModel\Table.cs" />
     <Compile Include="Core\ObjectModel\TString.cs" />
+    <Compile Include="Core\State\lstate.cs" />
     <Compile Include="Core\VirtualMachine\CallInfo.cs" />
     <Compile Include="Core\VirtualMachine\global_State.cs" />
     <Compile Include="Core\VirtualMachine\LuaStack.cs" />

@@ -40,7 +40,7 @@ namespace zlua.Core.VirtualMachine
         /// last free slot in the stack
         /// 标记分配的大小,topIndex永远小于stackLastFree
         /// </summary>
-        private StkId stack_last { get { return new StkId(stack, stack.Count); } }
+        private StkId stack_last { get { return new StkId(stack, stack.Count - EXTRA_STACK - 1); } }
 
         private Stack<CallInfo> CallStack { get; }
 
@@ -49,30 +49,6 @@ namespace zlua.Core.VirtualMachine
         /// saved pc when call a function
         /// index of instruction array；因为src用指针的原因，而zlua必须同时使用codes和pc来获取指令
         private int savedpc;
-
-        const int BasicStackSize = 40;
-
-        /// lua_newstate
-        public lua_State() : this(BasicStackSize)
-        {
-            const int BasicCiStackSize = 8;
-            CallStack = new Stack<CallInfo>(BasicCiStackSize);
-            // 基本的CallInfo，在chunk之前
-            // 因为调用函数之前要有一个CallInfo保存savedpc
-            // 因此构造LuaState时构造一个基本的CallInfo
-            CallInfo ci = new CallInfo
-            {
-                @base = newStkId(0),
-                top = newStkId(0),
-                func = newStkId(0)
-            };
-            CallStack.Push(ci);
-            for (int i = 0; i < BasicStackSize; i++) {
-                stack.Add(new TValue());
-            }
-            top = newStkId(0);
-            @base = top;
-        }
 
         /// <summary>
         /// 缓存cl
