@@ -1,22 +1,18 @@
 ------------------------------
-local a,t,k,v,e; t[k]=v; t[100] = "foo"
+local p = {["a"]=1}
 ------------------------------
 success compiling learn.lua
 ; source chunk: learn.lua
 ; x86 standard (32-bit, little endian, doubles)
 
 ; function [0] definition (level 1) 0
-; 0 upvalues, 0 params, is_vararg = 2, 5 stacks
-.function  0 0 2 5
-.local  "a"  ; 0
-.local  "t"  ; 1
-.local  "k"  ; 2
-.local  "v"  ; 3
-.local  "e"  ; 4
-.const  100  ; 0
-.const  "foo"  ; 1
-[1] settable   1   2   3    ; R1[R2] := R3
-[2] settable   1   256 257  ; R1[100] := "foo"
+; 0 upvalues, 0 params, is_vararg = 2, 2 stacks
+.function  0 0 2 2
+.local  "p"  ; 0
+.const  "a"  ; 0
+.const  1  ; 1
+[1] newtable   0   0   1    ; R0 := {} , array=0, hash=1
+[2] settable   0   256 257  ; R0["a"] := 1
 [3] return     0   1        ; return 
 ; end of function 0
 
@@ -24,17 +20,13 @@ success compiling learn.lua
 ; x86 standard (32-bit, little endian, doubles)
 
 ; function [0] definition (level 1) 0
-; 0 upvalues, 0 params, is_vararg = 2, 5 stacks
-.function  0 0 2 5
-.local  "a"  ; 0
-.local  "t"  ; 1
-.local  "k"  ; 2
-.local  "v"  ; 3
-.local  "e"  ; 4
-.const  100  ; 0
-.const  "foo"  ; 1
-[1] settable   1   2   3    ; R1[R2] := R3
-[2] settable   1   256 257  ; R1[100] := "foo"
+; 0 upvalues, 0 params, is_vararg = 2, 2 stacks
+.function  0 0 2 2
+.local  "p"  ; 0
+.const  "a"  ; 0
+.const  1  ; 1
+[1] newtable   0   0   1    ; R0 := {} , array=0, hash=1
+[2] settable   0   256 257  ; R0["a"] := 1
 [3] return     0   1        ; return 
 ; end of function 0
 
@@ -69,60 +61,40 @@ Pos   Hex Data           Description or Code
 0027  00                 nups (0)
 0028  00                 numparams (0)
 0029  02                 is_vararg (2)
-002A  05                 maxstacksize (5)
+002A  02                 maxstacksize (2)
                          * code:
 002B  03000000           sizecode (3)
-002F  49C00001           [1] settable   1   2   3    ; R1[R2] := R3
-0033  49404080           [2] settable   1   256 257  ; R1[100] := "foo"
+002F  0A400000           [1] newtable   0   0   1    ; R0 := {} , array=0, hash=1
+0033  09404080           [2] settable   0   256 257  ; R0["a"] := 1
 0037  1E008000           [3] return     0   1        ; return 
                          * constants:
 003B  02000000           sizek (2)
-003F  03                 const type 3
-0040  0000000000005940   const [0]: (100)
-0048  04                 const type 4
-0049  0400000000000000   string size (4)
-0051  666F6F00           "foo\0"
-                         const [1]: "foo"
+003F  04                 const type 4
+0040  0200000000000000   string size (2)
+0048  6100               "a\0"
+                         const [0]: "a"
+004A  03                 const type 3
+004B  000000000000F03F   const [1]: (1)
                          * functions:
-0055  00000000           sizep (0)
+0053  00000000           sizep (0)
                          * lines:
-0059  03000000           sizelineinfo (3)
+0057  03000000           sizelineinfo (3)
                          [pc] (line)
-005D  01000000           [1] (1)
-0061  01000000           [2] (1)
-0065  01000000           [3] (1)
+005B  01000000           [1] (1)
+005F  01000000           [2] (1)
+0063  01000000           [3] (1)
                          * locals:
-0069  05000000           sizelocvars (5)
-006D  0200000000000000   string size (2)
-0075  6100               "a\0"
-                         local [0]: a
-0077  00000000             startpc (0)
-007B  02000000             endpc   (2)
-007F  0200000000000000   string size (2)
-0087  7400               "t\0"
-                         local [1]: t
-0089  00000000             startpc (0)
-008D  02000000             endpc   (2)
-0091  0200000000000000   string size (2)
-0099  6B00               "k\0"
-                         local [2]: k
-009B  00000000             startpc (0)
-009F  02000000             endpc   (2)
-00A3  0200000000000000   string size (2)
-00AB  7600               "v\0"
-                         local [3]: v
-00AD  00000000             startpc (0)
-00B1  02000000             endpc   (2)
-00B5  0200000000000000   string size (2)
-00BD  6500               "e\0"
-                         local [4]: e
-00BF  00000000             startpc (0)
-00C3  02000000             endpc   (2)
+0067  01000000           sizelocvars (1)
+006B  0200000000000000   string size (2)
+0073  7000               "p\0"
+                         local [0]: p
+0075  02000000             startpc (2)
+0079  02000000             endpc   (2)
                          * upvalues:
-00C7  00000000           sizeupvalues (0)
+007D  00000000           sizeupvalues (0)
                          ** end of function 0 **
 
-00CB                     ** end of chunk **
+0081                     ** end of chunk **
 Pos   Hex Data           Description or Code
 ------------------------------------------------------------------------
 0000                     ** source chunk: luac.out
@@ -151,57 +123,37 @@ Pos   Hex Data           Description or Code
 0027  00                 nups (0)
 0028  00                 numparams (0)
 0029  02                 is_vararg (2)
-002A  05                 maxstacksize (5)
+002A  02                 maxstacksize (2)
                          * code:
 002B  03000000           sizecode (3)
-002F  49C00001           [1] settable   1   2   3    ; R1[R2] := R3
-0033  49404080           [2] settable   1   256 257  ; R1[100] := "foo"
+002F  0A400000           [1] newtable   0   0   1    ; R0 := {} , array=0, hash=1
+0033  09404080           [2] settable   0   256 257  ; R0["a"] := 1
 0037  1E008000           [3] return     0   1        ; return 
                          * constants:
 003B  02000000           sizek (2)
-003F  03                 const type 3
-0040  0000000000005940   const [0]: (100)
-0048  04                 const type 4
-0049  0400000000000000   string size (4)
-0051  666F6F00           "foo\0"
-                         const [1]: "foo"
+003F  04                 const type 4
+0040  0200000000000000   string size (2)
+0048  6100               "a\0"
+                         const [0]: "a"
+004A  03                 const type 3
+004B  000000000000F03F   const [1]: (1)
                          * functions:
-0055  00000000           sizep (0)
+0053  00000000           sizep (0)
                          * lines:
-0059  03000000           sizelineinfo (3)
+0057  03000000           sizelineinfo (3)
                          [pc] (line)
-005D  01000000           [1] (1)
-0061  01000000           [2] (1)
-0065  01000000           [3] (1)
+005B  01000000           [1] (1)
+005F  01000000           [2] (1)
+0063  01000000           [3] (1)
                          * locals:
-0069  05000000           sizelocvars (5)
-006D  0200000000000000   string size (2)
-0075  6100               "a\0"
-                         local [0]: a
-0077  00000000             startpc (0)
-007B  02000000             endpc   (2)
-007F  0200000000000000   string size (2)
-0087  7400               "t\0"
-                         local [1]: t
-0089  00000000             startpc (0)
-008D  02000000             endpc   (2)
-0091  0200000000000000   string size (2)
-0099  6B00               "k\0"
-                         local [2]: k
-009B  00000000             startpc (0)
-009F  02000000             endpc   (2)
-00A3  0200000000000000   string size (2)
-00AB  7600               "v\0"
-                         local [3]: v
-00AD  00000000             startpc (0)
-00B1  02000000             endpc   (2)
-00B5  0200000000000000   string size (2)
-00BD  6500               "e\0"
-                         local [4]: e
-00BF  00000000             startpc (0)
-00C3  02000000             endpc   (2)
+0067  01000000           sizelocvars (1)
+006B  0200000000000000   string size (2)
+0073  7000               "p\0"
+                         local [0]: p
+0075  02000000             startpc (2)
+0079  02000000             endpc   (2)
                          * upvalues:
-00C7  00000000           sizeupvalues (0)
+007D  00000000           sizeupvalues (0)
                          ** end of function 0 **
 
-00CB                     ** end of chunk **
+0081                     ** end of chunk **

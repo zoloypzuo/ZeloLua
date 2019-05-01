@@ -11,6 +11,7 @@
       <w>instrs</w>
       <w>luac</w>
       <w>mssg</w>
+      <w>newtable</w>
       <w>parlist</w>
       <w>punc</w>
       <w>setglobal</w>

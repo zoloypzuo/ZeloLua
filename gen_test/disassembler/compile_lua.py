@@ -142,6 +142,7 @@ TestS = namedtuple('TestS', [
 ])
 
 
+# TODO base不应该重复，否则会被替换掉，必须使用setlist0，setlist1
 def gs(lua_code: str, path: str, comment=''):
     compile(lua_code, 'string/' + path)
     # 字符串的空串测试函数的空串测试语句
@@ -170,20 +171,52 @@ gs("local function f() end\n"
    "local a,b,c = f(1,2,3,4)", fc('call'))
 gs("local a,b; return 1,a,b", fc('return'))
 gs("local a,b,c,d,e = 100, ...", fc('vararg'))
-gs("local function f() end\n"
-   "return f(a,b,c)", fc('tailcall'))
-gs("function obj:f(a) end\n"
-   "local a,obj; obj:f(a)", fc('self'))
+# gs("local function f() end\n"
+#    "return f(a,b,c)", fc('tailcall'))
+# gs('''
+# -- Meta class
+# Shape = {area = 0}
+#
+# function Shape:new (o,side)
+#   o = o or {}
+#   setmetatable(o, self)
+#   self.__index = self
+#   side = side or 0
+#   self.area = side*side;
+#   return o
+# end
+#
+# function Shape:printArea ()
+#   print(self.area)
+# end
+#
+# myshape = Shape:new(nil,10)
+#
+# myshape:printArea()
+#
+# ''', fc('self'))
 
 
 def t(s): return 'table/' + s
 
+# 《Lua设计与实现》p72+ 优点是每个测试尽可能短小，生成我们想要测试的指令
+# 《自己动手实现Lua》正文里的例子是没法运行的
+#
+# 源文本里有字符串的，用python的三点字符串，并加上r
+# 用r就没法用\n了
+# 不用r引号带转义很难复制到其他地方实验
 
-gs("local a,b,c,d; b = {x=1,y=2}", t('newtable'))
-gs("local a,t,k,v,e; v = t[k]; v = t[100]", t('gettable'))
-gs("local a,t,k,v,e; t[k]=v; t[100] = \"foo\"", t('settable'))
-gs("local t = {1,2,3,4}", t('setlist'))
-gs("t = {1,2,f()}", t('setlist1'), '结尾是函数调用或vararg')
+gs('local p = {}', t('newtable'))
+gs('local p = {1,2}',t('setlist'))
+gs(r'local p = {["a"]=1}',t('settable'))
+gs(r'''
+local a = "a"
+local p = {[a]=1}
+''',t('settable1'))
+gs(r'''
+local p = {["a"]=1}
+local b = p["a"]''', t('gettable'))
+# gs("t = {1,2,f()}", t('setlist1'), '结尾是函数调用或vararg')
 
 code = []
 for k, v in css.items():
