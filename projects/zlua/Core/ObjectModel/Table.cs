@@ -47,7 +47,7 @@ namespace zlua.Core.ObjectModel
         public TValue luaH_get(TValue key)
         {
             switch (key.tt) {
-                case LuaTag.LUA_TNIL: return lobject.NilObject;
+                case LuaTag.LUA_TNIL: return lobject.luaO_nilobject;
                 case LuaTag.LUA_TSTRING:
                     return luaH_getstr(key.TStr);
 
@@ -64,7 +64,7 @@ namespace zlua.Core.ObjectModel
                     if (hashTablePart.TryGetValue(key, out v)) {
                         return v;
                     } else {
-                        return lobject.NilObject;
+                        return lobject.luaO_nilobject;
                     }
             }
         }
@@ -79,7 +79,7 @@ namespace zlua.Core.ObjectModel
             // clua中if (p != luaO_nilobject)，c语言没有等于号重载
             // luaO_nilobject被设计为一个单例，专门用于表查找返回时作为未查到的标志
             // 下面的else分支中还检查了IsNil
-            if (Object.ReferenceEquals(v, lobject.NilObject)) {
+            if (!Object.ReferenceEquals(v, lobject.luaO_nilobject)) {
                 return v;
             } else {
                 if (key.IsNil) {
@@ -107,7 +107,7 @@ namespace zlua.Core.ObjectModel
             if (hashTablePart.TryGetValue(k, out v)) {
                 return v;
             } else {
-                return lobject.NilObject;
+                return lobject.luaO_nilobject;
             }
         }
 
@@ -128,7 +128,7 @@ namespace zlua.Core.ObjectModel
                 if (hashTablePart.TryGetValue(k, out v)) {
                     return v;
                 } else {
-                    return lobject.NilObject;
+                    return lobject.luaO_nilobject;
                 }
             }
         }
@@ -136,7 +136,7 @@ namespace zlua.Core.ObjectModel
         public TValue luaH_setstr(TString key)
         {
             var v = luaH_getstr(key);
-            if (Object.ReferenceEquals(v, lobject.NilObject)) {
+            if (!Object.ReferenceEquals(v, lobject.luaO_nilobject)) {
                 return v;
             } else {
                 TValue k = new TValue(key);
@@ -147,7 +147,7 @@ namespace zlua.Core.ObjectModel
         public TValue luaH_setnum(int key)
         {
             TValue v = luaH_getnum(key);
-            if (Object.ReferenceEquals(v, lobject.NilObject)) {
+            if (!Object.ReferenceEquals(v, lobject.luaO_nilobject)) {
                 return v;
             } else {
                 TValue k = new TValue((lua_Number)key);

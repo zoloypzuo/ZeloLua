@@ -460,19 +460,19 @@ namespace zlua.Core.VirtualMachine
                                         /* tail call: put new frame in place of previous one */
                                         CallInfo ciplus1 = CallStack.Pop();
                                         CallInfo ci = this.ci;/* previous frame */
-                                        CallStack.Push(ciplus1);
+                                        //CallStack.Push(ciplus1);
                                         int aux;
                                         StkId func = ci.func;
                                         StkId pfunc = ciplus1.func;  /* previous function index */
                                         //if (L->openupval) luaF_close(L, ci.@base);
-                                        this.@base=ci.@base  = ci.func + (ciplus1.@base - pfunc);
+                                        this.@base = ci.@base = ci.func + (ciplus1.@base - pfunc);
                                         for (aux = 0; pfunc + aux < top; aux++)  /* move frame down */
                                             (func + aux).Set(pfunc + aux);
-                                        ci.top=top = func + aux;  /* correct top */
-                                        Debug.Assert(top == this.@base + (((TValue)func).Cl as LuaClosure).p.maxstacksize);
+                                        ci.top = top = func + aux;  /* correct top */
+                                        AssertEqual(top, this.@base + (((TValue)func).Cl as LuaClosure).p.maxstacksize);
                                         ci.savedpc = this.savedpc;
                                         ci.tailcalls++;  /* one more call lost */
-                                        CallStack.Pop();  /* remove new frame */
+                                        //CallStack.Pop();  /* remove new frame */
                                         goto reentry;
                                     }
                                 case PCRC: {  /* it was a C function (`precall' called it) */

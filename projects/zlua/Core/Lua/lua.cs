@@ -5,6 +5,7 @@
 using Antlr4.Runtime;
 
 using System;
+using System.Diagnostics;
 using System.IO;
 
 using zlua.Compiler;
@@ -29,6 +30,14 @@ namespace zlua.Core.VirtualMachine
 
     public partial class lua_State
     {
+        /*
+        ** pseudo-indices
+        */
+        const int LUA_REGISTRYINDEX = (-10000);
+        const int LUA_ENVIRONINDEX = (-10001);
+        const int LUA_GLOBALSINDEX = (-10002);
+        int lua_upvalueindex(int i) { return (LUA_GLOBALSINDEX - (i)); }
+
         /* option for multiple returns in 'lua_pcall' and 'lua_call' */
         public const int LUA_MULTRET = -1;
         /* minimum Lua stack available to a C function */
@@ -49,10 +58,14 @@ namespace zlua.Core.VirtualMachine
                 var env = new Table(1, 1);
                 env.luaH_set(new TValue("print")).Cl = new CSharpClosure()
                 {
+                    // c print
                     f = (L) =>
                     {
+                        // pop arg
                         TValue s = L.pop();
+                        Debug.Assert(s.IsString);
                         Console.WriteLine(s.Str);
+                        // return 0 result
                         return 0;
                     }
                 };
@@ -136,6 +149,11 @@ namespace zlua.Core.VirtualMachine
                 char c = (char)f.ReadByte();
                 return c == luaU.FirstChar;
             }
+        }
+
+        private void AssertEqual<T>(T expected, T acutal) where T : IEquatable<T>
+        {
+            Debug.Assert(expected.Equals(acutal));
         }
     }
 }

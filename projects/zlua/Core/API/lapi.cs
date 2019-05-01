@@ -98,6 +98,83 @@ namespace zlua.Core.VirtualMachine
             return status;
         }
 
+        /// <summary>
+        /// 这是编程错误，clua里是空的
+        /// </summary>
+        /// <param name="b"></param>
+        void api_check(bool b)
+        {
+            Debug.Assert(b);
+        }
+
+        private TValue index2adr(int idx)
+        {
+            if (idx > 0) {
+                StkId o = @base + (idx - 1);
+                api_check(idx <= ci.top - @base);
+                if (o >= top) return lobject.luaO_nilobject;
+                else return o;
+            } else if (idx > LUA_REGISTRYINDEX) {
+                api_check(idx != 0 && -idx <= top - @base);
+                return top + idx;
+            } else switch (idx) {  /* pseudo-indices */
+                    case LUA_REGISTRYINDEX: return registry;
+                    case LUA_ENVIRONINDEX: {
+                            Closure func = curr_func;
+                            env.Table = (func as CSharpClosure).env;
+                            return env;
+                        }
+                    case LUA_GLOBALSINDEX: return gt;
+                    default: {
+                            Closure func = curr_func;
+                            idx = LUA_GLOBALSINDEX - idx;
+                            CSharpClosure ccl = func as CSharpClosure;
+                            return (idx <= ccl.nupvalues)
+                                      ? ccl.upvalue[idx - 1]
+                                      : lobject.luaO_nilobject;
+                        }
+                }
+        }
+
+        private void api_checkvalidindex(TValue i) { api_check(!Object.ReferenceEquals((i), lobject.luaO_nilobject)); }
+
+        public int lua_setmetatable(int objindex)
+        {
+            TValue obj;
+            Table mt;
+
+            api_checknelems(1);
+            obj = index2adr(objindex);
+            api_checkvalidindex(obj);
+            if (stack[top.index - 1].IsNil)
+                mt = null;
+            else {
+                api_check(stack[top.index - 1].IsTable);
+                mt = stack[top.index - 1].Table;
+            }
+            switch (obj.tt) {
+                case LuaTag.LUA_TTABLE: {
+                        obj.Table.metatable = mt;
+                        //if (mt!=null)
+                        //    luaC_objbarriert(L, hvalue(obj), mt);
+                        break;
+                    }
+                //case LUA_TUSERDATA: {
+                //        uvalue(obj)->metatable = mt;
+                //        if (mt)
+                //            luaC_objbarrier(L, rawuvalue(obj), mt);
+                //        break;
+                //    }
+                default: {
+                        G.mt[(int)obj.tt] = mt;
+                        break;
+                    }
+            }
+            top--;
+
+            return 1;
+        }
+
         //public int GetTop()
         //{
         //    return this.LuaStack.top;

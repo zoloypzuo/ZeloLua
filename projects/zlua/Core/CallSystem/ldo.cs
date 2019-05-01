@@ -146,7 +146,7 @@ namespace zlua.Core.VirtualMachine
                 throw new Exception("C stack overflow");
             // 因为Closure实例cl和实参已经被压栈，可以执行这个cl
             if (luaD_precall(func, nResults) == PCRLUA) {
-                luaV_execute(1);
+                luaV_execute(nexeccalls: 1);
             }
             --nCcalls;
         }

@@ -4,8 +4,10 @@ namespace zlua.Core.ObjectModel
 {
     internal class lobject
     {
-        /// luaO_nilobject_; 单例
-        public static readonly TValue NilObject = new TValue();
+        /// <summary>
+        /// 单例
+        /// </summary>
+        public static TValue luaO_nilobject { get; } = new TValue();
     }
 
     internal class LocVar

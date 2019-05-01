@@ -35,11 +35,11 @@ namespace zlua.Core.ObjectModel
     internal class CSharpClosure : Closure
     {
         public lua_CFunction f;
-        public List<TValue> upvals;
+        public List<TValue> upvalue;
 
-        public int NUpvals {
+        public int nupvalues {
             get {
-                return upvals.Count;
+                return upvalue.Count;
             }
         }
 

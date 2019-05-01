@@ -11,7 +11,7 @@ namespace zlua.Core.VirtualMachine
     /// lua_State一般性字段的定义和lua_State的初始化
     /// </summary>
     /// <remarks>这里的字段相对没有运行时的那些字段那么重要</remarks>
-    public partial class lua_State:GCObject
+    public partial class lua_State : GCObject
     {
         byte status;
         /// <summary>
@@ -86,7 +86,7 @@ namespace zlua.Core.VirtualMachine
             // 因此构造LuaState时构造一个基本的CallInfo
             CallInfo ci = new CallInfo();
             // clua是top，但是是错的，单步之后func是nil，当然不对，这对clua没影响，但是我们需要
-            ci.func = top+1;
+            ci.func = top + 1;
             // 这个位置在loadfile后推入chunk函数，先设为nil只是一个习惯
             (top++).SetNil();  /* `function' entry for this `ci' */
             @base = ci.@base = top;
@@ -128,5 +128,7 @@ namespace zlua.Core.VirtualMachine
             L.luaT_init();
             return L;
         }
+
+        Closure curr_func { get { return stack[ci.func.index].Cl as Closure; } }
     }
 }

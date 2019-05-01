@@ -42,7 +42,7 @@ namespace zlua.Core.VirtualMachine
             }
             return mt != null ?
                 mt.luaH_getstr(G.tmname[(int)@event]) :
-                lobject.NilObject;
+                lobject.luaO_nilobject;
         }
 
         /// <summary>
