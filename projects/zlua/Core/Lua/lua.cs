@@ -8,13 +8,13 @@ using System;
 using System.Diagnostics;
 using System.IO;
 
-using zlua.Compiler;
-using zlua.Compiler.CodeGenerator;
-using zlua.Core.InstructionSet;
-using zlua.Core.ObjectModel;
-using zlua.Core.Undumper;
+using ZoloLua.Compiler;
+using ZoloLua.Compiler.CodeGenerator;
+using ZoloLua.Core.InstructionSet;
+using ZoloLua.Core.ObjectModel;
+using ZoloLua.Core.Undumper;
 
-namespace zlua.Core.VirtualMachine
+namespace ZoloLua.Core.VirtualMachine
 {
     // 见鬼了异常，因为有些分支根本不可能走到，用于占位
     internal class GodDamnException : Exception

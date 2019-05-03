@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 
-using zlua.Core.ObjectModel;
+using ZoloLua.Core.ObjectModel;
 
-namespace zlua.Core.VirtualMachine
+namespace ZoloLua.Core.VirtualMachine
 {
     /// <summary>
     /// lua栈 TODO 全部移到lapi

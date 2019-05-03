@@ -1,4 +1,4 @@
-﻿namespace zlua.Core.Lua
+﻿namespace ZoloLua.Core.Lua
 {
     internal class luaO
     {

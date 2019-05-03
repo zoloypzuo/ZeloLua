@@ -1,8 +1,8 @@
 ﻿using System;
 
-using zlua.Core.ObjectModel;
+using ZoloLua.Core.ObjectModel;
 
-namespace zlua.Core.Lua
+namespace ZoloLua.Core.Lua
 {
     // lua浮点数类型
     //

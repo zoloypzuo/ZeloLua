@@ -5,7 +5,7 @@ using Newtonsoft.Json;
 using System;
 using System.Diagnostics;
 using System.IO;
-using zlua.Core.VirtualMachine;
+using ZoloLua.Core.VirtualMachine;
 
 namespace zluaTests
 {

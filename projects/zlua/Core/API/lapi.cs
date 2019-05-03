@@ -9,13 +9,13 @@
 
 using System;
 using System.Diagnostics;
-using zlua.Core.Lua;
-using zlua.Core.ObjectModel;
+using ZoloLua.Core.Lua;
+using ZoloLua.Core.ObjectModel;
 
 // CSharp API 这里因为过失没法回退，稍微要话十几分钟把所有index改为index2TValue(index)
 // TODO，反正lapi内部不用。
 // TODO namespace和。。还是有点。。爱
-namespace zlua.Core.VirtualMachine
+namespace ZoloLua.Core.VirtualMachine
 {
     public partial class lua_State
     {
@@ -456,7 +456,7 @@ namespace zlua.Core.VirtualMachine
 /// <summary>
 /// lua标准库，src就十几行，用于定义和加载所有具体的标准库，项目尾声时处理
 /// </summary>
-namespace zlua.Stdlib
+namespace ZoloLua.Stdlib
 {
     internal class lualib
     {

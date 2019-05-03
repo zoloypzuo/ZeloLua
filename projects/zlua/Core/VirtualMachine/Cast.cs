@@ -1,9 +1,9 @@
 ﻿using System;
 
-using zlua.Core.Lua;
-using zlua.Core.ObjectModel;
+using ZoloLua.Core.Lua;
+using ZoloLua.Core.ObjectModel;
 
-namespace zlua.Core.VirtualMachine
+namespace ZoloLua.Core.VirtualMachine
 {
     // manual.html#3.4.3
     public partial class lua_State

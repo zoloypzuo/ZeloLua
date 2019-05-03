@@ -1,6 +1,6 @@
 ﻿// 配置
 
-namespace zlua.Core.Configuration
+namespace ZoloLua.Core.Configuration
 {
     internal static class LuaConfiguration
     {

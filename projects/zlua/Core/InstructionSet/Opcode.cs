@@ -1,4 +1,4 @@
-﻿namespace zlua.Core.InstructionSet
+﻿namespace ZoloLua.Core.InstructionSet
 {
     internal enum Opcode : byte
     {

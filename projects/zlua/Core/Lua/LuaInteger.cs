@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace zlua.Core.Lua
+namespace ZoloLua.Core.Lua
 {
     // lua整数类型
     //

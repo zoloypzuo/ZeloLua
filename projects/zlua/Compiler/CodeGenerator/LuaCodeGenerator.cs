@@ -6,10 +6,10 @@ using System;
 using System.Collections.Generic;
 using Antlr4.Runtime.Misc;
 using Antlr4.Runtime.Tree;
-using zlua.Core.InstructionSet;
-using zlua.Core.ObjectModel;
+using ZoloLua.Core.InstructionSet;
+using ZoloLua.Core.ObjectModel;
 
-namespace zlua.Compiler.CodeGenerator
+namespace ZoloLua.Compiler.CodeGenerator
 {
     // 我决定暂时，至少名字不用antlr visitor，而是使用作者的命名
     internal class LuaCodeGenerator : LuaBaseVisitor<int>

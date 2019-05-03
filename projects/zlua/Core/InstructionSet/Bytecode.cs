@@ -2,9 +2,9 @@
 
 using System.Diagnostics;
 
-using zlua.Core.VirtualMachine;
+using ZoloLua.Core.VirtualMachine;
 
-namespace zlua.Core.InstructionSet
+namespace ZoloLua.Core.InstructionSet
 {
     /// <summary>
     /// 字节码指令

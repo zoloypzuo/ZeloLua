@@ -1,6 +1,6 @@
 ﻿// 类型模型
 
-namespace zlua.Core.ObjectModel
+namespace ZoloLua.Core.ObjectModel
 {
     internal class lobject
     {

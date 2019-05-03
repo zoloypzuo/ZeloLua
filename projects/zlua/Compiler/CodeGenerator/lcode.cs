@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 
-using zlua.Core.InstructionSet;
+using ZoloLua.Core.InstructionSet;
 
-namespace zlua.Compiler.CodeGenerator
+namespace ZoloLua.Compiler.CodeGenerator
 {
     internal class lcode
     {

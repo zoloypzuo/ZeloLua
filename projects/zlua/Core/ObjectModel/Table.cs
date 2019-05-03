@@ -2,9 +2,9 @@
 using System.Collections;
 using System.Collections.Generic;
 
-using zlua.Core.Lua;
+using ZoloLua.Core.Lua;
 
-namespace zlua.Core.ObjectModel
+namespace ZoloLua.Core.ObjectModel
 {
     /// <summary>
     /// 

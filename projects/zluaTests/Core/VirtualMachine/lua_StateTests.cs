@@ -1,6 +1,6 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using zluaTests;
-namespace zlua.Core.VirtualMachine.Tests{
+namespace ZoloLua.Core.VirtualMachine.Tests{
 	[TestClass()]
 	public class lua_StateTests
 	{

@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
 
-using zlua.Core.InstructionSet;
-using zlua.Core.Lua;
-using zlua.Core.ObjectModel;
+using ZoloLua.Core.InstructionSet;
+using ZoloLua.Core.Lua;
+using ZoloLua.Core.ObjectModel;
 
 /// <summary>
 /// 虚拟机
 /// </summary>
-namespace zlua.Core.VirtualMachine
+namespace ZoloLua.Core.VirtualMachine
 {
     /// <summary>
     /// 虚拟机

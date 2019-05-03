@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace zlua.Properties {
+namespace ZoloLua.Properties {
     using System;
     
     

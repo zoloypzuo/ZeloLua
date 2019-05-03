@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 
-using zlua.Core.InstructionSet;
+using ZoloLua.Core.InstructionSet;
 
-namespace zlua.Core.ObjectModel
+namespace ZoloLua.Core.ObjectModel
 {
     /// <summary>
     /// 函数原型

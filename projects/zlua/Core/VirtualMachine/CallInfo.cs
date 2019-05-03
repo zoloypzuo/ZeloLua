@@ -1,4 +1,4 @@
-﻿namespace zlua.Core.VirtualMachine
+﻿namespace ZoloLua.Core.VirtualMachine
 {
     public partial class lua_State
     {

@@ -2,14 +2,14 @@
 using System.IO;
 using System.Text;
 
-using zlua.Core.InstructionSet;
-using zlua.Core.Lua;
-using zlua.Core.ObjectModel;
+using ZoloLua.Core.InstructionSet;
+using ZoloLua.Core.Lua;
+using ZoloLua.Core.ObjectModel;
 
 /// <summary>
 /// 加载预编译chunk
 /// </summary>
-namespace zlua.Core.Undumper
+namespace ZoloLua.Core.Undumper
 {
     /// <summary>
     ///

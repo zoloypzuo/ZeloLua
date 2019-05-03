@@ -4,10 +4,10 @@ using System;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 
-using zlua.Core.Lua;
-using zlua.Core.VirtualMachine;
+using ZoloLua.Core.Lua;
+using ZoloLua.Core.VirtualMachine;
 
-namespace zlua.Core.ObjectModel
+namespace ZoloLua.Core.ObjectModel
 {
     // TODO light ud没了解足够，先不管
     /// <summary>

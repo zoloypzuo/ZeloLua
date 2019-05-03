@@ -1,9 +1,9 @@
 ﻿using System.Diagnostics;
 
-using zlua.Core.Lua;
-using zlua.Core.ObjectModel;
+using ZoloLua.Core.Lua;
+using ZoloLua.Core.ObjectModel;
 
-namespace zlua.Core.VirtualMachine
+namespace ZoloLua.Core.VirtualMachine
 {
     public partial class lua_State
     {

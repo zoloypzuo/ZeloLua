@@ -1,4 +1,4 @@
-﻿namespace zlua.Core.ObjectModel
+﻿namespace ZoloLua.Core.ObjectModel
 {
     /// <summary>
     /// the string type of lua, just warpper of C# string

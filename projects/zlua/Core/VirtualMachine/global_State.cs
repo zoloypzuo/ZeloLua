@@ -1,8 +1,8 @@
-﻿using zlua.Core.Lua;
-using zlua.Core.ObjectModel;
-using static zlua.Core.VirtualMachine.lua_State;
+﻿using ZoloLua.Core.Lua;
+using ZoloLua.Core.ObjectModel;
+using static ZoloLua.Core.VirtualMachine.lua_State;
 
-namespace zlua.Core.VirtualMachine
+namespace ZoloLua.Core.VirtualMachine
 {
     /// <summary>
     /// `global state', shared by all threads of this state

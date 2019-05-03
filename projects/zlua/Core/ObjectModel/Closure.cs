@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 
-using static zlua.Core.VirtualMachine.lua_State;
+using static ZoloLua.Core.VirtualMachine.lua_State;
 
-namespace zlua.Core.ObjectModel
+namespace ZoloLua.Core.ObjectModel
 {
     public class Closure : GCObject
     {

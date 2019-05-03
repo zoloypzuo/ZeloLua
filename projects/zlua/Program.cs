@@ -1,10 +1,10 @@
 ﻿using System.IO;
 using System.Linq;
 
-using zlua.Core.Undumper;
-using zlua.Core.VirtualMachine;
+using ZoloLua.Core.Undumper;
+using ZoloLua.Core.VirtualMachine;
 
-namespace zlua
+namespace ZoloLua
 {
     public class Program
     {

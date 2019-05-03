@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using zlua.Core.ObjectModel;
+using ZoloLua.Core.ObjectModel;
 
-namespace zlua.Core.VirtualMachine
+namespace ZoloLua.Core.VirtualMachine
 {
     /// <summary>
     /// lua_State一般性字段的定义和lua_State的初始化
