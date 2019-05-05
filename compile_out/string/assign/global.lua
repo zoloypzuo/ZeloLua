@@ -1,3 +1,41 @@
+------------------------------
+
+a = 10
+local b = a
+------------------------------
+success compiling learn.lua
+; source chunk: learn.lua
+; x86 standard (32-bit, little endian, doubles)
+
+; function [0] definition (level 1) 0
+; 0 upvalues, 0 params, is_vararg = 2, 2 stacks
+.function  0 0 2 2
+.local  "b"  ; 0
+.const  "a"  ; 0
+.const  10  ; 1
+[1] loadk      0   1        ; R0 := 10
+[2] setglobal  0   0        ; a := R0
+[3] getglobal  0   0        ; R0 := a
+[4] return     0   1        ; return 
+; end of function 0
+
+; source chunk: luac.out
+; x86 standard (32-bit, little endian, doubles)
+
+; function [0] definition (level 1) 0
+; 0 upvalues, 0 params, is_vararg = 2, 2 stacks
+.function  0 0 2 2
+.local  "b"  ; 0
+.const  "a"  ; 0
+.const  10  ; 1
+[1] loadk      0   1        ; R0 := 10
+[2] setglobal  0   0        ; a := R0
+[3] getglobal  0   0        ; R0 := a
+[4] return     0   1        ; return 
+; end of function 0
+
+
+------------------------------
 success compiling learn.lua
 Pos   Hex Data           Description or Code
 ------------------------------------------------------------------------
@@ -27,56 +65,42 @@ Pos   Hex Data           Description or Code
 0027  00                 nups (0)
 0028  00                 numparams (0)
 0029  02                 is_vararg (2)
-002A  05                 maxstacksize (5)
+002A  02                 maxstacksize (2)
                          * code:
-002B  03000000           sizecode (3)
-002F  01000000           [1] loadk      0   0        ; R0 := 100
-0033  65008002           [2] vararg     1   5        ; R1 to R4 := ...
-0037  1E008000           [3] return     0   1        ; return 
+002B  04000000           sizecode (4)
+002F  01400000           [1] loadk      0   1        ; R0 := 10
+0033  07000000           [2] setglobal  0   0        ; a := R0
+0037  05000000           [3] getglobal  0   0        ; R0 := a
+003B  1E008000           [4] return     0   1        ; return 
                          * constants:
-003B  01000000           sizek (1)
-003F  03                 const type 3
-0040  0000000000005940   const [0]: (100)
+003F  02000000           sizek (2)
+0043  04                 const type 4
+0044  0200000000000000   string size (2)
+004C  6100               "a\0"
+                         const [0]: "a"
+004E  03                 const type 3
+004F  0000000000002440   const [1]: (10)
                          * functions:
-0048  00000000           sizep (0)
+0057  00000000           sizep (0)
                          * lines:
-004C  03000000           sizelineinfo (3)
+005B  04000000           sizelineinfo (4)
                          [pc] (line)
-0050  01000000           [1] (1)
-0054  01000000           [2] (1)
-0058  01000000           [3] (1)
+005F  02000000           [1] (2)
+0063  02000000           [2] (2)
+0067  03000000           [3] (3)
+006B  03000000           [4] (3)
                          * locals:
-005C  05000000           sizelocvars (5)
-0060  0200000000000000   string size (2)
-0068  6100               "a\0"
-                         local [0]: a
-006A  02000000             startpc (2)
-006E  02000000             endpc   (2)
-0072  0200000000000000   string size (2)
-007A  6200               "b\0"
-                         local [1]: b
-007C  02000000             startpc (2)
-0080  02000000             endpc   (2)
-0084  0200000000000000   string size (2)
-008C  6300               "c\0"
-                         local [2]: c
-008E  02000000             startpc (2)
-0092  02000000             endpc   (2)
-0096  0200000000000000   string size (2)
-009E  6400               "d\0"
-                         local [3]: d
-00A0  02000000             startpc (2)
-00A4  02000000             endpc   (2)
-00A8  0200000000000000   string size (2)
-00B0  6500               "e\0"
-                         local [4]: e
-00B2  02000000             startpc (2)
-00B6  02000000             endpc   (2)
+006F  01000000           sizelocvars (1)
+0073  0200000000000000   string size (2)
+007B  6200               "b\0"
+                         local [0]: b
+007D  03000000             startpc (3)
+0081  03000000             endpc   (3)
                          * upvalues:
-00BA  00000000           sizeupvalues (0)
+0085  00000000           sizeupvalues (0)
                          ** end of function 0 **
 
-00BE                     ** end of chunk **
+0089                     ** end of chunk **
 Pos   Hex Data           Description or Code
 ------------------------------------------------------------------------
 0000                     ** source chunk: luac.out
@@ -105,53 +129,39 @@ Pos   Hex Data           Description or Code
 0027  00                 nups (0)
 0028  00                 numparams (0)
 0029  02                 is_vararg (2)
-002A  05                 maxstacksize (5)
+002A  02                 maxstacksize (2)
                          * code:
-002B  03000000           sizecode (3)
-002F  01000000           [1] loadk      0   0        ; R0 := 100
-0033  65008002           [2] vararg     1   5        ; R1 to R4 := ...
-0037  1E008000           [3] return     0   1        ; return 
+002B  04000000           sizecode (4)
+002F  01400000           [1] loadk      0   1        ; R0 := 10
+0033  07000000           [2] setglobal  0   0        ; a := R0
+0037  05000000           [3] getglobal  0   0        ; R0 := a
+003B  1E008000           [4] return     0   1        ; return 
                          * constants:
-003B  01000000           sizek (1)
-003F  03                 const type 3
-0040  0000000000005940   const [0]: (100)
+003F  02000000           sizek (2)
+0043  04                 const type 4
+0044  0200000000000000   string size (2)
+004C  6100               "a\0"
+                         const [0]: "a"
+004E  03                 const type 3
+004F  0000000000002440   const [1]: (10)
                          * functions:
-0048  00000000           sizep (0)
+0057  00000000           sizep (0)
                          * lines:
-004C  03000000           sizelineinfo (3)
+005B  04000000           sizelineinfo (4)
                          [pc] (line)
-0050  01000000           [1] (1)
-0054  01000000           [2] (1)
-0058  01000000           [3] (1)
+005F  02000000           [1] (2)
+0063  02000000           [2] (2)
+0067  03000000           [3] (3)
+006B  03000000           [4] (3)
                          * locals:
-005C  05000000           sizelocvars (5)
-0060  0200000000000000   string size (2)
-0068  6100               "a\0"
-                         local [0]: a
-006A  02000000             startpc (2)
-006E  02000000             endpc   (2)
-0072  0200000000000000   string size (2)
-007A  6200               "b\0"
-                         local [1]: b
-007C  02000000             startpc (2)
-0080  02000000             endpc   (2)
-0084  0200000000000000   string size (2)
-008C  6300               "c\0"
-                         local [2]: c
-008E  02000000             startpc (2)
-0092  02000000             endpc   (2)
-0096  0200000000000000   string size (2)
-009E  6400               "d\0"
-                         local [3]: d
-00A0  02000000             startpc (2)
-00A4  02000000             endpc   (2)
-00A8  0200000000000000   string size (2)
-00B0  6500               "e\0"
-                         local [4]: e
-00B2  02000000             startpc (2)
-00B6  02000000             endpc   (2)
+006F  01000000           sizelocvars (1)
+0073  0200000000000000   string size (2)
+007B  6200               "b\0"
+                         local [0]: b
+007D  03000000             startpc (3)
+0081  03000000             endpc   (3)
                          * upvalues:
-00BA  00000000           sizeupvalues (0)
+0085  00000000           sizeupvalues (0)
                          ** end of function 0 **
 
-00BE                     ** end of chunk **
+0089                     ** end of chunk **

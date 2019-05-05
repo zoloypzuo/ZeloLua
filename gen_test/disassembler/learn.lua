@@ -1,3 +1,1 @@
-
-local p = {["a"]=1}
-local b = p["a"]
+local a,b,c,d,e = 100, ...

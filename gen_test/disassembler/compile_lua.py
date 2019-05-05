@@ -31,6 +31,9 @@ compile函数使用以下文件
   * 用r就没法用\n了
   * 不用r引号带转义很难复制到其他地方实验
 * 测试代码部分我们使用一种类似ini风格的区域注释法，在每个区域前用三点字符串标记区域
+* 《Lua设计与实现》代号SS，《自己动手实现Lua》代号ZD
+* 测试路径使用驼峰命名
+* 测试注释添加SS的页数，因为运行测试时需要参考书的内容
 '''
 import os
 from collections import namedtuple
@@ -181,7 +184,41 @@ def gf(path: str):
 
 '''空串和hello world'''
 gs('', 'empty/empty')
-gs('print("Hello World!")', 'helloworld/helloworld')
+gs('print("Hello World!")', 'helloWorld/helloWorld')
+
+'''赋值类指令'''
+
+
+def ass(s): return 'assign/' + s
+
+
+gs('''
+local a = 10
+local b = a
+''', ass('localAssign'), comment='SS p68')
+gs('''
+a = 10
+local b = a''', ass('global'), comment='SS p70')
+
+'''表'''
+
+
+def t(s): return 'table/' + s
+
+
+gs('local p = {}', t('newtable'), 'SS p72')
+gs('local p = {1,2}', t('setlist'), 'SS p74')
+gs(r'local p = {["a"]=1}', t('settable'), 'SS p77')
+gs(r'''
+local a = "a"
+local p = {[a]=1}
+''', t('settable1'), 'SS p78')
+gs(r'''
+local p = {["a"]=1}
+local b = p["a"]''', t('gettable'), 'SS p79')
+# gs("t = {1,2,f()}", t('setlist1'), '结尾是函数调用或vararg')
+
+# TODO 从p90开始
 
 '''函数调用'''
 
@@ -222,23 +259,6 @@ gs("local a,b,c,d,e = 100, ...", fc('vararg'))
 #
 # ''', fc('self'))
 
-'''表'''
-
-
-def t(s): return 'table/' + s
-
-
-gs('local p = {}', t('newtable'))
-gs('local p = {1,2}', t('setlist'))
-gs(r'local p = {["a"]=1}', t('settable'))
-gs(r'''
-local a = "a"
-local p = {[a]=1}
-''', t('settable1'))
-gs(r'''
-local p = {["a"]=1}
-local b = p["a"]''', t('gettable'))
-# gs("t = {1,2,f()}", t('setlist1'), '结尾是函数调用或vararg')
 
 ''''''
 
@@ -269,7 +289,7 @@ for k, v in css.items():
 code = using(['Microsoft.VisualStudio.TestTools.UnitTesting', 'zluaTests'],
              namespace('zlua.Core.VirtualMachine.Tests',
                        attribute('[TestClass()]',
-                                 _class('public', 'lua_StateTests', code))))
+                                 _class('lua_StateTests', code, 'public'))))
 with open(r'..\..\..\zlua\projects\zluaTests\Core\VirtualMachine\lua_StateTests.cs', 'w') as f:
     f.write(join(code))
 
