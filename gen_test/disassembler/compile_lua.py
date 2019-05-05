@@ -30,7 +30,6 @@ compile函数使用以下文件
   * 源文本里有字符串的，用python的三点字符串，并加上r
   * 用r就没法用\n了
   * 不用r引号带转义很难复制到其他地方实验
-* 测试代码部分我们使用一种类似ini风格的区域注释法，在每个区域前用三点字符串标记区域
 * 《Lua设计与实现》代号SS，《自己动手实现Lua》代号ZD
 * 测试路径使用驼峰命名
 * 测试注释添加SS的页数，因为运行测试时需要参考书的内容
@@ -183,13 +182,14 @@ def gf(path: str):
 # region 测试
 
 '''空串和hello world'''
+
 gs('', 'empty/empty')
 gs('print("Hello World!")', 'helloWorld/helloWorld')
 
-'''赋值类指令'''
 
-
-def ass(s): return 'assign/' + s
+def ass(s):
+    '''赋值类指令'''
+    return 'assign/' + s
 
 
 gs('''
@@ -200,10 +200,10 @@ gs('''
 a = 10
 local b = a''', ass('global'), comment='SS p70')
 
-'''表'''
 
-
-def t(s): return 'table/' + s
+def t(s):
+    '''表'''
+    return 'table/' + s
 
 
 gs('local p = {}', t('newtable'), 'SS p72')
@@ -218,7 +218,22 @@ local p = {["a"]=1}
 local b = p["a"]''', t('gettable'), 'SS p79')
 # gs("t = {1,2,f()}", t('setlist1'), '结尾是函数调用或vararg')
 
-# TODO 从p90开始
+'''函数定义'''
+
+
+def fd(s): return 'functionDef/' + s
+
+
+gs('''
+function test()
+end''', fd('simplest'), 'SS p90')
+gs('''
+function f(a, b, c)
+end''', fd('parameter'), 'SS p93')
+# gs('''
+# local a,b,c
+# local function f() end
+# local g = function() end''', fd('closure'))
 
 '''函数调用'''
 
@@ -226,13 +241,14 @@ local b = p["a"]''', t('gettable'), 'SS p79')
 def fc(s): return 'functionCall/' + s
 
 
-gs("local a,b,c\n"
-   "local function f() end\n"
-   "local g = function() end\n", fc('closure'))
-gs("local function f() end\n"
-   "local a,b,c = f(1,2,3,4)", fc('call'))
-gs("local a,b; return 1,a,b", fc('return'))
-gs("local a,b,c,d,e = 100, ...", fc('vararg'))
+gs('print("a")', fc('simplest'), 'SS p95')
+
+
+# gs('''
+# local function f() end
+# local a,b,c = f(1,2,3,4)''', fc('call'))
+# gs("local a,b; return 1,a,b", fc('return'))
+# gs("local a,b,c,d,e = 100, ...", fc('vararg'))
 
 # gs("local function f() end\n"
 #    "return f(a,b,c)", fc('tailcall'))
@@ -259,8 +275,31 @@ gs("local a,b,c,d,e = 100, ...", fc('vararg'))
 #
 # ''', fc('self'))
 
+def fr(s):
+    '''函数返回'''
+    return 'functionReturn/' + s
 
-''''''
+
+def rel(s):
+    '''关系逻辑类指令'''
+    return 'relationOp/' + s
+
+
+gs('''
+local a,b,c
+c = a == b''', rel('foo'), 'SS p115')
+gs('''
+local a,b,c
+c = a and b''', rel('and'), 'SS p118')
+
+
+def loop(s):
+    '''循环类指令'''
+    return 'loop/' + s
+
+
+gs('local a = 0; for i = 1, 100, 5 do a = a + i end;', loop('foo'), 'SS p124')
+# gs('for k,v in pairs(t) do print(k,v) end')  TODO 在zlua导入pairs函数
 
 # endregion
 
@@ -276,15 +315,15 @@ for k, v in css.items():
         code=[r_comment(i.comment,
                         method_call('TestTool', 't00', [string(i.path)])) for i in v]
     ))
-    newline(code)
-    code += test_method_attribute(method_def(
-        access='public',
-        ret_type='void',
-        method=k + 'Test',
-        parlist=[],
-        code=[r_comment(i.comment, method_call('TestTool', 't01', [string(i.lua_code)])) for i in v]
-    ))
-    newline(code)
+newline(code)
+code += test_method_attribute(method_def(
+    access='public',
+    ret_type='void',
+    method=k + 'Test',
+    parlist=[],
+    code=[r_comment(i.comment, method_call('TestTool', 't01', [string(i.lua_code)])) for i in v]
+))
+newline(code)
 
 code = using(['Microsoft.VisualStudio.TestTools.UnitTesting', 'zluaTests'],
              namespace('zlua.Core.VirtualMachine.Tests',
@@ -293,4 +332,4 @@ code = using(['Microsoft.VisualStudio.TestTools.UnitTesting', 'zluaTests'],
 with open(r'..\..\..\zlua\projects\zluaTests\Core\VirtualMachine\lua_StateTests.cs', 'w') as f:
     f.write(join(code))
 
-# endregion
+    # endregion
