@@ -53,6 +53,16 @@ namespace ZoloLua.Core.VirtualMachine
             }
 
             /// <summary>
+            /// helper，前置的cast语法非常丑
+            /// </summary>
+            public TValue Value {
+                [DebuggerStepThrough]
+                get {
+                    return (TValue)this;
+                }
+            }
+
+            /// <summary>
             /// 指针+整数返回指针
             /// </summary>
             /// <param name="stkId"></param>
@@ -140,7 +150,7 @@ namespace ZoloLua.Core.VirtualMachine
 
             public override string ToString()
             {
-                return this.index.ToString();
+                return $"{index} {stack[index].ToString()}";
             }
 
             public override bool Equals(object obj)

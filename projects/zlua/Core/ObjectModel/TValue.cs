@@ -12,10 +12,6 @@ namespace ZoloLua.Core.ObjectModel
     // TODO light ud没了解足够，先不管
     /// <summary>
     /// lua对象
-    /// <list type="bullet">
-    ///     <item>item1</item>
-    ///     <item>item2</item>
-    /// </list>
     /// </summary>
     /// <remarks>TODO大小8+8+4=20B，其中指针大小4B或8B，enum大小默认4B，现在的样子是对齐的</remarks>
     public class TValue : IEquatable<TValue>
@@ -362,12 +358,14 @@ namespace ZoloLua.Core.ObjectModel
                     break;
 
                 case LuaTag.LUA_TBOOLEAN:
+                    return $"{tt} {B}";
                     break;
 
                 case LuaTag.LUA_TLIGHTUSERDATA:
                     break;
 
                 case LuaTag.LUA_TNUMBER:
+                    return $"{tt} {N.Value}";
                     break;
 
                 case LuaTag.LUA_TSTRING:

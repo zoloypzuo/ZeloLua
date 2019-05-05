@@ -494,13 +494,14 @@ namespace ZoloLua.Core.VirtualMachine
                     // if for index <= for limit {跳转到循环体第一行代码，并i=for index}
                     // <?=表示，当step为正数时，<=，当step为负数时，>=
                     case Opcode.OP_FORLOOP: {
-                            lua_Number step = stack[(int)i.A + 2].N;
+                            StkId raIndex = @base + (int)i.A;
+                            lua_Number step = (raIndex + 2).Value.N;
                             lua_Number idx = ra.N + step; /* increment index */
-                            lua_Number limit = stack[(int)i.A + 1].N;
+                            lua_Number limit = (raIndex + 1).Value.N;
                             if ((0 < step) ? idx <= limit : limit <= idx) {
                                 pc += i.SignedBx;  /* jump back */
                                 ra.N = idx;  /* update internal index... */
-                                stack[(int)i.A + 3].N = idx;  /* ...and external index */
+                                (raIndex + 3).Value.N = idx;  /* ...and external index */
                             }
                             continue;
                         }
@@ -509,9 +510,10 @@ namespace ZoloLua.Core.VirtualMachine
                     // for index-=for step，并跳转到forloop指令
                     // 参见2019-04-28 09-19-40.947648-for_num.lua
                     case Opcode.OP_FORPREP: {
+                            StkId raIndex = @base + (int)i.A;
                             TValue init = ra;
-                            TValue plimit = stack[(int)i.A + 1];
-                            TValue pstep = stack[(int)i.A + 2];
+                            TValue plimit = raIndex + 1;
+                            TValue pstep = raIndex + 2;
                             savedpc = pc;  /* next steps may throw errors */
                             lua_Number n1;
                             lua_Number n2;
@@ -619,23 +621,7 @@ namespace ZoloLua.Core.VirtualMachine
                     // 开始索引为A，个数为B
                     // vararg指令很像call指令
                     case Opcode.OP_VARARG: {
-                            //int a = (int)i.A;
-                            //int b = (int)i.B - 1;
-                            //CallInfo ci = this.ci;
-                            //int n = ci.@base - ci.func - cl.p.numparams;
-                            //if (b == LUA_MULTRET) {
-                            //    //check(n);
-                            //    ra = RA(i);  /* previous call may change the stack */
-                            //    b = n;
-                            //    top = a + n;
-                            //}
-                            //for (int j = 0; j < b; j++) {
-                            //    if (j < n) {
-                            //        stack[a + j].Value = stack[ci.@base - n + j];
-                            //    } else {
-                            //        stack[a + j].SetNil();
-                            //    }
-                            //}
+                            throw new NotImplementedException();
                             continue;
                         }
                     default:

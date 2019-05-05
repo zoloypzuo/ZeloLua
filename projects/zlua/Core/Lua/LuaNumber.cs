@@ -4,9 +4,10 @@ using ZoloLua.Core.ObjectModel;
 
 namespace ZoloLua.Core.Lua
 {
-    // lua浮点数类型
-    //
-    // 不支持配置成float
+    /// <summary>
+    /// lua浮点数类型
+    /// </summary>
+    /// <remarks>不支持配置成float</remarks>
     public struct lua_Number : IEquatable<lua_Number>
     {
         public double Value { get; set; }
@@ -51,21 +52,7 @@ namespace ZoloLua.Core.Lua
 
         public static implicit operator double(lua_Number n)
         {
-            return new lua_Number { Value = n };
-        }
-
-        //public static explicit operator LuaNumber(LuaIn n)
-        //{
-        //    return (Int64)n;
-        //}
-
-        public static bool ToFloat(TValue val)
-        {
-            //switch (val.Type) {
-            //    case LuaTypes.Number:return val.N;
-            //    default:
-            //}
-            return false;
+            return n.Value;
         }
 
         public static bool TryParse(string s, out lua_Number n)
