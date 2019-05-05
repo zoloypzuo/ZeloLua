@@ -1,36 +1,59 @@
-'''反汇编
-每次执行该脚本，lua源代码，简单汇编和完整汇编的代码会被整合输出到compile_out目录下名为对应时间戳的文件中
+'''
+# 自动生成测试系统
 
-chunkspy.file 反汇编程序
-learn.file 被反汇编的lua代码
-lua_asm.txt 简单汇编，输出的汇编代码，仅包含指令字节码
-exe_out_asm.txt 完整汇编，输出的预编译代码的反汇编代码，包含编译输出的所有信息
-luac.out 编译生成的临时文件
+## compile函数
 
-编译lua源代码
+compile函数使用以下文件
+* chunkspy.file 反汇编程序
+* learn.file 被反汇编的lua代码
+* lua_asm.txt 简单汇编，输出的汇编代码，仅包含指令字节码
+* exe_out_asm.txt 完整汇编，输出的预编译代码的反汇编代码，包含编译输出的所有信息
+* luac.out 编译生成的临时文件
+
+## 自动生成测试
 
 * 每个测试的源文本有一个路径
-* 整合的反汇编信息留在这个项目
-* 二进制chunk送到zlua的测试目录
-* 生成c#测试函数
-* 指定是文件还是字符串，暂时只管字符串
+  * 对于dostring，路径要自己制定
+  * 对于dofile，源文件本身有路径
+* 编译生成的反汇编信息被存储在这个项目的compile_out目录下
+* 二进制chunk被送到zlua的测试数据目录下
+* 自动生成c#测试函数，并将整个cs文件复制到zlua项目对应位置中
 
-指定路径标识，编译源文本，并输出到文件
 
-编译空串，字符串的空串测试函数的空串测试语句
-complie("", "string/empty/empty")
+## 编写测试
 
-编译文件，路径
-
+* 测试的数据来源很多，现阶段主要以《Lua设计与实现为主》
+* 它的优点是每个测试尽可能短小，生成我们想要测试的指令
+* 《自己动手实现Lua》正文里的例子是没法运行的
+* 我们从第6章开始慢慢照着书编写测试
+* 编写测试时注意python的字符串语法
+  * 源文本里有字符串的，用python的三点字符串，并加上r
+  * 用r就没法用\n了
+  * 不用r引号带转义很难复制到其他地方实验
+* 测试代码部分我们使用一种类似ini风格的区域注释法，在每个区域前用三点字符串标记区域
 '''
 import os
-import datetime
-import re
-from collections import defaultdict, namedtuple
-from pprint import pprint
+from collections import namedtuple
 from shutil import copyfile
 
+# region 内部实现
+
 zlua_chunk_base_path = '../../../zlua/data/chunk/'
+
+# 代表一条string test
+TestS = namedtuple(
+    'TestS',
+    [
+        'lua_code',
+        'path',
+        'comment'
+    ])
+
+# 路径集合，用来避免重复
+path_set = set()
+
+# cs string test
+css = {}
 
 
 def compile(lua_code: str, path: str):
@@ -68,10 +91,6 @@ def compile(lua_code: str, path: str):
             out.write('\n' + '-' * 30 + '\n')
             for i in in2:
                 out.write(i)
-
-
-# cs string test
-css = {}
 
 
 def join(l): return ''.join(l)
@@ -117,9 +136,6 @@ def newline(code: list): code.append('\n')
 def tab(code: list): return ['\t' + line for line in code]
 
 
-def using(namespaces: list, code): return ['using ' + namespace + ';\n' for namespace in namespaces] + code
-
-
 def namespace(namespace, code):
     return ['namespace ' + namespace,
             '{\n'] + \
@@ -127,29 +143,31 @@ def namespace(namespace, code):
            ['}\n']
 
 
-def _class(access, _class, code):
-    return ['public class ' + _class + '\n',
+def _class(_class, code, access='public'):
+    code = [access + ' class ' + _class + '\n',
             '{\n'] + \
            tab(code) + \
            ['}\n']
+    return code
 
 
-# 代表一条string test
-TestS = namedtuple('TestS', [
-    'lua_code',
-    'path',
-    'comment'
-])
+def using(namespaces: list, code): return ['using ' + namespace + ';\n' for namespace in namespaces] + code
 
 
-# TODO base不应该重复，否则会被替换掉，必须使用setlist0，setlist1
+# endregion
+
+# region 两个API函数，用于生成dostring和dofile测试
+
 def gs(lua_code: str, path: str, comment=''):
-    compile(lua_code, 'string/' + path)
+    string_path = 'string/' + path
+    assert string_path not in path_set, "base不应该重复，否则会被替换掉，必须使用setlist0，setlist1，避免重复"
+    path_set.add(string_path)
+    compile(lua_code, string_path)
     # 字符串的空串测试函数的空串测试语句
     _dir, base = os.path.split(path)
     if _dir not in css:
         css[_dir] = []
-    css[_dir].append(TestS(lua_code, 'string/' + path, comment))
+    css[_dir].append(TestS(lua_code, string_path, comment))
 
 
 def gf(path: str):
@@ -157,8 +175,15 @@ def gf(path: str):
         compile(f.read(), path)
 
 
+# endregion
+
+# region 测试
+
+'''空串和hello world'''
 gs('', 'empty/empty')
 gs('print("Hello World!")', 'helloworld/helloworld')
+
+'''函数调用'''
 
 
 def fc(s): return 'functionCall/' + s
@@ -171,6 +196,7 @@ gs("local function f() end\n"
    "local a,b,c = f(1,2,3,4)", fc('call'))
 gs("local a,b; return 1,a,b", fc('return'))
 gs("local a,b,c,d,e = 100, ...", fc('vararg'))
+
 # gs("local function f() end\n"
 #    "return f(a,b,c)", fc('tailcall'))
 # gs('''
@@ -196,27 +222,29 @@ gs("local a,b,c,d,e = 100, ...", fc('vararg'))
 #
 # ''', fc('self'))
 
+'''表'''
+
 
 def t(s): return 'table/' + s
 
-# 《Lua设计与实现》p72+ 优点是每个测试尽可能短小，生成我们想要测试的指令
-# 《自己动手实现Lua》正文里的例子是没法运行的
-#
-# 源文本里有字符串的，用python的三点字符串，并加上r
-# 用r就没法用\n了
-# 不用r引号带转义很难复制到其他地方实验
 
 gs('local p = {}', t('newtable'))
-gs('local p = {1,2}',t('setlist'))
-gs(r'local p = {["a"]=1}',t('settable'))
+gs('local p = {1,2}', t('setlist'))
+gs(r'local p = {["a"]=1}', t('settable'))
 gs(r'''
 local a = "a"
 local p = {[a]=1}
-''',t('settable1'))
+''', t('settable1'))
 gs(r'''
 local p = {["a"]=1}
 local b = p["a"]''', t('gettable'))
 # gs("t = {1,2,f()}", t('setlist1'), '结尾是函数调用或vararg')
+
+''''''
+
+# endregion
+
+# region main
 
 code = []
 for k, v in css.items():
@@ -244,3 +272,5 @@ code = using(['Microsoft.VisualStudio.TestTools.UnitTesting', 'zluaTests'],
                                  _class('public', 'lua_StateTests', code))))
 with open(r'..\..\..\zlua\projects\zluaTests\Core\VirtualMachine\lua_StateTests.cs', 'w') as f:
     f.write(join(code))
+
+# endregion

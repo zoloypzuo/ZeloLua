@@ -5,6 +5,7 @@
       <w>addr</w>
       <w>arglist</w>
       <w>chunkspy</w>
+      <w>dostring</w>
       <w>endpc</w>
       <w>exps</w>
       <w>ident</w>
