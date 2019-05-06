@@ -1,15 +1,14 @@
 ﻿using System.Collections.Generic;
-
 using ZoloLua.Core.ObjectModel;
 
 namespace ZoloLua.Core.VirtualMachine
 {
     /// <summary>
-    /// lua栈 TODO 全部移到lapi
+    ///     lua栈 TODO 全部移到lapi
     /// </summary>
     /// <remarks>
-    /// 注意还是要手工扩容的，用数组是不行的，用list后还得手工扩容，扩容是添加新的luaValue实例
-    /// 栈索引参见p54
+    ///     注意还是要手工扩容的，用数组是不行的，用list后还得手工扩容，扩容是添加新的luaValue实例
+    ///     栈索引参见p54
     /// </remarks>
     public partial class lua_State
     {

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-
 using ZoloLua.Core.ObjectModel;
 
 namespace ZoloLua.Core.VirtualMachine
@@ -9,7 +8,7 @@ namespace ZoloLua.Core.VirtualMachine
     public partial class lua_State
     {
         /// <summary>
-        /// helper，绑定此lua_State的stack和StkId
+        ///     helper，绑定此lua_State的stack和StkId
         /// </summary>
         /// <param name="index"></param>
         /// <returns></returns>
@@ -19,11 +18,11 @@ namespace ZoloLua.Core.VirtualMachine
         }
 
         /// <summary>
-        /// 模拟指针运算
+        ///     模拟指针运算
         /// </summary>
         private struct StkId : IEquatable<StkId>
         {
-            private List<TValue> stack;
+            private readonly List<TValue> stack;
             public int index;
 
             public StkId(List<TValue> stack, int index)
@@ -35,7 +34,7 @@ namespace ZoloLua.Core.VirtualMachine
             }
 
             /// <summary>
-            /// helper
+            ///     helper
             /// </summary>
             /// <param name="o"></param>
             [DebuggerStepThrough]
@@ -45,7 +44,7 @@ namespace ZoloLua.Core.VirtualMachine
             }
 
             /// <summary>
-            /// helper
+            ///     helper
             /// </summary>
             [DebuggerStepThrough]
             public void SetNil()
@@ -54,17 +53,17 @@ namespace ZoloLua.Core.VirtualMachine
             }
 
             /// <summary>
-            /// helper，前置的cast语法非常丑
+            ///     helper，前置的cast语法非常丑
             /// </summary>
             public TValue Value {
                 [DebuggerStepThrough]
                 get {
-                    return (TValue)this;
+                    return this;
                 }
             }
 
             /// <summary>
-            /// 指针+整数返回指针
+            ///     指针+整数返回指针
             /// </summary>
             /// <param name="stkId"></param>
             /// <param name="i"></param>
@@ -75,7 +74,7 @@ namespace ZoloLua.Core.VirtualMachine
             }
 
             /// <summary>
-            /// 指针-整数返回指针
+            ///     指针-整数返回指针
             /// </summary>
             /// <param name="stkId"></param>
             /// <param name="i"></param>
@@ -86,7 +85,7 @@ namespace ZoloLua.Core.VirtualMachine
             }
 
             /// <summary>
-            /// 指针之差
+            ///     指针之差
             /// </summary>
             /// <param name="l"></param>
             /// <param name="r"></param>
@@ -94,7 +93,7 @@ namespace ZoloLua.Core.VirtualMachine
             public static int operator -(StkId l, StkId r)
             {
                 // stkid是内部实现细节，因此错误是断言不是异常
-                Debug.Assert(Object.ReferenceEquals(l.stack, r.stack));
+                Debug.Assert(ReferenceEquals(l.stack, r.stack));
                 return l.index - r.index;
             }
 
@@ -111,7 +110,7 @@ namespace ZoloLua.Core.VirtualMachine
             }
 
             /// <summary>
-            /// 指针解引用
+            ///     指针解引用
             /// </summary>
             /// <param name="stkId"></param>
             public static implicit operator TValue(StkId stkId)
@@ -121,22 +120,22 @@ namespace ZoloLua.Core.VirtualMachine
 
             public static bool operator <(StkId l, StkId r)
             {
-                return Object.ReferenceEquals(l.stack, r.stack) && l.index < r.index;
+                return ReferenceEquals(l.stack, r.stack) && l.index < r.index;
             }
 
             public static bool operator >(StkId l, StkId r)
             {
-                return Object.ReferenceEquals(l.stack, r.stack) && l.index > r.index;
+                return ReferenceEquals(l.stack, r.stack) && l.index > r.index;
             }
 
             public static bool operator <=(StkId l, StkId r)
             {
-                return Object.ReferenceEquals(l.stack, r.stack) && l.index <= r.index;
+                return ReferenceEquals(l.stack, r.stack) && l.index <= r.index;
             }
 
             public static bool operator >=(StkId l, StkId r)
             {
-                return Object.ReferenceEquals(l.stack, r.stack) && l.index >= r.index;
+                return ReferenceEquals(l.stack, r.stack) && l.index >= r.index;
             }
 
             public static bool operator ==(StkId l, StkId r)
@@ -151,7 +150,7 @@ namespace ZoloLua.Core.VirtualMachine
 
             public override string ToString()
             {
-                return $"{index} {stack[index].ToString()}";
+                return $"{index} {stack[index]}";
             }
 
             public override bool Equals(object obj)
@@ -162,7 +161,7 @@ namespace ZoloLua.Core.VirtualMachine
             public bool Equals(StkId other)
             {
                 // stkid是内部实现细节，因此错误是断言不是异常
-                Debug.Assert(Object.ReferenceEquals(this.stack, other.stack));
+                Debug.Assert(ReferenceEquals(stack, other.stack));
                 return index == other.index;
             }
 

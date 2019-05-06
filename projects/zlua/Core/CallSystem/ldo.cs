@@ -3,7 +3,6 @@
 
 using System;
 using System.Diagnostics;
-
 using ZoloLua.Core.Configuration;
 using ZoloLua.Core.ObjectModel;
 
@@ -11,24 +10,6 @@ namespace ZoloLua.Core.VirtualMachine
 {
     public partial class lua_State
     {
-        private void luaD_checkstack(int n)
-        {
-            if (stack_last - top <= (n))
-                luaD_growstack(n);
-            //else condhardstacktests(luaD_reallocstack(L, L->stacksize - EXTRA_STACK - 1));
-        }
-
-        private void incr_top()
-        { luaD_checkstack(1); top++; }
-
-        [DebuggerStepThrough]
-        private int savestack(StkId p)
-        { return p.index; }
-
-        [DebuggerStepThrough]
-        private StkId restorestack(int n)
-        { return new StkId(stack, n); }
-
         //#define saveci(L,p)		((char *)(p) - (char *)L->base_ci)
         //#define restoreci(L,n)		((CallInfo *)((char *)L->base_ci + (n)))
 
@@ -37,13 +18,34 @@ namespace ZoloLua.Core.VirtualMachine
         //internal const int PCRC = 1;    /* 说明precall调用了一个c函数：did a call to a C function */
         //const int PCRYIELD = 2;
         /* results from luaD_precall */
-        private const int PCRLUA = 0;   /* initiated a call to a Lua function */
+        private const int PCRLUA = 0; /* initiated a call to a Lua function */
         private const int PCRC = 1; /* did a call to a C function */
-        private const int PCRYIELD = 2;	/* C funtion yielded */
+        private const int PCRYIELD = 2; /* C funtion yielded */
 
-        /* type of protected functions, to be ran by `runprotected' */
+        private void luaD_checkstack(int n)
+        {
+            if (stack_last - top <= n)
+                luaD_growstack(n);
+            //else condhardstacktests(luaD_reallocstack(L, L->stacksize - EXTRA_STACK - 1));
+        }
 
-        private delegate void Pfunc(lua_State L, object ud);
+        private void incr_top()
+        {
+            luaD_checkstack(1);
+            top++;
+        }
+
+        [DebuggerStepThrough]
+        private int savestack(StkId p)
+        {
+            return p.index;
+        }
+
+        [DebuggerStepThrough]
+        private StkId restorestack(int n)
+        {
+            return new StkId(stack, n);
+        }
 
         // header public api
         // int luaD_protectedparser (lua_State *L, ZIO *z, const char *name);
@@ -71,7 +73,6 @@ namespace ZoloLua.Core.VirtualMachine
         }
 
         /// <summary>
-        ///
         /// </summary>
         /// <param name="p"></param>
         /// <param name="actual"></param>
@@ -83,20 +84,20 @@ namespace ZoloLua.Core.VirtualMachine
             int nfixargs = p.numparams;
             StkId @base, @fixed;
             for (; actual < nfixargs; ++actual)
-                (top++).SetNil();
+                top++.SetNil();
             /* move fixed parameters to final position */
-            @fixed = top - actual;  /* first fixed argument */
-            @base = top;  /* final position of first argument */
+            @fixed = top - actual; /* first fixed argument */
+            @base = top; /* final position of first argument */
             for (i = 0; i < nfixargs; i++) {
-                (top++).Set(@fixed + i);
+                top++.Set(@fixed + i);
                 (@fixed + i).SetNil();
             }
             return @base;
         }
 
         /// <summary>
-        /// tryfuncTM; 尝试返回元方法__call
-        /// 我们暂时不管metacall
+        ///     tryfuncTM; 尝试返回元方法__call
+        ///     我们暂时不管metacall
         /// </summary>
         private StkId tryfuncTM(StkId func)
         {
@@ -111,8 +112,8 @@ namespace ZoloLua.Core.VirtualMachine
             top++;
             //TODO clua中save和restore是保存func指针
             //我感觉是多余的，防止编程错误
-            func = restorestack(funcr);/* previous call may change stack */
-            func.Set(tm);/* tag method is the new function to be called */
+            func = restorestack(funcr); /* previous call may change stack */
+            func.Set(tm); /* tag method is the new function to be called */
             return func;
         }
 
@@ -149,9 +150,7 @@ namespace ZoloLua.Core.VirtualMachine
             if (nCcalls >= LuaConfiguration.LUAI_MAXCCALLS)
                 throw new Exception("C stack overflow");
             // 因为Closure实例cl和实参已经被压栈，可以执行这个cl
-            if (luaD_precall(func, nResults) == PCRLUA) {
-                luaV_execute(nexeccalls: 1);
-            }
+            if (luaD_precall(func, nResults) == PCRLUA) luaV_execute(1);
             --nCcalls;
         }
 
@@ -165,9 +164,7 @@ namespace ZoloLua.Core.VirtualMachine
         private int luaD_precall(StkId func, int nresults)
         {
             TValue funcValue = func;
-            if (!funcValue.IsFunction) { /* `func' is not a function? */
-                func = tryfuncTM(func);/* check the `function' tag method */
-            }
+            if (!funcValue.IsFunction) func = tryfuncTM(func); /* check the `function' tag method */
             int funcr = savestack(func);
             ci.savedpc = savedpc;
             /* Lua function? prepare its call */
@@ -177,16 +174,16 @@ namespace ZoloLua.Core.VirtualMachine
                 Proto p = cl.p;
                 luaD_checkstack(p.maxstacksize);
                 func = restorestack(funcr);
-                if (!p.IsVararg) {  /* no varargs? */
+                if (!p.IsVararg) { /* no varargs? */
                     @base = func + 1;
                     if (top > @base + p.numparams)
                         top = @base + p.numparams;
-                } else {  /* vararg function */
-                    int nargs = (top - func) - 1;
+                } else { /* vararg function */
+                    int nargs = top - func - 1;
                     @base = adjust_varargs(p, nargs);
-                    func = restorestack(funcr);  /* previous call may change the stack */
+                    func = restorestack(funcr); /* previous call may change the stack */
                 }
-                CallInfo ci = new CallInfo()
+                CallInfo ci = new CallInfo
                 {
                     func = func,
                     @base = @base,
@@ -195,7 +192,7 @@ namespace ZoloLua.Core.VirtualMachine
                 this.@base = @base;
                 CallStack.Push(ci); /* now `enter' new function */
                 Debug.Assert(ci.top <= stack_last);
-                code = p.code;  /* starting point */
+                code = p.code; /* starting point */
                 savedpc = 0;
                 ci.tailcalls = 0;
                 ci.nresults = nresults;
@@ -208,10 +205,10 @@ namespace ZoloLua.Core.VirtualMachine
             }
             /* if is a C function, call it */
             else {
-                luaD_checkstack(LUA_MINSTACK);  /* ensure minimum stack size */
+                luaD_checkstack(LUA_MINSTACK); /* ensure minimum stack size */
                 func = restorestack(funcr);
                 StkId @base = func + 1;
-                CallInfo ci = new CallInfo()
+                CallInfo ci = new CallInfo
                 {
                     func = func,
                     top = top + LUA_MINSTACK,
@@ -222,19 +219,18 @@ namespace ZoloLua.Core.VirtualMachine
                 CallStack.Push(ci); /* now `enter' new function */
                 Debug.Assert(ci.top <= stack_last);
                 funcValue = func;
-                int n = (funcValue.Cl as CSharpClosure).f(this);  /* do the actual call */
-                if (n < 0)  /* yielding? */
+                int n = (funcValue.Cl as CSharpClosure).f(this); /* do the actual call */
+                if (n < 0) /* yielding? */ {
                     return PCRYIELD;
-                else {
-                    luaD_poscall(top - n);
-                    return PCRC;
                 }
+                luaD_poscall(top - n);
+                return PCRC;
             }
         }
 
         /// <summary>
-        /// 从C或lua函数返回
-        /// `resultIndex是返回值相对于L.base的偏移(很容易错，因为没有指针）
+        ///     从C或lua函数返回
+        ///     `resultIndex是返回值相对于L.base的偏移(很容易错，因为没有指针）
         /// </summary>
         private int luaD_poscall(StkId firstResult)
         {
@@ -242,7 +238,7 @@ namespace ZoloLua.Core.VirtualMachine
             int wanted, i;
             // ci退栈
             CallInfo ci = CallStack.Pop();
-            res = ci.func;  /* res == final position of 1st result */
+            res = ci.func; /* res == final position of 1st result */
             wanted = ci.nresults;
             @base = this.ci.@base; /* restore base */
             TValue funcValue = this.ci.func;
@@ -251,15 +247,15 @@ namespace ZoloLua.Core.VirtualMachine
             savedpc = this.ci.savedpc;
             /* move results to correct place */
             for (i = wanted; i != 0 && firstResult < top; i--)
-                (res++).Set(firstResult++);
+                res++.Set(firstResult++);
             while (i-- > 0)
-                (res++).SetNil();
+                res++.SetNil();
             top = res;
-            return (wanted - LUA_MULTRET);  /* 0 iff wanted == LUA_MULTRET */
+            return wanted - LUA_MULTRET; /* 0 iff wanted == LUA_MULTRET */
         }
 
         /// <summary>
-        /// 调用<c>func</c>，参数是<c>u</c>
+        ///     调用<c>func</c>，参数是<c>u</c>
         /// </summary>
         /// <param name="L"></param>
         /// <param name="func"></param>
@@ -268,7 +264,7 @@ namespace ZoloLua.Core.VirtualMachine
         /// <param name="ef"></param>
         /// <returns></returns>
         private int luaD_pcall(Pfunc func, object u,
-                int old_top, int ef)
+                               int old_top, int ef)
         {
             // 同样的，注释掉的代码太复杂了，都是错误处理
             int status;
@@ -308,5 +304,9 @@ namespace ZoloLua.Core.VirtualMachine
             f(this, ud);
             return 0;
         }
+
+        /* type of protected functions, to be ran by `runprotected' */
+
+        private delegate void Pfunc(lua_State L, object ud);
     }
 }

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.IO;
 using System.Text;
-
 using ZoloLua.Core.InstructionSet;
 using ZoloLua.Core.Lua;
 using ZoloLua.Core.ObjectModel;
@@ -12,43 +11,33 @@ using ZoloLua.Core.ObjectModel;
 namespace ZoloLua.Core.Undumper
 {
     /// <summary>
-    ///
     /// </summary>
     /// <remarks>
-    /// 《Lua设计与实现》p57
-    /// <list type="bullet">
-    ///     <item>chunk的数据格式是lua内部实现细节，并没有标准，以lua源代码实现为准</item>
-    ///     <item>当校验失败时，简单地拒接chunk</item>
-    ///     <item>chunk中字符串编码是utf8</item>
-    ///     <item>
-    ///     chunk数值类型规格表如下：
-    ///     lua类型 | c语言类型 | c#类型 | 大小
-    ///     ====== | ======== | ===== | ====
-    ///     字节 | unsigned char | byte | 1
-    ///     整数 | int | Int32 | 4
-    ///     size_t | size_t | int | 4 or 8
-    ///     LuaInteger | long long | Int64 | 8
-    ///     LuaNumber | double | double | 8
-    ///     </item>
-    ///     <item>
-    ///     chunk支持4B和8B的size_t大小，但zlua中使用int代替size_t
-    ///     参见 https://stackoverflow.com/questions/32906774/what-is-equal-to-the-c-size-t-in-c-sharp
-    ///     chunk使用的size_t时被cast到int，有抛出溢出异常的可能
-    ///     这里只是用checked语法简单地保证抛出，但是概率很小，除非使用超过2G大小的数组
-    ///     </item>
-    /// </list>
+    ///     《Lua设计与实现》p57
+    ///     <list type="bullet">
+    ///         <item>chunk的数据格式是lua内部实现细节，并没有标准，以lua源代码实现为准</item>
+    ///         <item>当校验失败时，简单地拒接chunk</item>
+    ///         <item>chunk中字符串编码是utf8</item>
+    ///         <item>
+    ///             chunk数值类型规格表如下：
+    ///             lua类型 | c语言类型 | c#类型 | 大小
+    ///             ====== | ======== | ===== | ====
+    ///             字节 | unsigned char | byte | 1
+    ///             整数 | int | Int32 | 4
+    ///             size_t | size_t | int | 4 or 8
+    ///             LuaInteger | long long | Int64 | 8
+    ///             LuaNumber | double | double | 8
+    ///         </item>
+    ///         <item>
+    ///             chunk支持4B和8B的size_t大小，但zlua中使用int代替size_t
+    ///             参见 https://stackoverflow.com/questions/32906774/what-is-equal-to-the-c-size-t-in-c-sharp
+    ///             chunk使用的size_t时被cast到int，有抛出溢出异常的可能
+    ///             这里只是用checked语法简单地保证抛出，但是概率很小，除非使用超过2G大小的数组
+    ///         </item>
+    ///     </list>
     /// </remarks>
     internal static class luaU
     {
-        #region 公有属性
-
-        public static bool IsSizeofCSizeT8 { get; private set; } = true;
-
-        // chunk文件首字符，用于/loadfile/检查文件是否是chunk
-        public const char FirstChar = '\x1b'; // LUA_SIGNATURE[0]
-
-        #endregion 公有属性
-
         #region 公有方法
 
         public static Proto Undump(Stream data)
@@ -62,28 +51,32 @@ namespace ZoloLua.Core.Undumper
 
         #endregion 公有方法
 
+        #region 公有属性
+
+        public static bool IsSizeofCSizeT8 { get; private set; } = true;
+
+        // chunk文件首字符，用于/loadfile/检查文件是否是chunk
+        public const char FirstChar = '\x1b'; // LUA_SIGNATURE[0]
+
+        #endregion 公有属性
+
         #region 私有方法
 
         private static int ReadSizeT(BinaryReader reader)
         {
-            if (IsSizeofCSizeT8) {
+            if (IsSizeofCSizeT8)
                 return checked((int)reader.ReadUInt64());
-            } else {
-                return checked((int)reader.ReadUInt32());
-            }
+            return checked((int)reader.ReadUInt32());
         }
 
         private static string ReadString(BinaryReader reader)
         {
             // 确定字符串长度
             int size = ReadSizeT(reader);
-            if (size == 0) {
-                return null;
-            } else {
-                string s = new String(reader.ReadChars(size - 1));
-                reader.ReadChar();  /* remove trailing '\0' */
-                return s;
-            }
+            if (size == 0) return null;
+            string s = new string(reader.ReadChars(size - 1));
+            reader.ReadChar(); /* remove trailing '\0' */
+            return s;
         }
 
         private static lua_Number ReadLuaNumber(BinaryReader reader)
@@ -100,7 +93,7 @@ namespace ZoloLua.Core.Undumper
         private const byte LUAC_FORMAT = 0;
 
         // "\x19\x93\r\n\x1a\n"
-        private static readonly byte[] LUAC_DATA = new byte[] { 0x19, 0x93, 0x0d, 0x0a, 0x1a, 0x0a };
+        private static readonly byte[] LUAC_DATA = { 0x19, 0x93, 0x0d, 0x0a, 0x1a, 0x0a };
 
         private const uint CINT_SIZE = 4;
         private const uint CSIZET_SIZE_32 = 4;
@@ -145,44 +138,24 @@ namespace ZoloLua.Core.Undumper
                 numberFlag = reader.ReadByte()
             };
 
-            if (header.signature != LUA_SIGNATURE) {
-                throw new UndumpException("not a precompiled header");
-            }
-            if (header.version != LUAC_VERSION) {
-                throw new UndumpException("version mismatch");
-            }
-            if (header.format != LUAC_FORMAT) {
-                throw new UndumpException("format mismatch");
-            }
-            if (header.endianness != 1) {
-                throw new UndumpException("");
-            }
-            if (header.cintSize != CINT_SIZE) {
-                throw new UndumpException("int size mismatch");
-            }
-            if (!(header.sizetSize == CSIZET_SIZE_32 || header.sizetSize == CSIZET_SIZE_64)) {
+            if (header.signature != LUA_SIGNATURE) throw new UndumpException("not a precompiled header");
+            if (header.version != LUAC_VERSION) throw new UndumpException("version mismatch");
+            if (header.format != LUAC_FORMAT) throw new UndumpException("format mismatch");
+            if (header.endianness != 1) throw new UndumpException("");
+            if (header.cintSize != CINT_SIZE) throw new UndumpException("int size mismatch");
+            if (!(header.sizetSize == CSIZET_SIZE_32 || header.sizetSize == CSIZET_SIZE_64))
                 throw new UndumpException("size_t size mismatch");
-            } else {
-                IsSizeofCSizeT8 = header.sizetSize == CSIZET_SIZE_64;
-            }
-            if (header.instructionSize != INSTRUCTION_SIZE) {
-                throw new UndumpException("instruction size mismatch");
-            }
-            if (header.luaNumberSize != LUA_NUMBER_SIZE) {
-                throw new UndumpException("lua_Number size mismatch");
-            }
-            if (header.numberFlag != 0) {
-                throw new UndumpException("=?");
-            }
+            IsSizeofCSizeT8 = header.sizetSize == CSIZET_SIZE_64;
+            if (header.instructionSize != INSTRUCTION_SIZE) throw new UndumpException("instruction size mismatch");
+            if (header.luaNumberSize != LUA_NUMBER_SIZE) throw new UndumpException("lua_Number size mismatch");
+            if (header.numberFlag != 0) throw new UndumpException("=?");
         }
 
         private static Proto ReadProto(BinaryReader reader, string parentSource)
         {
             string source = ReadString(reader);
-            if (source == null) {
-                source = parentSource;
-            }
-            var p = new Proto
+            if (source == null) source = parentSource;
+            Proto p = new Proto
             {
                 source = source,
                 linedefined = reader.ReadInt32(),
@@ -203,64 +176,54 @@ namespace ZoloLua.Core.Undumper
 
         private static string[] ReadUpvalueNames(BinaryReader reader)
         {
-            var names = new string[reader.ReadInt32()];
-            for (int i = 0; i < names.Length; i++) {
-                names[i] = ReadString(reader);
-            }
+            string[] names = new string[reader.ReadInt32()];
+            for (int i = 0; i < names.Length; i++) names[i] = ReadString(reader);
             return names;
         }
 
         private static LocVar[] ReadLocVars(BinaryReader reader)
         {
-            var locVars = new LocVar[reader.ReadInt32()];
-            for (int i = 0; i < locVars.Length; i++) {
+            LocVar[] locVars = new LocVar[reader.ReadInt32()];
+            for (int i = 0; i < locVars.Length; i++)
                 locVars[i] = new LocVar
                 {
                     varname = ReadString(reader),
                     startpc = reader.ReadInt32(),
                     endpc = reader.ReadInt32()
                 };
-            }
             return locVars;
         }
 
         private static int[] ReadLineInfo(BinaryReader reader)
         {
-            var lineInfo = new int[reader.ReadInt32()];
-            for (int i = 0; i < lineInfo.Length; i++) {
-                lineInfo[i] = reader.ReadInt32();
-            }
+            int[] lineInfo = new int[reader.ReadInt32()];
+            for (int i = 0; i < lineInfo.Length; i++) lineInfo[i] = reader.ReadInt32();
             return lineInfo;
         }
 
         private static Proto[] ReadProtos(BinaryReader reader, string parentSouce)
         {
-            var protos = new Proto[reader.ReadInt32()];
-            for (int i = 0; i < protos.Length; i++) {
-                protos[i] = ReadProto(reader, parentSouce);
-            }
+            Proto[] protos = new Proto[reader.ReadInt32()];
+            for (int i = 0; i < protos.Length; i++) protos[i] = ReadProto(reader, parentSouce);
             return protos;
         }
 
         private static UpVal[] ReadUpvalues(BinaryReader reader)
         {
-            var upvals = new UpVal[reader.ReadUInt32()];
-            for (int i = 0; i < upvals.Length; i++) {
+            UpVal[] upvals = new UpVal[reader.ReadUInt32()];
+            for (int i = 0; i < upvals.Length; i++)
                 upvals[i] = new UpVal
                 {
                     Instack = reader.ReadByte(),
                     Idx = reader.ReadByte()
                 };
-            }
             return upvals;
         }
 
         private static TValue[] ReadConstants(BinaryReader reader)
         {
-            var k = new TValue[reader.ReadInt32()];
-            for (int i = 0; i < k.Length; i++) {
-                k[i] = ReadConstant(reader);
-            }
+            TValue[] k = new TValue[reader.ReadInt32()];
+            for (int i = 0; i < k.Length; i++) k[i] = ReadConstant(reader);
             return k;
         }
 
@@ -287,9 +250,7 @@ namespace ZoloLua.Core.Undumper
         private static Bytecode[] ReadCode(BinaryReader reader)
         {
             Bytecode[] code = new Bytecode[reader.ReadInt32()];
-            for (int i = 0; i < code.Length; i++) {
-                code[i] = new Bytecode(reader.ReadUInt32());
-            }
+            for (int i = 0; i < code.Length; i++) code[i] = new Bytecode(reader.ReadUInt32());
             return code;
         }
 

@@ -7,7 +7,7 @@ namespace ZoloLua.Core.Lua
     // 不支持配置成比如int32
     public struct lua_Integer : IEquatable<lua_Integer>
     {
-        public Int64 Value { get; set; }
+        public long Value { get; set; }
 
         public override bool Equals(object obj)
         {
@@ -21,7 +21,7 @@ namespace ZoloLua.Core.Lua
 
         public override int GetHashCode()
         {
-            var hashCode = -783812246;
+            int hashCode = -783812246;
             hashCode = hashCode * -1521134295 + base.GetHashCode();
             hashCode = hashCode * -1521134295 + Value.GetHashCode();
             return hashCode;
@@ -42,27 +42,27 @@ namespace ZoloLua.Core.Lua
             return !i1.Equals(i2);
         }
 
-        public static implicit operator lua_Integer(Int64 i)
+        public static implicit operator lua_Integer(long i)
         {
             return new lua_Integer { Value = i };
         }
 
-        public static implicit operator Int64(lua_Integer i)
+        public static implicit operator long(lua_Integer i)
         {
             return i.Value;
         }
 
         public static explicit operator lua_Integer(lua_Number n)
         {
-            return (Int64)n;
+            return (long)n;
         }
 
         // TODO，先进行词法验证，luanumber也是，lua和c#标准不同
         public static bool TryParse(string s, out lua_Integer i)
         {
-            Int64 outI;
+            long outI;
             bool b;
-            b = Int64.TryParse(s, out outI);
+            b = long.TryParse(s, out outI);
             i = outI;
             return b;
         }

@@ -1,5 +1,4 @@
 ﻿using System;
-
 using ZoloLua.Core.Lua;
 using ZoloLua.Core.ObjectModel;
 

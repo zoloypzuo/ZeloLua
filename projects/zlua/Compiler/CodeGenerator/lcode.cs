@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-
 using ZoloLua.Core.InstructionSet;
 
 namespace ZoloLua.Compiler.CodeGenerator
@@ -18,47 +17,42 @@ namespace ZoloLua.Compiler.CodeGenerator
     // 我现在就是跟着《go lua》写，也不要管clua，因为作者是很可靠的
     internal class upvalInfo
     {
+        public int index;
         public int locVarSlot;
         public int upvalIndex;
-        public int index;
     }
 
     internal class locVarInfo
     {
-        public locVarInfo prev;
+        // 是否被闭包捕获
+        public bool captured;
         public string name;
+        public locVarInfo prev;
 
         // 作用域层次
         public int scopeLv;
 
         // 与这个名字绑定的寄存器索引
         public int slot;
-
-        // 是否被闭包捕获
-        public bool captured;
     }
 
     internal class funcInfo
     {
-        public funcInfo parent;
-        public List<funcInfo> subFuncs;
+        // break表 p323 17.1.4
+        public List<List<int>> breaks;
 
-        #region 寄存器分配
+        // nil bool number string
+        // 常量值到常量表索引的映射
+        public Dictionary<object, int> constants;
 
-        // 每一个局部变量和vm计算的临时变量都会分配一个寄存器
-        // 局部变量退出作用域
-        // 和临时变量计算完毕时回收寄存器
-        //
-        // 已经分配的寄存器数量
-        public int usedRegs;
+        public List<Bytecode> insts;
+        public bool isVararg;
+        public int lastLine;
+        public int line;
+        public List<int> lineNums;
 
-        // 函数需要的最大的寄存器数量，必要时扩容
-        public int maxRegs;
-
-        #endregion 寄存器分配
-
-        // 当前作用域层次，初始值为0，每进入新作用域就递增
-        public int scopeLv;
+        // 当前生效的局部变量 是不是指已经声明的？？？
+        public Dictionary<string, locVarInfo> locNames;
 
         // 变量作用域是纯粹的栈
         // 每个栈代表一个同名的局部变量
@@ -83,16 +77,15 @@ namespace ZoloLua.Compiler.CodeGenerator
         //   }
         // local a
         public List<locVarInfo> locVars;
+        public int numParams;
+        public funcInfo parent;
 
-        // 当前生效的局部变量 是不是指已经声明的？？？
-        public Dictionary<string, locVarInfo> locNames;
+        // 当前作用域层次，初始值为0，每进入新作用域就递增
+        public int scopeLv;
+        public List<funcInfo> subFuncs;
 
         // upvalue表 p324 17.1.5
         public Dictionary<string, upvalInfo> upvalues;
-
-        // nil bool number string
-        // 常量值到常量表索引的映射
-        public Dictionary<object, int> constants;
 
         internal void closeOpenUpvals()
         {
@@ -101,16 +94,6 @@ namespace ZoloLua.Compiler.CodeGenerator
             //    emitJmp(a, 0);
             //}
         }
-
-        // break表 p323 17.1.4
-        public List<List<int>> breaks;
-
-        public List<Bytecode> insts;
-        public List<int> lineNums;
-        public int line;
-        public int lastLine;
-        public int numParams;
-        public bool isVararg;
 
         // 由于构造的复杂性，初始化在ctor完成
         //public funcInfo(funcInfo parent, functiondefExpContext fd)
@@ -141,13 +124,10 @@ namespace ZoloLua.Compiler.CodeGenerator
         public int indexOfConstant(object constant)
         {
             int outI;
-            if (constants.TryGetValue(constant, out outI)) {
-                return outI;
-            } else {
-                int i = constants.Count;
-                constants[constant] = i;
-                return i;
-            }
+            if (constants.TryGetValue(constant, out outI)) return outI;
+            int i = constants.Count;
+            constants[constant] = i;
+            return i;
         }
 
         /* registers */
@@ -159,45 +139,30 @@ namespace ZoloLua.Compiler.CodeGenerator
         public int allocReg()
         {
             usedRegs++;
-            if (usedRegs >= 255) {
-                throw new Exception("function or expression needs too many registers");
-            }
-            if (usedRegs > maxRegs) {
-                maxRegs = usedRegs;
-            }
+            if (usedRegs >= 255) throw new Exception("function or expression needs too many registers");
+            if (usedRegs > maxRegs) maxRegs = usedRegs;
             return usedRegs - 1;
         }
 
         public void freeReg()
         {
-            if (usedRegs <= 0) {
+            if (usedRegs <= 0)
                 throw new Exception("usedRegs <= 0 !");
-            } else {
-                usedRegs--;
-            }
+            usedRegs--;
         }
 
         public int allocRegs(int n)
         {
-            if (n <= 0) {
-                throw new Exception("n <= 0 !");
-            } else {
-                for (int i = 0; i < n; i++) {
-                    allocReg();
-                }
-                return usedRegs - n;
-            }
+            if (n <= 0) throw new Exception("n <= 0 !");
+            for (int i = 0; i < n; i++) allocReg();
+            return usedRegs - n;
         }
 
         public void freeRegs(int n)
         {
-            if (n < 0) {
+            if (n < 0)
                 throw new Exception("n<0");
-            } else {
-                for (int i = 0; i < n; i++) {
-                    freeReg();
-                }
-            }
+            for (int i = 0; i < n; i++) freeReg();
         }
 
         /* lexical scope */
@@ -206,16 +171,15 @@ namespace ZoloLua.Compiler.CodeGenerator
         public void enterScope(bool breakable)
         {
             scopeLv++;
-            if (breakable) {
+            if (breakable)
                 breaks.Add(new List<int>());
-            } else {
+            else
                 breaks.Add(null);
-            }
         }
 
         public void exitScope()
         {
-            var pendingBreakJmps = breaks[breaks.Count - 1];
+            List<int> pendingBreakJmps = breaks[breaks.Count - 1];
             //breaks.pop()
 
             //var a = getJmpArgA();
@@ -227,11 +191,9 @@ namespace ZoloLua.Compiler.CodeGenerator
 
             scopeLv--;
 
-            foreach (var item in locNames) {
-                var locVar = item.Value;
-                if (locVar.scopeLv > scopeLv) { // out of scope
-                    removeLocVar(locVar);
-                }
+            foreach (KeyValuePair<string, locVarInfo> item in locNames) {
+                locVarInfo locVar = item.Value;
+                if (locVar.scopeLv > scopeLv) removeLocVar(locVar);
             }
         }
 
@@ -261,12 +223,12 @@ namespace ZoloLua.Compiler.CodeGenerator
         // 在当前作用域添加一个局部变量，返回分配给它的寄存器索引
         public int addLocVar(string name)
         {
-            var newVar = new locVarInfo
+            locVarInfo newVar = new locVarInfo
             {
                 name = name,
                 prev = locNames[name],
                 scopeLv = scopeLv,
-                slot = allocReg(),
+                slot = allocReg()
             };
 
             locVars.Add(newVar);
@@ -279,21 +241,18 @@ namespace ZoloLua.Compiler.CodeGenerator
         public int slotOfLocVar(string name)
         {
             locVarInfo outLocVarInfo;
-            if (locNames.TryGetValue(name, out outLocVarInfo)) {
+            if (locNames.TryGetValue(name, out outLocVarInfo))
                 return outLocVarInfo.slot;
-            } else {
-                return -1;
-            }
+            return -1;
         }
 
         public void addBreakJmp(int pc)
         {
-            for (int i = scopeLv; i >= 0; i--) {
+            for (int i = scopeLv; i >= 0; i--)
                 if (breaks[i] != null) { // breakable
                     breaks[i].Add(pc);
                     return;
                 }
-            }
 
             throw new Exception("<break> at line ? not inside a loop!");
         }
@@ -311,5 +270,19 @@ namespace ZoloLua.Compiler.CodeGenerator
         {
             //self.emitABC(OP_RETURN, a, n + 1, 0)
         }
+
+        #region 寄存器分配
+
+        // 每一个局部变量和vm计算的临时变量都会分配一个寄存器
+        // 局部变量退出作用域
+        // 和临时变量计算完毕时回收寄存器
+        //
+        // 已经分配的寄存器数量
+        public int usedRegs;
+
+        // 函数需要的最大的寄存器数量，必要时扩容
+        public int maxRegs;
+
+        #endregion 寄存器分配
     }
 }

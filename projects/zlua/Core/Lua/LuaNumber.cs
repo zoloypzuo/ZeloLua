@@ -3,7 +3,7 @@
 namespace ZoloLua.Core.Lua
 {
     /// <summary>
-    /// lua浮点数类型
+    ///     lua浮点数类型
     /// </summary>
     /// <remarks>不支持配置成float</remarks>
     public struct lua_Number : IEquatable<lua_Number>
@@ -22,7 +22,7 @@ namespace ZoloLua.Core.Lua
 
         public override int GetHashCode()
         {
-            var hashCode = -783812246;
+            int hashCode = -783812246;
             hashCode = hashCode * -1521134295 + base.GetHashCode();
             hashCode = hashCode * -1521134295 + Value.GetHashCode();
             return hashCode;
@@ -57,7 +57,7 @@ namespace ZoloLua.Core.Lua
         {
             double outN;
             bool b;
-            b = Double.TryParse(s, out outN);
+            b = double.TryParse(s, out outN);
             n = outN;
             return b;
         }

@@ -1,13 +1,11 @@
-﻿using Newtonsoft.Json;
-
-using System.Diagnostics;
-
+﻿using System.Diagnostics;
+using Newtonsoft.Json;
 using ZoloLua.Core.VirtualMachine;
 
 namespace ZoloLua.Core.InstructionSet
 {
     /// <summary>
-    /// 字节码指令
+    ///     字节码指令
     /// </summary>
     internal struct Bytecode
     {
@@ -87,7 +85,7 @@ namespace ZoloLua.Core.InstructionSet
         // 创建一个从某一位置开始若干位1的掩码
         private static uint Mask1(uint n, uint pos)
         {
-            return (~((~(uint)0) << (int)n)) << (int)pos;
+            return ~(~(uint)0 << (int)n) << (int)pos;
         }
 
         // 创建一个从某一位置开始若干位0的掩码
@@ -99,16 +97,16 @@ namespace ZoloLua.Core.InstructionSet
         // 得到从某一位置开始若干位的无符号整数值
         private uint Get(uint n, uint pos)
         {
-            var a = (Value >> (int)pos);
-            var b = Mask1(n, 0);
-            return (a & b);
+            uint a = Value >> (int)pos;
+            uint b = Mask1(n, 0);
+            return a & b;
         }
 
         // 将某一位置开始若干位设为x
         private void Set(uint x, uint n, uint pos)
         {
-            var a = Value & Mask0(n, pos);
-            var b = (x << (int)pos) & Mask1(n, pos);
+            uint a = Value & Mask0(n, pos);
+            uint b = (x << (int)pos) & Mask1(n, pos);
             Value = a | b;
         }
 
@@ -172,7 +170,7 @@ namespace ZoloLua.Core.InstructionSet
         private const uint SizeB = 9;
         private const uint SizeBx = SizeC + SizeB;
         private const uint SizeA = 8;
-        private const uint SIZE_Ax = (SizeC + SizeB + SizeA);
+        private const uint SIZE_Ax = SizeC + SizeB + SizeA;
         private const uint SizeOp = 6;
 
         private const uint PosOp = 0;
@@ -198,8 +196,8 @@ namespace ZoloLua.Core.InstructionSet
 
         public override string ToString()
         {
-            var c = BytecodeTool.GetOpmode(Opcode);
-            var op = Opcode;
+            opmode c = BytecodeTool.GetOpmode(Opcode);
+            Opcode op = Opcode;
             switch (c.OpMode) {
                 case OpMode.IABC:
                     return $"{op} A: {A} B: {B} C: {C}";

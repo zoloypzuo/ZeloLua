@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-
 using static ZoloLua.Core.VirtualMachine.lua_State;
 
 namespace ZoloLua.Core.ObjectModel
@@ -19,8 +18,6 @@ namespace ZoloLua.Core.ObjectModel
         public Proto p;
         public List<UpVal> upvals;
 
-        public int NumUpvals { get { return upvals.Count; } }
-
         // luaF_newLclosure
         public LuaClosure(Table env, int nUpvals, Proto p) : base(env)
         {
@@ -30,6 +27,8 @@ namespace ZoloLua.Core.ObjectModel
             //    p.Upvalues[i] = new UpVal();
             //}
         }
+
+        public int NumUpvals => upvals.Count;
     }
 
     internal class CSharpClosure : Closure
@@ -37,14 +36,10 @@ namespace ZoloLua.Core.ObjectModel
         public lua_CFunction f;
         public List<TValue> upvalue;
 
-        public int nupvalues {
-            get {
-                return upvalue.Count;
-            }
-        }
-
         public CSharpClosure() : base(null)
         {
         }
+
+        public int nupvalues => upvalue.Count;
     }
 }

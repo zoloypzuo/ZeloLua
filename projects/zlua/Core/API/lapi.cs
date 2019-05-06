@@ -7,9 +7,7 @@
 // * 扩展方法：只能访问public内容
 // 显然，partial会好一些，这是api，不是辅助api，不是单纯包装，因此必须要在类内，namespace肯定要一样，至于怎么构建namespace之后在考虑
 
-using System;
 using System.Diagnostics;
-
 using ZoloLua.Core.Lua;
 using ZoloLua.Core.ObjectModel;
 
@@ -40,7 +38,7 @@ namespace ZoloLua.Core.VirtualMachine
         [DebuggerStepThrough]
         private void checkresults(int na, int nr)
         {
-            Debug.Assert((nr) == LUA_MULTRET || (ci.top - top >= (nr) - (na)));
+            Debug.Assert(nr == LUA_MULTRET || ci.top - top >= nr - na);
         }
 
         private void lua_call(int nargs, int nresults)
@@ -53,20 +51,10 @@ namespace ZoloLua.Core.VirtualMachine
             adjustresults(nresults);
         }
 
-        /*
-        ** Execute a protected call.
-        */
-
-        private struct CallS
-        {  /* data to `f_call' */
-            public StkId func;
-            public int nresults;
-        };
-
         private void f_call(lua_State L, object ud)
         {
             // lua_State内的PFunc的L只是装饰，一定传入this
-            Debug.Assert(Object.ReferenceEquals(L, this));
+            Debug.Assert(ReferenceEquals(L, this));
             // 这里不是很清楚为什么要多定义一个CallS
             CallS c = (CallS)ud;
             luaD_call(c.func, c.nresults);
@@ -91,7 +79,7 @@ namespace ZoloLua.Core.VirtualMachine
             //api_checkvalidindex( o);
             //func = savestack(o);
             //}
-            c.func = top - (nargs + 1);  /* function to be called */
+            c.func = top - (nargs + 1); /* function to be called */
             c.nresults = nresults;
             status = luaD_pcall(f_call, c, savestack(c.func), func);
             adjustresults(nresults);
@@ -99,7 +87,7 @@ namespace ZoloLua.Core.VirtualMachine
         }
 
         /// <summary>
-        /// 这是编程错误，clua里是空的
+        ///     这是编程错误，clua里是空的
         /// </summary>
         /// <param name="b"></param>
         private void api_check(bool b)
@@ -113,32 +101,36 @@ namespace ZoloLua.Core.VirtualMachine
                 StkId o = @base + (idx - 1);
                 api_check(idx <= ci.top - @base);
                 if (o >= top) return lobject.luaO_nilobject;
-                else return o;
-            } else if (idx > LUA_REGISTRYINDEX) {
+                return o;
+            }
+            if (idx > LUA_REGISTRYINDEX) {
                 api_check(idx != 0 && -idx <= top - @base);
                 return top + idx;
-            } else switch (idx) {  /* pseudo-indices */
-                    case LUA_REGISTRYINDEX: return registry;
-                    case LUA_ENVIRONINDEX: {
-                            Closure func = curr_func;
-                            env.Table = (func as CSharpClosure).env;
-                            return env;
-                        }
-                    case LUA_GLOBALSINDEX: return gt;
-                    default: {
-                            Closure func = curr_func;
-                            idx = LUA_GLOBALSINDEX - idx;
-                            CSharpClosure ccl = func as CSharpClosure;
-                            return (idx <= ccl.nupvalues)
-                                      ? ccl.upvalue[idx - 1]
-                                      : lobject.luaO_nilobject;
-                        }
-                }
+            }
+            switch (idx) { /* pseudo-indices */
+                case LUA_REGISTRYINDEX: return registry;
+                case LUA_ENVIRONINDEX:
+                    {
+                        Closure func = curr_func;
+                        env.Table = (func as CSharpClosure).env;
+                        return env;
+                    }
+                case LUA_GLOBALSINDEX: return gt;
+                default:
+                    {
+                        Closure func = curr_func;
+                        idx = LUA_GLOBALSINDEX - idx;
+                        CSharpClosure ccl = func as CSharpClosure;
+                        return idx <= ccl.nupvalues
+                            ? ccl.upvalue[idx - 1]
+                            : lobject.luaO_nilobject;
+                    }
+            }
         }
 
         private void api_checkvalidindex(TValue i)
         {
-            api_check(!Object.ReferenceEquals((i), lobject.luaO_nilobject));
+            api_check(!ReferenceEquals(i, lobject.luaO_nilobject));
         }
 
         public int lua_setmetatable(int objindex)
@@ -149,14 +141,15 @@ namespace ZoloLua.Core.VirtualMachine
             api_checknelems(1);
             obj = index2adr(objindex);
             api_checkvalidindex(obj);
-            if (stack[top.index - 1].IsNil)
+            if (stack[top.index - 1].IsNil) {
                 mt = null;
-            else {
+            } else {
                 api_check(stack[top.index - 1].IsTable);
                 mt = stack[top.index - 1].Table;
             }
             switch (obj.tt) {
-                case LuaTag.LUA_TTABLE: {
+                case LuaTag.LUA_TTABLE:
+                    {
                         obj.Table.metatable = mt;
                         //if (mt!=null)
                         //    luaC_objbarriert(L, hvalue(obj), mt);
@@ -168,7 +161,8 @@ namespace ZoloLua.Core.VirtualMachine
                 //            luaC_objbarrier(L, rawuvalue(obj), mt);
                 //        break;
                 //    }
-                default: {
+                default:
+                    {
                         G.mt[(int)obj.tt] = mt;
                         break;
                     }
@@ -176,6 +170,16 @@ namespace ZoloLua.Core.VirtualMachine
             top--;
 
             return 1;
+        }
+
+        /*
+        ** Execute a protected call.
+        */
+
+        private struct CallS
+        { /* data to `f_call' */
+            public StkId func;
+            public int nresults;
         }
 
         //public int GetTop()

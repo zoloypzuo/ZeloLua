@@ -4,7 +4,6 @@
 // 相关代码在funcInfo的scope区域
 using Antlr4.Runtime.Misc;
 using Antlr4.Runtime.Tree;
-
 using ZoloLua.Core.ObjectModel;
 
 namespace ZoloLua.Compiler.CodeGenerator
@@ -63,7 +62,7 @@ namespace ZoloLua.Compiler.CodeGenerator
 
         public override int VisitFunctionCallStat([NotNull] LuaParser.FunctionCallStatContext context)
         {
-            var r = fi.allocReg();
+            int r = fi.allocReg();
             VisitFunctioncall(context.functioncall());
             fi.freeReg();
             return 0;
@@ -119,7 +118,7 @@ namespace ZoloLua.Compiler.CodeGenerator
         {
             // local function Name funcbody
             // 这里就只需要名字字符串
-            var r = fi.addLocVar(context.NAME().GetText());
+            int r = fi.addLocVar(context.NAME().GetText());
             VisitFuncbody(context.funcbody());
             return 0;
         }
@@ -287,43 +286,34 @@ namespace ZoloLua.Compiler.CodeGenerator
 
         public override int VisitBlock([NotNull] LuaParser.BlockContext context)
         {
-            foreach (var stat in context.stat()) {
-                VisitStat(stat);
-            }
-            var retstat = context.retstat();
-            if (retstat != null) {
-                VisitRetstat(retstat);
-            }
+            foreach (LuaParser.StatContext stat in context.stat()) VisitStat(stat);
+            LuaParser.RetstatContext retstat = context.retstat();
+            if (retstat != null) VisitRetstat(retstat);
             return 0;
         }
 
         public override int VisitRetstat([NotNull] LuaParser.RetstatContext context)
         {
-            var explist = context.explist();
+            LuaParser.ExplistContext explist = context.explist();
             // "return"
             if (explist == null) {
                 // 生成return nil语句
                 fi.emitReturn(0, 0);
                 return 0;
-            } else {
-                var expStar = explist.exp();
-                // 确认explist最后一个元素是vararg或函数
-                bool multRet = isVarargOrFuncCall(expStar[expStar.Length - 1]);
-                //TODO
-                // 这里很依赖最后一个元素
-                // 如果最后一个exp是vararg或函数
-                // 要visit exp(fi,exp,r,-1)
-                // 对于前面的元素，要visit exp(fi,exp,r,1)
-                //fi.freeRegs(nExps);
-                foreach (var item in expStar) {
-                }
-                int a = fi.usedRegs;
-                if (multRet) {
-                    fi.emitReturn(a, -1);
-                } else {
-                    //fi.emitReturn(a.nExps);
-                }
             }
+            LuaParser.ExpContext[] expStar = explist.exp();
+            // 确认explist最后一个元素是vararg或函数
+            bool multRet = isVarargOrFuncCall(expStar[expStar.Length - 1]);
+            //TODO
+            // 这里很依赖最后一个元素
+            // 如果最后一个exp是vararg或函数
+            // 要visit exp(fi,exp,r,-1)
+            // 对于前面的元素，要visit exp(fi,exp,r,1)
+            //fi.freeRegs(nExps);
+            foreach (LuaParser.ExpContext item in expStar) {
+            }
+            int a = fi.usedRegs;
+            if (multRet) fi.emitReturn(a, -1);
             // p328 最下面
             // 作者不实现尾递归
             return 0;

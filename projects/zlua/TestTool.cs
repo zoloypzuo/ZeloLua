@@ -1,14 +1,12 @@
 ﻿// 测试工具
 
-using Newtonsoft.Json;
-
 using System;
 using System.Diagnostics;
 using System.IO;
-
+using Newtonsoft.Json;
 using ZoloLua.Core.VirtualMachine;
 
-namespace zluaTests
+namespace ZoloLua
 {
     internal class TestTool
     {
@@ -27,7 +25,7 @@ namespace zluaTests
         // 文件被放在json目录下，生成后你可以移动整理到自己要的位置
         public static void ExportObject(object o)
         {
-            using (var writer =
+            using (StreamWriter writer =
                 new StreamWriter(new FileStream($"{JsonDataPathBase}{DateTime.Now}_{o}.json", FileMode.OpenOrCreate))) {
                 var output = JsonConvert.SerializeObject(o, Settings);
                 writer.Write(output);
@@ -44,12 +42,12 @@ namespace zluaTests
         public static void AssertPropertyEqual(string subPath, object actual)
         {
             var actualS = JsonConvert.SerializeObject(actual, Settings);
-            var fullPath = $"{JsonDataPathBase}{subPath}";
+            string fullPath = $"{JsonDataPathBase}{subPath}";
             Debug.Assert(actualS == File.ReadAllText(fullPath));
         }
 
         /// <summary>
-        /// 执行chunk文件
+        ///     执行chunk文件
         /// </summary>
         /// <param name="filename"></param>
         /// <example>
@@ -62,7 +60,7 @@ namespace zluaTests
         }
 
         /// <summary>
-        /// dostring
+        ///     dostring
         /// </summary>
         /// <param name="filename"></param>
         public static void t01(string s)

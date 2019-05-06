@@ -2,7 +2,6 @@
 
 using System;
 using System.Diagnostics;
-
 using ZoloLua.Core.InstructionSet;
 using ZoloLua.Core.Lua;
 using ZoloLua.Core.ObjectModel;
@@ -39,21 +38,18 @@ namespace ZoloLua.Core.VirtualMachine
         {
             TValue rb = RKB(i);
             TValue rc = RKC(i);
-            if (predicate(rb, rc) != (i.A != 0)) {
+            if (predicate(rb, rc) != (i.A != 0))
                 savedpc++;
-            } else {
+            else
                 savedpc += code[savedpc].SignedBx;
-            }
         }
 
         // int floor div
         public static lua_Integer IFloorDiv(lua_Integer a, lua_Integer b)
         {
-            if (a > 0 & b > 0 || a < 0 && b < 0 || a % b == 0) {
+            if ((a > 0) & (b > 0) || a < 0 && b < 0 || a % b == 0)
                 return a / b;
-            } else {
-                return a / b - 1;
-            }
+            return a / b - 1;
         }
 
         // float floor div
@@ -92,7 +88,7 @@ namespace ZoloLua.Core.VirtualMachine
         /// 实现决策】不调用元方法的rawequal作为Equals重载，这个是调用的，单独写一个函数
         public bool equalobj(TValue o1, TValue o2)
         {
-            return (o1.tt == o2.tt) && luaV_equalval(o1, o2);
+            return o1.tt == o2.tt && luaV_equalval(o1, o2);
         }
 
         public bool luaV_equalval(TValue t1, TValue t2)
@@ -103,23 +99,23 @@ namespace ZoloLua.Core.VirtualMachine
                 case LuaTag.LUA_TNIL: return true;
                 case LuaTag.LUA_TNUMBER: return t1.N == t2.N;
                 case LuaTag.LUA_TBOOLEAN: return t1.B == t2.B;
-                case LuaTag.LUA_TLIGHTUSERDATA: return Object.ReferenceEquals(t1.LightUserdata, t2.LightUserdata);
-                case LuaTag.LUA_TUSERDATA: {
-                        if (Object.ReferenceEquals(t1.Userdata, t2.Userdata)) {
-                            return true;
-                        }
+                case LuaTag.LUA_TLIGHTUSERDATA: return ReferenceEquals(t1.LightUserdata, t2.LightUserdata);
+                case LuaTag.LUA_TUSERDATA:
+                    {
+                        if (ReferenceEquals(t1.Userdata, t2.Userdata)) return true;
                         tm = get_compTM(t1.Userdata.metatable, t2.Userdata.metatable, TMS.TM_EQ);
-                        break;  /* will try TM */
+                        break; /* will try TM */
                     }
-                case LuaTag.LUA_TTABLE: {
-                        if (Object.ReferenceEquals(t1.Table, t2.tt)) return true;
+                case LuaTag.LUA_TTABLE:
+                    {
+                        if (ReferenceEquals(t1.Table, t2.tt)) return true;
                         tm = get_compTM(t1.Table.metatable, t2.Table.metatable, TMS.TM_EQ);
-                        break;  /* will try TM */
+                        break; /* will try TM */
                     }
-                default: return Object.ReferenceEquals(t1.gc, t2.gc);
+                default: return ReferenceEquals(t1.gc, t2.gc);
             }
-            if (tm == null) return false;  /* no TM? */
-            callTMres(top, tm, t1, t2);  /* call TM */
+            if (tm == null) return false; /* no TM? */
+            callTMres(top, tm, t1, t2); /* call TM */
             return !stack[top.index].IsFalse;
         }
 
@@ -128,19 +124,12 @@ namespace ZoloLua.Core.VirtualMachine
             if (l.tt != r.tt)
                 //return luaG_ordererror(L, l, r);
                 throw new Exception();
-            else if (l.IsNumber)
-                return l.N < r.N;
-            else if (l.IsString)
-                return l_strcmp(l.TStr, r.TStr) < 0;
-            else {
-                int res = call_orderTM(l, r, TMS.TM_LT);
-                if (res != -1) {
-                    return res == 1 ? false : true;
-                } else {
-                    //return luaG_ordererror(L, l, r);
-                    throw new Exception();
-                }
-            }
+            if (l.IsNumber) return l.N < r.N;
+            if (l.IsString) return l_strcmp(l.TStr, r.TStr) < 0;
+            int res = call_orderTM(l, r, TMS.TM_LT);
+            if (res != -1)
+                return res == 1 ? false : true;
+            throw new Exception();
         }
 
         private int l_strcmp(TString ls, TString rs)
@@ -149,21 +138,23 @@ namespace ZoloLua.Core.VirtualMachine
             int ll = ls.len;
             string r = rs.str;
             int lr = rs.len;
-            for (; ; ) {
+            for (;;) {
                 // http://www.cplusplus.com/reference/cstring/strcoll/
                 // https://docs.microsoft.com/en-us/dotnet/api/system.string.compare?view=netframework-4.8
-                int temp = String.Compare(l, r);
+                int temp = string.Compare(l, r);
                 if (temp != 0) return temp;
-                else {  /* strings are equal up to a `\0' */
-                    int len = l.Length;  /* index of first `\0' in both strings */
-                    if (len == lr)  /* r is finished? */
-                        return (len == ll) ? 0 : 1;
-                    else if (len == ll)  /* l is finished? */
-                        return -1;  /* l is smaller than r (because r is not finished) */
-                                    /* both strings longer than `len'; go on comparing (after the `\0') */
-                    len++;
-                    l += len; ll -= len; r += len; lr -= len;
-                }
+/* strings are equal up to a `\0' */
+                int len = l.Length; /* index of first `\0' in both strings */
+                if (len == lr) /* r is finished? */
+                    return len == ll ? 0 : 1;
+                if (len == ll) /* l is finished? */
+                    return -1; /* l is smaller than r (because r is not finished) */
+                /* both strings longer than `len'; go on comparing (after the `\0') */
+                len++;
+                l += len;
+                ll -= len;
+                r += len;
+                lr -= len;
             }
         }
 
@@ -173,18 +164,15 @@ namespace ZoloLua.Core.VirtualMachine
             if (l.tt != r.tt)
                 //return luaG_ordererror(L, l, r);
                 throw new Exception();
-            else if (l.IsNumber)
+            if (l.IsNumber)
                 return l.N <= r.N;
-            else if (l.IsString)
+            if (l.IsString)
                 return l_strcmp(l.TStr, r.TStr) <= 0;
-            else if ((res = call_orderTM(l, r, TMS.TM_LE)) != -1)  /* first try `le' */
+            if ((res = call_orderTM(l, r, TMS.TM_LE)) != -1) /* first try `le' */
                 return res == 1 ? true : false;
-            else if ((res = call_orderTM(r, l, TMS.TM_LT)) != -1)  /* else try `lt' */
+            if ((res = call_orderTM(r, l, TMS.TM_LT)) != -1) /* else try `lt' */
                 return res == 0 ? true : false;
-            else {
-                //return luaG_ordererror(L, l, r);
-                throw new Exception();
-            }
+            throw new Exception();
         }
     }
 }
