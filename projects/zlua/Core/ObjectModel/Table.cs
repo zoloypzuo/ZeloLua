@@ -7,7 +7,7 @@ using ZoloLua.Core.Lua;
 namespace ZoloLua.Core.ObjectModel
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <remarks>
     /// <list type="bullet">

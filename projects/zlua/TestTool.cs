@@ -5,6 +5,7 @@ using Newtonsoft.Json;
 using System;
 using System.Diagnostics;
 using System.IO;
+
 using ZoloLua.Core.VirtualMachine;
 
 namespace zluaTests
@@ -47,7 +48,6 @@ namespace zluaTests
             Debug.Assert(actualS == File.ReadAllText(fullPath));
         }
 
-
         /// <summary>
         /// 执行chunk文件
         /// </summary>
@@ -69,6 +69,5 @@ namespace zluaTests
         {
             //lua_State.lua_newstate().luaL_dostring(s);
         }
-
     }
 }

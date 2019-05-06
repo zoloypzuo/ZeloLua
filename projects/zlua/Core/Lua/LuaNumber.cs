@@ -1,7 +1,5 @@
 ﻿using System;
 
-using ZoloLua.Core.ObjectModel;
-
 namespace ZoloLua.Core.Lua
 {
     /// <summary>

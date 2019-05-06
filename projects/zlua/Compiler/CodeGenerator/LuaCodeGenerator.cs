@@ -2,11 +2,9 @@
 //
 // 变量和作用域的原理请先看p321的例子代码和右侧的示意图，然后就能看懂代码了
 // 相关代码在funcInfo的scope区域
-using System;
-using System.Collections.Generic;
 using Antlr4.Runtime.Misc;
 using Antlr4.Runtime.Tree;
-using ZoloLua.Core.InstructionSet;
+
 using ZoloLua.Core.ObjectModel;
 
 namespace ZoloLua.Compiler.CodeGenerator
@@ -16,10 +14,8 @@ namespace ZoloLua.Compiler.CodeGenerator
     {
         // 当前函数
         private funcInfo fi;
+
         public Proto Chunk { get; }
-
-
-
 
         #region visitor
 
@@ -88,7 +84,6 @@ namespace ZoloLua.Compiler.CodeGenerator
             fi.exitScope();
             return 0;
         }
-
 
         public override int VisitWhileStat([NotNull] LuaParser.WhileStatContext context)
         {
@@ -321,7 +316,6 @@ namespace ZoloLua.Compiler.CodeGenerator
                 // 对于前面的元素，要visit exp(fi,exp,r,1)
                 //fi.freeRegs(nExps);
                 foreach (var item in expStar) {
-
                 }
                 int a = fi.usedRegs;
                 if (multRet) {
@@ -335,7 +329,7 @@ namespace ZoloLua.Compiler.CodeGenerator
             return 0;
         }
 
-        bool isVarargOrFuncCall(LuaParser.ExpContext context)
+        private bool isVarargOrFuncCall(LuaParser.ExpContext context)
         {
             //TODO
             bool isFuncCall = context is LuaParser.PrefixexpExpContext;
@@ -496,6 +490,7 @@ namespace ZoloLua.Compiler.CodeGenerator
         {
             return base.VisitString(context);
         }
-        #endregion
+
+        #endregion visitor
     }
 }

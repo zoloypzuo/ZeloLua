@@ -33,15 +33,17 @@ namespace ZoloLua.Core.VirtualMachine
         /*
         ** pseudo-indices
         */
-        const int LUA_REGISTRYINDEX = (-10000);
-        const int LUA_ENVIRONINDEX = (-10001);
-        const int LUA_GLOBALSINDEX = (-10002);
-        int lua_upvalueindex(int i) { return (LUA_GLOBALSINDEX - (i)); }
+        private const int LUA_REGISTRYINDEX = (-10000);
+        private const int LUA_ENVIRONINDEX = (-10001);
+        private const int LUA_GLOBALSINDEX = (-10002);
+
+        private int lua_upvalueindex(int i)
+        { return (LUA_GLOBALSINDEX - (i)); }
 
         /* option for multiple returns in 'lua_pcall' and 'lua_call' */
         public const int LUA_MULTRET = -1;
         /* minimum Lua stack available to a C function */
-        const int LUA_MINSTACK = 20;
+        private const int LUA_MINSTACK = 20;
 
         // 《Lua设计与实现》p39
         public void luaL_dofile(string path)
@@ -99,7 +101,7 @@ namespace ZoloLua.Core.VirtualMachine
         /// <param name=""></param>
         /// <param name="chunkname"></param>
         /// <returns></returns>
-        int lua_load(ICharStream chunk, string chunkname)
+        private int lua_load(ICharStream chunk, string chunkname)
         {
             // status是parser返回的错误码
             int status = 0;
@@ -140,7 +142,6 @@ namespace ZoloLua.Core.VirtualMachine
 
         /// 基于L.top，压函数，压args，返回n个值
         public delegate int lua_CFunction(lua_State L);
-
 
         private bool IsBinaryChunk(string path)
         {

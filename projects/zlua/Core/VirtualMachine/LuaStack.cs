@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 using ZoloLua.Core.ObjectModel;
 
@@ -15,8 +14,6 @@ namespace ZoloLua.Core.VirtualMachine
     public partial class lua_State
     {
         public List<TValue> stack { get; }
-
-
 
         //// 检查栈的空闲空间是否还可以容纳（推入）至少n个值，如若不然，扩容
         //public void check(int n)

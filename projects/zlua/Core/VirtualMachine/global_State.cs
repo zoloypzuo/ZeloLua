@@ -1,5 +1,6 @@
 ﻿using ZoloLua.Core.Lua;
 using ZoloLua.Core.ObjectModel;
+
 using static ZoloLua.Core.VirtualMachine.lua_State;
 
 namespace ZoloLua.Core.VirtualMachine
@@ -13,10 +14,12 @@ namespace ZoloLua.Core.VirtualMachine
         public TValue l_registry;
         public lua_State mainthread;
         public UpVal uvhead;  /* head of double-linked list of all open upvalues */
+
         /// <summary>
         /// metatables for basic types
         /// </summary>
         public Table[] mt;
+
         /// <summary>
         /// 元方法名字
         /// array with tag-method names

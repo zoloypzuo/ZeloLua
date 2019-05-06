@@ -11,20 +11,23 @@ namespace ZoloLua.Core.VirtualMachine
 {
     public partial class lua_State
     {
-        void luaD_checkstack(int n)
+        private void luaD_checkstack(int n)
         {
             if (stack_last - top <= (n))
                 luaD_growstack(n);
             //else condhardstacktests(luaD_reallocstack(L, L->stacksize - EXTRA_STACK - 1));
         }
 
-        void incr_top() { luaD_checkstack(1); top++; }
+        private void incr_top()
+        { luaD_checkstack(1); top++; }
 
         [DebuggerStepThrough]
-        int savestack(StkId p) { return p.index; }
+        private int savestack(StkId p)
+        { return p.index; }
 
         [DebuggerStepThrough]
-        StkId restorestack(int n) { return new StkId(stack, n); }
+        private StkId restorestack(int n)
+        { return new StkId(stack, n); }
 
         //#define saveci(L,p)		((char *)(p) - (char *)L->base_ci)
         //#define restoreci(L,n)		((CallInfo *)((char *)L->base_ci + (n)))
@@ -34,13 +37,13 @@ namespace ZoloLua.Core.VirtualMachine
         //internal const int PCRC = 1;    /* 说明precall调用了一个c函数：did a call to a C function */
         //const int PCRYIELD = 2;
         /* results from luaD_precall */
-        const int PCRLUA = 0;   /* initiated a call to a Lua function */
-        const int PCRC = 1; /* did a call to a C function */
-        const int PCRYIELD = 2;	/* C funtion yielded */
-
+        private const int PCRLUA = 0;   /* initiated a call to a Lua function */
+        private const int PCRC = 1; /* did a call to a C function */
+        private const int PCRYIELD = 2;	/* C funtion yielded */
 
         /* type of protected functions, to be ran by `runprotected' */
-        delegate void Pfunc(lua_State L, object ud);
+
+        private delegate void Pfunc(lua_State L, object ud);
 
         // header public api
         // int luaD_protectedparser (lua_State *L, ZIO *z, const char *name);
@@ -68,7 +71,7 @@ namespace ZoloLua.Core.VirtualMachine
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="p"></param>
         /// <param name="actual"></param>
@@ -119,6 +122,7 @@ namespace ZoloLua.Core.VirtualMachine
         ** When returns, all the results are on the stack, starting at the original
         ** function position.
         */
+
         // * 调用函数，函数可以是c#函数或lua函数
         // * 调用协议如下：
         //   调用/Call/前，Closure实例和实参被依次压栈
@@ -132,7 +136,7 @@ namespace ZoloLua.Core.VirtualMachine
         /// lua_call 函数和args已经压栈，调用它；是一次C发起的调用
         /// 这个特殊的call不是lua实现内部使用的，他会用api来push func，push args然后调用
         /// 一个例子是每次启动chunk时，push chunk，call it，funcindex=topindex-1
-        void luaD_call(StkId func, int nResults)
+        private void luaD_call(StkId func, int nResults)
         {
             //TODO
             //if (++L->nCcalls >= LUAI_MAXCCALLS) {
@@ -151,7 +155,6 @@ namespace ZoloLua.Core.VirtualMachine
             --nCcalls;
         }
 
-
         // luaD_precall
         //
         // * 同时也是call指令实现
@@ -159,7 +162,7 @@ namespace ZoloLua.Core.VirtualMachine
         // * 保存this.savedpc到当前CallInfo的savedpc中
         // * 根据函数参数个数计算待调用函数的base和top值，存入新的CallInfo中
         // * 切换到新的CallInfo
-        int luaD_precall(StkId func, int nresults)
+        private int luaD_precall(StkId func, int nresults)
         {
             TValue funcValue = func;
             if (!funcValue.IsFunction) { /* `func' is not a function? */
@@ -233,7 +236,7 @@ namespace ZoloLua.Core.VirtualMachine
         /// 从C或lua函数返回
         /// `resultIndex是返回值相对于L.base的偏移(很容易错，因为没有指针）
         /// </summary>
-        int luaD_poscall(StkId firstResult)
+        private int luaD_poscall(StkId firstResult)
         {
             StkId res;
             int wanted, i;
@@ -255,7 +258,6 @@ namespace ZoloLua.Core.VirtualMachine
             return (wanted - LUA_MULTRET);  /* 0 iff wanted == LUA_MULTRET */
         }
 
-
         /// <summary>
         /// 调用<c>func</c>，参数是<c>u</c>
         /// </summary>
@@ -265,7 +267,7 @@ namespace ZoloLua.Core.VirtualMachine
         /// <param name="old_top"></param>
         /// <param name="ef"></param>
         /// <returns></returns>
-        int luaD_pcall(Pfunc func, object u,
+        private int luaD_pcall(Pfunc func, object u,
                 int old_top, int ef)
         {
             // 同样的，注释掉的代码太复杂了，都是错误处理
@@ -291,7 +293,7 @@ namespace ZoloLua.Core.VirtualMachine
             return status;
         }
 
-        int luaD_rawrunprotected(Pfunc f, object ud)
+        private int luaD_rawrunprotected(Pfunc f, object ud)
         {
             //struct lua_longjmp lj;
             //lj.status = 0;

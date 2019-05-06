@@ -9,6 +9,7 @@
 
 using System;
 using System.Diagnostics;
+
 using ZoloLua.Core.Lua;
 using ZoloLua.Core.ObjectModel;
 
@@ -20,7 +21,7 @@ namespace ZoloLua.Core.VirtualMachine
     public partial class lua_State
     {
         [DebuggerStepThrough]
-        void api_checknelems(int n)
+        private void api_checknelems(int n)
         {
             // clua实现最后相当于空语句，因此是断言不是异常
             Debug.Assert(n <= top - @base);
@@ -31,19 +32,18 @@ namespace ZoloLua.Core.VirtualMachine
         */
 
         [DebuggerStepThrough]
-        void adjustresults(int nres)
+        private void adjustresults(int nres)
         {
             if (nres == LUA_MULTRET && top >= ci.top) ci.top = top;
         }
 
-
         [DebuggerStepThrough]
-        void checkresults(int na, int nr)
+        private void checkresults(int na, int nr)
         {
             Debug.Assert((nr) == LUA_MULTRET || (ci.top - top >= (nr) - (na)));
         }
 
-        void lua_call(int nargs, int nresults)
+        private void lua_call(int nargs, int nresults)
         {
             StkId func;
             api_checknelems(nargs + 1);
@@ -56,12 +56,12 @@ namespace ZoloLua.Core.VirtualMachine
         /*
         ** Execute a protected call.
         */
-        struct CallS
+
+        private struct CallS
         {  /* data to `f_call' */
             public StkId func;
             public int nresults;
         };
-
 
         private void f_call(lua_State L, object ud)
         {
@@ -74,7 +74,7 @@ namespace ZoloLua.Core.VirtualMachine
 
         //luaL_dofile调用如下
         //lua_pcall(nargs: 0, nresults: LUA_MULTRET, errfunc: 0);
-        int lua_pcall(int nargs, int nresults, int errfunc)
+        private int lua_pcall(int nargs, int nresults, int errfunc)
         {
             CallS c;
             int status;
@@ -102,7 +102,7 @@ namespace ZoloLua.Core.VirtualMachine
         /// 这是编程错误，clua里是空的
         /// </summary>
         /// <param name="b"></param>
-        void api_check(bool b)
+        private void api_check(bool b)
         {
             Debug.Assert(b);
         }
@@ -136,7 +136,10 @@ namespace ZoloLua.Core.VirtualMachine
                 }
         }
 
-        private void api_checkvalidindex(TValue i) { api_check(!Object.ReferenceEquals((i), lobject.luaO_nilobject)); }
+        private void api_checkvalidindex(TValue i)
+        {
+            api_check(!Object.ReferenceEquals((i), lobject.luaO_nilobject));
+        }
 
         public int lua_setmetatable(int objindex)
         {

@@ -18,7 +18,6 @@ namespace ZoloLua.Core.VirtualMachine
     /// <remarks>写成partial是分给各个API类</remarks>
     public partial class lua_State
     {
-
         /// <summary>
         /// top指向第一个可用位置，每次push时 top++ = value
         /// </summary>
@@ -29,7 +28,6 @@ namespace ZoloLua.Core.VirtualMachine
         /// 是相对于栈底的偏移，所有函数内索引局部变量以这个为基准
         /// </summary>
         private StkId @base { get; set; }
-
 
         /// <summary>
         /// 当前函数
@@ -65,13 +63,16 @@ namespace ZoloLua.Core.VirtualMachine
         #region 从指令取出参数的辅助方法
 
         [DebuggerStepThrough]
-        int GETARG_A(Bytecode i) { return (int)i.A; }
+        private int GETARG_A(Bytecode i)
+        { return (int)i.A; }
 
         [DebuggerStepThrough]
-        int GETARG_B(Bytecode i) { return (int)i.B; }
+        private int GETARG_B(Bytecode i)
+        { return (int)i.B; }
 
         [DebuggerStepThrough]
-        int GETARG_C(Bytecode i) { return (int)i.C; }
+        private int GETARG_C(Bytecode i)
+        { return (int)i.C; }
 
         private TValue R(int i)
         {

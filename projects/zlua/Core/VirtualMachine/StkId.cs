@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+
 using ZoloLua.Core.ObjectModel;
 
 namespace ZoloLua.Core.VirtualMachine
@@ -20,9 +21,9 @@ namespace ZoloLua.Core.VirtualMachine
         /// <summary>
         /// 模拟指针运算
         /// </summary>
-        struct StkId : IEquatable<StkId>
+        private struct StkId : IEquatable<StkId>
         {
-            List<TValue> stack;
+            private List<TValue> stack;
             public int index;
 
             public StkId(List<TValue> stack, int index)

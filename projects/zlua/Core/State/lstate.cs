@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 using ZoloLua.Core.ObjectModel;
 
 namespace ZoloLua.Core.VirtualMachine
@@ -13,7 +11,8 @@ namespace ZoloLua.Core.VirtualMachine
     /// <remarks>这里的字段相对没有运行时的那些字段那么重要</remarks>
     public partial class lua_State : GCObject
     {
-        byte status;
+        private byte status;
+
         /// <summary>
         /// l_G
         /// </summary>
@@ -21,39 +20,39 @@ namespace ZoloLua.Core.VirtualMachine
         /// 这里没有只读，因为new_state是static，这里ctor不够用
         /// 相比而言，真正的运行时，比如call stack等等，更加重要，因此严格一些，全局表等等都不太重要
         /// </remarks>
-        global_State G;
+        private global_State G;
 
         /// <summary>
         /// number of nested C calls
         /// </summary>
-        UInt16 nCcalls;
+        private UInt16 nCcalls;
 
         /// <summary>
         /// nested C calls when resuming coroutine
         /// </summary>
-        UInt16 baseCcalls;
+        private UInt16 baseCcalls;
 
         /// <summary>
         /// table of globals
         /// l_gt
         /// </summary>
-        TValue gt;
+        private TValue gt;
 
         /// <summary>
         /// temporary place for environments
         /// </summary>
-        TValue env;
+        private TValue env;
 
-        TValue registry { get { return G.l_registry; } }
+        private TValue registry { get { return G.l_registry; } }
 
         /* extra stack space to handle TM calls and some other extras */
-        const int EXTRA_STACK = 5;
+        private const int EXTRA_STACK = 5;
 
-        const int BASIC_CI_SIZE = 8;
+        private const int BASIC_CI_SIZE = 8;
 
-        const int BASIC_STACK_SIZE = (2 * LUA_MINSTACK);
+        private const int BASIC_STACK_SIZE = (2 * LUA_MINSTACK);
 
-        int stacksize { get { return stack.Count; } }
+        private int stacksize { get { return stack.Count; } }
 
         /// <summary>
         /// stack_init
@@ -129,6 +128,6 @@ namespace ZoloLua.Core.VirtualMachine
             return L;
         }
 
-        Closure curr_func { get { return stack[ci.func.index].Cl as Closure; } }
+        private Closure curr_func { get { return stack[ci.func.index].Cl as Closure; } }
     }
 }
