@@ -44,26 +44,6 @@ namespace ZoloLua.Core.VirtualMachine
                 savedpc += code[savedpc].SignedBx;
         }
 
-        // int floor div
-        public static lua_Integer IFloorDiv(lua_Integer a, lua_Integer b)
-        {
-            if ((a > 0) & (b > 0) || a < 0 && b < 0 || a % b == 0)
-                return a / b;
-            return a / b - 1;
-        }
-
-        // float floor div
-        public static lua_Number FFloorDiv(lua_Number a, lua_Number b)
-        {
-            return Math.Floor(a / b);
-        }
-
-        // int mod
-        public static lua_Integer IMod(lua_Integer a, lua_Integer b)
-        {
-            return a - IFloorDiv(a, b) * b;
-        }
-
         // float mod
         public static lua_Number luai_nummod(lua_Number a, lua_Number b)
         {
