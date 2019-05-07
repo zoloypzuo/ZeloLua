@@ -76,7 +76,6 @@
     <Compile Include="Core\State\lstate.cs" />
     <Compile Include="Core\VirtualMachine\CallInfo.cs" />
     <Compile Include="Core\VirtualMachine\global_State.cs" />
-    <Compile Include="Core\VirtualMachine\LuaStack.cs" />
     <Compile Include="Core\VirtualMachine\Operator.cs" />
     <Compile Include="Core\VirtualMachine\StkId.cs" />
     <Compile Include="Library\AuxLib\lauxlib.cs" />
