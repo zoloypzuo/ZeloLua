@@ -7,30 +7,7 @@ namespace ZoloLua.Core.VirtualMachine
     // manual.html#3.4.3
     public partial class lua_State
     {
-        // luaV_tonumber
-        //
-        // number直接返回
-        // string尝试解析成number返回
-        // 其他类型不能转换成number
-        // 这里不要参考clua，写的很复杂很乱
-        public static bool tonumber(TValue val, out lua_Number n)
-        {
-            switch (val.tt) {
-                case LuaTag.LUA_TNUMBER:
-                    n = val.N;
-                    return true;
 
-                case LuaTag.LUA_TSTRING:
-                    double outN;
-                    bool b = TValue.Str2Num(val.Str, out outN);
-                    n = outN;
-                    return b;
-
-                default:
-                    n = 0;
-                    return false;
-            }
-        }
 
         // luaV_tointeger
         public static bool tointeger(TValue val, out lua_Integer i)

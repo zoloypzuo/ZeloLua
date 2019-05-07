@@ -6,9 +6,6 @@ using ZoloLua.Core.InstructionSet;
 using ZoloLua.Core.Lua;
 using ZoloLua.Core.ObjectModel;
 
-/// <summary>
-/// 虚拟机
-/// </summary>
 namespace ZoloLua.Core.VirtualMachine
 {
     /// <summary>
@@ -31,32 +28,50 @@ namespace ZoloLua.Core.VirtualMachine
         /// <remarks>因为要写辅助方法，所以从局部变量变为字段</remarks>
         private TValue[] k;
 
-        /// saved pc when call a function
-        /// index of instruction array；因为src用指针的原因，而zlua必须同时使用codes和pc来获取指令
+        /// <summary>
+        /// 调用函数时保存的pc
+        /// </summary>
+        /// <remarks>clua用指针算法，而zlua必须同时使用codes数组和pc索引来获取指令</remarks>
         private int savedpc;
 
         /// <summary>
-        ///     top指向第一个可用位置，每次push时 top++ = value
+        ///     栈顶
         /// </summary>
-        private StkId top { get; set; }
+        /// <remarks>
+        ///     栈顶约定：top指向第一个可用位置，每次push时 top++ = value
+        /// </remarks>
+        private StkId top;
 
         /// <summary>
-        ///     当前函数栈帧的base
+        ///     当前函数栈帧的基
+        /// </summary>
+        /// <remarks>
         ///     是相对于栈底的偏移，所有函数内索引局部变量以这个为基准
-        /// </summary>
-        private StkId @base { get; set; }
+        /// </remarks>
+        private StkId @base;
 
         /// <summary>
-        ///     当前函数
+        ///     当前函数调用信息
         /// </summary>
-        private CallInfo ci => CallStack.Peek();
+        private CallInfo ci {
+            get {
+                return CallStack.Peek();
+            }
+        }
 
         /// <summary>
-        ///     last free slot in the stack
-        ///     标记分配的大小,topIndex永远小于stackLastFree
+        ///     栈最后空闲的索引
         /// </summary>
-        private StkId stack_last => new StkId(stack, stack.Count - EXTRA_STACK - 1);
+        /// <remarks>标记分配的大小,top永远小于stacklastfree</remarks>
+        private StkId stack_last {
+            get {
+                return newStkId(stack.Count - EXTRA_STACK - 1);
+            }
+        }
 
+        /// <summary>
+        /// 调用栈
+        /// </summary>
         private Stack<CallInfo> CallStack { get; }
 
         /// <summary>
@@ -68,13 +83,6 @@ namespace ZoloLua.Core.VirtualMachine
         {
             int pc = 0;
             StkId @base;
-            Action<Action> Protect =
-                action =>
-                {
-                    savedpc = pc;
-                    action();
-                    @base = this.@base;
-                };
             reentry:
             TValue funcValue = ci.func;
             Debug.Assert(funcValue.IsLuaFunction);
@@ -85,35 +93,31 @@ namespace ZoloLua.Core.VirtualMachine
             while (true) {
                 Bytecode i = code[pc++];
                 Debug.Assert(@base == this.@base && this.@base == ci.@base);
-                Debug.Assert(@base <= top && top < newStkId(stack.Count)); //这里始终没有。
+                Debug.Assert(@base <= top && top < newStkId(stack.Count));
                 TValue ra = RA(i);
                 switch (i.Opcode) {
 
                     #region 赋值类指令 数据传输指令
 
                     // A B R(A) := R(B)
-                    case Opcode.OP_MOVE:
-                        {
+                    case Opcode.OP_MOVE: {
                             ra.Value = RB(i);
                             continue;
                         }
                     // A Bx R(A) := Kst(Bx)
                     // 从常量表取出常量写入R(A)
-                    case Opcode.OP_LOADK:
-                        {
+                    case Opcode.OP_LOADK: {
                             ra.Value = KBx(i);
                             continue;
                         }
                     // A B C R(A) := (Bool)B; if (C) pc++
-                    case Opcode.OP_LOADBOOL:
-                        {
+                    case Opcode.OP_LOADBOOL: {
                             ra.B = i.B != 0;
                             if (GETARG_C(i) != 0) pc++;
                             continue;
                         }
                     // A B R(A) := ... := R(B) := nil
-                    case Opcode.OP_LOADNIL:
-                        {
+                    case Opcode.OP_LOADNIL: {
                             int raIndex = (int)i.A;
                             int rbIndex = (int)i.B;
                             do {
@@ -122,14 +126,12 @@ namespace ZoloLua.Core.VirtualMachine
                             continue;
                         }
                     // A B R(A) := UpValue[B]
-                    case Opcode.OP_GETUPVAL:
-                        {
+                    case Opcode.OP_GETUPVAL: {
                             ra.Value = UpValueB(i);
                             continue;
                         }
                     // A Bx R(A) := Gbl[Kst(Bx)]
-                    case Opcode.OP_GETGLOBAL:
-                        {
+                    case Opcode.OP_GETGLOBAL: {
                             TValue g = new TValue(cl.env);
                             TValue rb = KBx(i);
                             Debug.Assert(rb.IsString);
@@ -137,35 +139,30 @@ namespace ZoloLua.Core.VirtualMachine
                             continue;
                         }
                     // A B C R(A) := R(B)[RK(C)]
-                    case Opcode.OP_GETTABLE:
-                        {
+                    case Opcode.OP_GETTABLE: {
                             luaV_gettable(RB(i), RKC(i), ra);
                             continue;
                         }
                     // A Bx Gbl[Kst(Bx)] := R(A)
-                    case Opcode.OP_SETGLOBAL:
-                        {
+                    case Opcode.OP_SETGLOBAL: {
                             TValue g = new TValue(cl.env);
                             Debug.Assert(KBx(i).IsString);
                             luaV_settable(g, KBx(i), ra);
                             continue;
                         }
                     // A B UpValue[B] := R(A)
-                    case Opcode.OP_SETUPVAL:
-                        {
+                    case Opcode.OP_SETUPVAL: {
                             UpVal uv = cl.upvals[(int)i.B];
                             uv.v.Value = ra;
                             continue;
                         }
                     // A B C R(A)[RK(B)] := RK(C)
-                    case Opcode.OP_SETTABLE:
-                        {
+                    case Opcode.OP_SETTABLE: {
                             luaV_settable(ra, RKB(i), RKC(i));
                             continue;
                         }
                     // A B C R(A) := {} (size = B,C)
-                    case Opcode.OP_NEWTABLE:
-                        {
+                    case Opcode.OP_NEWTABLE: {
                             int b = (int)i.B;
                             int c = (int)i.C;
                             ra.Table = new Table(b, c);
@@ -180,8 +177,7 @@ namespace ZoloLua.Core.VirtualMachine
                     // * 从obj表中查找"f"键的值作为被调用方法
                     // * 将obj设为f的第一个实参
                     // self指令后会有一条move指令，再是一条call指令
-                    case Opcode.OP_SELF:
-                        {
+                    case Opcode.OP_SELF: {
                             // 将obj设为f的第一个实参
                             TValue rb = RB(i);
                             R((int)i.A + 1).Value = rb;
@@ -195,45 +191,38 @@ namespace ZoloLua.Core.VirtualMachine
                     #region 算术运算符 数值计算类指令
 
                     // A B C R(A) := RK(B) + RK(C)
-                    case Opcode.OP_ADD:
-                        {
+                    case Opcode.OP_ADD: {
                             arith_op(i, (a, b) => a + b, TMS.TM_ADD);
                             continue;
                         }
                     // A B C R(A) := RK(B) - RK(C)
-                    case Opcode.OP_SUB:
-                        {
+                    case Opcode.OP_SUB: {
                             arith_op(i, (a, b) => a - b, TMS.TM_SUB);
                             continue;
                         }
                     // A B C R(A) := RK(B) * RK(C)
-                    case Opcode.OP_MUL:
-                        {
+                    case Opcode.OP_MUL: {
                             arith_op(i, (a, b) => a * b, TMS.TM_MUL);
                             continue;
                         }
                     // A B C R(A) := RK(B) / RK(C)
-                    case Opcode.OP_DIV:
-                        {
+                    case Opcode.OP_DIV: {
                             arith_op(i, (a, b) => a / b, TMS.TM_DIV);
                             continue;
                         }
                     // A B C R(A) := RK(B) % RK(C)
-                    case Opcode.OP_MOD:
-                        {
+                    case Opcode.OP_MOD: {
                             arith_op(i, luai_nummod, TMS.TM_MOD);
                             continue;
                         }
                     // A B C R(A) := RK(B) ^ RK(C)
-                    case Opcode.OP_POW:
-                        {
+                    case Opcode.OP_POW: {
                             arith_op(i, luai_numpow, TMS.TM_POW);
                             continue;
                         }
 
                     // A B R(A) := -R(B)
-                    case Opcode.OP_UNM:
-                        {
+                    case Opcode.OP_UNM: {
                             //TODO
                             TValue rb = RB(i);
                             if (rb.IsNumber) {
@@ -250,8 +239,7 @@ namespace ZoloLua.Core.VirtualMachine
                     #region 逻辑运算符
 
                     // A B R(A) := not R(B)
-                    case Opcode.OP_NOT:
-                        {
+                    case Opcode.OP_NOT: {
                             TValue rb = RB(i);
                             bool res = rb.IsFalse; /* next assignment may change this value */
                             ra.B = res;
@@ -261,27 +249,23 @@ namespace ZoloLua.Core.VirtualMachine
                     #endregion 逻辑运算符
 
                     // A B R(A) := length of R(B)
-                    case Opcode.OP_LEN:
-                        {
+                    case Opcode.OP_LEN: {
                             TValue rb = RB(i);
                             switch (rb.tt) {
-                                case LuaTag.LUA_TTABLE:
-                                    {
+                                case LuaTag.LUA_TTABLE: {
                                         ra.N = rb.Table.luaH_getn();
                                         break;
                                     }
-                                case LuaTag.LUA_TSTRING:
-                                    {
+                                case LuaTag.LUA_TSTRING: {
                                         ra.N = rb.Str.Length;
                                         break;
                                     }
-                                // try metamethod
+                                    // try metamethod
                             }
                             continue;
                         }
                     // A B C R(A) := R(B).. ... ..R(C)
-                    case Opcode.OP_CONCAT:
-                        {
+                    case Opcode.OP_CONCAT: {
                             int b = (int)i.B;
                             int c = (int)i.C;
                             luaV_concat(c - b + 1, c);
@@ -289,8 +273,7 @@ namespace ZoloLua.Core.VirtualMachine
                             continue;
                         }
                     // sBx pc+=sBx
-                    case Opcode.OP_JMP:
-                        {
+                    case Opcode.OP_JMP: {
                             pc += i.SignedBx;
                             continue;
                         }
@@ -298,27 +281,23 @@ namespace ZoloLua.Core.VirtualMachine
                     #region 比较运算符 关系逻辑类指令
 
                     // A B C if ((RK(B) == RK(C)) ~= A) then pc++
-                    case Opcode.OP_EQ:
-                        {
+                    case Opcode.OP_EQ: {
                             Relation(i, equalobj);
                             continue;
                         }
                     // A B C if ((RK(B) <  RK(C)) ~= A) then pc++
-                    case Opcode.OP_LT:
-                        {
+                    case Opcode.OP_LT: {
                             Relation(i, luaV_lessthan);
                             continue;
                         }
                     // A B C if ((RK(B) <= RK(C)) ~= A) then pc++
-                    case Opcode.OP_LE:
-                        {
+                    case Opcode.OP_LE: {
                             Relation(i, lessequal);
                             continue;
                         }
                     // A C if not (R(A) <=> C) then pc++
                     // 与testset类似
-                    case Opcode.OP_TEST:
-                        {
+                    case Opcode.OP_TEST: {
                             if (ra.IsFalse != (i.C == 1 ? true : false))
                                 pc += code[pc].SignedBx;
                             else
@@ -328,8 +307,7 @@ namespace ZoloLua.Core.VirtualMachine
                     // A B C if (R(B) <=> C) then R(A) := R(B) else pc++
                     // 判断RB的条件值是否与C相等，是则RA=RB，否则pc++
                     // <=>表示bool比较
-                    case Opcode.OP_TESTSET:
-                        {
+                    case Opcode.OP_TESTSET: {
                             if (ra.IsFalse != (i.C == 1 ? true : false)) {
                                 ra.Value = RB(i);
                                 pc += code[pc].SignedBx;
@@ -350,8 +328,7 @@ namespace ZoloLua.Core.VirtualMachine
                     // call指令对应于lua脚本中的函数调用
                     // 执行完该指令后，被调用函数和它的栈帧被清空，返回值被留在栈上
                     // 《自己动手实现Lua》p154
-                    case Opcode.OP_CALL:
-                        {
+                    case Opcode.OP_CALL: {
                             int a = GETARG_A(i);
                             int b = GETARG_B(i);
                             int nresults = GETARG_C(i) - 1;
@@ -359,27 +336,23 @@ namespace ZoloLua.Core.VirtualMachine
                             if (b != 0) top = raIndex + b; /* else previous instruction set top */
                             savedpc = pc;
                             switch (luaD_precall(raIndex, nresults)) {
-                                case PCRLUA:
-                                    {
+                                case PCRLUA: {
                                         nexeccalls++;
                                         goto reentry; /* restart luaV_execute over new Lua function */
                                     }
-                                case PCRC:
-                                    {
+                                case PCRC: {
                                         /* it was a C function (`precall' called it); adjust results */
                                         if (nresults >= 0) top = ci.top;
                                         @base = this.@base;
                                         continue;
                                     }
-                                default:
-                                    {
+                                default: {
                                         return; /* yield */
                                     }
                             }
                         }
                     // A B return R(A), ... ,R(A+B-2) (see note)
-                    case Opcode.OP_RETURN:
-                        {
+                    case Opcode.OP_RETURN: {
                             int a = GETARG_A(i);
                             int b = GETARG_B(i);
                             StkId raIndex = @base + a;
@@ -389,7 +362,7 @@ namespace ZoloLua.Core.VirtualMachine
                             //if (L->openupval) luaF_close(L, base);
                             b = luaD_poscall(@base + a);
                             if (--nexeccalls == 0) /* was previous function running `here'? */ return; /* no: return */
-/* yes: continue its execution */
+                                                                                                       /* yes: continue its execution */
                             if (b != 0) top = ci.top;
                             Debug.Assert(((TValue)ci.func).IsLuaFunction);
                             Debug.Assert(code[ci.savedpc - 1].Opcode == Opcode.OP_CALL);
@@ -397,8 +370,7 @@ namespace ZoloLua.Core.VirtualMachine
                         }
                     // A B C return R(A)(R(A+1), ... ,R(A+B-1))
                     // 形如return f()的返回语句被优化成尾递归
-                    case Opcode.OP_TAILCALL:
-                        {
+                    case Opcode.OP_TAILCALL: {
                             int a = GETARG_A(i);
                             int b = GETARG_B(i);
                             StkId raIndex = @base + a;
@@ -407,8 +379,7 @@ namespace ZoloLua.Core.VirtualMachine
                             savedpc = pc;
                             Debug.Assert((int)i.C - 1 == LUA_MULTRET);
                             switch (luaD_precall(raIndex, LUA_MULTRET)) {
-                                case PCRLUA:
-                                    {
+                                case PCRLUA: {
                                         /* tail call: put new frame in place of previous one */
                                         CallInfo ciplus1 = CallStack.Pop();
                                         CallInfo ci = this.ci; /* previous frame */
@@ -427,13 +398,11 @@ namespace ZoloLua.Core.VirtualMachine
                                         //CallStack.Pop();  /* remove new frame */
                                         goto reentry;
                                     }
-                                case PCRC:
-                                    { /* it was a C function (`precall' called it) */
+                                case PCRC: { /* it was a C function (`precall' called it) */
                                         @base = this.@base;
                                         continue;
                                     }
-                                default:
-                                    {
+                                default: {
                                         return; /* yield */
                                     }
                             }
@@ -447,8 +416,7 @@ namespace ZoloLua.Core.VirtualMachine
                     // for index+=for step，
                     // if for index <= for limit {跳转到循环体第一行代码，并i=for index}
                     // <?=表示，当step为正数时，<=，当step为负数时，>=
-                    case Opcode.OP_FORLOOP:
-                        {
+                    case Opcode.OP_FORLOOP: {
                             StkId raIndex = @base + (int)i.A;
                             lua_Number step = (raIndex + 2).Value.N;
                             lua_Number idx = ra.N + step; /* increment index */
@@ -464,8 +432,7 @@ namespace ZoloLua.Core.VirtualMachine
                     // forprep相当于循环的初始化
                     // for index-=for step，并跳转到forloop指令
                     // 参见2019-04-28 09-19-40.947648-for_num.lua
-                    case Opcode.OP_FORPREP:
-                        {
+                    case Opcode.OP_FORPREP: {
                             StkId raIndex = @base + (int)i.A;
                             TValue init = ra;
                             TValue plimit = raIndex + 1;
@@ -491,8 +458,7 @@ namespace ZoloLua.Core.VirtualMachine
                             continue;
                         }
                     // A C R(A+3), ... ,R(A+2+C) := R(A)(R(A+1), R(A+2)); if R(A+3) ~= nil then R(A+2)=R(A+3) else pc++
-                    case Opcode.OP_TFORLOOP:
-                        {
+                    case Opcode.OP_TFORLOOP: {
                             int a = (int)i.A;
                             StkId raIndex = @base + a;
                             StkId cb = @base + a + 3; /* call base */
@@ -515,8 +481,7 @@ namespace ZoloLua.Core.VirtualMachine
                     #endregion 循环类指令
 
                     // A B C R(A)[(C-1)*FPF+i] := R(A+i), 1 <= i <= B
-                    case Opcode.OP_SETLIST:
-                        {
+                    case Opcode.OP_SETLIST: {
                             int a = GETARG_A(i);
                             int n = GETARG_B(i);
                             int c = GETARG_C(i);
@@ -543,8 +508,7 @@ namespace ZoloLua.Core.VirtualMachine
                             continue;
                         }
                     // A  close all variables in the stack up to (>=) R(A)
-                    case Opcode.OP_CLOSE:
-                        {
+                    case Opcode.OP_CLOSE: {
                             //luaF_close(ra);
                             continue;
                         }
@@ -552,8 +516,7 @@ namespace ZoloLua.Core.VirtualMachine
                     // closure指令的执行分为以下两步：
                     // * 从内嵌Proto列表中取出Proto实例，来构造Closure实例ncl
                     // * 提前执行后面的move指令或get upval指令来初始化ncl的upvals
-                    case Opcode.OP_CLOSURE:
-                        {
+                    case Opcode.OP_CLOSURE: {
                             /*用Proto简单new一个LuaClosure，提前执行之后的指令s来初始化upvals*/
                             Proto p = cl.p.p[i.Bx];
                             int nup = p.nups;
@@ -575,8 +538,7 @@ namespace ZoloLua.Core.VirtualMachine
                     // 将vararg加载到连续多个寄存器中
                     // 开始索引为A，个数为B
                     // vararg指令很像call指令
-                    case Opcode.OP_VARARG:
-                        {
+                    case Opcode.OP_VARARG: {
                             throw new NotImplementedException();
                             continue;
                         }
@@ -586,13 +548,7 @@ namespace ZoloLua.Core.VirtualMachine
             }
         }
 
-        /// 让栈扩展到`size大小
-        /// TODO 删除 stack.check
-        internal void Alloc(int size)
-        {
-            for (int i = stack.Count; i < size; i++)
-                stack.Add(new TValue());
-        }
+
 
         #region 从指令取出参数的辅助方法
 
@@ -614,30 +570,35 @@ namespace ZoloLua.Core.VirtualMachine
             return (int)i.C;
         }
 
+        [DebuggerStepThrough]
         private TValue R(int i)
         {
             return @base + i;
         }
 
         // R(A)
+        [DebuggerStepThrough]
         private TValue RA(Bytecode i)
         {
             return @base + (int)i.A;
         }
 
         // R(B)
+        [DebuggerStepThrough]
         private TValue RB(Bytecode i)
         {
             return @base + (int)i.B;
         }
 
         // R(C)
+        [DebuggerStepThrough]
         private TValue RC(Bytecode i)
         {
             return @base + (int)i.C;
         }
 
         // RK(B)
+        [DebuggerStepThrough]
         private TValue RKB(Bytecode i)
         {
             int B = (int)i.B;
@@ -648,6 +609,7 @@ namespace ZoloLua.Core.VirtualMachine
         }
 
         // RK(C)
+        [DebuggerStepThrough]
         private TValue RKC(Bytecode instr)
         {
             int C = (int)instr.C;
@@ -658,6 +620,7 @@ namespace ZoloLua.Core.VirtualMachine
         }
 
         // UpValue[A]
+        [DebuggerStepThrough]
         private TValue UpValueA(Bytecode instr)
         {
             TValue upa = cl.upvals[(int)instr.A].v;
@@ -665,12 +628,14 @@ namespace ZoloLua.Core.VirtualMachine
         }
 
         // UpValue[B]
+        [DebuggerStepThrough]
         private TValue UpValueB(Bytecode instr)
         {
             TValue upb = cl.upvals[(int)instr.B].v;
             return upb;
         }
 
+        [DebuggerStepThrough]
         private TValue KBx(Bytecode i)
         {
             Debug.Assert(BytecodeTool.GetOpmode(i.Opcode).ArgBMode == OperandMode.OpArgK);
@@ -679,15 +644,6 @@ namespace ZoloLua.Core.VirtualMachine
 
         #endregion 从指令取出参数的辅助方法
 
-        #region other things
-
-        /// <summary>
-        ///     luaV_tostring
-        /// </summary>
-        public bool ToString(TValue obj)
-        {
-            return false;
-        }
 
         /// <summary>
         ///     limit for table tag-method chains (to avoid loops)
@@ -695,7 +651,7 @@ namespace ZoloLua.Core.VirtualMachine
         private const int MAXTAGLOOP = 100;
 
         /// <summary>
-        ///     无限查元表
+        ///     元表查找算法
         /// </summary>
         /// <param name="t"></param>
         /// <param name="key"></param>
@@ -809,6 +765,34 @@ namespace ZoloLua.Core.VirtualMachine
             return false; //TODO 调用meta方法
         }
 
+        TValue luaV_tonumber(TValue obj, TValue n)
+        {
+            lua_Number num;
+            if (obj.IsNumber) return obj;
+            if (obj.IsString && lobject.luaO_str2d(obj.Str, out num)) {
+                n.N = num;
+                return n;
+            } else
+                return null;
+        }
+
+
+        public static bool tonumber(TValue val, out lua_Number n)
+        {
+            switch (val.tt) {
+                case LuaTag.LUA_TNUMBER:
+                    n = val.N;
+                    return true;
+
+                case LuaTag.LUA_TSTRING:
+                    return lobject.luaO_str2d(val.Str, out n);
+
+                default:
+                    n = 0;
+                    return false;
+            }
+        }
+
         private bool tostring(TValue o)
         {
             return o.IsString || luaV_tostring(o);
@@ -816,13 +800,10 @@ namespace ZoloLua.Core.VirtualMachine
 
         private bool luaV_tostring(TValue obj)
         {
-            if (!obj.IsNumber) {
-                return false;
-            }
+            if (!obj.IsNumber) return false;
             obj.Str = obj.N.ToString();
             return true;
         }
 
-        #endregion other things
     }
 }

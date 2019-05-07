@@ -17,12 +17,12 @@ namespace ZoloLua.Core.ObjectModel
     public class Table : GCObject, IEnumerable<KeyValuePair<TValue, TValue>>
     {
         private readonly List<TValue> array;
+        private readonly Dictionary<TValue, TValue> hashTablePart;
         /// <summary>
         ///     用于优化元方法查找的标志
         /// </summary>
         /// <remarks>1 left shift p bits means tagmethod(p) is not present</remarks>
         public byte flags;
-        private readonly Dictionary<TValue, TValue> hashTablePart;
 
         public Table metatable;
 
@@ -37,7 +37,11 @@ namespace ZoloLua.Core.ObjectModel
             array = new List<TValue>(sizeArrayPart);
         }
 
-        public int sizearray => array.Count;
+        public int sizearray {
+            get {
+                return array.Count;
+            }
+        }
 
         /// <summary>
         /// </summary>

@@ -14,46 +14,72 @@ namespace ZoloLua.Core.ObjectModel
     /// <remarks>TODO大小8+8+4=20B，其中指针大小4B或8B，enum大小默认4B，现在的样子是对齐的</remarks>
     public class TValue : IEquatable<TValue>
     {
-        #region 私有属性
+        /// <summary>
+        ///     构造nil
+        /// </summary>
+        public TValue()
+        {
+            tt = LuaTag.LUA_TNIL;
+        }
 
+        public TValue(lua_Number n)
+        {
+            tt = LuaTag.LUA_TNUMBER;
+            NumericValue = new LuaNumeric { n = n };
+        }
+
+        public TValue(bool b)
+        {
+            tt = LuaTag.LUA_TBOOLEAN;
+            NumericValue = new LuaNumeric { b = b };
+        }
+
+        public TValue(string s)
+        {
+            tt = LuaTag.LUA_TSTRING;
+            gc = new TString(s);
+        }
+
+        public TValue(TString tstr)
+        {
+            tt = LuaTag.LUA_TSTRING;
+            gc = tstr;
+        }
+
+        public TValue(Table table)
+        {
+            tt = LuaTag.LUA_TTABLE;
+            gc = table;
+        }
+
+        public TValue(lua_State thread)
+        {
+            tt = LuaTag.LUA_TTHREAD;
+            gc = thread;
+        }
+
+        public TValue(Userdata userdata)
+        {
+            tt = LuaTag.LUA_TUSERDATA;
+            gc = userdata;
+        }
+
+        public TValue(Closure closure)
+        {
+            tt = LuaTag.LUA_TFUNCTION;
+            gc = closure;
+        }
+
+        /// <summary>
+        ///     lua值类型的值
+        /// </summary>
         [JsonProperty]
         private LuaNumeric NumericValue { get; set; }
 
-        #endregion 私有属性
 
-        #region 嵌套类型定义
-
-        // TODO 删除int类型
         /// <summary>
-        ///     lua值类型
+        ///     lua引用类型的值
         /// </summary>
-        /// <remarks>
-        ///     <list>
-        ///         <item>大小8B</item>
-        ///         <item>
-        ///             是union，这个特性不允许引用类型，所以TObject放在外面
-        ///             https://docs.microsoft.com/en-us/dotnet/api/system.runtime.interopservices.structlayoutattribute?view=netframework-4.7.2
-        ///         </item>
-        ///     </list>
-        /// </remarks>
-        [StructLayout(LayoutKind.Explicit)]
-        private struct LuaNumeric
-        {
-            [FieldOffset(0)]
-            public readonly lua_Integer i;
-
-            [FieldOffset(0)]
-            public lua_Number n;
-
-            [FieldOffset(0)]
-            public bool b;
-        }
-
-        #endregion 嵌套类型定义
-
-        #region 公有属性
-
-        // lua引用类型
         [JsonProperty]
         public GCObject gc { get; private set; }
 
@@ -63,13 +89,12 @@ namespace ZoloLua.Core.ObjectModel
         [JsonProperty]
         private object p { get; set; }
 
-        // 类型标签
+        /// <summary>
+        ///     类型标签
+        /// </summary>
         [JsonProperty]
         public LuaTag tt { get; private set; }
 
-        #endregion 公有属性
-
-        #region 访问器与设置器
 
         [JsonIgnore]
         public lua_Number N {
@@ -189,142 +214,115 @@ namespace ZoloLua.Core.ObjectModel
             }
         }
 
+
+        public bool IsNil {
+            get {
+                return tt == LuaTag.LUA_TNIL;
+            }
+        }
+
+        public bool IsNumber {
+            get {
+                return tt == LuaTag.LUA_TNUMBER;
+            }
+        }
+
+        public bool IsString {
+            get {
+                return tt == LuaTag.LUA_TSTRING;
+            }
+        }
+
+        public bool IsTable {
+            get {
+                return tt == LuaTag.LUA_TTABLE;
+            }
+        }
+
+        public bool IsProto {
+            get {
+                return tt == LuaTag.LUA_TFUNCTION;
+            }
+        }
+
+        public bool IsBool {
+            get {
+                return tt == LuaTag.LUA_TBOOLEAN;
+            }
+        }
+
+        public bool IsUserdata {
+            get {
+                return tt == LuaTag.LUA_TUSERDATA;
+            }
+        }
+
+        public bool IsThread {
+            get {
+                return tt == LuaTag.LUA_TTHREAD;
+            }
+        }
+
+        public bool IsLightUserdata {
+            get {
+                return tt == LuaTag.LUA_TLIGHTUSERDATA;
+            }
+        }
+
+        public bool IsCSharpFunction {
+            get {
+                return tt == LuaTag.LUA_TFUNCTION && gc is CSharpClosure;
+            }
+        }
+
+        public bool IsLuaFunction {
+            get {
+                return tt == LuaTag.LUA_TFUNCTION && gc is LuaClosure;
+            }
+        }
+
+        public bool IsFunction {
+            get {
+                return tt == LuaTag.LUA_TFUNCTION;
+            }
+        }
+
+
+        public bool IsCollectable {
+            get {
+                return (int)tt >= (int)LuaTag.LUA_TSTRING;
+            }
+        }
+
+        /// <summary>
+        ///     lua值都可以作为条件测试，只有false和nil是条件为假
+        /// </summary>
+        public bool IsFalse {
+            get {
+                return IsNil || IsBool && B == false;
+            }
+        }
+
+        /// <summary>
+        ///     lua值都可以作为条件测试，只有false和nil是条件为假
+        /// </summary>
+        public bool IsTrue {
+            get {
+                return !IsFalse;
+            }
+        }
+
+
+        public bool Equals(TValue other)
+        {
+            return lobject.luaO_rawequalObj(this, other);
+        }
+
         [DebuggerStepThrough]
         public void SetNil()
         {
             tt = LuaTag.LUA_TNIL;
             gc = null;
-        }
-
-        #endregion 访问器与设置器
-
-        #region 构造函数
-
-        // 构造nil
-        public TValue()
-        {
-            tt = LuaTag.LUA_TNIL;
-        }
-
-        public TValue(lua_Number n)
-        {
-            tt = LuaTag.LUA_TNUMBER;
-            NumericValue = new LuaNumeric { n = n };
-        }
-
-        public TValue(bool b)
-        {
-            tt = LuaTag.LUA_TBOOLEAN;
-            NumericValue = new LuaNumeric { b = b };
-        }
-
-        public TValue(string s)
-        {
-            tt = LuaTag.LUA_TSTRING;
-            gc = new TString(s);
-        }
-
-        public TValue(TString tstr)
-        {
-            tt = LuaTag.LUA_TSTRING;
-            gc = tstr;
-        }
-
-        public TValue(Table table)
-        {
-            tt = LuaTag.LUA_TTABLE;
-            gc = table;
-        }
-
-        public TValue(lua_State thread)
-        {
-            tt = LuaTag.LUA_TTHREAD;
-            gc = thread;
-        }
-
-        public TValue(Userdata userdata)
-        {
-            tt = LuaTag.LUA_TUSERDATA;
-            gc = userdata;
-        }
-
-        public TValue(Closure closure)
-        {
-            tt = LuaTag.LUA_TFUNCTION;
-            gc = closure;
-        }
-
-        #endregion 构造函数
-
-        #region 类型谓词
-
-        public bool IsNil => tt == LuaTag.LUA_TNIL;
-        public bool IsNumber => tt == LuaTag.LUA_TNUMBER;
-        public bool IsString => tt == LuaTag.LUA_TSTRING;
-        public bool IsTable => tt == LuaTag.LUA_TTABLE;
-        public bool IsProto => tt == LuaTag.LUA_TFUNCTION;
-        public bool IsBool => tt == LuaTag.LUA_TBOOLEAN;
-        public bool IsUserdata => tt == LuaTag.LUA_TUSERDATA;
-        public bool IsThread => tt == LuaTag.LUA_TTHREAD;
-        public bool IsLightUserdata => tt == LuaTag.LUA_TLIGHTUSERDATA;
-        public bool IsCSharpFunction => tt == LuaTag.LUA_TFUNCTION && gc is CSharpClosure;
-        public bool IsLuaFunction => tt == LuaTag.LUA_TFUNCTION && gc is LuaClosure;
-        public bool IsFunction => tt == LuaTag.LUA_TFUNCTION;
-
-        #endregion 类型谓词
-
-        #region 其他方法
-
-        public bool IsCollectable => (int)tt >= (int)LuaTag.LUA_TSTRING;
-
-        // lua值都可以作为条件测试，只有false和nil是条件为假
-        public bool IsFalse => IsNil || IsBool && B == false;
-
-        // lua值都可以作为条件测试，只有false和nil是条件为假
-        public bool IsTrue => !IsFalse;
-
-        internal bool i;
-
-        /// luaO_str2d; 简单地包装Parse，返回成功和double
-        /// src返回bool用参数返回double，我改了】他除了了x结尾的”hex const“没空研究，放弃
-        public static bool Str2Num(string s, out double n)
-        {
-            // 类似于这种地方，就暴露了LuaNumber是double
-            // 然而这是没办法的。。
-            // out LuaNumber时无法隐式转换，所以此函数参数使用out double，为了方便
-            return double.TryParse(s, out n);
-        }
-
-        #endregion 其他方法
-
-        #region 重载基本方法
-
-        public static bool luaO_rawequalObj(TValue t1, TValue t2)
-        {
-            if (t1.tt != t2.tt)
-                return false;
-            switch (t2.tt) {
-                case LuaTag.LUA_TNIL:
-                    return true;
-
-                case LuaTag.LUA_TNUMBER:
-                    return t1.N == t2.N;
-
-                case LuaTag.LUA_TBOOLEAN:
-                    return t1.B == t2.B;
-
-                case LuaTag.LUA_TSTRING:
-                    return t1.Str == t2.Str;
-
-                default:
-                    Debug.Assert(t2.IsCollectable);
-                    return t1.gc == t2.gc;
-            }
-        }
-
-        public bool Equals(TValue other)
-        {
-            return luaO_rawequalObj(this, other);
         }
 
         public override bool Equals(object obj)
@@ -343,55 +341,39 @@ namespace ZoloLua.Core.ObjectModel
             }
         }
 
-        // TODO 懒得写了。。你调试时需要再写
         public override string ToString()
         {
             switch (tt) {
-                case LuaTag.LUA_TNONE:
-                    break;
-
-                case LuaTag.LUA_TNIL:
-                    break;
-
                 case LuaTag.LUA_TBOOLEAN:
                     return $"{tt} {B}";
-                    break;
-
-                case LuaTag.LUA_TLIGHTUSERDATA:
-                    break;
-
                 case LuaTag.LUA_TNUMBER:
                     return $"{tt} {N.Value}";
-                    break;
-
                 case LuaTag.LUA_TSTRING:
                     return $"{tt} {Str}";
-
-                case LuaTag.LUA_TTABLE:
-                    break;
-
-                case LuaTag.LUA_TFUNCTION:
-                    break;
-
-                case LuaTag.LUA_TUSERDATA:
-                    break;
-
-                case LuaTag.LUA_TTHREAD:
-                    break;
-
-                case LuaTag.LUA_TPROTO:
-                    break;
-
-                case LuaTag.LUA_TUPVAL:
-                    break;
-
-                case LuaTag.LUA_TDEADKEY:
-                    break;
-
             }
             return tt.ToString();
         }
 
-        #endregion 重载基本方法
+        /// <summary>
+        ///     lua值类型
+        /// </summary>
+        /// <remarks>
+        ///     <list>
+        ///         <item>大小8B</item>
+        ///         <item>
+        ///             是union，这个特性不允许使用c#引用类型，所以放在外面
+        ///             https://docs.microsoft.com/en-us/dotnet/api/system.runtime.interopservices.structlayoutattribute?view=netframework-4.7.2
+        ///         </item>
+        ///     </list>
+        /// </remarks>
+        [StructLayout(LayoutKind.Explicit)]
+        private struct LuaNumeric
+        {
+            [FieldOffset(0)]
+            public lua_Number n;
+
+            [FieldOffset(0)]
+            public bool b;
+        }
     }
 }

@@ -16,14 +16,6 @@ namespace ZoloLua.Core.VirtualMachine
     {
     }
 
-    // 错误的操作数类型，我们用opcode作为提示
-    internal class OprdTypeException : Exception
-    {
-        public OprdTypeException(Opcode opcode) : base(opcode + "错误的操作数")
-        {
-        }
-    }
-
     public partial class lua_State
     {
         /// 基于L.top，压函数，压args，返回n个值

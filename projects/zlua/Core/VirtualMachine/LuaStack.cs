@@ -14,6 +14,14 @@ namespace ZoloLua.Core.VirtualMachine
     {
         public List<TValue> stack { get; }
 
+        /// 让栈扩展到`size大小
+        /// TODO 删除 stack.check
+        internal void Alloc(int size)
+        {
+            for (int i = stack.Count; i < size; i++)
+                stack.Add(new TValue());
+        }
+
         //// 检查栈的空闲空间是否还可以容纳（推入）至少n个值，如若不然，扩容
         //public void check(int n)
         //{

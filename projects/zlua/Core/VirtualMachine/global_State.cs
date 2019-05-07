@@ -27,7 +27,7 @@ namespace ZoloLua.Core.VirtualMachine
 
         public global_State()
         {
-            mt = new Table[luaO.NUM_TAGS];
+            mt = new Table[lobject.NUM_TAGS];
             tmname = new TString[(int)TMS.TM_N];
             l_registry = new TValue();
         }

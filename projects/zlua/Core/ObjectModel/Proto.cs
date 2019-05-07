@@ -61,7 +61,11 @@ namespace ZoloLua.Core.ObjectModel
         /// </remarks>
         public string source;
 
-        public bool IsVararg => is_vararg != 0;
+        public bool IsVararg {
+            get {
+                return is_vararg != 0;
+            }
+        }
 
         #region 调试信息
 

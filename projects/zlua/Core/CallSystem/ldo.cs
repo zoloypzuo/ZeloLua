@@ -220,9 +220,7 @@ namespace ZoloLua.Core.VirtualMachine
                 Debug.Assert(ci.top <= stack_last);
                 funcValue = func;
                 int n = (funcValue.Cl as CSharpClosure).f(this); /* do the actual call */
-                if (n < 0) /* yielding? */ {
-                    return PCRYIELD;
-                }
+                if (n < 0) /* yielding? */ return PCRYIELD;
                 luaD_poscall(top - n);
                 return PCRC;
             }

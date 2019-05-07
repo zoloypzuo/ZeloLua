@@ -28,7 +28,11 @@ namespace ZoloLua.Core.ObjectModel
             //}
         }
 
-        public int NumUpvals => upvals.Count;
+        public int NumUpvals {
+            get {
+                return upvals.Count;
+            }
+        }
     }
 
     internal class CSharpClosure : Closure
@@ -40,6 +44,10 @@ namespace ZoloLua.Core.ObjectModel
         {
         }
 
-        public int nupvalues => upvalue.Count;
+        public int nupvalues {
+            get {
+                return upvalue.Count;
+            }
+        }
     }
 }

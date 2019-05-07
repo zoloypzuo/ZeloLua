@@ -116,7 +116,7 @@ namespace ZoloLua.Core.VirtualMachine
             if (mt1 == mt2) return tm1; /* same metatables => same metamethods */
             tm2 = fasttm(mt2, @event);
             if (tm2 == null) return null; /* no metamethod */
-            if (TValue.luaO_rawequalObj(tm1, tm2)) /* same metamethods? */
+            if (lobject.luaO_rawequalObj(tm1, tm2)) /* same metamethods? */
                 return tm1;
             return null;
         }
@@ -130,7 +130,7 @@ namespace ZoloLua.Core.VirtualMachine
             TValue tm2;
             if (tm1.IsNil) return -1; /* no metamethod? */
             tm2 = luaT_gettmbyobj(p2, @event);
-            if (!TValue.luaO_rawequalObj(tm1, tm2)) /* different metamethods? */
+            if (!lobject.luaO_rawequalObj(tm1, tm2)) /* different metamethods? */
                 return -1;
             callTMres(top, tm1, p1, p2);
             return !stack[top.index].IsFalse ? 1 : 0;

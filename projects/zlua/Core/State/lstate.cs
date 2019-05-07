@@ -84,11 +84,23 @@ namespace ZoloLua.Core.VirtualMachine
             CallStack.Push(ci);
         }
 
-        private TValue registry => G.l_registry;
+        private TValue registry {
+            get {
+                return G.l_registry;
+            }
+        }
 
-        private int stacksize => stack.Count;
+        private int stacksize {
+            get {
+                return stack.Count;
+            }
+        }
 
-        private Closure curr_func => stack[ci.func.index].Cl;
+        private Closure curr_func {
+            get {
+                return stack[ci.func.index].Cl;
+            }
+        }
 
         /// <summary>
         /// luaE_newthread

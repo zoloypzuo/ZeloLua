@@ -27,7 +27,7 @@ namespace ZoloLua
         {
             using (StreamWriter writer =
                 new StreamWriter(new FileStream($"{JsonDataPathBase}{DateTime.Now}_{o}.json", FileMode.OpenOrCreate))) {
-                var output = JsonConvert.SerializeObject(o, Settings);
+                string output = JsonConvert.SerializeObject(o, Settings);
                 writer.Write(output);
             }
         }
@@ -41,7 +41,7 @@ namespace ZoloLua
         // json.net的序列化非常可靠，包括环，多态的处理，但是不得不在类中插入很多特性
         public static void AssertPropertyEqual(string subPath, object actual)
         {
-            var actualS = JsonConvert.SerializeObject(actual, Settings);
+            string actualS = JsonConvert.SerializeObject(actual, Settings);
             string fullPath = $"{JsonDataPathBase}{subPath}";
             Debug.Assert(actualS == File.ReadAllText(fullPath));
         }

@@ -18,7 +18,11 @@ namespace ZoloLua.Compiler.CodeGenerator
 
         #region visitor
 
-        protected override int DefaultResult => base.DefaultResult;
+        protected override int DefaultResult {
+            get {
+                return base.DefaultResult;
+            }
+        }
 
         public override int Visit([NotNull] IParseTree tree)
         {

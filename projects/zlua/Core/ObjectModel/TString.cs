@@ -12,7 +12,11 @@
             this.str = str;
         }
 
-        public int len => str.Length;
+        public int len {
+            get {
+                return str.Length;
+            }
+        }
 
         public override string ToString()
         {
