@@ -70,11 +70,11 @@ namespace ZoloLua.Core.ObjectModel
         public TValue luaH_get(TValue key)
         {
             switch (key.tt) {
-                case LuaTag.LUA_TNIL: return lobject.luaO_nilobject;
-                case LuaTag.LUA_TSTRING:
+                case LuaType.LUA_TNIL: return lobject.luaO_nilobject;
+                case LuaType.LUA_TSTRING:
                     return luaH_getstr(key.TStr);
 
-                case LuaTag.LUA_TNUMBER:
+                case LuaType.LUA_TNUMBER:
                     lua_Number n = key.N;
                     // clua是(int)n，估计问题不大
                     int k = (int)Math.Round(n, MidpointRounding.AwayFromZero);

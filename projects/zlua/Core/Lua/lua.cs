@@ -342,7 +342,7 @@ namespace ZoloLua.Core.VirtualMachine
         {
             Proto p;
             if (IsBinaryChunk(path)) {
-                p = luaU.Undump(new FileStream(path, FileMode.Open));
+                p = lundump.Undump(new FileStream(path, FileMode.Open));
                 Table env = new Table(1, 1);
                 env.luaH_set(new TValue("print")).Cl = new CSharpClosure
                 {
@@ -432,7 +432,7 @@ namespace ZoloLua.Core.VirtualMachine
             using (FileStream f = new FileStream(path, FileMode.Open)) {
                 // TODO check and throw file open error
                 char c = (char)f.ReadByte();
-                return c == luaU.FirstChar;
+                return c == lundump.FirstChar;
             }
         }
 

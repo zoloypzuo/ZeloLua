@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using zlua.Core.MetaMethod;
 using ZoloLua.Core.Configuration;
 using ZoloLua.Core.ObjectModel;
 

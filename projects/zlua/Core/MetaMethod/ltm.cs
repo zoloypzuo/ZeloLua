@@ -1,6 +1,18 @@
 ﻿using System.Diagnostics;
+using zlua.Core.MetaMethod;
 using ZoloLua.Core.Lua;
 using ZoloLua.Core.ObjectModel;
+
+namespace ZoloLua.Core.MetaMethod
+{
+    /// <summary>
+    /// 元方法
+    /// </summary>
+    public class ltm
+    {
+
+    }
+}
 
 namespace ZoloLua.Core.VirtualMachine
 {
@@ -28,7 +40,7 @@ namespace ZoloLua.Core.VirtualMachine
         {
             Table mt;
             switch (o.tt) {
-                case LuaTag.LUA_TTABLE:
+                case LuaType.LUA_TTABLE:
                     mt = o.Table.metatable;
                     break;
                 //case LuaType.Userdata:
@@ -137,25 +149,5 @@ namespace ZoloLua.Core.VirtualMachine
         }
     }
 
-    internal enum TMS
-    {
-        TM_INDEX,
-        TM_NEWINDEX,
-        TM_GC,
-        TM_MODE,
-        TM_EQ, /* last tag method with `fast' access */
-        TM_ADD,
-        TM_SUB,
-        TM_MUL,
-        TM_DIV,
-        TM_MOD,
-        TM_POW,
-        TM_UNM,
-        TM_LEN,
-        TM_LT,
-        TM_LE,
-        TM_CONCAT,
-        TM_CALL,
-        TM_N /* number of elements in the enum */
-    }
+
 }

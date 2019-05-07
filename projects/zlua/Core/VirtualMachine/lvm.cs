@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
+using zlua.Core.MetaMethod;
 using ZoloLua.Core.InstructionSet;
 using ZoloLua.Core.Lua;
 using ZoloLua.Core.ObjectModel;
@@ -252,11 +253,11 @@ namespace ZoloLua.Core.VirtualMachine
                     case Opcode.OP_LEN: {
                             TValue rb = RB(i);
                             switch (rb.tt) {
-                                case LuaTag.LUA_TTABLE: {
+                                case LuaType.LUA_TTABLE: {
                                         ra.N = rb.Table.luaH_getn();
                                         break;
                                     }
-                                case LuaTag.LUA_TSTRING: {
+                                case LuaType.LUA_TSTRING: {
                                         ra.N = rb.Str.Length;
                                         break;
                                     }
@@ -780,11 +781,11 @@ namespace ZoloLua.Core.VirtualMachine
         public static bool tonumber(TValue val, out lua_Number n)
         {
             switch (val.tt) {
-                case LuaTag.LUA_TNUMBER:
+                case LuaType.LUA_TNUMBER:
                     n = val.N;
                     return true;
 
-                case LuaTag.LUA_TSTRING:
+                case LuaType.LUA_TSTRING:
                     return lobject.luaO_str2d(val.Str, out n);
 
                 default:

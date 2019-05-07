@@ -19,54 +19,54 @@ namespace ZoloLua.Core.ObjectModel
         /// </summary>
         public TValue()
         {
-            tt = LuaTag.LUA_TNIL;
+            tt = LuaType.LUA_TNIL;
         }
 
         public TValue(lua_Number n)
         {
-            tt = LuaTag.LUA_TNUMBER;
+            tt = LuaType.LUA_TNUMBER;
             NumericValue = new LuaNumeric { n = n };
         }
 
         public TValue(bool b)
         {
-            tt = LuaTag.LUA_TBOOLEAN;
+            tt = LuaType.LUA_TBOOLEAN;
             NumericValue = new LuaNumeric { b = b };
         }
 
         public TValue(string s)
         {
-            tt = LuaTag.LUA_TSTRING;
+            tt = LuaType.LUA_TSTRING;
             gc = new TString(s);
         }
 
         public TValue(TString tstr)
         {
-            tt = LuaTag.LUA_TSTRING;
+            tt = LuaType.LUA_TSTRING;
             gc = tstr;
         }
 
         public TValue(Table table)
         {
-            tt = LuaTag.LUA_TTABLE;
+            tt = LuaType.LUA_TTABLE;
             gc = table;
         }
 
         public TValue(lua_State thread)
         {
-            tt = LuaTag.LUA_TTHREAD;
+            tt = LuaType.LUA_TTHREAD;
             gc = thread;
         }
 
         public TValue(Userdata userdata)
         {
-            tt = LuaTag.LUA_TUSERDATA;
+            tt = LuaType.LUA_TUSERDATA;
             gc = userdata;
         }
 
         public TValue(Closure closure)
         {
-            tt = LuaTag.LUA_TFUNCTION;
+            tt = LuaType.LUA_TFUNCTION;
             gc = closure;
         }
 
@@ -93,7 +93,7 @@ namespace ZoloLua.Core.ObjectModel
         ///     类型标签
         /// </summary>
         [JsonProperty]
-        public LuaTag tt { get; private set; }
+        public LuaType tt { get; private set; }
 
 
         [JsonIgnore]
@@ -103,7 +103,7 @@ namespace ZoloLua.Core.ObjectModel
                 return NumericValue.n;
             }
             set {
-                tt = LuaTag.LUA_TNUMBER;
+                tt = LuaType.LUA_TNUMBER;
                 NumericValue = new LuaNumeric { n = value };
             }
         }
@@ -115,7 +115,7 @@ namespace ZoloLua.Core.ObjectModel
                 return NumericValue.b;
             }
             set {
-                tt = LuaTag.LUA_TBOOLEAN;
+                tt = LuaType.LUA_TBOOLEAN;
                 NumericValue = new LuaNumeric { b = value };
             }
         }
@@ -127,7 +127,7 @@ namespace ZoloLua.Core.ObjectModel
                 return gc as TString;
             }
             set {
-                tt = LuaTag.LUA_TSTRING;
+                tt = LuaType.LUA_TSTRING;
                 gc = value;
             }
         }
@@ -139,7 +139,7 @@ namespace ZoloLua.Core.ObjectModel
                 return (gc as TString).str;
             }
             set {
-                tt = LuaTag.LUA_TSTRING;
+                tt = LuaType.LUA_TSTRING;
                 TString tstr = gc as TString;
                 if (tstr != null)
                     tstr.str = value;
@@ -154,7 +154,7 @@ namespace ZoloLua.Core.ObjectModel
                 return gc as Closure;
             }
             set {
-                tt = LuaTag.LUA_TFUNCTION;
+                tt = LuaType.LUA_TFUNCTION;
                 gc = value;
             }
         }
@@ -163,7 +163,7 @@ namespace ZoloLua.Core.ObjectModel
         public lua_State Thread {
             get { return gc as lua_State; }
             set {
-                tt = LuaTag.LUA_TTHREAD;
+                tt = LuaType.LUA_TTHREAD;
                 gc = value;
             }
         }
@@ -172,7 +172,7 @@ namespace ZoloLua.Core.ObjectModel
         public Table Table {
             get { return gc as Table; }
             set {
-                tt = LuaTag.LUA_TTABLE;
+                tt = LuaType.LUA_TTABLE;
                 gc = value;
             }
         }
@@ -183,7 +183,7 @@ namespace ZoloLua.Core.ObjectModel
                 return gc as Userdata;
             }
             set {
-                tt = LuaTag.LUA_TUSERDATA;
+                tt = LuaType.LUA_TUSERDATA;
                 gc = value;
             }
         }
@@ -194,7 +194,7 @@ namespace ZoloLua.Core.ObjectModel
                 return p;
             }
             set {
-                tt = LuaTag.LUA_TLIGHTUSERDATA;
+                tt = LuaType.LUA_TLIGHTUSERDATA;
                 p = value;
             }
         }
@@ -217,80 +217,80 @@ namespace ZoloLua.Core.ObjectModel
 
         public bool IsNil {
             get {
-                return tt == LuaTag.LUA_TNIL;
+                return tt == LuaType.LUA_TNIL;
             }
         }
 
         public bool IsNumber {
             get {
-                return tt == LuaTag.LUA_TNUMBER;
+                return tt == LuaType.LUA_TNUMBER;
             }
         }
 
         public bool IsString {
             get {
-                return tt == LuaTag.LUA_TSTRING;
+                return tt == LuaType.LUA_TSTRING;
             }
         }
 
         public bool IsTable {
             get {
-                return tt == LuaTag.LUA_TTABLE;
+                return tt == LuaType.LUA_TTABLE;
             }
         }
 
         public bool IsProto {
             get {
-                return tt == LuaTag.LUA_TFUNCTION;
+                return tt == LuaType.LUA_TFUNCTION;
             }
         }
 
         public bool IsBool {
             get {
-                return tt == LuaTag.LUA_TBOOLEAN;
+                return tt == LuaType.LUA_TBOOLEAN;
             }
         }
 
         public bool IsUserdata {
             get {
-                return tt == LuaTag.LUA_TUSERDATA;
+                return tt == LuaType.LUA_TUSERDATA;
             }
         }
 
         public bool IsThread {
             get {
-                return tt == LuaTag.LUA_TTHREAD;
+                return tt == LuaType.LUA_TTHREAD;
             }
         }
 
         public bool IsLightUserdata {
             get {
-                return tt == LuaTag.LUA_TLIGHTUSERDATA;
+                return tt == LuaType.LUA_TLIGHTUSERDATA;
             }
         }
 
         public bool IsCSharpFunction {
             get {
-                return tt == LuaTag.LUA_TFUNCTION && gc is CSharpClosure;
+                return tt == LuaType.LUA_TFUNCTION && gc is CSharpClosure;
             }
         }
 
         public bool IsLuaFunction {
             get {
-                return tt == LuaTag.LUA_TFUNCTION && gc is LuaClosure;
+                return tt == LuaType.LUA_TFUNCTION && gc is LuaClosure;
             }
         }
 
         public bool IsFunction {
             get {
-                return tt == LuaTag.LUA_TFUNCTION;
+                return tt == LuaType.LUA_TFUNCTION;
             }
         }
 
 
         public bool IsCollectable {
             get {
-                return (int)tt >= (int)LuaTag.LUA_TSTRING;
+                return (int)tt >= (int)LuaType.LUA_TSTRING;
             }
         }
 
@@ -321,7 +321,7 @@ namespace ZoloLua.Core.ObjectModel
         [DebuggerStepThrough]
         public void SetNil()
         {
-            tt = LuaTag.LUA_TNIL;
+            tt = LuaType.LUA_TNIL;
             gc = null;
         }
 
@@ -333,9 +333,9 @@ namespace ZoloLua.Core.ObjectModel
         public override int GetHashCode()
         {
             switch (tt) {
-                case LuaTag.LUA_TNUMBER: return N.GetHashCode();
-                case LuaTag.LUA_TSTRING: return Str.GetHashCode();
-                case LuaTag.LUA_TBOOLEAN: return B.GetHashCode();
+                case LuaType.LUA_TNUMBER: return N.GetHashCode();
+                case LuaType.LUA_TSTRING: return Str.GetHashCode();
+                case LuaType.LUA_TBOOLEAN: return B.GetHashCode();
                 default:
                     return gc.GetHashCode();
             }
@@ -344,11 +344,11 @@ namespace ZoloLua.Core.ObjectModel
         public override string ToString()
         {
             switch (tt) {
-                case LuaTag.LUA_TBOOLEAN:
+                case LuaType.LUA_TBOOLEAN:
                     return $"{tt} {B}";
-                case LuaTag.LUA_TNUMBER:
+                case LuaType.LUA_TNUMBER:
                     return $"{tt} {N.Value}";
-                case LuaTag.LUA_TSTRING:
+                case LuaType.LUA_TSTRING:
                     return $"{tt} {Str}";
             }
             return tt.ToString();

@@ -87,10 +87,4 @@ namespace ZoloLua.Core.ObjectModel
 
         #endregion 调试信息
     }
-
-    internal class ChunkProto : Proto
-    {
-        internal List<double> ns = new List<double>();
-        internal List<string> strs = new List<string>();
-    }
 }

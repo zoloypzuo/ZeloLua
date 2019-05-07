@@ -5,12 +5,10 @@ using ZoloLua.Core.InstructionSet;
 using ZoloLua.Core.Lua;
 using ZoloLua.Core.ObjectModel;
 
-/// <summary>
-/// 加载预编译chunk
-/// </summary>
 namespace ZoloLua.Core.Undumper
 {
     /// <summary>
+    ///     加载预编译chunk
     /// </summary>
     /// <remarks>
     ///     《Lua设计与实现》p57
@@ -36,9 +34,31 @@ namespace ZoloLua.Core.Undumper
     ///         </item>
     ///     </list>
     /// </remarks>
-    internal static class luaU
+    internal static class lundump
     {
-        #region 公有方法
+        // chunk文件首字符，用于/loadfile/检查文件是否是chunk
+        public const char FirstChar = '\x1b'; // LUA_SIGNATURE[0]
+
+
+        // ASCII字符串 ESC L u a
+        private const string LUA_SIGNATURE = "\x1bLua";
+
+        private const byte LUAC_VERSION = 0x51;
+        private const byte LUAC_FORMAT = 0;
+
+        private const uint CINT_SIZE = 4;
+        private const uint CSIZET_SIZE_32 = 4;
+        private const uint CSIZET_SIZE_64 = 8;
+        private const uint INSTRUCTION_SIZE = 4;
+        private const uint LUA_NUMBER_SIZE = 8;
+
+        // "\x19\x93\r\n\x1a\n"
+        private static readonly byte[] LUAC_DATA = { 0x19, 0x93, 0x0d, 0x0a, 0x1a, 0x0a };
+        private static readonly lua_Integer LUAC_INT = 0x5678;
+        private static readonly lua_Number LUAC_NUM = 370.5f;
+
+
+        public static bool IsSizeofCSizeT8 { get; private set; } = true;
 
         public static Proto Undump(Stream data)
         {
@@ -49,18 +69,6 @@ namespace ZoloLua.Core.Undumper
             }
         }
 
-        #endregion 公有方法
-
-        #region 公有属性
-
-        public static bool IsSizeofCSizeT8 { get; private set; } = true;
-
-        // chunk文件首字符，用于/loadfile/检查文件是否是chunk
-        public const char FirstChar = '\x1b'; // LUA_SIGNATURE[0]
-
-        #endregion 公有属性
-
-        #region 私有方法
 
         private static int ReadSizeT(BinaryReader reader)
         {
@@ -84,27 +92,6 @@ namespace ZoloLua.Core.Undumper
             return reader.ReadDouble();
         }
 
-        #region 用于校验的常量
-
-        // ASCII字符串 ESC L u a
-        private const string LUA_SIGNATURE = "\x1bLua";
-
-        private const byte LUAC_VERSION = 0x51;
-        private const byte LUAC_FORMAT = 0;
-
-        // "\x19\x93\r\n\x1a\n"
-        private static readonly byte[] LUAC_DATA = { 0x19, 0x93, 0x0d, 0x0a, 0x1a, 0x0a };
-
-        private const uint CINT_SIZE = 4;
-        private const uint CSIZET_SIZE_32 = 4;
-        private const uint CSIZET_SIZE_64 = 8;
-        private const uint INSTRUCTION_SIZE = 4;
-        private const uint LUA_INTEGER_SIZE = 8;
-        private const uint LUA_NUMBER_SIZE = 8;
-        private static readonly lua_Integer LUAC_INT = 0x5678;
-        private static readonly lua_Number LUAC_NUM = 370.5f;
-
-        #endregion 用于校验的常量
 
         private static void CheckHeader(BinaryReader reader)
         {
@@ -229,17 +216,17 @@ namespace ZoloLua.Core.Undumper
 
         private static TValue ReadConstant(BinaryReader reader)
         {
-            switch ((LuaTag)reader.ReadByte()) {
-                case LuaTag.LUA_TNIL:
+            switch ((LuaType)reader.ReadByte()) {
+                case LuaType.LUA_TNIL:
                     return new TValue();
 
-                case LuaTag.LUA_TBOOLEAN:
+                case LuaType.LUA_TBOOLEAN:
                     return new TValue(reader.ReadByte() != 0);
 
-                case LuaTag.LUA_TNUMBER:
+                case LuaType.LUA_TNUMBER:
                     return new TValue(ReadLuaNumber(reader));
 
-                case LuaTag.LUA_TSTRING:
+                case LuaType.LUA_TSTRING:
                     return new TValue(ReadString(reader));
 
                 default:
@@ -253,8 +240,6 @@ namespace ZoloLua.Core.Undumper
             for (int i = 0; i < code.Length; i++) code[i] = new Bytecode(reader.ReadUInt32());
             return code;
         }
-
-        #endregion 私有方法
     }
 
     public class UndumpException : Exception

@@ -59,13 +59,14 @@
     <Compile Include="Core\InstructionSet\Opcode.cs" />
     <Compile Include="Core\API\lapi.cs" />
     <Compile Include="Core\CallSystem\ldo.cs" />
+    <Compile Include="Core\Lua\LuaInteger.cs" />
     <Compile Include="Core\MetaMethod\ltm.cs" />
+    <Compile Include="Core\MetaMethod\TMS.cs" />
     <Compile Include="Core\ObjectModel\Closure.cs" />
     <Compile Include="Core\ObjectModel\lobject.cs" />
     <Compile Include="Core\InstructionSet\lopcodes.cs" />
     <Compile Include="Core\Lua\lua.cs" />
     <Compile Include="Core\Configuration\luaconf.cs" />
-    <Compile Include="Core\Lua\LuaInteger.cs" />
     <Compile Include="Core\Lua\LuaNumber.cs" />
     <Compile Include="Core\Lua\LuaType.cs" />
     <Compile Include="Core\ObjectModel\TValue.cs" />
@@ -77,7 +78,6 @@
     <Compile Include="Core\VirtualMachine\global_State.cs" />
     <Compile Include="Core\VirtualMachine\LuaStack.cs" />
     <Compile Include="Core\VirtualMachine\Operator.cs" />
-    <Compile Include="Core\VirtualMachine\Cast.cs" />
     <Compile Include="Core\VirtualMachine\StkId.cs" />
     <Compile Include="Library\AuxLib\lauxlib.cs" />
     <Compile Include="Program.cs" />

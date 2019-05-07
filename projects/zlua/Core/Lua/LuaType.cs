@@ -3,7 +3,7 @@
     /// <summary>
     ///     lua类型枚举
     /// </summary>
-    public enum LuaTag
+    public enum LuaType
     {
         /// <summary>
         ///     无效索引对应的值的类型，表示没有值

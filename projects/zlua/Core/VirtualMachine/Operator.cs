@@ -2,6 +2,7 @@
 
 using System;
 using System.Diagnostics;
+using zlua.Core.MetaMethod;
 using ZoloLua.Core.InstructionSet;
 using ZoloLua.Core.Lua;
 using ZoloLua.Core.ObjectModel;
@@ -76,17 +77,17 @@ namespace ZoloLua.Core.VirtualMachine
             TValue tm;
             Debug.Assert(t1.tt == t2.tt);
             switch (t1.tt) {
-                case LuaTag.LUA_TNIL: return true;
-                case LuaTag.LUA_TNUMBER: return t1.N == t2.N;
-                case LuaTag.LUA_TBOOLEAN: return t1.B == t2.B;
-                case LuaTag.LUA_TLIGHTUSERDATA: return ReferenceEquals(t1.LightUserdata, t2.LightUserdata);
-                case LuaTag.LUA_TUSERDATA:
+                case LuaType.LUA_TNIL: return true;
+                case LuaType.LUA_TNUMBER: return t1.N == t2.N;
+                case LuaType.LUA_TBOOLEAN: return t1.B == t2.B;
+                case LuaType.LUA_TLIGHTUSERDATA: return ReferenceEquals(t1.LightUserdata, t2.LightUserdata);
+                case LuaType.LUA_TUSERDATA:
                     {
                         if (ReferenceEquals(t1.Userdata, t2.Userdata)) return true;
                         tm = get_compTM(t1.Userdata.metatable, t2.Userdata.metatable, TMS.TM_EQ);
                         break; /* will try TM */
                     }
-                case LuaTag.LUA_TTABLE:
+                case LuaType.LUA_TTABLE:
                     {
                         if (ReferenceEquals(t1.Table, t2.tt)) return true;
                         tm = get_compTM(t1.Table.metatable, t2.Table.metatable, TMS.TM_EQ);

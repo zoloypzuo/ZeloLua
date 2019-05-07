@@ -5,7 +5,7 @@ using ZoloLua.Core.Lua;
 using ZoloLua.Core.ObjectModel;
 
 
-namespace Zolo.Core.API
+namespace ZoloLua.Core.API
 {
     /// <summary>
     ///  lua API

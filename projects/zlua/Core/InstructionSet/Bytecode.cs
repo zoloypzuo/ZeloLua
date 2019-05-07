@@ -9,20 +9,6 @@ namespace ZoloLua.Core.InstructionSet
     /// </summary>
     internal struct Bytecode
     {
-        /// 一个仅用于warp args的struct
-        internal struct RK
-        {
-            public bool isK;
-            public int val;
-
-            public RK(bool isK, int val)
-            {
-                this.isK = isK;
-                this.val = val;
-            }
-        }
-
-
         public uint Value { get; set; }
 
         public Bytecode(uint i)

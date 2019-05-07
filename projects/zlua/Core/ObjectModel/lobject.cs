@@ -12,7 +12,7 @@ namespace ZoloLua.Core.ObjectModel
     internal class lobject
     {
         /* tags for values visible from Lua */
-        public const int LAST_TAG = (int)LuaTag.LUA_TTHREAD;
+        public const int LAST_TAG = (int)LuaType.LUA_TTHREAD;
 
         public const int NUM_TAGS = (LAST_TAG + 1);
 
@@ -72,16 +72,16 @@ namespace ZoloLua.Core.ObjectModel
             if (t1.tt != t2.tt)
                 return false;
             switch (t2.tt) {
-                case LuaTag.LUA_TNIL:
+                case LuaType.LUA_TNIL:
                     return true;
 
-                case LuaTag.LUA_TNUMBER:
+                case LuaType.LUA_TNUMBER:
                     return t1.N == t2.N;
 
-                case LuaTag.LUA_TBOOLEAN:
+                case LuaType.LUA_TBOOLEAN:
                     return t1.B == t2.B;
 
-                case LuaTag.LUA_TSTRING:
+                case LuaType.LUA_TSTRING:
                     return t1.Str == t2.Str;
 
                 default:
