@@ -1,10 +1,18 @@
-﻿// 调用系统
-// Stack and Call structure of Lua
-
-using System;
+﻿using System;
 using System.Diagnostics;
 using ZoloLua.Core.Configuration;
 using ZoloLua.Core.ObjectModel;
+
+namespace ZoloLua.Core.CallSystem
+{
+    /// <summary>
+    /// 调用系统
+    /// </summary>
+    public class ldo
+    {
+
+    }
+}
 
 namespace ZoloLua.Core.VirtualMachine
 {

@@ -1,19 +1,21 @@
-﻿// lua API
-//
-// 如果不想写在一个类里，有以下几种方案：
-// * partial class：本身专用于拆分大类到不同文件，必须在同一namespace，我不能放在zlua.API中
-//   你要思考namesapce的意义，我分文件夹，namespace的意义是什么，怎么去分
-//   看msdn和koopoo
-// * 扩展方法：只能访问public内容
-// 显然，partial会好一些，这是api，不是辅助api，不是单纯包装，因此必须要在类内，namespace肯定要一样，至于怎么构建namespace之后在考虑
+﻿
 
 using System.Diagnostics;
 using ZoloLua.Core.Lua;
 using ZoloLua.Core.ObjectModel;
 
-// CSharp API 这里因为过失没法回退，稍微要话十几分钟把所有index改为index2TValue(index)
-// TODO，反正lapi内部不用。
-// TODO namespace和。。还是有点。。爱
+
+namespace Zolo.Core.API
+{
+    /// <summary>
+    ///  lua API
+    /// </summary>
+    public class lapi
+    {
+
+    }
+}
+
 namespace ZoloLua.Core.VirtualMachine
 {
     public partial class lua_State
@@ -109,15 +111,13 @@ namespace ZoloLua.Core.VirtualMachine
             }
             switch (idx) { /* pseudo-indices */
                 case LUA_REGISTRYINDEX: return registry;
-                case LUA_ENVIRONINDEX:
-                    {
+                case LUA_ENVIRONINDEX: {
                         Closure func = curr_func;
                         env.Table = (func as CSharpClosure).env;
                         return env;
                     }
                 case LUA_GLOBALSINDEX: return gt;
-                default:
-                    {
+                default: {
                         Closure func = curr_func;
                         idx = LUA_GLOBALSINDEX - idx;
                         CSharpClosure ccl = func as CSharpClosure;
@@ -148,8 +148,7 @@ namespace ZoloLua.Core.VirtualMachine
                 mt = stack[top.index - 1].Table;
             }
             switch (obj.tt) {
-                case LuaTag.LUA_TTABLE:
-                    {
+                case LuaType.LUA_TTABLE: {
                         obj.Table.metatable = mt;
                         //if (mt!=null)
                         //    luaC_objbarriert(L, hvalue(obj), mt);
@@ -161,8 +160,7 @@ namespace ZoloLua.Core.VirtualMachine
                 //            luaC_objbarrier(L, rawuvalue(obj), mt);
                 //        break;
                 //    }
-                default:
-                    {
+                default: {
                         G.mt[(int)obj.tt] = mt;
                         break;
                     }
@@ -309,30 +307,30 @@ namespace ZoloLua.Core.VirtualMachine
 
         //#region Access*方法 从栈获取值
 
-        //public string TypeName(LuaTag type)
+        //public string TypeName(LuaType type)
         //{
         //    return type.ToString();
         //}
 
         //// 无效索引返回LUA_TNONE
-        //public LuaTag Type(int idx)
+        //public LuaType Type(int idx)
         //{
         //    if (LuaStack.isValid(idx)) {
         //        var val = LuaStack.get(idx);
         //        return val.tt;
         //    } else {
-        //        return LuaTag.LUA_TNONE;
+        //        return LuaType.LUA_TNONE;
         //    }
         //}
 
         //public bool IsNone(int idx)
         //{
-        //    return Type(idx) == LuaTag.LUA_TNONE;
+        //    return Type(idx) == LuaType.LUA_TNONE;
         //}
 
         //public bool IsNil(int idx)
         //{
-        //    return Type(idx) == LuaTag.LUA_TNIL;
+        //    return Type(idx) == LuaType.LUA_TNIL;
         //}
 
         //public bool IsNoneOrNil(int idx)
@@ -342,13 +340,13 @@ namespace ZoloLua.Core.VirtualMachine
 
         //public bool IsBoolean(int idx)
         //{
-        //    return Type(idx) == LuaTag.LUA_TBOOLEAN;
+        //    return Type(idx) == LuaType.LUA_TBOOLEAN;
         //}
 
         //// 注意lua类型转换规格
         //public bool IsString(int idx)
         //{
-        //    return Type(idx) == LuaTag.LUA_TNUMBER || Type(idx) == LuaTag.LUA_TSTRING;
+        //    return Type(idx) == LuaType.LUA_TNUMBER || Type(idx) == LuaType.LUA_TSTRING;
         //}
 
         //public bool IsNumber(int idx)
@@ -359,7 +357,7 @@ namespace ZoloLua.Core.VirtualMachine
 
         //public bool IsInteger(int idx)
         //{
-        //    return Type(idx) == LuaTag.LUA_TNUMBER;
+        //    return Type(idx) == LuaType.LUA_TNUMBER;
         //}
 
         //public bool ToBoolean(int idx)
@@ -370,10 +368,10 @@ namespace ZoloLua.Core.VirtualMachine
         //private bool convertToBoolean(TValue luaValue)
         //{
         //    switch (luaValue.tt) {
-        //        case LuaTag.LUA_TNIL:
+        //        case LuaType.LUA_TNIL:
         //            return false;
 
-        //        case LuaTag.LUA_TBOOLEAN:
+        //        case LuaType.LUA_TBOOLEAN:
         //            return luaValue.B;
 
         //        default:

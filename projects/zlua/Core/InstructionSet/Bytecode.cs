@@ -9,8 +9,6 @@ namespace ZoloLua.Core.InstructionSet
     /// </summary>
     internal struct Bytecode
     {
-        #region 内嵌类型定义
-
         /// 一个仅用于warp args的struct
         internal struct RK
         {
@@ -24,24 +22,14 @@ namespace ZoloLua.Core.InstructionSet
             }
         }
 
-        #endregion 内嵌类型定义
-
-        #region 公有属性
 
         public uint Value { get; set; }
-
-        #endregion 公有属性
-
-        #region 构造函数
 
         public Bytecode(uint i)
         {
             Value = i;
         }
 
-        #endregion 构造函数
-
-        #region 访问器和设置器
 
         [JsonIgnore]
         public Opcode Opcode {
@@ -61,11 +49,6 @@ namespace ZoloLua.Core.InstructionSet
             }
         }
 
-        #endregion 访问器和设置器
-
-        // TODO
-
-        #region handle RK
 
         // if x[7] (in bit) is 1, return true, and RKB returns KB
         public static bool IsK(int x)
@@ -78,9 +61,6 @@ namespace ZoloLua.Core.InstructionSet
             return x & ~(1 << (int)(SizeB - 1));
         }
 
-        #endregion handle RK
-
-        #region 私有方法
 
         // 创建一个从某一位置开始若干位1的掩码
         private static uint Mask1(uint n, uint pos)
@@ -158,11 +138,6 @@ namespace ZoloLua.Core.InstructionSet
             }
         }
 
-        #endregion 私有方法
-
-        #region 私有常量
-
-        #region 指令各部分的大小和位置
 
         // 这一片因为是去年写的，全部使用帕斯卡，换成现在我更愿意写成C的全大写形式
         private const uint SizeC = 9;
@@ -180,9 +155,6 @@ namespace ZoloLua.Core.InstructionSet
         private const uint PosBx = PosC;
         private const uint POS_Ax = PosA;
 
-        #endregion 指令各部分的大小和位置
-
-        #region 指令参数的最大值
 
         private const uint MaxArgBx = (1 << (int)SizeBx) - 1;
         private const uint MaxArgSignedBx = MaxArgBx >> 1;
@@ -190,9 +162,6 @@ namespace ZoloLua.Core.InstructionSet
         private const uint MaxArgB = (1 << (int)SizeB) - 1;
         private const uint MaxArgC = (1 << (int)SizeC) - 1;
 
-        #endregion 指令参数的最大值
-
-        #endregion 私有常量
 
         public override string ToString()
         {
