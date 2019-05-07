@@ -1,10 +1,11 @@
-﻿// 配置
-
-namespace ZoloLua.Core.Configuration
+﻿namespace ZoloLua.Core.Configuration
 {
+    /// <summary>
+    /// lua配置
+    /// </summary>
+    /// <remarks>clua这里太繁琐了，所以只能其他代码用到再到这里来添加</remarks>
     internal static class LuaConfiguration
     {
-        #region consts
 
         /// <summary>
         ///     LUAI_MAXCALLS limits the number of nested calls.
@@ -33,6 +34,5 @@ namespace ZoloLua.Core.Configuration
         /// </summary>
         public const int MaxNLocals = 200;
 
-        #endregion consts
     }
 }
