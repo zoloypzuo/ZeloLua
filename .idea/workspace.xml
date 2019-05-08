@@ -2,12 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="3cd1adb7-fda5-4b8e-8462-9bcc5578c8c3" name="Default" comment="">
+      <change afterPath="$PROJECT_DIR$/tool/Protected.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen_test/disassembler/compile_lua.py" beforeDir="false" afterPath="$PROJECT_DIR$/gen_test/disassembler/compile_lua.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen_test/disassembler/exe_out_asm.txt" beforeDir="false" afterPath="$PROJECT_DIR$/gen_test/disassembler/exe_out_asm.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen_test/disassembler/learn.lua" beforeDir="false" afterPath="$PROJECT_DIR$/gen_test/disassembler/learn.lua" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen_test/disassembler/lua_asm.txt" beforeDir="false" afterPath="$PROJECT_DIR$/gen_test/disassembler/lua_asm.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen_test/disassembler/luac.out" beforeDir="false" afterPath="$PROJECT_DIR$/gen_test/disassembler/luac.out" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -85,15 +81,15 @@
     <session id="-835728598">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="10" />
+          <entry key="project.closed" value="12" />
           <entry key="project.open.time.0" value="1" />
           <entry key="project.open.time.1" value="1" />
-          <entry key="project.open.time.11" value="1" />
+          <entry key="project.open.time.11" value="2" />
           <entry key="project.open.time.5" value="2" />
           <entry key="project.open.time.6" value="3" />
           <entry key="project.open.time.7" value="4" />
           <entry key="project.open.time.8" value="2" />
-          <entry key="project.opened" value="14" />
+          <entry key="project.opened" value="15" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
@@ -103,7 +99,7 @@
           <entry key="gen_test" value="1" />
           <entry key="lua" value="12" />
           <entry key="md" value="1" />
-          <entry key="py" value="14" />
+          <entry key="py" value="17" />
           <entry key="txt" value="2" />
         </counts>
       </usages-collector>
@@ -113,7 +109,7 @@
           <entry key="C#" value="1" />
           <entry key="Markdown" value="1" />
           <entry key="PLAIN_TEXT" value="4" />
-          <entry key="Python" value="14" />
+          <entry key="Python" value="17" />
           <entry key="lua" value="11" />
         </counts>
       </usages-collector>
@@ -123,7 +119,7 @@
           <entry key="g4" value="1446" />
           <entry key="lua" value="90" />
           <entry key="md" value="97" />
-          <entry key="py" value="7012" />
+          <entry key="py" value="7134" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
@@ -131,7 +127,7 @@
           <entry key="ANTLR v4 grammar file" value="1446" />
           <entry key="Markdown" value="97" />
           <entry key="PLAIN_TEXT" value="6" />
-          <entry key="Python" value="7012" />
+          <entry key="Python" value="7134" />
           <entry key="lua" value="90" />
         </counts>
       </usages-collector>
@@ -159,16 +155,45 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="600">
-      <file pinned="true" current-in-tab="true">
+      <file pinned="true" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/gen_test/disassembler/compile_lua.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-83">
+            <state relative-caret-position="17">
               <caret line="267" column="24" selection-start-line="267" selection-start-column="24" selection-end-line="267" selection-end-column="24" />
               <folding>
-                <element signature="e#705#714#0" expanded="true" />
-                <marker date="1557064667462" expanded="true" signature="5321:5322" ph="..." />
-                <marker date="1557064667462" expanded="true" signature="6264:6453" ph="..." />
+                <marker date="1557070218682" expanded="true" signature="5321:5322" ph="..." />
+                <marker date="1557070218682" expanded="true" signature="6264:6453" ph="..." />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/zlua/lua.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="185">
+              <caret line="11" lean-forward="true" selection-start-line="11" selection-end-line="11" />
+              <folding>
+                <element signature="e#23#43#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/tool/vmloop.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1224">
+              <caret line="72" selection-start-line="72" selection-end-line="72" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/tool/Protected.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="289">
+              <caret line="17" lean-forward="true" selection-start-line="17" selection-end-line="17" />
             </state>
           </provider>
         </entry>
@@ -185,7 +210,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Lua.g4">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="714">
+            <state relative-caret-position="510">
               <caret line="42" column="6" selection-start-line="42" selection-start-column="6" selection-end-line="42" selection-end-column="6" />
             </state>
           </provider>
@@ -252,7 +277,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/_gen/Lua.g4" />
         <option value="$PROJECT_DIR$/ISA.py" />
         <option value="$PROJECT_DIR$/main.py" />
         <option value="$PROJECT_DIR$/call_system.py" />
@@ -303,6 +327,7 @@
         <option value="$PROJECT_DIR$/gen_test/disassembler/test.cs" />
         <option value="$PROJECT_DIR$/gen_test/disassembler/learn.lua" />
         <option value="$PROJECT_DIR$/gen_test/disassembler/compile_lua.py" />
+        <option value="$PROJECT_DIR$/tool/Protected.py" />
       </list>
     </option>
   </component>
@@ -337,13 +362,7 @@
             <path>
               <item name="zlua_prototype" type="b2602c69:ProjectViewProjectNode" />
               <item name="zlua_prototype" type="462c0819:PsiDirectoryNode" />
-              <item name="gen_test" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="zlua_prototype" type="b2602c69:ProjectViewProjectNode" />
-              <item name="zlua_prototype" type="462c0819:PsiDirectoryNode" />
-              <item name="gen_test" type="462c0819:PsiDirectoryNode" />
-              <item name="disassembler" type="462c0819:PsiDirectoryNode" />
+              <item name="tool" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -571,7 +590,7 @@
     <frame x="-6" y="-6" width="1387" height="972" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.17430504" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.17655897" />
       <window_info id="Structure" order="1" weight="0.5009914" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -782,7 +801,6 @@
     </expressions>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python36/Lib/unittest/runner.py" />
     <entry file="file://$APPLICATION_HOME_DIR$/helpers/pycharm/teamcity/unittestpy.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="9702">
@@ -875,13 +893,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/zlua/lua.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="561">
-          <caret line="40" column="37" selection-start-line="40" selection-start-column="37" selection-end-line="40" selection-end-column="37" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/gen/zlua/LuaLexer.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="5712">
@@ -900,13 +911,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1207">
           <caret line="76" selection-start-line="73" selection-end-line="76" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/tool/vmloop.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1224">
-          <caret line="72" selection-start-line="72" selection-end-line="72" />
         </state>
       </provider>
     </entry>
@@ -956,20 +960,17 @@
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
     <entry file="file://$PROJECT_DIR$/gen_test/disassembler/test.cs" />
+    <entry file="file://$PROJECT_DIR$/compile_out/string/self.lua" />
     <entry file="file://$PROJECT_DIR$/gen_test/disassembler/compile_lua.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-83">
+        <state relative-caret-position="17">
           <caret line="267" column="24" selection-start-line="267" selection-start-column="24" selection-end-line="267" selection-end-column="24" />
           <folding>
-            <element signature="e#705#714#0" expanded="true" />
-            <marker date="1557064667462" expanded="true" signature="5321:5322" ph="..." />
-            <marker date="1557064667462" expanded="true" signature="6264:6453" ph="..." />
+            <marker date="1557070218682" expanded="true" signature="5321:5322" ph="..." />
+            <marker date="1557070218682" expanded="true" signature="6264:6453" ph="..." />
           </folding>
         </state>
       </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/compile_out/string/self.lua">
-      <provider selected="true" editor-type-id="text-editor" />
     </entry>
     <entry file="file://$PROJECT_DIR$/compile_out/string/table/gettable.lua">
       <provider selected="true" editor-type-id="text-editor">
@@ -980,13 +981,37 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Lua.g4">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="714">
+        <state relative-caret-position="510">
           <caret line="42" column="6" selection-start-line="42" selection-start-column="6" selection-end-line="42" selection-end-column="6" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/gen_test/disassembler/learn.lua">
       <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/zlua/lua.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="185">
+          <caret line="11" lean-forward="true" selection-start-line="11" selection-end-line="11" />
+          <folding>
+            <element signature="e#23#43#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tool/vmloop.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1224">
+          <caret line="72" selection-start-line="72" selection-end-line="72" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tool/Protected.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="289">
+          <caret line="17" lean-forward="true" selection-start-line="17" selection-end-line="17" />
+        </state>
+      </provider>
     </entry>
   </component>
 </project>
