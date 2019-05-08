@@ -7,7 +7,7 @@ using ZoloLua.Core.VirtualMachine;
 
 namespace ZoloLua.Core.Lua
 {
-    // KopiLua
+    // KopiLua lua.h所有内容
     public class Lua
     {
         public delegate int lua_CFunction(lua_State L);
@@ -302,21 +302,6 @@ namespace ZoloLua.Core.VirtualMachine
 
     public partial class lua_State
     {
-        /// 基于L.top，压函数，压args，返回n个值
-        public delegate int lua_CFunction(lua_State L);
-
-        /*
-        ** pseudo-indices
-        */
-        private const int LUA_REGISTRYINDEX = -10000;
-        private const int LUA_ENVIRONINDEX = -10001;
-        private const int LUA_GLOBALSINDEX = -10002;
-
-        /* option for multiple returns in 'lua_pcall' and 'lua_call' */
-        public const int LUA_MULTRET = -1;
-        /* minimum Lua stack available to a C function */
-        private const int LUA_MINSTACK = 20;
-
         public static lua_State lua_open()
         {
             return luaL_newstate();
@@ -353,9 +338,5 @@ namespace ZoloLua.Core.VirtualMachine
             }
         }
 
-        private int lua_upvalueindex(int i)
-        {
-            return LUA_GLOBALSINDEX - i;
-        }
     }
 }
