@@ -597,7 +597,7 @@ namespace ZoloLua.Core.VirtualMachine
         public void lua_concat(int n)
         {
 
-            api_checknelems(L, n);
+            api_checknelems( n);
             if (n >= 2) {
                 luaV_concat(n, (top - @base) - 1);
                 top -= (n - 1);
@@ -630,17 +630,17 @@ namespace ZoloLua.Core.VirtualMachine
             // dump没实现
             // 大概的内容是编译生成p和void*data，data是二进制chunk
             // 这里的o作为p的重启，然后被抛弃了
-            int status;
-            TValue o;
+            //int status;
+            //TValue o;
 
-            api_checknelems(1);
-            o = top - 1;
-            if (o.IsLuaFunction)
-                status = luaU_dump(data, 0);
-            else
-                status = 1;
+            //api_checknelems(1);
+            //o = top - 1;
+            //if (o.IsLuaFunction)
+            //    status = luaU_dump(data, 0);
+            //else
+            //    status = 1;
 
-            return status;
+            //return status;
         }
 
 
