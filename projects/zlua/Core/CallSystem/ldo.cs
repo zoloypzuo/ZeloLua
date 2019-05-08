@@ -263,6 +263,7 @@ namespace ZoloLua.Core.VirtualMachine
 
         /// <summary>
         ///     调用<c>func</c>，参数是<c>u</c>
+        /// 是pcall这条线，我决定放弃这条线
         /// </summary>
         /// <param name="L"></param>
         /// <param name="func"></param>
@@ -270,6 +271,7 @@ namespace ZoloLua.Core.VirtualMachine
         /// <param name="old_top"></param>
         /// <param name="ef"></param>
         /// <returns></returns>
+        [Obsolete]
         private int luaD_pcall(Pfunc func, object u,
                                int old_top, int ef)
         {
@@ -296,24 +298,38 @@ namespace ZoloLua.Core.VirtualMachine
             return status;
         }
 
+        /// <summary>
+        /// 是内部实现细节
+        /// LUAI_TRY太复杂了，涉及longjmp错误处理
+        /// pcall调用，我决定放弃pcall
+        /// </summary>
+        /// <param name="f"></param>
+        /// <param name="ud"></param>
+        /// <returns></returns>
+        [Obsolete]
         private int luaD_rawrunprotected(Pfunc f, object ud)
         {
             //struct lua_longjmp lj;
             //lj.status = 0;
             //lj.previous = L->errorJmp;  /* chain new error handler */
             //L->errorJmp = &lj;
-            // LUAI_TRY太复杂了，涉及longjmp错误处理
+            // 
             //  LUAI_TRY(&lj,
             //    (f)(ud);
             //);
             //L->errorJmp = lj.previous;  /* restore old error handler */
             //return lj.status;
-            f(this, ud);
+            f(ud);
             return 0;
         }
 
         /* type of protected functions, to be ran by `runprotected' */
-
-        private delegate void Pfunc(lua_State L, object ud);
+        /// <summary>
+        /// 是内部实现细节，因此我设计为不传入L
+        /// 是pcall调用，我放弃这条线
+        /// </summary>
+        /// <param name="ud"></param>
+        [Obsolete]
+        private delegate void Pfunc(object ud);
     }
 }

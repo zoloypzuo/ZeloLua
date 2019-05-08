@@ -361,5 +361,10 @@ namespace ZoloLua.Core.VirtualMachine
         {
             Debug.Assert(expected.Equals(acutal));
         }
+
+		public static lua_State lua_open()
+		{
+			return luaL_newstate();
+		}
     }
 }

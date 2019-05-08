@@ -47,7 +47,14 @@ namespace ZoloLua.Core.VirtualMachine
             Debug.Assert(nr == LUA_MULTRET || ci.top - top >= nr - na);
         }
 
-        private void lua_call(int nargs, int nresults)
+        /// <summary>
+        /// lua_pcall的基础版本，不抛出异常
+        /// 我决定一律使用lua_call替代lua_pcall
+        /// https://www.lua.org/manual/5.1/manual.html#lua_call
+        /// </summary>
+        /// <param name="nargs"></param>
+        /// <param name="nresults"></param>
+        public void lua_call(int nargs, int nresults)
         {
             StkId func;
             api_checknelems(nargs + 1);
@@ -57,10 +64,9 @@ namespace ZoloLua.Core.VirtualMachine
             adjustresults(nresults);
         }
 
-        private void f_call(lua_State L, object ud)
+        [Obsolete]
+        private void f_call(object ud)
         {
-            // lua_State内的PFunc的L只是装饰，一定传入this
-            Debug.Assert(ReferenceEquals(L, this));
             // 这里不是很清楚为什么要多定义一个CallS
             CallS c = (CallS)ud;
             luaD_call(c.func, c.nresults);
@@ -68,6 +74,7 @@ namespace ZoloLua.Core.VirtualMachine
 
         //luaL_dofile调用如下
         //lua_pcall(nargs: 0, nresults: LUA_MULTRET, errfunc: 0);
+        [Obsolete]
         private int lua_pcall(int nargs, int nresults, int errfunc)
         {
             CallS c;
@@ -177,7 +184,7 @@ namespace ZoloLua.Core.VirtualMachine
         /*
         ** Execute a protected call.
         */
-
+        [Obsolete]
         private struct CallS
         { /* data to `f_call' */
             public StkId func;

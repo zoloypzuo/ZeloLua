@@ -4,9 +4,11 @@
     {
         public static void Main(string[] args)
         {
+            //一个简单的例子
             //库是在dofile外面打开的
-            //luaL_openlibs(L);  /* open libraries */
-            //lua_State.lua_newstate().luaL_dofile(@"C:\Users\91018\Documents\GitHub\zlua\data\luac.out");
+            //lua_State L=lua_open();
+            //luaL_openlibs(L);
+            //luaL_dofile(L,@"");
         }
     }
 }

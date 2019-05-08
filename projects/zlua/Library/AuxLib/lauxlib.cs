@@ -27,7 +27,8 @@ namespace ZoloLua.Core.VirtualMachine
         public void luaL_dofile(string path)
         {
             luaL_loadfile(path);
-            lua_pcall(0, LUA_MULTRET, 0);
+            //lua_pcall(0, LUA_MULTRET, 0);
+            lua_call(0, LUA_MULTRET);
         }
 
         public void luaL_loadfile(string path)
@@ -65,7 +66,8 @@ namespace ZoloLua.Core.VirtualMachine
         public void luaL_dostring(string s)
         {
             luaL_loadstring(s);
-            lua_pcall(0, LUA_MULTRET, 0);
+            //lua_pcall(0, LUA_MULTRET, 0);
+            lua_call(0, LUA_MULTRET);
         }
 
         public void luaL_loadstring(string s)
