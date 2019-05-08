@@ -58,10 +58,10 @@ namespace ZoloLua.Core.ObjectModel
             gc = thread;
         }
 
-        public TValue(Userdata userdata)
+        public TValue(Udata udata)
         {
             tt = LuaType.LUA_TUSERDATA;
-            gc = userdata;
+            gc = udata;
         }
 
         public TValue(Closure closure)
@@ -84,7 +84,7 @@ namespace ZoloLua.Core.ObjectModel
         public GCObject gc { get; private set; }
 
         /// <summary>
-        ///     light userdata
+        ///     light udata
         /// </summary>
         [JsonProperty]
         private object p { get; set; }
@@ -141,10 +141,11 @@ namespace ZoloLua.Core.ObjectModel
             set {
                 tt = LuaType.LUA_TSTRING;
                 TString tstr = gc as TString;
-                if (tstr != null)
+                if (tstr != null) {
                     tstr.str = value;
-                else
+                } else {
                     gc = new TString(value);
+                }
             }
         }
 
@@ -178,9 +179,9 @@ namespace ZoloLua.Core.ObjectModel
         }
 
         [JsonIgnore]
-        public Userdata Userdata {
+        public Udata Udata {
             get {
-                return gc as Userdata;
+                return gc as Udata;
             }
             set {
                 tt = LuaType.LUA_TUSERDATA;
@@ -207,10 +208,11 @@ namespace ZoloLua.Core.ObjectModel
             set {
                 tt = value.tt;
                 NumericValue = value.NumericValue;
-                if (value.IsCollectable)
+                if (value.IsCollectable) {
                     gc = value.gc;
-                else
+                } else {
                     gc = null;
+                }
             }
         }
 
@@ -318,13 +320,6 @@ namespace ZoloLua.Core.ObjectModel
             return lobject.luaO_rawequalObj(this, other);
         }
 
-        [DebuggerStepThrough]
-        public void SetNil()
-        {
-            tt = LuaType.LUA_TNIL;
-            gc = null;
-        }
-
         public override bool Equals(object obj)
         {
             return obj is TValue && Equals(obj as TValue);
@@ -339,6 +334,13 @@ namespace ZoloLua.Core.ObjectModel
                 default:
                     return gc.GetHashCode();
             }
+        }
+
+        [DebuggerStepThrough]
+        public void SetNil()
+        {
+            tt = LuaType.LUA_TNIL;
+            gc = null;
         }
 
         public override string ToString()

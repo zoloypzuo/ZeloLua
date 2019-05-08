@@ -1,5 +1,4 @@
 ﻿using zlua.Core.MetaMethod;
-using ZoloLua.Core.Lua;
 using ZoloLua.Core.ObjectModel;
 using static ZoloLua.Core.VirtualMachine.lua_State;
 

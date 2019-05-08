@@ -292,7 +292,9 @@ namespace ZoloLua.Compiler.CodeGenerator
         {
             foreach (LuaParser.StatContext stat in context.stat()) VisitStat(stat);
             LuaParser.RetstatContext retstat = context.retstat();
-            if (retstat != null) VisitRetstat(retstat);
+            if (retstat != null) {
+                VisitRetstat(retstat);
+            }
             return 0;
         }
 
@@ -317,7 +319,9 @@ namespace ZoloLua.Compiler.CodeGenerator
             foreach (LuaParser.ExpContext item in expStar) {
             }
             int a = fi.usedRegs;
-            if (multRet) fi.emitReturn(a, -1);
+            if (multRet) {
+                fi.emitReturn(a, -1);
+            }
             // p328 最下面
             // 作者不实现尾递归
             return 0;

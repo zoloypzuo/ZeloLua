@@ -20,18 +20,6 @@ namespace ZoloLua
                 TypeNameHandling = TypeNameHandling.Auto
             };
 
-        // 使用json将对象序列化到文件
-        // 文件名有时间戳和类型名构成，是唯一标识的
-        // 文件被放在json目录下，生成后你可以移动整理到自己要的位置
-        public static void ExportObject(object o)
-        {
-            using (StreamWriter writer =
-                new StreamWriter(new FileStream($"{JsonDataPathBase}{DateTime.Now}_{o}.json", FileMode.OpenOrCreate))) {
-                string output = JsonConvert.SerializeObject(o, Settings);
-                writer.Write(output);
-            }
-        }
-
         // 断言比较两个对象所有字段对应相等
         //
         // /subPath/是基于json目录的相对路径
@@ -44,6 +32,18 @@ namespace ZoloLua
             string actualS = JsonConvert.SerializeObject(actual, Settings);
             string fullPath = $"{JsonDataPathBase}{subPath}";
             Debug.Assert(actualS == File.ReadAllText(fullPath));
+        }
+
+        // 使用json将对象序列化到文件
+        // 文件名有时间戳和类型名构成，是唯一标识的
+        // 文件被放在json目录下，生成后你可以移动整理到自己要的位置
+        public static void ExportObject(object o)
+        {
+            using (StreamWriter writer =
+                new StreamWriter(new FileStream($"{JsonDataPathBase}{DateTime.Now}_{o}.json", FileMode.OpenOrCreate))) {
+                string output = JsonConvert.SerializeObject(o, Settings);
+                writer.Write(output);
+            }
         }
 
         /// <summary>

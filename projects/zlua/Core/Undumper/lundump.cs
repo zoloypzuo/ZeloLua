@@ -70,29 +70,6 @@ namespace ZoloLua.Core.Undumper
         }
 
 
-        private static int ReadSizeT(BinaryReader reader)
-        {
-            if (IsSizeofCSizeT8)
-                return checked((int)reader.ReadUInt64());
-            return checked((int)reader.ReadUInt32());
-        }
-
-        private static string ReadString(BinaryReader reader)
-        {
-            // 确定字符串长度
-            int size = ReadSizeT(reader);
-            if (size == 0) return null;
-            string s = new string(reader.ReadChars(size - 1));
-            reader.ReadChar(); /* remove trailing '\0' */
-            return s;
-        }
-
-        private static lua_Number ReadLuaNumber(BinaryReader reader)
-        {
-            return reader.ReadDouble();
-        }
-
-
         private static void CheckHeader(BinaryReader reader)
         {
             //------------------------------
@@ -125,93 +102,41 @@ namespace ZoloLua.Core.Undumper
                 numberFlag = reader.ReadByte()
             };
 
-            if (header.signature != LUA_SIGNATURE) throw new UndumpException("not a precompiled header");
-            if (header.version != LUAC_VERSION) throw new UndumpException("version mismatch");
-            if (header.format != LUAC_FORMAT) throw new UndumpException("format mismatch");
-            if (header.endianness != 1) throw new UndumpException("");
-            if (header.cintSize != CINT_SIZE) throw new UndumpException("int size mismatch");
-            if (!(header.sizetSize == CSIZET_SIZE_32 || header.sizetSize == CSIZET_SIZE_64))
+            if (header.signature != LUA_SIGNATURE) {
+                throw new UndumpException("not a precompiled header");
+            }
+            if (header.version != LUAC_VERSION) {
+                throw new UndumpException("version mismatch");
+            }
+            if (header.format != LUAC_FORMAT) {
+                throw new UndumpException("format mismatch");
+            }
+            if (header.endianness != 1) {
+                throw new UndumpException("");
+            }
+            if (header.cintSize != CINT_SIZE) {
+                throw new UndumpException("int size mismatch");
+            }
+            if (!(header.sizetSize == CSIZET_SIZE_32 || header.sizetSize == CSIZET_SIZE_64)) {
                 throw new UndumpException("size_t size mismatch");
+            }
             IsSizeofCSizeT8 = header.sizetSize == CSIZET_SIZE_64;
-            if (header.instructionSize != INSTRUCTION_SIZE) throw new UndumpException("instruction size mismatch");
-            if (header.luaNumberSize != LUA_NUMBER_SIZE) throw new UndumpException("lua_Number size mismatch");
-            if (header.numberFlag != 0) throw new UndumpException("=?");
+            if (header.instructionSize != INSTRUCTION_SIZE) {
+                throw new UndumpException("instruction size mismatch");
+            }
+            if (header.luaNumberSize != LUA_NUMBER_SIZE) {
+                throw new UndumpException("lua_Number size mismatch");
+            }
+            if (header.numberFlag != 0) {
+                throw new UndumpException("=?");
+            }
         }
 
-        private static Proto ReadProto(BinaryReader reader, string parentSource)
+        private static Bytecode[] ReadCode(BinaryReader reader)
         {
-            string source = ReadString(reader);
-            if (source == null) source = parentSource;
-            Proto p = new Proto
-            {
-                source = source,
-                linedefined = reader.ReadInt32(),
-                lastlinedefined = reader.ReadInt32(),
-                nups = reader.ReadByte(),
-                numparams = reader.ReadByte(),
-                is_vararg = reader.ReadByte(),
-                maxstacksize = reader.ReadByte(),
-                code = ReadCode(reader),
-                k = ReadConstants(reader),
-                p = ReadProtos(reader, source),
-                lineinfo = ReadLineInfo(reader),
-                locvars = ReadLocVars(reader),
-                upvalues = ReadUpvalueNames(reader)
-            };
-            return p;
-        }
-
-        private static string[] ReadUpvalueNames(BinaryReader reader)
-        {
-            string[] names = new string[reader.ReadInt32()];
-            for (int i = 0; i < names.Length; i++) names[i] = ReadString(reader);
-            return names;
-        }
-
-        private static LocVar[] ReadLocVars(BinaryReader reader)
-        {
-            LocVar[] locVars = new LocVar[reader.ReadInt32()];
-            for (int i = 0; i < locVars.Length; i++)
-                locVars[i] = new LocVar
-                {
-                    varname = ReadString(reader),
-                    startpc = reader.ReadInt32(),
-                    endpc = reader.ReadInt32()
-                };
-            return locVars;
-        }
-
-        private static int[] ReadLineInfo(BinaryReader reader)
-        {
-            int[] lineInfo = new int[reader.ReadInt32()];
-            for (int i = 0; i < lineInfo.Length; i++) lineInfo[i] = reader.ReadInt32();
-            return lineInfo;
-        }
-
-        private static Proto[] ReadProtos(BinaryReader reader, string parentSouce)
-        {
-            Proto[] protos = new Proto[reader.ReadInt32()];
-            for (int i = 0; i < protos.Length; i++) protos[i] = ReadProto(reader, parentSouce);
-            return protos;
-        }
-
-        private static UpVal[] ReadUpvalues(BinaryReader reader)
-        {
-            UpVal[] upvals = new UpVal[reader.ReadUInt32()];
-            for (int i = 0; i < upvals.Length; i++)
-                upvals[i] = new UpVal
-                {
-                    Instack = reader.ReadByte(),
-                    Idx = reader.ReadByte()
-                };
-            return upvals;
-        }
-
-        private static TValue[] ReadConstants(BinaryReader reader)
-        {
-            TValue[] k = new TValue[reader.ReadInt32()];
-            for (int i = 0; i < k.Length; i++) k[i] = ReadConstant(reader);
-            return k;
+            Bytecode[] code = new Bytecode[reader.ReadInt32()];
+            for (int i = 0; i < code.Length; i++) code[i] = new Bytecode(reader.ReadUInt32());
+            return code;
         }
 
         private static TValue ReadConstant(BinaryReader reader)
@@ -234,11 +159,108 @@ namespace ZoloLua.Core.Undumper
             }
         }
 
-        private static Bytecode[] ReadCode(BinaryReader reader)
+        private static TValue[] ReadConstants(BinaryReader reader)
         {
-            Bytecode[] code = new Bytecode[reader.ReadInt32()];
-            for (int i = 0; i < code.Length; i++) code[i] = new Bytecode(reader.ReadUInt32());
-            return code;
+            TValue[] k = new TValue[reader.ReadInt32()];
+            for (int i = 0; i < k.Length; i++) k[i] = ReadConstant(reader);
+            return k;
+        }
+
+        private static int[] ReadLineInfo(BinaryReader reader)
+        {
+            int[] lineInfo = new int[reader.ReadInt32()];
+            for (int i = 0; i < lineInfo.Length; i++) lineInfo[i] = reader.ReadInt32();
+            return lineInfo;
+        }
+
+        private static LocVar[] ReadLocVars(BinaryReader reader)
+        {
+            LocVar[] locVars = new LocVar[reader.ReadInt32()];
+            for (int i = 0; i < locVars.Length; i++)
+                locVars[i] = new LocVar
+                {
+                    varname = ReadString(reader),
+                    startpc = reader.ReadInt32(),
+                    endpc = reader.ReadInt32()
+                };
+            return locVars;
+        }
+
+        private static lua_Number ReadLuaNumber(BinaryReader reader)
+        {
+            return reader.ReadDouble();
+        }
+
+        private static Proto ReadProto(BinaryReader reader, string parentSource)
+        {
+            string source = ReadString(reader);
+            if (source == null) {
+                source = parentSource;
+            }
+            Proto p = new Proto
+            {
+                source = source,
+                linedefined = reader.ReadInt32(),
+                lastlinedefined = reader.ReadInt32(),
+                nups = reader.ReadByte(),
+                numparams = reader.ReadByte(),
+                is_vararg = reader.ReadByte(),
+                maxstacksize = reader.ReadByte(),
+                code = ReadCode(reader),
+                k = ReadConstants(reader),
+                p = ReadProtos(reader, source),
+                lineinfo = ReadLineInfo(reader),
+                locvars = ReadLocVars(reader),
+                upvalues = ReadUpvalueNames(reader)
+            };
+            return p;
+        }
+
+        private static Proto[] ReadProtos(BinaryReader reader, string parentSouce)
+        {
+            Proto[] protos = new Proto[reader.ReadInt32()];
+            for (int i = 0; i < protos.Length; i++) protos[i] = ReadProto(reader, parentSouce);
+            return protos;
+        }
+
+
+        private static int ReadSizeT(BinaryReader reader)
+        {
+            if (IsSizeofCSizeT8) {
+                return checked((int)reader.ReadUInt64());
+            }
+            return checked((int)reader.ReadUInt32());
+        }
+
+        private static string ReadString(BinaryReader reader)
+        {
+            // 确定字符串长度
+            int size = ReadSizeT(reader);
+            if (size == 0) {
+                return null;
+            }
+            string s = new string(reader.ReadChars(size - 1));
+            reader.ReadChar(); /* remove trailing '\0' */
+            return s;
+        }
+
+        private static string[] ReadUpvalueNames(BinaryReader reader)
+        {
+            string[] names = new string[reader.ReadInt32()];
+            for (int i = 0; i < names.Length; i++) names[i] = ReadString(reader);
+            return names;
+        }
+
+        private static UpVal[] ReadUpvalues(BinaryReader reader)
+        {
+            UpVal[] upvals = new UpVal[reader.ReadUInt32()];
+            for (int i = 0; i < upvals.Length; i++)
+                upvals[i] = new UpVal
+                {
+                    Instack = reader.ReadByte(),
+                    Idx = reader.ReadByte()
+                };
+            return upvals;
         }
     }
 

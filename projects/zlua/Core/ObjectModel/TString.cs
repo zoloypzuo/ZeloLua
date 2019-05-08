@@ -18,11 +18,6 @@
             }
         }
 
-        public override string ToString()
-        {
-            return str;
-        }
-
         public override bool Equals(object obj)
         {
             return obj is TString && str.Equals((obj as TString).str);
@@ -41,6 +36,11 @@
         public static implicit operator TString(string str)
         {
             return new TString(str);
+        }
+
+        public override string ToString()
+        {
+            return str;
         }
     }
 }

@@ -81,6 +81,85 @@ namespace ZoloLua.Core.VirtualMachine
 
         private List<TValue> stack { get; }
 
+        public bool LessThan(TValue lhs, TValue rhs)
+        {
+            if (lhs.tt != rhs.tt) {
+                throw new Exception();
+            }
+            if (lhs.IsNumber) {
+                return lhs.N < rhs.N;
+            }
+            if (lhs.IsString) {
+                return false; //TODO 字典序。或者你看标准库有没有
+            }
+            return false; //TODO 调用meta方法
+        }
+
+        /// <summary>
+        ///     元表查找算法
+        /// </summary>
+        /// <param name="t"></param>
+        /// <param name="key"></param>
+        /// <param name="val"></param>
+        public void luaV_gettable(TValue t, TValue key, TValue val)
+        {
+            for (int loop = 0; loop < MAXTAGLOOP; loop++) {
+                TValue tm;
+                if (t.IsTable) {
+                    Table h = t.Table;
+                    TValue res = h.luaH_get(key); /* do a primitive get */
+                    tm = fasttm(h.metatable, TMS.TM_INDEX);
+                    if (!res.IsNil || /* result is no nil? */
+                        tm == null) { /* or no TM? */
+                        val.Value = res;
+                        return;
+                    }
+                    /* else will try the tag method */
+                } else {
+                    tm = luaT_gettmbyobj(t, TMS.TM_INDEX);
+                    if (tm.IsNil) {
+                        throw new Exception();
+                    }
+                    if (tm.IsFunction) {
+                        callTMres(val, tm, t, key);
+                        return;
+                    }
+                    t = tm; /* else repeat with `tm' */
+                }
+            }
+            //TODO
+            //luaG_runerror(L, "loop in gettable");
+        }
+
+        public void luaV_settable(TValue t, TValue key, TValue val)
+        {
+            for (int loop = 0; loop < MAXTAGLOOP; loop++) {
+                TValue tm;
+                if (t.IsTable) {
+                    Table h = t.Table;
+                    TValue oldval = h.luaH_set(key); /* do a primitive set */
+                    tm = fasttm(h.metatable, TMS.TM_NEWINDEX);
+                    if (!oldval.IsNil ||
+                        tm == null) {
+                        oldval.Value = val;
+                        return;
+                    }
+                    /* else will try the tag method */
+                } else {
+                    tm = luaT_gettmbyobj(t, TMS.TM_NEWINDEX);
+                    if (tm.IsNil) {
+                        //luaG_typeerror(L, t, "index");
+                    } else if (tm.IsFunction) {
+                        callTM(tm, t, key, val);
+                        return;
+                    } else {
+                        t = tm; /* else repeat with `tm' */
+                    }
+                }
+            }
+            //luaG_runerror(L, "loop in settable");
+        }
+
         // 弹栈，若栈为空，抛出异常
         /// <summary>
         ///     The pop
@@ -113,6 +192,71 @@ namespace ZoloLua.Core.VirtualMachine
             //    top++;
             //}
             top++.Set(val);
+        }
+
+
+        public static bool tonumber(TValue val, out lua_Number n)
+        {
+            switch (val.tt) {
+                case LuaType.LUA_TNUMBER:
+                    n = val.N;
+                    return true;
+
+                case LuaType.LUA_TSTRING:
+                    return lobject.luaO_str2d(val.Str, out n);
+
+                default:
+                    n = 0;
+                    return false;
+            }
+        }
+
+        /// <summary>
+        ///     拼接栈上连续<c>total</c>个寄存器，<c>last</c>是最后一个元素的索引
+        /// </summary>
+        /// <param name="total"></param>
+        /// <param name="last"></param>
+        private void luaV_concat(int total, int last)
+        {
+            // 如果total为0，返回空串
+            do {
+                // 这里因为。。不改成StkId，除非不对
+                int top = @base.index + last + 1;
+                int n = 2; /* number of elements handled in this pass (at least 2) */
+                if (!stack[top - 2].IsString || stack[top - 2].IsNumber || !tostring(stack[top - 1])) {
+                    if (!call_binTM(stack[top - 2], stack[top - 1], stack[top - 2], TMS.TM_CONCAT))
+                        //luaG_concaterror(L, top - 2, top - 1);
+                    {
+                        throw new Exception();
+                    }
+                } else if (stack[top - 1].Str.Length == 0) /* second op is empty? */ {
+                    tostring(stack[top - 2]); /* result is first op (as string) */
+                } else {
+                    /* at least two string values; get as many as possible */
+                    int tl = stack[top - 1].Str.Length;
+                    StringBuilder buffer = new StringBuilder();
+                    int i;
+                    /* collect total length */
+                    for (n = 1; n < total && tostring(stack[top - n - 1]); n++) {
+                        int l = stack[top - n - 1].Str.Length;
+                        if (l >= int.MaxValue - tl)
+                            //luaG_runerror(L, "string length overflow");
+                        {
+                            throw new Exception();
+                        }
+                        tl += l;
+                    }
+                    tl = 0;
+                    for (i = n; i > 0; i--) { /* concat all strings */
+                        int l = stack[top - i].Str.Length;
+                        buffer.Append(stack[top - i].Str);
+                        tl += l;
+                    }
+                    stack[top - n] = new TValue(buffer.ToString());
+                }
+                total -= n - 1; /* got `n' strings to create 1 new */
+                last -= n - 1;
+            } while (total > 1); /* repeat until only 1 result left */
         }
 
         /// <summary>
@@ -663,133 +807,6 @@ namespace ZoloLua.Core.VirtualMachine
             }
         }
 
-        /// <summary>
-        ///     元表查找算法
-        /// </summary>
-        /// <param name="t"></param>
-        /// <param name="key"></param>
-        /// <param name="val"></param>
-        public void luaV_gettable(TValue t, TValue key, TValue val)
-        {
-            for (int loop = 0; loop < MAXTAGLOOP; loop++) {
-                TValue tm;
-                if (t.IsTable) {
-                    Table h = t.Table;
-                    TValue res = h.luaH_get(key); /* do a primitive get */
-                    tm = fasttm(h.metatable, TMS.TM_INDEX);
-                    if (!res.IsNil || /* result is no nil? */
-                        tm == null) { /* or no TM? */
-                        val.Value = res;
-                        return;
-                    }
-                    /* else will try the tag method */
-                } else {
-                    tm = luaT_gettmbyobj(t, TMS.TM_INDEX);
-                    if (tm.IsNil) {
-                        throw new Exception();
-                    }
-                    if (tm.IsFunction) {
-                        callTMres(val, tm, t, key);
-                        return;
-                    }
-                    t = tm; /* else repeat with `tm' */
-                }
-            }
-            //TODO
-            //luaG_runerror(L, "loop in gettable");
-        }
-
-        public void luaV_settable(TValue t, TValue key, TValue val)
-        {
-            for (int loop = 0; loop < MAXTAGLOOP; loop++) {
-                TValue tm;
-                if (t.IsTable) {
-                    Table h = t.Table;
-                    TValue oldval = h.luaH_set(key); /* do a primitive set */
-                    tm = fasttm(h.metatable, TMS.TM_NEWINDEX);
-                    if (!oldval.IsNil ||
-                        tm == null) {
-                        oldval.Value = val;
-                        return;
-                    }
-                    /* else will try the tag method */
-                } else {
-                    tm = luaT_gettmbyobj(t, TMS.TM_NEWINDEX);
-                    if (tm.IsNil) {
-                        //luaG_typeerror(L, t, "index");
-                    } else if (tm.IsFunction) {
-                        callTM(tm, t, key, val);
-                        return;
-                    } else {
-                        t = tm; /* else repeat with `tm' */
-                    }
-                }
-            }
-            //luaG_runerror(L, "loop in settable");
-        }
-
-        /// <summary>
-        ///     拼接栈上连续<c>total</c>个寄存器，<c>last</c>是最后一个元素的索引
-        /// </summary>
-        /// <param name="total"></param>
-        /// <param name="last"></param>
-        private void luaV_concat(int total, int last)
-        {
-            // 如果total为0，返回空串
-            do {
-                // 这里因为。。不改成StkId，除非不对
-                int top = @base.index + last + 1;
-                int n = 2; /* number of elements handled in this pass (at least 2) */
-                if (!stack[top - 2].IsString || stack[top - 2].IsNumber || !tostring(stack[top - 1])) {
-                    if (!call_binTM(stack[top - 2], stack[top - 1], stack[top - 2], TMS.TM_CONCAT))
-                        //luaG_concaterror(L, top - 2, top - 1);
-                    {
-                        throw new Exception();
-                    }
-                } else if (stack[top - 1].Str.Length == 0) /* second op is empty? */ {
-                    tostring(stack[top - 2]); /* result is first op (as string) */
-                } else {
-                    /* at least two string values; get as many as possible */
-                    int tl = stack[top - 1].Str.Length;
-                    StringBuilder buffer = new StringBuilder();
-                    int i;
-                    /* collect total length */
-                    for (n = 1; n < total && tostring(stack[top - n - 1]); n++) {
-                        int l = stack[top - n - 1].Str.Length;
-                        if (l >= int.MaxValue - tl)
-                            //luaG_runerror(L, "string length overflow");
-                        {
-                            throw new Exception();
-                        }
-                        tl += l;
-                    }
-                    tl = 0;
-                    for (i = n; i > 0; i--) { /* concat all strings */
-                        int l = stack[top - i].Str.Length;
-                        buffer.Append(stack[top - i].Str);
-                        tl += l;
-                    }
-                    stack[top - n] = new TValue(buffer.ToString());
-                }
-                total -= n - 1; /* got `n' strings to create 1 new */
-                last -= n - 1;
-            } while (total > 1); /* repeat until only 1 result left */
-        }
-
-        public bool LessThan(TValue lhs, TValue rhs)
-        {
-            if (lhs.tt != rhs.tt) {
-                throw new Exception();
-            }
-            if (lhs.IsNumber) {
-                return lhs.N < rhs.N;
-            }
-            if (lhs.IsString) {
-                return false; //TODO 字典序。或者你看标准库有没有
-            }
-            return false; //TODO 调用meta方法
-        }
-
         private TValue luaV_tonumber(TValue obj, TValue n)
         {
             lua_Number num;
@@ -803,28 +820,6 @@ namespace ZoloLua.Core.VirtualMachine
             return null;
         }
 
-
-        public static bool tonumber(TValue val, out lua_Number n)
-        {
-            switch (val.tt) {
-                case LuaType.LUA_TNUMBER:
-                    n = val.N;
-                    return true;
-
-                case LuaType.LUA_TSTRING:
-                    return lobject.luaO_str2d(val.Str, out n);
-
-                default:
-                    n = 0;
-                    return false;
-            }
-        }
-
-        private bool tostring(TValue o)
-        {
-            return o.IsString || luaV_tostring(o);
-        }
-
         private bool luaV_tostring(TValue obj)
         {
             if (!obj.IsNumber) {
@@ -832,6 +827,11 @@ namespace ZoloLua.Core.VirtualMachine
             }
             obj.Str = obj.N.ToString();
             return true;
+        }
+
+        private bool tostring(TValue o)
+        {
+            return o.IsString || luaV_tostring(o);
         }
 
 

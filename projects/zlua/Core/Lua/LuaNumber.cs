@@ -4,8 +4,13 @@ namespace ZoloLua.Core.Lua
 {
     /// <summary>
     ///     lua浮点数类型
+    /// 不支持配置成float
     /// </summary>
-    /// <remarks>不支持配置成float</remarks>
+    /// <remarks>
+    ///typedef double lua_Number;
+    ///Lua 中数字的类型。 确省是 double ，但是你可以在 luaconf.h中修改它。
+    ///通过修改配置文件你可以改变 Lua 让它操作其它数字类型（例如：float 或是 long ）。
+    /// </remarks>
     public struct lua_Number : IEquatable<lua_Number>
     {
         public double Value { get; set; }

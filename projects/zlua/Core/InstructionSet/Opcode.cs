@@ -1,6 +1,6 @@
 ﻿namespace ZoloLua.Core.InstructionSet
 {
-    internal enum Opcode 
+    internal enum Opcode
     {
         /*----------------------------------------------------------------------
            name		args	description

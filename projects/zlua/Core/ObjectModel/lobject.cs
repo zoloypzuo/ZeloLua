@@ -4,7 +4,7 @@ using ZoloLua.Core.Lua;
 namespace ZoloLua.Core.ObjectModel
 {
     /// <summary>
-    /// 类型模型
+    ///     类型模型
     /// </summary>
     /// <remarks>
     ///     我完整查看了clua，lobject是一个internal的模块
@@ -14,15 +14,15 @@ namespace ZoloLua.Core.ObjectModel
         /* tags for values visible from Lua */
         public const int LAST_TAG = (int)LuaType.LUA_TTHREAD;
 
-        public const int NUM_TAGS = (LAST_TAG + 1);
+        public const int NUM_TAGS = LAST_TAG + 1;
 
 
         /*
 		** Extra tags for non-values
 		*/
-        public const int LUA_TPROTO = (LAST_TAG + 1);
-        public const int LUA_TUPVAL = (LAST_TAG + 2);
-        public const int LUA_TDEADKEY = (LAST_TAG + 3);
+        public const int LUA_TPROTO = LAST_TAG + 1;
+        public const int LUA_TUPVAL = LAST_TAG + 2;
+        public const int LUA_TDEADKEY = LAST_TAG + 3;
 
         // 类型模型中各个类型的结构体定义
         // 我单独拉出来定义
@@ -44,19 +44,6 @@ namespace ZoloLua.Core.ObjectModel
         public const int LUA_TUSERDATA = 7;
         public const int LUA_TTHREAD = 8;
 
-        /* Macros to test type */
-        public static int ttype(TValue o) { return (int)o.tt; }
-
-        public static bool ttisnil(TValue o) { return (ttype(o) == LUA_TNIL); }
-        public static bool ttisnumber(TValue o) { return (ttype(o) == LUA_TNUMBER); }
-        public static bool ttisstring(TValue o) { return (ttype(o) == LUA_TSTRING); }
-        public static bool ttistable(TValue o) { return (ttype(o) == LUA_TTABLE); }
-        public static bool ttisfunction(TValue o) { return (ttype(o) == LUA_TFUNCTION); }
-        public static bool ttisboolean(TValue o) { return (ttype(o) == LUA_TBOOLEAN); }
-        public static bool ttisuserdata(TValue o) { return (ttype(o) == LUA_TUSERDATA); }
-        public static bool ttisthread(TValue o) { return (ttype(o) == LUA_TTHREAD); }
-        public static bool ttislightuserdata(TValue o) { return (ttype(o) == LUA_TLIGHTUSERDATA); }
-
         // 一些访问TValue各个类型的值的宏
 
         /// <summary>
@@ -69,8 +56,9 @@ namespace ZoloLua.Core.ObjectModel
 
         public static bool luaO_rawequalObj(TValue t1, TValue t2)
         {
-            if (t1.tt != t2.tt)
+            if (t1.tt != t2.tt) {
                 return false;
+            }
             switch (t2.tt) {
                 case LuaType.LUA_TNIL:
                     return true;
@@ -95,6 +83,26 @@ namespace ZoloLua.Core.ObjectModel
             return lua_Number.TryParse(s, out n);
         }
 
+        public static bool ttisboolean(TValue o) { return ttype(o) == LUA_TBOOLEAN; }
+
+        public static bool ttisfunction(TValue o) { return ttype(o) == LUA_TFUNCTION; }
+
+        public static bool ttislightuserdata(TValue o) { return ttype(o) == LUA_TLIGHTUSERDATA; }
+
+        public static bool ttisnil(TValue o) { return ttype(o) == LUA_TNIL; }
+
+        public static bool ttisnumber(TValue o) { return ttype(o) == LUA_TNUMBER; }
+
+        public static bool ttisstring(TValue o) { return ttype(o) == LUA_TSTRING; }
+
+        public static bool ttistable(TValue o) { return ttype(o) == LUA_TTABLE; }
+
+        public static bool ttisthread(TValue o) { return ttype(o) == LUA_TTHREAD; }
+
+        public static bool ttisuserdata(TValue o) { return ttype(o) == LUA_TUSERDATA; }
+
+        /* Macros to test type */
+        public static int ttype(TValue o) { return (int)o.tt; }
     }
 
     internal class LocVar
@@ -109,11 +117,25 @@ namespace ZoloLua.Core.ObjectModel
     {
     }
 
-    //TODO
-    public class Userdata : GCObject
+    /// <summary>
+    /// 用户数据
+    /// </summary>
+    /// <remarks>
+    ///zlua不区分light ud和ud，因为c#不能手工分配内存
+    /// clua的Udata指由L分配内存的用户数据
+    /// </remarks>
+    public class Udata : GCObject
     {
         public Table env;
         public Table metatable;
+
+        /// <summary>
+        /// luaS_newudata
+        /// </summary>
+        public Udata(Table e)
+        {
+            env = e;
+        }
     }
 
     internal class UpVal : GCObject

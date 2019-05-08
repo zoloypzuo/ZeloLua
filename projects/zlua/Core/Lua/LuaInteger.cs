@@ -3,11 +3,14 @@
 namespace ZoloLua.Core.Lua
 {
     /// <summary>
-    /// lua整数类型
-    /// </summary>
-    /// <remarks>
+    ///     lua整数类型
     /// 不支持配置成比如int32
     /// lua5.1虽然没有整数类型，但是仍然使用lua_Integer在pushinteger和tointeger函数中（16次引用），而且内部为ptrdiff
+    /// </summary>
+    /// <remarks>
+    /// typedef ptrdiff_t lua_Integer;
+    ///这个类型被用于 Lua API 接收整数值。
+    ///缺省时这个被定义为 ptrdiff_t， 这个东西通常是机器能处理的最大整数类型。
     /// </remarks>
     public struct lua_Integer : IEquatable<lua_Integer>
     {

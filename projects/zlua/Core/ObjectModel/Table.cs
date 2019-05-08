@@ -62,6 +62,11 @@ namespace ZoloLua.Core.ObjectModel
             return GetEnumerator();
         }
 
+        public IEnumerator GetEnumerator()
+        {
+            return GetEnumerator();
+        }
+
         /// <summary>
         ///     main search function
         /// </summary>
@@ -78,89 +83,19 @@ namespace ZoloLua.Core.ObjectModel
                     lua_Number n = key.N;
                     // clua是(int)n，估计问题不大
                     int k = (int)Math.Round(n, MidpointRounding.AwayFromZero);
-                    if (k == n)
+                    if (k == n) {
                         return luaH_getnum(k);
+                    }
                     /* else go through */
                     goto default;
                 default:
                     TValue v;
-                    if (hashTablePart.TryGetValue(key, out v))
+                    if (hashTablePart.TryGetValue(key, out v)) {
                         return v;
-                    else
+                    } else {
                         return lobject.luaO_nilobject;
+                    }
             }
-        }
-
-        /// <summary>
-        ///     返回查找到的值，否则创建新的键值对并返回该新创建的值
-        /// </summary>
-        public TValue luaH_set(TValue key)
-        {
-            TValue v = luaH_get(key);
-            // 注意这里是比较地址
-            // clua中if (p != luaO_nilobject)，c语言没有等于号重载
-            // luaO_nilobject被设计为一个单例，专门用于表查找返回时作为未查到的标志
-            // 下面的else分支中还检查了IsNil
-            if (!ReferenceEquals(v, lobject.luaO_nilobject)) return v;
-            if (key.IsNil)
-                throw new Exception();
-            if (key.IsNumber && double.IsNaN(key.N))
-                throw new Exception();
-            return newkey(key);
-        }
-
-        /// <summary>
-        ///     search function for strings
-        /// </summary>
-        /// <param name="key"></param>
-        /// <returns></returns>
-        public TValue luaH_getstr(TString key)
-        {
-            TValue k = new TValue(key);
-            TValue v;
-            if (hashTablePart.TryGetValue(k, out v))
-                return v;
-            return lobject.luaO_nilobject;
-        }
-
-        /// <summary>
-        ///     search function for integers
-        /// </summary>
-        /// <param name="key"></param>
-        /// <returns></returns>
-        public TValue luaH_getnum(int key)
-        {
-            /* (1 <= key && key <= t->sizearray) */
-            // 这里比较有技巧性，负数和非负数各占有符号数的上下一半，互不相交，这样只需要比较一次
-            if ((uint)key - 1 < (uint)array.Count) return array[key - 1];
-            TValue k = new TValue(key);
-            TValue v;
-            if (hashTablePart.TryGetValue(k, out v))
-                return v;
-            return lobject.luaO_nilobject;
-        }
-
-        public TValue luaH_setstr(TString key)
-        {
-            TValue v = luaH_getstr(key);
-            if (!ReferenceEquals(v, lobject.luaO_nilobject)) return v;
-            TValue k = new TValue(key);
-            return newkey(k);
-        }
-
-        public TValue luaH_setnum(int key)
-        {
-            TValue v = luaH_getnum(key);
-            if (!ReferenceEquals(v, lobject.luaO_nilobject)) return v;
-            TValue k = new TValue(key);
-            return newkey(k);
-        }
-
-        private TValue newkey(TValue k)
-        {
-            TValue newVal = new TValue();
-            hashTablePart[k] = newVal;
-            return newVal;
         }
 
         /// <summary>
@@ -178,15 +113,116 @@ namespace ZoloLua.Core.ObjectModel
                 int i = 0;
                 while (j - i > 1) {
                     int m = (i + j) / 2;
-                    if (array[m - 1].IsNil) j = m;
-                    else i = m;
+                    if (array[m - 1].IsNil) {
+                        j = m;
+                    } else {
+                        i = m;
+                    }
                 }
                 return i;
             }
             /* else must find a boundary in hash part */
-            if (hashTablePart.Count == 0) /* hash part is empty? */
+            if (hashTablePart.Count == 0) /* hash part is empty? */ {
                 return j; /* that is easy... */
+            }
             return unbound_search(j);
+        }
+
+        /// <summary>
+        ///     search function for integers
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        public TValue luaH_getnum(int key)
+        {
+            /* (1 <= key && key <= t->sizearray) */
+            // 这里比较有技巧性，负数和非负数各占有符号数的上下一半，互不相交，这样只需要比较一次
+            if ((uint)key - 1 < (uint)array.Count) {
+                return array[key - 1];
+            }
+            TValue k = new TValue(key);
+            TValue v;
+            if (hashTablePart.TryGetValue(k, out v)) {
+                return v;
+            }
+            return lobject.luaO_nilobject;
+        }
+
+        /// <summary>
+        ///     search function for strings
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        public TValue luaH_getstr(TString key)
+        {
+            TValue k = new TValue(key);
+            TValue v;
+            if (hashTablePart.TryGetValue(k, out v)) {
+                return v;
+            }
+            return lobject.luaO_nilobject;
+        }
+
+        public void luaH_resizearray(int nasize)
+        {
+            //TODO
+            int nsize = hashTablePart.Count == 0 ? 0 : hashTablePart.Count;
+            resize(nasize, nsize);
+        }
+
+        /// <summary>
+        ///     返回查找到的值，否则创建新的键值对并返回该新创建的值
+        /// </summary>
+        public TValue luaH_set(TValue key)
+        {
+            TValue v = luaH_get(key);
+            // 注意这里是比较地址
+            // clua中if (p != luaO_nilobject)，c语言没有等于号重载
+            // luaO_nilobject被设计为一个单例，专门用于表查找返回时作为未查到的标志
+            // 下面的else分支中还检查了IsNil
+            if (!ReferenceEquals(v, lobject.luaO_nilobject)) {
+                return v;
+            }
+            if (key.IsNil) {
+                throw new Exception();
+            }
+            if (key.IsNumber && double.IsNaN(key.N)) {
+                throw new Exception();
+            }
+            return newkey(key);
+        }
+
+        public TValue luaH_setnum(int key)
+        {
+            TValue v = luaH_getnum(key);
+            if (!ReferenceEquals(v, lobject.luaO_nilobject)) {
+                return v;
+            }
+            TValue k = new TValue(key);
+            return newkey(k);
+        }
+
+        public TValue luaH_setstr(TString key)
+        {
+            TValue v = luaH_getstr(key);
+            if (!ReferenceEquals(v, lobject.luaO_nilobject)) {
+                return v;
+            }
+            TValue k = new TValue(key);
+            return newkey(k);
+        }
+
+        private TValue newkey(TValue k)
+        {
+            TValue newVal = new TValue();
+            hashTablePart[k] = newVal;
+            return newVal;
+        }
+
+        private void resize(int nasize, int nhsize)
+        {
+            for (int i = array.Count; i < nasize; i++) array.Add(new TValue());
+            //TODO
         }
 
         private int unbound_search(int j)
@@ -207,28 +243,13 @@ namespace ZoloLua.Core.ObjectModel
             /* now do a binary search between them */
             while (j - i > 1) {
                 int m = (i + j) / 2;
-                if (luaH_getnum(m).IsNil) j = m;
-                else i = m;
+                if (luaH_getnum(m).IsNil) {
+                    j = m;
+                } else {
+                    i = m;
+                }
             }
             return i;
-        }
-
-        public void luaH_resizearray(int nasize)
-        {
-            //TODO
-            int nsize = hashTablePart.Count == 0 ? 0 : hashTablePart.Count;
-            resize(nasize, nsize);
-        }
-
-        private void resize(int nasize, int nhsize)
-        {
-            for (int i = array.Count; i < nasize; i++) array.Add(new TValue());
-            //TODO
-        }
-
-        public IEnumerator GetEnumerator()
-        {
-            return GetEnumerator();
         }
     }
 }

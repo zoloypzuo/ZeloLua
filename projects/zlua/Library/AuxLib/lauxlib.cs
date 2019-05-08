@@ -10,23 +10,23 @@ namespace ZoloLua.Core.VirtualMachine
 {
     public partial class lua_State
     {
-        /// <summary>
-        ///     构造新的lua解释器
-        ///     与lua_open宏同义
-        /// </summary>
-        /// <returns></returns>
-        /// <remarks>注意这和lua_State的ctor不同，比如要设置g.mainthread=this</remarks>
-        public static lua_State luaL_newstate()
-        {
-            lua_State L = lua_newstate();
-            //TODOlua_atpanic(L, &panic);
-            return L;
-        }
-
         // 《Lua设计与实现》p39
         public void luaL_dofile(string path)
         {
             luaL_loadfile(path);
+            //lua_pcall(0, LUA_MULTRET, 0);
+            lua_call(0, LUA_MULTRET);
+        }
+
+        /// <summary>
+        ///     zlua和clua这点不同，clua的dofile和dostring都会调用lua_load，后者用lookahead判断是否是二进制，再用parser或unudmp
+        ///     zlua的dostring只能parse，不能undump
+        ///     主要是ANTLRStream，太烦了
+        /// </summary>
+        /// <param name="s"></param>
+        public void luaL_dostring(string s)
+        {
+            luaL_loadstring(s);
             //lua_pcall(0, LUA_MULTRET, 0);
             lua_call(0, LUA_MULTRET);
         }
@@ -57,22 +57,22 @@ namespace ZoloLua.Core.VirtualMachine
             }
         }
 
-        /// <summary>
-        ///     zlua和clua这点不同，clua的dofile和dostring都会调用lua_load，后者用lookahead判断是否是二进制，再用parser或unudmp
-        ///     zlua的dostring只能parse，不能undump
-        ///     主要是ANTLRStream，太烦了
-        /// </summary>
-        /// <param name="s"></param>
-        public void luaL_dostring(string s)
-        {
-            luaL_loadstring(s);
-            //lua_pcall(0, LUA_MULTRET, 0);
-            lua_call(0, LUA_MULTRET);
-        }
-
         public void luaL_loadstring(string s)
         {
             lua_load(new AntlrInputStream(s), s);
+        }
+
+        /// <summary>
+        ///     构造新的lua解释器
+        ///     与lua_open宏同义
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks>注意这和lua_State的ctor不同，比如要设置g.mainthread=this</remarks>
+        public static lua_State luaL_newstate()
+        {
+            lua_State L = lua_newstate();
+            //TODOlua_atpanic(L, &panic);
+            return L;
         }
     }
 }

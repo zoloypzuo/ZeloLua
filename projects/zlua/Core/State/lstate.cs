@@ -102,39 +102,8 @@ namespace ZoloLua.Core.VirtualMachine
             }
         }
 
-        /// <summary>
-        /// luaE_newthread
-        /// 只被lua_newthread调用
-        /// TODO，因此在lapi中实现，主要是因为ctor有限
-        /// </summary>
-        //public lua_State(lua_State L) :
-        //    this()  /* init stack */
-        //{
-        //    // 共享全局状态
-        //    G = L.G;
-        //    gt = L.gt;  /* share table of globals */
-        //}
 
-        /// <summary>
-        ///     lua_newstate
-        /// </summary>
-        /// <remarks>
-        ///     只被auxlib的luaL_newstate调用
-        ///     clua中，这个函数只分配内存
-        /// </remarks>
-        public static lua_State lua_newstate()
-        {
-            lua_State L = new lua_State();
-            global_State g = new global_State();
-            L.G = g;
-            g.mainthread = L;
-            //g->uvhead.u.l.prev = &g->uvhead;
-            //g->uvhead.u.l.next = &g->uvhead;
-            // f_luaopen
-            L.gt = new TValue(new Table(0, 2));
-            L.registry.Table = new Table(0, 2);
-            L.luaT_init();
-            return L;
-        }
+
+
     }
 }

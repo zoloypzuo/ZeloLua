@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using ZoloLua.Core.InstructionSet;
+﻿using ZoloLua.Core.InstructionSet;
 
 namespace ZoloLua.Core.ObjectModel
 {

@@ -51,9 +51,6 @@
         {
             return luaP_opmodes[(int)opcode];
         }
-
-
-   
     }
 
     internal enum OpMode
@@ -64,7 +61,7 @@
         IAx
     }
 
-    internal enum OperandMode 
+    internal enum OperandMode
     {
         // 不使用该参数
         OpArgN,
@@ -97,12 +94,12 @@
         }
 
         /// <summary>
-        /// 是测试指令，下一条指令一定是jump
+        ///     是测试指令，下一条指令一定是jump
         /// </summary>
         public bool IsTest { get; }
 
         /// <summary>
-        /// 这条指令会设置RA
+        ///     这条指令会设置RA
         /// </summary>
         public bool SetA { get; }
 
