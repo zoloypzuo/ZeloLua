@@ -65,15 +65,7 @@ namespace ZoloLua.Core.VirtualMachine
             return luaL_newstate();
         }
 
-        /// 注册一个C#函数，在lua代码中用name调用
-        /// 被调用函数被包装成closure，在G中，key是`name
-        /// no upval，你要自己设置（永远用不到）
-        public void Register(lua_CFunction csFunc, string name)
-        {
-            CSharpClosure newFunc = new CSharpClosure
-                { f = csFunc };
-            gt.Table.luaH_getstr(name).Cl = newFunc;
-        }
+
 
         /// <summary>
         ///     helper，帮助调试

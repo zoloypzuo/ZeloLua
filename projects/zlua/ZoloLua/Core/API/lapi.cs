@@ -11,7 +11,7 @@ namespace ZoloLua.Core.VirtualMachine
 {
     public partial class lua_State
     {
-   
+
 
         #region lapi辅助宏
 
@@ -1106,19 +1106,19 @@ namespace ZoloLua.Core.VirtualMachine
         /// 		
         /// 	</para>
         /// </remarks>
-        public void lua_pushcclosure(lua_CFunction fn,int n)
+        public void lua_pushcclosure(lua_CFunction fn, int n)
         {
             CSharpClosure cl = new CSharpClosure
             {
                 f = fn,
-                upvalue=new TValue[n],
-                env=getcurrenv()
+                upvalue = new TValue[n],
+                env = getcurrenv()
             };
-            api_checknelems( n);
+            api_checknelems(n);
             top -= n;
-            while (n--!=0)
-                 cl.upvalue[n]= top + n;
-            top.Value.Cl= cl;
+            while (n-- != 0)
+                cl.upvalue[n] = top + n;
+            top.Value.Cl = cl;
             api_incr_top();
         }
 
@@ -1476,6 +1476,9 @@ namespace ZoloLua.Core.VirtualMachine
         }
 
         /// <summary>
+        /// 注册一个C#函数，在lua代码中用name调用
+        /// 被调用函数被包装成closure，在G中，key是`name
+        /// no upval，你要自己设置（永远用不到）
         /// 	<see href="https://www.lua.org/manual/5.1/manual.html#lua_register">lua_register</see>
         /// </summary>
         /// <remarks>
@@ -1493,8 +1496,10 @@ namespace ZoloLua.Core.VirtualMachine
         /// 		
         /// 	</para>
         /// </remarks>
-        public void lua_register()
+        public void lua_register(string name, lua_CFunction f)
         {
+            lua_pushcfunction(f);
+            lua_setglobal(name);
         }
 
         /// <summary>
@@ -1621,8 +1626,14 @@ namespace ZoloLua.Core.VirtualMachine
         /// 		
         /// 	</para>
         /// </remarks>
-        public void lua_setfield()
+        public void lua_setfield(int idx, string k)
         {
+            api_checknelems(1);
+            TValue t = index2adr(idx);
+            api_checkvalidindex(t);
+            TValue key = new TValue(k);
+            luaV_settable(t, key, top - 1);
+            top--;  /* pop value */
         }
 
         /// <summary>
@@ -1640,8 +1651,9 @@ namespace ZoloLua.Core.VirtualMachine
         /// 		
         /// 	</para>
         /// </remarks>
-        public void lua_setglobal()
+        public void lua_setglobal(string s)
         {
+            lua_setfield(LUA_GLOBALSINDEX, s);
         }
 
         /// <summary>
