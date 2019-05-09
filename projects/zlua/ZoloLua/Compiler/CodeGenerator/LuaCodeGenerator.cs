@@ -4,7 +4,7 @@
 // 相关代码在funcInfo的scope区域
 using Antlr4.Runtime.Misc;
 using Antlr4.Runtime.Tree;
-using ZoloLua.Core.ObjectModel;
+using ZoloLua.Core.TypeModel;
 
 namespace ZoloLua.Compiler.CodeGenerator
 {

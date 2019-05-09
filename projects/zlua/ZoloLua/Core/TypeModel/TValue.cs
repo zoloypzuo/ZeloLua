@@ -3,9 +3,10 @@ using System.Diagnostics;
 using System.Runtime.InteropServices;
 using Newtonsoft.Json;
 using ZoloLua.Core.Lua;
+using ZoloLua.Core.ObjectModel;
 using ZoloLua.Core.VirtualMachine;
 
-namespace ZoloLua.Core.ObjectModel
+namespace ZoloLua.Core.TypeModel
 {
     // TODO light ud没了解足够，先不管
     /// <summary>

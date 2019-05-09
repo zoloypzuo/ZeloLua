@@ -6,6 +6,7 @@ using ZoloLua.Compiler.CodeGenerator;
 using ZoloLua.Core.Configuration;
 using ZoloLua.Core.Lua;
 using ZoloLua.Core.ObjectModel;
+using ZoloLua.Core.TypeModel;
 
 namespace ZoloLua.Core.VirtualMachine
 {
@@ -2078,8 +2079,8 @@ namespace ZoloLua.Core.VirtualMachine
             if (CallStack.Count == 1) /* no enclosing function? */ {
                 return gt.Table; /* use global table as environment */
             }
-            Closure func = curr_func;
-            return (func as CSharpClosure).env;
+            CSharpClosure func = curr_func as CSharpClosure;
+            return func.env;
         }
 
 

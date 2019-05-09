@@ -3,7 +3,7 @@ using System.IO;
 using System.Text;
 using ZoloLua.Core.InstructionSet;
 using ZoloLua.Core.Lua;
-using ZoloLua.Core.ObjectModel;
+using ZoloLua.Core.TypeModel;
 
 namespace ZoloLua.Core.Undumper
 {

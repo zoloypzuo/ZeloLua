@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics;
 using ZoloLua.Core.Lua;
 using ZoloLua.Core.MetaMethod;
-using ZoloLua.Core.ObjectModel;
+using ZoloLua.Core.TypeModel;
 
 namespace ZoloLua.Core.VirtualMachine
 {

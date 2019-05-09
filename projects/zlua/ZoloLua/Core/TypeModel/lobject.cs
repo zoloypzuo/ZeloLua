@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics;
 using ZoloLua.Core.Lua;
 
-namespace ZoloLua.Core.ObjectModel
+namespace ZoloLua.Core.TypeModel
 {
     /// <summary>
     ///     类型模型

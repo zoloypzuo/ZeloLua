@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using ZoloLua.Core.Lua;
+using ZoloLua.Core.TypeModel;
 using static ZoloLua.Core.VirtualMachine.lua_State;
 
 namespace ZoloLua.Core.ObjectModel

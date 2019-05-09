@@ -2,7 +2,7 @@
 using System.Diagnostics;
 using System.IO;
 using ZoloLua.Core.Lua;
-using ZoloLua.Core.ObjectModel;
+using ZoloLua.Core.TypeModel;
 using ZoloLua.Core.Undumper;
 
 namespace ZoloLua.Core.VirtualMachine

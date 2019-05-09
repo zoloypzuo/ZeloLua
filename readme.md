@@ -39,7 +39,7 @@ zlua不是：
   * InstructionSet：指令集
   * Lua：lua解释器
   * MetaMethod：元方法
-  * ObjectModel：类型模型
+  * TypeModel：类型模型
   * State：lua_State类和global_State类
   * Undumper：加载预编译chunk
   * VirtualMachine：虚拟机

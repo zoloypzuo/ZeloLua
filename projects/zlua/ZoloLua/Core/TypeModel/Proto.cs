@@ -1,6 +1,6 @@
 ﻿using ZoloLua.Core.InstructionSet;
 
-namespace ZoloLua.Core.ObjectModel
+namespace ZoloLua.Core.TypeModel
 {
     /// <summary>
     ///     函数原型

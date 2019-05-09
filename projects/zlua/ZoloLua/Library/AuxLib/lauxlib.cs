@@ -4,6 +4,7 @@ using System.IO;
 using System.Text;
 using Antlr4.Runtime;
 using ZoloLua.Core.ObjectModel;
+using ZoloLua.Core.TypeModel;
 using ZoloLua.Core.Undumper;
 using ZoloLua.Library.AuxLib;
 
