@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
-using zlua.Core.MetaMethod;
 using ZoloLua.Core.InstructionSet;
 using ZoloLua.Core.Lua;
+using ZoloLua.Core.MetaMethod;
 using ZoloLua.Core.ObjectModel;
 
 namespace ZoloLua.Core.VirtualMachine

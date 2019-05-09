@@ -4,9 +4,29 @@ using ZoloLua.Core.ObjectModel;
 namespace ZoloLua.Core.VirtualMachine
 {
     /// <summary>
-    ///     lua_State一般性字段的定义和lua_State的初始化
+    /// lua_State一般性字段的定义和lua_State的初始化，这里的字段相对没有运行时的那些字段那么重要
+    /// 	<see href="https://www.lua.org/manual/5.1/manual.html#lua_State">lua_State</see>
     /// </summary>
-    /// <remarks>这里的字段相对没有运行时的那些字段那么重要</remarks>
+    /// <remarks>
+    /// 	<para>
+    /// 		lua_State
+    /// 		typedef struct lua_State lua_State;
+    /// 		
+    /// 		一个不透明的结构，它保存了整个 Lua 解释器的状态。
+    /// 		Lua 库是完全可重入的：
+    /// 		它没有任何全局变量。
+    /// 		（译注：从 C 语法上来说，也不尽然。例如，在 table 的实现中
+    /// 		用了一个静态全局变量 dummynode_ ，但这在正确使用时并不影响可重入性。
+    /// 		只是万一你错误链接了 lua 库，不小心在同一进程空间中存在两份 lua 库实现的代码的话，
+    /// 		多份 dummynode_ 不同的地址会导致一些问题。）
+    /// 		所有的信息都保存在这个结构中。
+    /// 		
+    /// 		这个状态机的指针必须作为第一个参数传递给每一个库函数。
+    /// 		lua_newstate 是一个例外，
+    /// 		这个函数会从头创建一个 Lua 状态机。
+    /// 		
+    /// 	</para>
+    /// </remarks>
     public partial class lua_State : GCObject
     {
         /* extra stack space to handle TM calls and some other extras */

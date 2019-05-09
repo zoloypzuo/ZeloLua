@@ -167,7 +167,7 @@ namespace ZoloLua.Core.InstructionSet
                     return $"{op} Ax: {Ax}";
 
                 default:
-                    throw new GodDamnException();
+                    throw new System.Exception();
             }
         }
     }

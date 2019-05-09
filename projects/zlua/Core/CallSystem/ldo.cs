@@ -1,18 +1,8 @@
 ﻿using System;
 using System.Diagnostics;
-using zlua.Core.MetaMethod;
 using ZoloLua.Core.Configuration;
+using ZoloLua.Core.MetaMethod;
 using ZoloLua.Core.ObjectModel;
-
-namespace ZoloLua.Core.CallSystem
-{
-    /// <summary>
-    ///     调用系统
-    /// </summary>
-    public class ldo
-    {
-    }
-}
 
 namespace ZoloLua.Core.VirtualMachine
 {

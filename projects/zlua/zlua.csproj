@@ -49,11 +49,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Compiler\CodeGenerator\lcode.cs" />
-    <Compile Include="Compiler\CodeGenerator\LuaBaseVisitor.cs" />
     <Compile Include="Compiler\CodeGenerator\LuaCodeGenerator.cs" />
-    <Compile Include="Compiler\CodeGenerator\LuaLexer.cs" />
-    <Compile Include="Compiler\CodeGenerator\LuaParser.cs" />
-    <Compile Include="Compiler\CodeGenerator\LuaVisitor.cs" />
     <Compile Include="Core\InstructionSet\Bytecode.cs" />
     <Compile Include="Core\InstructionSet\BytecodeTool.cs" />
     <Compile Include="Core\InstructionSet\Opcode.cs" />

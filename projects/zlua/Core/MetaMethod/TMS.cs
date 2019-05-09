@@ -1,4 +1,4 @@
-﻿namespace zlua.Core.MetaMethod
+﻿namespace ZoloLua.Core.MetaMethod
 {
     internal enum TMS
     {

@@ -1,17 +1,7 @@
 ﻿using System.Diagnostics;
-using zlua.Core.MetaMethod;
 using ZoloLua.Core.Lua;
+using ZoloLua.Core.MetaMethod;
 using ZoloLua.Core.ObjectModel;
-
-namespace ZoloLua.Core.MetaMethod
-{
-    /// <summary>
-    ///     元方法
-    /// </summary>
-    public class ltm
-    {
-    }
-}
 
 namespace ZoloLua.Core.VirtualMachine
 {
