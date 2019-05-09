@@ -5,6 +5,7 @@ using System.Text;
 using Antlr4.Runtime;
 using ZoloLua.Core.ObjectModel;
 using ZoloLua.Core.Undumper;
+using ZoloLua.Library.AuxLib;
 
 namespace ZoloLua.Core.VirtualMachine
 {
@@ -73,6 +74,16 @@ namespace ZoloLua.Core.VirtualMachine
             lua_State L = lua_newstate();
             //TODOlua_atpanic(L, &panic);
             return L;
+        }
+
+        public void luaL_openlibs()
+        {
+            luaL_Reg[] lib = lualibs;
+            for (int i = 0; i < lib.Length; i++) {
+                lua_pushcfunction(lib[i].func);
+                lua_pushstring(lib[i].name);
+                lua_call(1, 0);
+            }
         }
     }
 }

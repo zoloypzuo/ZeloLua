@@ -1084,6 +1084,7 @@ namespace ZoloLua.Core.VirtualMachine
         }
 
         /// <summary>
+        /// 创建c闭包，有n个upval（是TValue），upvals已经被压栈了
         /// 	<see href="https://www.lua.org/manual/5.1/manual.html#lua_pushcclosure">lua_pushcclosure</see>
         /// </summary>
         /// <remarks>
@@ -1105,11 +1106,24 @@ namespace ZoloLua.Core.VirtualMachine
         /// 		
         /// 	</para>
         /// </remarks>
-        public void lua_pushcclosure()
+        public void lua_pushcclosure(lua_CFunction fn,int n)
         {
+            CSharpClosure cl = new CSharpClosure
+            {
+                f = fn,
+                upvalue=new TValue[n],
+                env=getcurrenv()
+            };
+            api_checknelems( n);
+            top -= n;
+            while (n--!=0)
+                 cl.upvalue[n]= top + n;
+            top.Value.Cl= cl;
+            api_incr_top();
         }
 
         /// <summary>
+        /// 创建c函数，与pushcclosure的区别在于无upval
         /// 	<see href="https://www.lua.org/manual/5.1/manual.html#lua_pushcfunction">lua_pushcfunction</see>
         /// </summary>
         /// <remarks>
@@ -1130,8 +1144,9 @@ namespace ZoloLua.Core.VirtualMachine
         /// 		
         /// 	</para>
         /// </remarks>
-        public void lua_pushcfunction()
+        public void lua_pushcfunction(lua_CFunction f)
         {
+            lua_pushcclosure(f, 0);
         }
 
         /// <summary>
@@ -1221,8 +1236,10 @@ namespace ZoloLua.Core.VirtualMachine
         /// 		
         /// 	</para>
         /// </remarks>
-        public void lua_pushlstring()
+        public void lua_pushlstring(string s)
         {
+            top.Value.TStr = new TString(s);
+            api_incr_top();
         }
 
         /// <summary>
@@ -1239,6 +1256,8 @@ namespace ZoloLua.Core.VirtualMachine
         /// </remarks>
         public void lua_pushnil()
         {
+            top.SetNil();
+            api_incr_top();
         }
 
         /// <summary>
@@ -1272,8 +1291,12 @@ namespace ZoloLua.Core.VirtualMachine
         /// 		
         /// 	</para>
         /// </remarks>
-        public void lua_pushstring()
+        public void lua_pushstring(string s)
         {
+            if (s == null)
+                lua_pushnil();
+            else
+                lua_pushlstring(s);
         }
 
         /// <summary>
