@@ -2,170 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="3cd1adb7-fda5-4b8e-8462-9bcc5578c8c3" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/tool/test/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tool/test/disassembler/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tool/test/util.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dictionaries/91018.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dictionaries/91018.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen_test/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/tool/csharp.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen_test/compile_out/2018-07-10 13-33-21.109486.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/compile_out/2018-07-10 13-33-21.109486.lua" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen_test/compile_out/2018-07-10 13-34-06.395065.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/compile_out/2018-07-10 13-34-06.395065.lua" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen_test/compile_out/2018-07-10 13-34-25.121064.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/compile_out/2018-07-10 13-34-25.121064.lua" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen_test/compile_out/2018-07-10 17-02-44.749038.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/compile_out/2018-07-10 17-02-44.749038.lua" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen_test/compile_out/2018-07-10 23-45-53.021016.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/compile_out/2018-07-10 23-45-53.021016.lua" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen_test/compile_out/2018-07-20 16-40-13.156996.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/compile_out/2018-07-20 16-40-13.156996.lua" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen_test/compile_out/2018-07-28 16-05-54.484714.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/compile_out/2018-07-28 16-05-54.484714.lua" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen_test/compile_out/2018-07-31 13-05-37.928440.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/compile_out/2018-07-31 13-05-37.928440.lua" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen_test/compile_out/2018-08-01 10-46-45.467369.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/compile_out/2018-08-01 10-46-45.467369.lua" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen_test/compile_out/2018-08-01 16-17-38.880804.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/compile_out/2018-08-01 16-17-38.880804.lua" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen_test/compile_out/2018-08-01 23-34-51.350042.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/compile_out/2018-08-01 23-34-51.350042.lua" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen_test/compile_out/2018-08-02 17-10-05.759987.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/compile_out/2018-08-02 17-10-05.759987.lua" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen_test/compile_out/2018-08-04 20-05-32.809182.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/compile_out/2018-08-04 20-05-32.809182.lua" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen_test/compile_out/2018-08-05 22-15-41.971398.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/compile_out/2018-08-05 22-15-41.971398.lua" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen_test/compile_out/2018-08-06 14-45-48.378991.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/compile_out/2018-08-06 14-45-48.378991.lua" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen_test/compile_out/2018-08-07 17-24-09.185387.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/compile_out/2018-08-07 17-24-09.185387.lua" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen_test/compile_out/2018-08-08 17-22-03.216625.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/compile_out/2018-08-08 17-22-03.216625.lua" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen_test/compile_out/2019-04-26 00-19-08.230274-hello_world.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/compile_out/2019-04-26 00-19-08.230274-hello_world.lua" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen_test/compile_out/2019-04-28 09-19-40.947648-for_num.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/compile_out/2019-04-28 09-19-40.947648-for_num.lua" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen_test/compile_out/2019-04-28 10-45-52.175971-empty.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/compile_out/2019-04-28 10-45-52.175971-empty.lua" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen_test/compile_out/2019-04-28 13-45-09.049741-functionCall-call.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/compile_out/2019-04-28 13-45-09.049741-functionCall-call.lua" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen_test/disassembler/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/tool/lapi/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen_test/disassembler/chunkspy.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/disassembler/chunkspy.lua" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen_test/disassembler/compile_lua.py" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/disassembler/compile_lua.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen_test/disassembler/exe_out_asm.txt" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/disassembler/exe_out_asm.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen_test/disassembler/learn.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/disassembler/learn.lua" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen_test/disassembler/lua.exe" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/disassembler/lua.exe" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen_test/disassembler/lua_asm.txt" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/disassembler/lua_asm.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen_test/disassembler/luac.exe" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/disassembler/luac.exe" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen_test/disassembler/luac.out" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/disassembler/luac.out" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen_test/file/lua5.1-tests/README" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/lua5.1-tests/README" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen_test/file/lua5.1-tests/all.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/lua5.1-tests/all.lua" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen_test/file/lua5.1-tests/api.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/lua5.1-tests/api.lua" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen_test/file/lua5.1-tests/attrib.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/lua5.1-tests/attrib.lua" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen_test/file/lua5.1-tests/big.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/lua5.1-tests/big.lua" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen_test/file/lua5.1-tests/calls.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/lua5.1-tests/calls.lua" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen_test/file/lua5.1-tests/checktable.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/lua5.1-tests/checktable.lua" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen_test/file/lua5.1-tests/closure.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/lua5.1-tests/closure.lua" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen_test/file/lua5.1-tests/code.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/lua5.1-tests/code.lua" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen_test/file/lua5.1-tests/constructs.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/lua5.1-tests/constructs.lua" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen_test/file/lua5.1-tests/db.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/lua5.1-tests/db.lua" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen_test/file/lua5.1-tests/errors.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/lua5.1-tests/errors.lua" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen_test/file/lua5.1-tests/etc/ltests.c" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/lua5.1-tests/etc/ltests.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen_test/file/lua5.1-tests/etc/ltests.h" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/lua5.1-tests/etc/ltests.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen_test/file/lua5.1-tests/events.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/lua5.1-tests/events.lua" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen_test/file/lua5.1-tests/files.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/lua5.1-tests/files.lua" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen_test/file/lua5.1-tests/gc.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/lua5.1-tests/gc.lua" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen_test/file/lua5.1-tests/libs/lib1.c" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/lua5.1-tests/libs/lib1.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen_test/file/lua5.1-tests/libs/lib11.c" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/lua5.1-tests/libs/lib11.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen_test/file/lua5.1-tests/libs/lib2.c" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/lua5.1-tests/libs/lib2.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen_test/file/lua5.1-tests/libs/lib21.c" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/lua5.1-tests/libs/lib21.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen_test/file/lua5.1-tests/libs/makefile" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/lua5.1-tests/libs/makefile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen_test/file/lua5.1-tests/literals.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/lua5.1-tests/literals.lua" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen_test/file/lua5.1-tests/locals.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/lua5.1-tests/locals.lua" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen_test/file/lua5.1-tests/main.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/lua5.1-tests/main.lua" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen_test/file/lua5.1-tests/math.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/lua5.1-tests/math.lua" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen_test/file/lua5.1-tests/nextvar.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/lua5.1-tests/nextvar.lua" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen_test/file/lua5.1-tests/pm.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/lua5.1-tests/pm.lua" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen_test/file/lua5.1-tests/sort.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/lua5.1-tests/sort.lua" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen_test/file/lua5.1-tests/strings.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/lua5.1-tests/strings.lua" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen_test/file/lua5.1-tests/vararg.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/lua5.1-tests/vararg.lua" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen_test/file/lua5.1-tests/verybig.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/lua5.1-tests/verybig.lua" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen_test/file/luago-book/ch02/foo_bar.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/luago-book/ch02/foo_bar.lua" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen_test/file/luago-book/ch02/hello_world.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/luago-book/ch02/hello_world.lua" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen_test/file/luago-book/ch02/luac.exe" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/luago-book/ch02/luac.exe" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen_test/file/luago-book/ch02/luac.out" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/luago-book/ch02/luac.out" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen_test/file/luago-book/ch02/test/constants.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/luago-book/ch02/test/constants.lua" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen_test/file/luago-book/ch02/test/long_string.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/luago-book/ch02/test/long_string.lua" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen_test/file/luago-book/ch02/test/param_num.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/luago-book/ch02/test/param_num.lua" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen_test/file/luago-book/ch02/test/vararg.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/luago-book/ch02/test/vararg.lua" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen_test/file/luago-book/ch04/examples.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/luago-book/ch04/examples.lua" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen_test/file/luago-book/ch05/examples.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/luago-book/ch05/examples.lua" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen_test/file/luago-book/ch06/sum.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/luago-book/ch06/sum.lua" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen_test/file/luago-book/ch06/test/max_regs.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/luago-book/ch06/test/max_regs.lua" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen_test/file/luago-book/ch06/test/max_regs2.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/luago-book/ch06/test/max_regs2.lua" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen_test/file/luago-book/ch07/examples.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/luago-book/ch07/examples.lua" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen_test/file/luago-book/ch07/test.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/luago-book/ch07/test.lua" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen_test/file/luago-book/ch07/test/big_list.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/luago-book/ch07/test/big_list.lua" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen_test/file/luago-book/ch07/test_seq.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/luago-book/ch07/test_seq.lua" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen_test/file/luago-book/ch08/examples.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/luago-book/ch08/examples.lua" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen_test/file/luago-book/ch08/test.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/luago-book/ch08/test.lua" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen_test/file/luago-book/ch10/examples.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/luago-book/ch10/examples.lua" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen_test/file/luago-book/ch10/factorial.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/luago-book/ch10/factorial.lua" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen_test/file/luago-book/ch10/fibonacci.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/luago-book/ch10/fibonacci.lua" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen_test/file/luago-book/ch10/test.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/luago-book/ch10/test.lua" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen_test/file/luago-book/ch10/test_env.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/luago-book/ch10/test_env.lua" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen_test/file/luago-book/ch11/complex.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/luago-book/ch11/complex.lua" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen_test/file/luago-book/ch11/examples.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/luago-book/ch11/examples.lua" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen_test/file/luago-book/ch11/vector2.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/luago-book/ch11/vector2.lua" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen_test/file/luago-book/ch12/examples.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/luago-book/ch12/examples.lua" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen_test/file/luago-book/ch12/range.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/luago-book/ch12/range.lua" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen_test/file/luago-book/ch12/test.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/luago-book/ch12/test.lua" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen_test/file/luago-book/ch12/values.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/luago-book/ch12/values.lua" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen_test/file/luago-book/ch13/examples.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/luago-book/ch13/examples.lua" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen_test/file/luago-book/ch13/test.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/luago-book/ch13/test.lua" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen_test/file/luago-book/ch14/examples.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/luago-book/ch14/examples.lua" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen_test/file/luago-book/ch16/examples.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/luago-book/ch16/examples.lua" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen_test/file/luago-book/ch17/examples.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/luago-book/ch17/examples.lua" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen_test/file/luago-book/ch18/examples.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/luago-book/ch18/examples.lua" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen_test/file/luago-book/ch19/examples.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/luago-book/ch19/examples.lua" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen_test/file/luago-book/ch20/examples.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/luago-book/ch20/examples.lua" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen_test/file/luago-book/ch20/mymod.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/luago-book/ch20/mymod.lua" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen_test/file/luago-book/ch20/test.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/luago-book/ch20/test.lua" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen_test/file/luago-book/ch21/examples.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/luago-book/ch21/examples.lua" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen_test/file/luago-book/ch21/test.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/luago-book/ch21/test.lua" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen_test/file/luago-book/postface/examples.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/luago-book/postface/examples.lua" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen_test/file/programming-in-lua-2th-edition/13_123.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/programming-in-lua-2th-edition/13_123.lua" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen_test/file/programming-in-lua-2th-edition/13_4.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/programming-in-lua-2th-edition/13_4.lua" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen_test/file/programming-in-lua-2th-edition/17.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/programming-in-lua-2th-edition/17.lua" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen_test/file/programming-in-lua-2th-edition/17_1.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/programming-in-lua-2th-edition/17_1.lua" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen_test/file/programming-in-lua-2th-edition/a.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/programming-in-lua-2th-edition/a.lua" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen_test/file/programming-in-lua-2th-edition/part1/10_1.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/programming-in-lua-2th-edition/part1/10_1.lua" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen_test/file/programming-in-lua-2th-edition/part1/10_1_db.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/programming-in-lua-2th-edition/part1/10_1_db.lua" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen_test/file/programming-in-lua-2th-edition/part1/10_2.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/programming-in-lua-2th-edition/part1/10_2.lua" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen_test/file/programming-in-lua-2th-edition/part1/10_2_in.txt" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/programming-in-lua-2th-edition/part1/10_2_in.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen_test/file/programming-in-lua-2th-edition/part1/2_4.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/programming-in-lua-2th-edition/part1/2_4.lua" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen_test/file/programming-in-lua-2th-edition/part1/2_5.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/programming-in-lua-2th-edition/part1/2_5.lua" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen_test/file/programming-in-lua-2th-edition/part1/3.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/programming-in-lua-2th-edition/part1/3.lua" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen_test/file/programming-in-lua-2th-edition/part1/4.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/programming-in-lua-2th-edition/part1/4.lua" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen_test/file/programming-in-lua-2th-edition/part1/5.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/programming-in-lua-2th-edition/part1/5.lua" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen_test/file/programming-in-lua-2th-edition/part1/6.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/programming-in-lua-2th-edition/part1/6.lua" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen_test/file/programming-in-lua-2th-edition/part1/7_1_1.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/programming-in-lua-2th-edition/part1/7_1_1.lua" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen_test/file/programming-in-lua-2th-edition/part1/7_1_2.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/programming-in-lua-2th-edition/part1/7_1_2.lua" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen_test/file/programming-in-lua-2th-edition/part1/7_3.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/programming-in-lua-2th-edition/part1/7_3.lua" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen_test/file/programming-in-lua-2th-edition/part1/7_4.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/programming-in-lua-2th-edition/part1/7_4.lua" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen_test/file/programming-in-lua-2th-edition/part1/7_5.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/programming-in-lua-2th-edition/part1/7_5.lua" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen_test/file/programming-in-lua-2th-edition/part1/8.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/programming-in-lua-2th-edition/part1/8.lua" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen_test/file/programming-in-lua-2th-edition/part1/8_1.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/programming-in-lua-2th-edition/part1/8_1.lua" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen_test/file/programming-in-lua-2th-edition/part1/9_2_1.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/programming-in-lua-2th-edition/part1/9_2_1.lua" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen_test/file/programming-in-lua-2th-edition/part1/9_2_2.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/programming-in-lua-2th-edition/part1/9_2_2.lua" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen_test/file/programming-in-lua-2th-edition/part1/9_3.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/programming-in-lua-2th-edition/part1/9_3.lua" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen_test/file/programming-in-lua-2th-edition/part1/9_4.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/programming-in-lua-2th-edition/part1/9_4.lua" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen_test/file/programming-in-lua-2th-edition/part1/luasocket-2.0.2-lua-5.1.2-Win32-vc8.zip" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/programming-in-lua-2th-edition/part1/luasocket-2.0.2-lua-5.1.2-Win32-vc8.zip" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen_test/file/programming-in-lua-2th-edition/part2/14.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/programming-in-lua-2th-edition/part2/14.lua" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen_test/file/programming-in-lua-2th-edition/part2/14_1.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/programming-in-lua-2th-edition/part2/14_1.lua" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen_test/file/programming-in-lua-2th-edition/part2/14_2.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/programming-in-lua-2th-edition/part2/14_2.lua" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen_test/file/programming-in-lua-2th-edition/part2/14_3.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/programming-in-lua-2th-edition/part2/14_3.lua" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen_test/file/programming-in-lua-2th-edition/part3/23_1.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/programming-in-lua-2th-edition/part3/23_1.lua" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen_test/file/programming-in-lua-2th-edition/part3/23_1_1.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/programming-in-lua-2th-edition/part3/23_1_1.lua" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen_test/file/programming-in-lua-2th-edition/part3/23_1_2.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/programming-in-lua-2th-edition/part3/23_1_2.lua" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen_test/file/programming-in-lua-2th-edition/part3/23_1_3.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/programming-in-lua-2th-edition/part3/23_1_3.lua" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen_test/file/programming-in-lua-2th-edition/part3/23_2.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/programming-in-lua-2th-edition/part3/23_2.lua" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen_test/file/programming-in-lua-2th-edition/part3/23_3.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/programming-in-lua-2th-edition/part3/23_3.lua" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen_test/file/programming-in-lua-2th-edition/part4/25_3.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/programming-in-lua-2th-edition/part4/25_3.lua" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen_test/file/programming-in-lua-2th-edition/part4/26.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/programming-in-lua-2th-edition/part4/26.lua" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen_test/file/programming-in-lua-2th-edition/part4/27_1.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/programming-in-lua-2th-edition/part4/27_1.lua" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen_test/file/programming-in-lua-2th-edition/part4/27_2.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/programming-in-lua-2th-edition/part4/27_2.lua" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen_test/file/programming-in-lua-2th-edition/part4/27_3.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/programming-in-lua-2th-edition/part4/27_3.lua" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen_test/file/programming-in-lua-2th-edition/part4/28.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/programming-in-lua-2th-edition/part4/28.lua" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen_test/file/programming-in-lua-2th-edition/part4/28_1.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/programming-in-lua-2th-edition/part4/28_1.lua" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen_test/file/programming-in-lua-2th-edition/part4/28_2.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/programming-in-lua-2th-edition/part4/28_2.lua" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen_test/file/programming-in-lua-2th-edition/part4/28_3.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/programming-in-lua-2th-edition/part4/28_3.lua" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen_test/file/programming-in-lua-2th-edition/part4/29_1.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/programming-in-lua-2th-edition/part4/29_1.lua" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen_test/file/programming-in-lua-2th-edition/part4/29_2.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/programming-in-lua-2th-edition/part4/29_2.lua" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen_test/file/programming-in-lua-2th-edition/part4/30_2.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/programming-in-lua-2th-edition/part4/30_2.lua" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tool/lapi.cs" beforeDir="false" afterPath="$PROJECT_DIR$/tool/lapi/lapi.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tool/lapi.py" beforeDir="false" afterPath="$PROJECT_DIR$/tool/lapi/lapi.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tool/lapi.txt" beforeDir="false" afterPath="$PROJECT_DIR$/tool/lapi/lapi.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tool/test/disassembler/compile_lua.py" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/disassembler/compile_lua.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -245,7 +82,7 @@
     <session id="-835728598">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="14" />
+          <entry key="project.closed" value="15" />
           <entry key="project.open.time.0" value="1" />
           <entry key="project.open.time.1" value="1" />
           <entry key="project.open.time.10" value="1" />
@@ -287,7 +124,7 @@
           <entry key="g4" value="1446" />
           <entry key="lua" value="90" />
           <entry key="md" value="97" />
-          <entry key="py" value="10011" />
+          <entry key="py" value="10015" />
           <entry key="txt" value="12" />
         </counts>
       </usages-collector>
@@ -296,7 +133,7 @@
           <entry key="ANTLR v4 grammar file" value="1446" />
           <entry key="Markdown" value="97" />
           <entry key="PLAIN_TEXT" value="22" />
-          <entry key="Python" value="10011" />
+          <entry key="Python" value="10015" />
           <entry key="lua" value="90" />
         </counts>
       </usages-collector>
@@ -327,13 +164,13 @@
       <file pinned="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/tool/test/disassembler/compile_lua.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="152">
-              <caret line="98" column="25" lean-forward="true" selection-start-line="98" selection-start-column="25" selection-end-line="98" selection-end-column="25" />
+            <state relative-caret-position="597">
+              <caret line="277" column="39" selection-start-line="277" selection-start-column="39" selection-end-line="277" selection-end-column="39" />
               <folding>
                 <element signature="e#660#669#0" expanded="true" />
                 <element signature="e#4358#4369#0" />
-                <marker date="1557405834520" expanded="true" signature="4038:4039" ph="..." />
-                <marker date="1557405834520" expanded="true" signature="4981:5170" ph="..." />
+                <marker date="1557406212090" expanded="true" signature="4038:4039" ph="..." />
+                <marker date="1557406212090" expanded="true" signature="4981:5170" ph="..." />
               </folding>
             </state>
           </provider>
@@ -814,7 +651,7 @@
     <frame x="-6" y="-6" width="1387" height="972" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.1833208" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.1833208" />
       <window_info id="Structure" order="1" weight="0.5009914" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -831,7 +668,7 @@
       <window_info anchor="bottom" id="Docker" order="11" show_stripe_button="false" />
       <window_info anchor="bottom" id="Version Control" order="12" />
       <window_info anchor="bottom" id="Database Changes" order="13" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Debug" order="14" sideWeight="0.49865642" visible="true" weight="0.35740513" />
+      <window_info anchor="bottom" id="Debug" order="14" sideWeight="0.49865642" weight="0.35740513" />
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.2496142" />
@@ -1310,13 +1147,13 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/tool/test/disassembler/compile_lua.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="152">
-          <caret line="98" column="25" lean-forward="true" selection-start-line="98" selection-start-column="25" selection-end-line="98" selection-end-column="25" />
+        <state relative-caret-position="597">
+          <caret line="277" column="39" selection-start-line="277" selection-start-column="39" selection-end-line="277" selection-end-column="39" />
           <folding>
             <element signature="e#660#669#0" expanded="true" />
             <element signature="e#4358#4369#0" />
-            <marker date="1557405834520" expanded="true" signature="4038:4039" ph="..." />
-            <marker date="1557405834520" expanded="true" signature="4981:5170" ph="..." />
+            <marker date="1557406212090" expanded="true" signature="4038:4039" ph="..." />
+            <marker date="1557406212090" expanded="true" signature="4981:5170" ph="..." />
           </folding>
         </state>
       </provider>

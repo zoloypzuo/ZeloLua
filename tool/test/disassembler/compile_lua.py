@@ -275,7 +275,7 @@ all_code = \
         ]) + \
         namespace('ZoloLua.Core.VirtualMachine.Tests',
                   attribute('[TestClass()]',
-                            _class('lua_StateTests', code, 'public'))))
+                            _class('lvmTests', code, 'public'))))
 
 write_all(zlua_test_code_path, join(all_code))
 # endregion
