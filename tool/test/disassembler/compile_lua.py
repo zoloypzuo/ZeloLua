@@ -37,10 +37,10 @@ compile函数使用以下文件
 import os
 from collections import namedtuple
 from shutil import copyfile
+from tool.csharp import attribute, method_def, r_comment, method_call, string, newline, csharp, using, namespace, _class
+from tool.test.util import join, write_all, make_dirs
 
-# region 内部实现
-
-zlua_chunk_base_path = '../../../zlua/data/chunk/'
+# region app
 
 # 代表一条string test
 TestS = namedtuple(
@@ -58,6 +58,14 @@ path_set = set()
 css = {}
 
 
+def test_method_attribute(code):
+    return attribute('[TestMethod()]', code)
+
+
+zlua_chunk_base_path = '../../../../zlua/data/chunk/'
+output_base = r'../compile_out/'
+
+
 def compile(lua_code: str, path: str):
     # 将源文本写入文件
     with open('learn.lua', 'w') as f:
@@ -69,16 +77,13 @@ def compile(lua_code: str, path: str):
     os.system("lua chunkspy.lua luac.out learn.lua > exe_out_asm.txt")
     # 将luac.out复制到zlua输出路径
     output_path = '{zlua_chunk_base_path}{path}.out'.format(zlua_chunk_base_path=zlua_chunk_base_path, path=path)
-    if not os.path.exists(os.path.dirname(output_path)):
-        os.makedirs(os.path.dirname(output_path))
+    make_dirs(output_path)
     copyfile('luac.out', output_path)
 
     # 整合写入文件
-    output_base = r'../../compile_out/'
     # time_stamp = str(datetime.datetime.now()).replace(':', '-')
     output_path = '{output_base}{path}.lua'.format(output_base=output_base, path=path)
-    if not os.path.exists(os.path.dirname(output_path)):
-        os.makedirs(os.path.dirname(output_path))
+    make_dirs(output_path)
     with open(output_path, 'w') as out:
         with open('learn.lua', 'r') as in3, \
                 open('lua_asm.txt', 'r') as in1, \
@@ -95,71 +100,7 @@ def compile(lua_code: str, path: str):
                 out.write(i)
 
 
-def join(l): return ''.join(l)
-
-
-def method_def(access, ret_type, method, parlist, code: list):
-    return ['{access} {ret_type} {method}({parlist})\n'.format(
-        access=access,
-        ret_type=ret_type,
-        method=method,
-        parlist=','.join(parlist))
-           ] + \
-           ['{\n'] + \
-           tab(code) + \
-           ['}\n']
-
-
-def test_method_attribute(code):
-    return attribute('[TestMethod()]', code)
-
-
-def method_call(o, func, arglist):
-    # 静态方法也可
-    return o + '.' + func + '(' + ','.join(arglist) + ');\n'
-
-
-def attribute(attribute, code):
-    return [attribute + '\n'] + \
-           code
-
-
-def string(s): return '"' + s.replace('\n', '\\n').replace('"', '\\"') + '"'
-
-
-def r_comment(comment, s):
-    # 空comment被忽略
-    return s.rstrip() + '  // ' + comment + '\n' if comment else s
-
-
-def newline(code: list): code.append('\n')
-
-
-def tab(code: list): return ['\t' + line for line in code]
-
-
-def namespace(namespace, code):
-    return ['namespace ' + namespace,
-            '{\n'] + \
-           tab(code) + \
-           ['}\n']
-
-
-def _class(_class, code, access='public'):
-    code = [access + ' class ' + _class + '\n',
-            '{\n'] + \
-           tab(code) + \
-           ['}\n']
-    return code
-
-
-def using(namespaces: list, code): return ['using ' + namespace + ';\n' for namespace in namespaces] + code
-
-
-# endregion
-
-# region 两个API函数，用于生成dostring和dofile测试
-
+# 两个API函数，用于生成dostring和dofile测试
 def gs(lua_code: str, path: str, comment=''):
     string_path = 'string/' + path
     assert string_path not in path_set, "base不应该重复，否则会被替换掉，必须使用setlist0，setlist1，避免重复"
@@ -305,6 +246,8 @@ gs('local a = 0; for i = 1, 100, 5 do a = a + i end;', loop('foo'), 'SS p124')
 
 # region main
 
+zlua_test_code_path = r'..\..\..\..\zlua\projects\zluaTests\ZoloLua\Core\VirtualMachine\lua_StateTests.cs'
+
 code = []
 for k, v in css.items():
     code += test_method_attribute(method_def(
@@ -315,21 +258,24 @@ for k, v in css.items():
         code=[r_comment(i.comment,
                         method_call('TestTool', 't00', [string(i.path)])) for i in v]
     ))
-newline(code)
-code += test_method_attribute(method_def(
-    access='public',
-    ret_type='void',
-    method=k + 'Test',
-    parlist=[],
-    code=[r_comment(i.comment, method_call('TestTool', 't01', [string(i.lua_code)])) for i in v]
-))
-newline(code)
+    newline(code)
+    code += test_method_attribute(method_def(
+        access='public',
+        ret_type='void',
+        method=k + 'Test',
+        parlist=[],
+        code=[r_comment(i.comment, method_call('TestTool', 't01', [string(i.lua_code)])) for i in v]
+    ))
+    newline(code)
 
-code = using(['Microsoft.VisualStudio.TestTools.UnitTesting', 'zluaTests'],
-             namespace('zlua.Core.VirtualMachine.Tests',
-                       attribute('[TestClass()]',
-                                 _class('lua_StateTests', code, 'public'))))
-with open(r'..\..\..\zlua\projects\zluaTests\Core\VirtualMachine\lua_StateTests.cs', 'w') as f:
-    f.write(join(code))
+all_code = \
+    csharp(
+        using([
+            'Microsoft.VisualStudio.TestTools.UnitTesting',
+        ]) + \
+        namespace('ZoloLua.Core.VirtualMachine.Tests',
+                  attribute('[TestClass()]',
+                            _class('lua_StateTests', code, 'public'))))
 
+write_all(zlua_test_code_path, join(all_code))
 # endregion

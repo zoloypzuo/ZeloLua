@@ -51,31 +51,16 @@ code tag会把单词也变成行
 所以结合上面的信息，先parse html，为method做一个标记，我用^，然后用网上的html to txt工具转txt，再用py来split ^
 
 实际上，我将<hr>换成^即可
+
+
+2019年5月9日20:21:19 使用完成，这个生成项目不应该再次生成了，因为不可以
 '''
+from tool.csharp import method_def
+from tool.test.util import tab, join, read_all, write_all
 
-
-def join(l): return ''.join(l)
-
-
-def tab(code: list): return ['\t' + line for line in code]
-
-
-# region c#
-def method_def(access, ret_type, method, parlist, code: list):
-    return ['{access} {ret_type} {method}({parlist})\n'.format(
-        access=access,
-        ret_type=ret_type,
-        method=method,
-        parlist=','.join(parlist))
-           ] + \
-           ['{\n'] + \
-           tab(code) + \
-           ['}\n']
-
-
-# endregion
 
 # region xml
+
 def xml_tag(tag, code):
     '''
     def para(code):
@@ -119,7 +104,7 @@ def xml_doc(code):
 
 # endregion
 
-# region gen app
+# region app
 def my_method_def(method):
     return method_def('public', 'void', method, [], [])
 
@@ -134,23 +119,12 @@ def my_summary(method):
 
 def cutoff(s: str, sep='。；，'):
     '''截断太长的行'''
+    pass
 
 
-from bs4 import BeautifulSoup
+# endregion
 
-
-# 测试用源文本还是有缺陷的
-# 3.7 C API的函数和类型
-def read_all(path):
-    with open(path, 'r', encoding='utf-8') as f:
-        return f.read()
-
-
-def write_all(path, s: str):
-    with open(path, 'w', encoding='utf-8') as f:
-        return f.write(s)
-
-
+# region main
 src = read_all('lapi.txt').strip()
 # method_docs = src.split('\n\n')  # split to paragraphs
 method_docs = src.split('^')
@@ -163,7 +137,7 @@ for method_doc in method_docs:
     # code[len(code) - 1] += '\n'  # 最后一行添加换行符，[..., 'sth\n']和[..., 'sth', '\n']是不一样的
     # soup = BeautifulSoup(code[0])
     # method = soup.code.string
-    method=code[0].strip()
+    method = code[0].strip()
     code = \
         xml_doc(
             my_summary(method) + \
@@ -177,47 +151,3 @@ for method_doc in method_docs:
 write_all('lapi.cs', join(all_code))
 
 # endregion
-
-
-# 测试用源文本
-'''
-lua_pushlstring
-void lua_pushlstring (lua_State *L, const char *s, size_t len);
-把指针 s 指向的长度为 len 的字符串压栈。 Lua 对这个字符串做一次内存拷贝（或是复用一个拷贝）， 因此 s 处的内存在函数返回后，可以释放掉或是重用于其它用途。 字符串内可以保存有零字符。
-
-lua_pushnil
-void lua_pushnil (lua_State *L);
-把一个 nil 压栈。
-
-'''
-# 生成效果
-'''
-/// <summary>
-/// 	<see href="https://www.lua.org/manual/5.1/manual.html#lua_pushlstring">lua_pushlstring</see>
-/// </summary>
-/// <remarks>
-/// 	<para>
-/// 		lua_pushlstring
-/// 		void lua_pushlstring (lua_State *L, const char *s, size_t len);
-/// 		把指针 s 指向的长度为 len 的字符串压栈。 Lua 对这个字符串做一次内存拷贝（或是复用一个拷贝）， 因此 s 处的内存在函数返回后，可以释放掉或是重用于其它用途。 字符串内可以保存有零字符。
-/// 	</para>
-/// </remarks>
-public void lua_pushlstring()
-{
-}
-
-/// <summary>
-/// 	<see href="https://www.lua.org/manual/5.1/manual.html#lua_pushnil">lua_pushnil</see>
-/// </summary>
-/// <remarks>
-/// 	<para>
-/// 		lua_pushnil
-/// 		void lua_pushnil (lua_State *L);
-/// 		把一个 nil 压栈。
-/// 	</para>
-/// </remarks>
-public void lua_pushnil()
-{
-}
-
-'''

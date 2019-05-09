@@ -5,6 +5,7 @@
       <w>addr</w>
       <w>arglist</w>
       <w>chunkspy</w>
+      <w>csharp</w>
       <w>dostring</w>
       <w>endpc</w>
       <w>exps</w>
@@ -25,6 +26,7 @@
       <w>xasm</w>
       <w>zasm</w>
       <w>zlua</w>
+      <w>zolo</w>
     </words>
   </dictionary>
 </component>
