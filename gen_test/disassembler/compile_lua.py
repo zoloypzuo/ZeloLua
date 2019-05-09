@@ -332,4 +332,4 @@ code = using(['Microsoft.VisualStudio.TestTools.UnitTesting', 'zluaTests'],
 with open(r'..\..\..\zlua\projects\zluaTests\Core\VirtualMachine\lua_StateTests.cs', 'w') as f:
     f.write(join(code))
 
-    # endregion
+# endregion
