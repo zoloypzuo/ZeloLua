@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using ZoloLua.Core.Lua;
 using static ZoloLua.Core.VirtualMachine.lua_State;
 
 namespace ZoloLua.Core.ObjectModel
@@ -38,7 +39,7 @@ namespace ZoloLua.Core.ObjectModel
     internal class CSharpClosure : Closure
     {
         public lua_CFunction f;
-        public List<TValue> upvalue;
+        public TValue[] upvalue;
 
         public CSharpClosure() : base(null)
         {
@@ -46,7 +47,7 @@ namespace ZoloLua.Core.ObjectModel
 
         public int nupvalues {
             get {
-                return upvalue.Count;
+                return upvalue.Length;
             }
         }
     }
