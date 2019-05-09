@@ -1503,6 +1503,7 @@ namespace ZoloLua.Core.VirtualMachine
         }
 
         /// <summary>
+        /// 删除指定位置的值，这个位置之后的格子依次向前移动一格
         /// 	<see href="https://www.lua.org/manual/5.1/manual.html#lua_remove">lua_remove</see>
         /// </summary>
         /// <remarks>
@@ -1729,6 +1730,8 @@ namespace ZoloLua.Core.VirtualMachine
         }
 
         /// <summary>
+        /// 将栈顶设为/idx/，/idx/小于当前栈顶索引时，相当于弹出或者说截断多余的部分，
+        /// 相反地，如果/idx/大于当前栈顶索引时，相当于压入nil来填补
         /// 	<see href="https://www.lua.org/manual/5.1/manual.html#lua_settop">lua_settop</see>
         /// </summary>
         /// <remarks>
