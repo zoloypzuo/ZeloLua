@@ -136,6 +136,11 @@ namespace ZoloLua.Core.TypeModel
         {
             env = e;
         }
+
+        /// <summary>
+        /// TODO
+        /// </summary>
+        public int len { get { return 0; } }
     }
 
     internal class UpVal : GCObject

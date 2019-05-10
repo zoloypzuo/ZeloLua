@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using ZoloLua.Core.Lua;
+using ZoloLua.Core.VirtualMachine;
 
 namespace ZoloLua.Core.TypeModel
 {
@@ -250,6 +251,11 @@ namespace ZoloLua.Core.TypeModel
                 }
             }
             return i;
+        }
+
+        internal bool luaH_next(TValue stkId)
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -12,8 +12,6 @@ namespace ZoloLua.Core.VirtualMachine
 {
     public partial class lua_State
     {
-
-
         #region lapi辅助宏
 
         /// <summary>
@@ -56,8 +54,34 @@ namespace ZoloLua.Core.VirtualMachine
             top++;
         }
 
-        #endregion
+        [DebuggerStepThrough]
+        private bool isvalid(TValue o)
+        {
+            return !ReferenceEquals(o, lobject.luaO_nilobject);
+        }
 
+        /* test for pseudo index */
+        [DebuggerStepThrough]
+        private bool ispseudo(int i)
+        {
+            return i <= LUA_REGISTRYINDEX;
+        }
+
+        /* test for upvalue */
+        [DebuggerStepThrough]
+        private bool isupvalue(int i)
+        {
+            return i < LUA_REGISTRYINDEX;
+        }
+
+        /* test for valid but not pseudo index */
+        [DebuggerStepThrough]
+        private bool isstackindex(int i, TValue o)
+        {
+            return isvalid(o) && !ispseudo(i);
+        }
+
+        #endregion
 
         #region load* call*辅助宏 
 
@@ -76,7 +100,6 @@ namespace ZoloLua.Core.VirtualMachine
         }
 
         #endregion
-
 
         #region Obsolete
 
@@ -487,8 +510,9 @@ namespace ZoloLua.Core.VirtualMachine
         /// 		
         /// 	</para>
         /// </remarks>
-        public void lua_getglobal()
+        public void lua_getglobal(string s)
         {
+            lua_getfield(LUA_GLOBALSINDEX, s);
         }
 
         /// <summary>
@@ -613,8 +637,9 @@ namespace ZoloLua.Core.VirtualMachine
         /// 		
         /// 	</para>
         /// </remarks>
-        public void lua_isboolean()
+        public bool lua_isboolean(int n)
         {
+            return lua_type(n) == LuaType.LUA_TBOOLEAN;
         }
 
         /// <summary>
@@ -629,8 +654,10 @@ namespace ZoloLua.Core.VirtualMachine
         /// 		
         /// 	</para>
         /// </remarks>
-        public void lua_iscfunction()
+        public bool lua_iscfunction(int idx)
         {
+            TValue o = index2adr(idx);
+            return o.IsCSharpFunction;
         }
 
         /// <summary>
@@ -645,8 +672,9 @@ namespace ZoloLua.Core.VirtualMachine
         /// 		
         /// 	</para>
         /// </remarks>
-        public void lua_isfunction()
+        public bool lua_isfunction(int n)
         {
+            return lua_type(n) == LuaType.LUA_TFUNCTION;
         }
 
         /// <summary>
@@ -661,8 +689,9 @@ namespace ZoloLua.Core.VirtualMachine
         /// 		
         /// 	</para>
         /// </remarks>
-        public void lua_islightuserdata()
+        public bool lua_islightuserdata(int n)
         {
+            return lua_type(n) == LuaType.LUA_TLIGHTUSERDATA;
         }
 
         /// <summary>
@@ -677,8 +706,9 @@ namespace ZoloLua.Core.VirtualMachine
         /// 		
         /// 	</para>
         /// </remarks>
-        public void lua_isnil()
+        public bool lua_isnil(int n)
         {
+            return lua_type(n) == LuaType.LUA_TNIL;
         }
 
         /// <summary>
@@ -693,8 +723,11 @@ namespace ZoloLua.Core.VirtualMachine
         /// 		
         /// 	</para>
         /// </remarks>
-        public void lua_isnumber()
+        public bool lua_isnumber(int idx)
         {
+            lua_Number n;
+            TValue o = index2adr(idx);
+            return tonumber(o, out n);
         }
 
         /// <summary>
@@ -709,8 +742,10 @@ namespace ZoloLua.Core.VirtualMachine
         /// 		
         /// 	</para>
         /// </remarks>
-        public void lua_isstring()
+        public bool lua_isstring(int idx)
         {
+            TValue o = index2adr(idx);
+            return o.IsString || o.IsNumber;
         }
 
         /// <summary>
@@ -725,8 +760,9 @@ namespace ZoloLua.Core.VirtualMachine
         /// 		
         /// 	</para>
         /// </remarks>
-        public void lua_istable()
+        public bool lua_istable(int n)
         {
+            return lua_type(n) == LuaType.LUA_TTABLE;
         }
 
         /// <summary>
@@ -741,8 +777,9 @@ namespace ZoloLua.Core.VirtualMachine
         /// 		
         /// 	</para>
         /// </remarks>
-        public void lua_isthread()
+        public bool lua_isthread(int n)
         {
+            return lua_type(n) == LuaType.LUA_TTHREAD;
         }
 
         /// <summary>
@@ -757,8 +794,9 @@ namespace ZoloLua.Core.VirtualMachine
         /// 		
         /// 	</para>
         /// </remarks>
-        public void lua_isuserdata()
+        public bool lua_isuserdata(int n)
         {
+            return lua_type(n) == LuaType.LUA_TUSERDATA;
         }
 
         /// <summary>
@@ -777,8 +815,14 @@ namespace ZoloLua.Core.VirtualMachine
         /// 		
         /// 	</para>
         /// </remarks>
-        public void lua_lessthan()
+        public bool lua_lessthan(int index1, int index2)
         {
+            TValue o1, o2;
+            bool i;
+            o1 = index2adr(index1);
+            o2 = index2adr(index2);
+            i = isvalid(o1) && isvalid(o2) && luaV_lessthan(o1, o2);
+            return i;
         }
 
         /// <summary>
@@ -1002,27 +1046,18 @@ namespace ZoloLua.Core.VirtualMachine
         /// 		
         /// 	</para>
         /// </remarks>
-        public void lua_next()
+        public bool lua_next(int idx)
         {
-        }
-
-        /// <summary>
-        /// 	<see href="https://www.lua.org/manual/5.1/manual.html#lua_Number">lua_Number</see>
-        /// </summary>
-        /// <remarks>
-        /// 	<para>
-        /// 		lua_Number
-        /// 		typedef double lua_Number;
-        /// 		
-        /// 		Lua 中数字的类型。
-        /// 		确省是 double ，但是你可以在 luaconf.h 中修改它。
-        /// 		
-        /// 		通过修改配置文件你可以改变 Lua 让它操作其它数字类型（例如：float 或是 long ）。
-        /// 		
-        /// 	</para>
-        /// </remarks>
-        public void lua_Number()
-        {
+            TValue t;
+            bool more;
+            t = index2adr(idx);
+            api_check(t.IsTable);
+            more = t.Table.luaH_next(top - 1);
+            if (more) {
+                api_incr_top();
+            } else  /* no more elements */
+                top -= 1;  /* remove key */
+            return more;
         }
 
         /// <summary>
@@ -1041,8 +1076,20 @@ namespace ZoloLua.Core.VirtualMachine
         /// 		
         /// 	</para>
         /// </remarks>
-        public void lua_objlen()
+        public int lua_objlen(int idx)
         {
+            TValue o = index2adr(idx);
+            switch (o.tt) {
+                case LuaType.LUA_TSTRING: return o.TStr.len;
+                case LuaType.LUA_TUSERDATA: return o.Udata.len;
+                case LuaType.LUA_TTABLE: return o.Table.luaH_getn();
+                case LuaType.LUA_TNUMBER: {
+                        int l;
+                        l = (luaV_tostring(o) ? o.TStr.len : 0);
+                        return l;
+                    }
+                default: return 0;
+            }
         }
 
         /// <summary>
@@ -1092,6 +1139,7 @@ namespace ZoloLua.Core.VirtualMachine
         /// 		
         /// 	</para>
         /// </remarks>
+        [Obsolete]
         public void lua_pcall()
         {
         }
@@ -1108,8 +1156,9 @@ namespace ZoloLua.Core.VirtualMachine
         /// 		
         /// 	</para>
         /// </remarks>
-        public void lua_pop()
+        public void lua_pop(int n)
         {
+            lua_settop(-(n) - 1);
         }
 
         /// <summary>
@@ -1124,8 +1173,10 @@ namespace ZoloLua.Core.VirtualMachine
         /// 		
         /// 	</para>
         /// </remarks>
-        public void lua_pushboolean()
+        public void lua_pushboolean(bool b)
         {
+            top.Value.B = b;  /* ensure that true is 1 */
+            api_incr_top();
         }
 
         /// <summary>
@@ -1223,6 +1274,7 @@ namespace ZoloLua.Core.VirtualMachine
         /// 		
         /// 	</para>
         /// </remarks>
+        [Obsolete]
         public void lua_pushfstring()
         {
         }
@@ -1239,8 +1291,10 @@ namespace ZoloLua.Core.VirtualMachine
         /// 		
         /// 	</para>
         /// </remarks>
-        public void lua_pushinteger()
+        public void lua_pushinteger(lua_Integer n)
         {
+            top.Value.N = (lua_Number)(n.Value);
+            api_incr_top();
         }
 
         /// <summary>
@@ -1262,8 +1316,10 @@ namespace ZoloLua.Core.VirtualMachine
         /// 		
         /// 	</para>
         /// </remarks>
-        public void lua_pushlightuserdata()
+        public void lua_pushlightuserdata(object p)
         {
+            top.Value.LightUserdata = p;
+            api_incr_top();
         }
 
         /// <summary>
@@ -1317,8 +1373,10 @@ namespace ZoloLua.Core.VirtualMachine
         /// 		
         /// 	</para>
         /// </remarks>
-        public void lua_pushnumber()
+        public void lua_pushnumber(lua_Number n)
         {
+            top.Value.N = n;
+            api_incr_top();
         }
 
         /// <summary>
@@ -1357,8 +1415,11 @@ namespace ZoloLua.Core.VirtualMachine
         /// 		
         /// 	</para>
         /// </remarks>
-        public void lua_pushthread()
+        public bool lua_pushthread(lua_State L)
         {
+            top.Value.Thread = L;
+            api_incr_top();
+            return (G.mainthread == L);
         }
 
         /// <summary>
@@ -1373,27 +1434,10 @@ namespace ZoloLua.Core.VirtualMachine
         /// 		
         /// 	</para>
         /// </remarks>
-        public void lua_pushvalue()
+        public void lua_pushvalue(int idx)
         {
-        }
-
-        /// <summary>
-        /// 	<see href="https://www.lua.org/manual/5.1/manual.html#lua_pushvfstring">lua_pushvfstring</see>
-        /// </summary>
-        /// <remarks>
-        /// 	<para>
-        /// 		lua_pushvfstring
-        /// 		const char *lua_pushvfstring (lua_State *L,
-        /// 		                              const char *fmt,
-        /// 		                              va_list argp);
-        /// 		
-        /// 		等价于 lua_pushfstring，
-        /// 		不过是用 va_list 接收参数，而不是用可变数量的实际参数。
-        /// 		
-        /// 	</para>
-        /// </remarks>
-        public void lua_pushvfstring()
-        {
+            top.Value.Value = index2adr(idx);
+            api_incr_top();
         }
 
         /// <summary>
@@ -1434,8 +1478,12 @@ namespace ZoloLua.Core.VirtualMachine
         /// 		
         /// 	</para>
         /// </remarks>
-        public void lua_rawget()
+        public void lua_rawget(int idx)
         {
+            TValue t;
+            t = index2adr(idx);
+            api_check(t.IsTable);
+            (top - 1).Value.Value = t.Table.luaH_get(top - 1);
         }
 
         /// <summary>
@@ -1452,8 +1500,13 @@ namespace ZoloLua.Core.VirtualMachine
         /// 		
         /// 	</para>
         /// </remarks>
-        public void lua_rawgeti()
+        public void lua_rawgeti(int idx, int n)
         {
+            TValue o;
+            o = index2adr(idx);
+            api_check(o.IsTable);
+            top.Value.Value = o.Table.luaH_getnum(n);
+            api_incr_top();
         }
 
         /// <summary>
@@ -1469,8 +1522,15 @@ namespace ZoloLua.Core.VirtualMachine
         /// 		
         /// 	</para>
         /// </remarks>
-        public void lua_rawset()
+        [Obsolete(message: "太繁琐了")]
+        public void lua_rawset(int idx)
         {
+            //StkId t;
+            //api_checknelems(L, 2);
+            //t = index2adr(L, idx);
+            //api_check(L, ttistable(t));
+            //setobj2t(L, luaH_set(L, hvalue(t), L->top - 2), L->top - 1);
+            //L->top -= 2;
         }
 
         /// <summary>
@@ -1490,33 +1550,8 @@ namespace ZoloLua.Core.VirtualMachine
         /// 		
         /// 	</para>
         /// </remarks>
+        [Obsolete(message: "太繁琐了")]
         public void lua_rawseti()
-        {
-        }
-
-        /// <summary>
-        /// 	<see href="https://www.lua.org/manual/5.1/manual.html#lua_Reader">lua_Reader</see>
-        /// </summary>
-        /// <remarks>
-        /// 	<para>
-        /// 		lua_Reader
-        /// 		typedef const char * (*lua_Reader) (lua_State *L,
-        /// 		                                    void *data,
-        /// 		                                    size_t *size);
-        /// 		
-        /// 		lua_load 用到的读取器函数，
-        /// 		每次它需要一块新的 chunk 的时候，
-        /// 		lua_load 就调用读取器，
-        /// 		每次都会传入一个参数 data 。
-        /// 		读取器需要返回含有新的 chunk 的一块内存的指针，
-        /// 		并把 size 设为这块内存的大小。
-        /// 		内存块必须在下一次函数被调用之前一直存在。
-        /// 		读取器可以通过返回一个 NULL 来指示 chunk 结束。
-        /// 		读取器可能返回多个块，每个块可以有任意的大于零的尺寸。
-        /// 		
-        /// 	</para>
-        /// </remarks>
-        public void lua_Reader()
         {
         }
 
@@ -1563,8 +1598,14 @@ namespace ZoloLua.Core.VirtualMachine
         /// 		
         /// 	</para>
         /// </remarks>
-        public void lua_remove()
+        public void lua_remove(int idx)
         {
+            StkId p;
+            bool isValid;
+            p = realIndex2adr(idx, out isValid);
+            api_check(isValid);
+            while (++p < top) (p - 1).Value.Value = p;
+            top--;
         }
 
         /// <summary>
@@ -1580,6 +1621,7 @@ namespace ZoloLua.Core.VirtualMachine
         /// 		
         /// 	</para>
         /// </remarks>
+        [Obsolete(message: "太繁琐了")]
         public void lua_replace()
         {
         }
@@ -1616,22 +1658,6 @@ namespace ZoloLua.Core.VirtualMachine
         /// 	</para>
         /// </remarks>
         public void lua_resume()
-        {
-        }
-
-        /// <summary>
-        /// 	<see href="https://www.lua.org/manual/5.1/manual.html#lua_setallocf">lua_setallocf</see>
-        /// </summary>
-        /// <remarks>
-        /// 	<para>
-        /// 		lua_setallocf
-        /// 		void lua_setallocf (lua_State *L, lua_Alloc f, void *ud);
-        /// 		
-        /// 		把指定状态机的分配器函数换成带上指针 ud 的 f 。
-        /// 		
-        /// 	</para>
-        /// </remarks>
-        public void lua_setallocf()
         {
         }
 
@@ -1791,8 +1817,17 @@ namespace ZoloLua.Core.VirtualMachine
         /// 		
         /// 	</para>
         /// </remarks>
-        public void lua_settop()
+        public void lua_settop(int idx)
         {
+            if (idx >= 0) {
+                api_check(idx <= stack_last - @base);
+                while (top < @base + idx)
+                    (top++).SetNil();
+                top = @base + idx;
+            } else {
+                api_check(-(idx + 1) <= (top - @base));
+                top += idx + 1;  /* `subtract' index (index is negative) */
+            }
         }
 
         /// <summary>
@@ -2028,8 +2063,12 @@ namespace ZoloLua.Core.VirtualMachine
         /// 		
         /// 	</para>
         /// </remarks>
-        public void lua_type()
+        public LuaType lua_type(int idx)
         {
+            TValue o = index2adr(idx);
+            //TODO lobject.h line 136 ttnov很奇怪，它对tt进行掩码干嘛呢。。
+            //不过zlua不需要，返回类型枚举即可
+            return isvalid(o) ? o.tt : LuaType.LUA_TNONE;
         }
 
         /// <summary>
@@ -2046,32 +2085,6 @@ namespace ZoloLua.Core.VirtualMachine
         /// 	</para>
         /// </remarks>
         public void lua_typename()
-        {
-        }
-
-        /// <summary>
-        /// 	<see href="https://www.lua.org/manual/5.1/manual.html#lua_Writer">lua_Writer</see>
-        /// </summary>
-        /// <remarks>
-        /// 	<para>
-        /// 		lua_Writer
-        /// 		typedef int (*lua_Writer) (lua_State *L,
-        /// 		                           const void* p,
-        /// 		                           size_t sz,
-        /// 		                           void* ud);
-        /// 		
-        /// 		由 lua_dump 用到的写入器函数。
-        /// 		每次 lua_dump 产生了一块新的 chunk ，它都会调用写入器。
-        /// 		传入要写入的缓存 (p) 和它的尺寸 (sz) ，
-        /// 		还有 lua_dump 的参数 data 。
-        /// 		
-        /// 		写入器会返回一个错误码：
-        /// 		0 表示没有错误；
-        /// 		别的值均表示一个错误，并且会让 lua_dump 停止再次调用写入器。
-        /// 		
-        /// 	</para>
-        /// </remarks>
-        public void lua_Writer()
         {
         }
 
