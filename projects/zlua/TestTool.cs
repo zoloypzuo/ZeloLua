@@ -56,7 +56,9 @@ namespace ZoloLua
         public static void t00(string filename)
         {
             const string basePath = "../../../../data/chunk/";
-            lua_State.lua_newstate().luaL_dofile($"{basePath}{filename}.out");
+            lua_State L = lua_State.lua_open();
+            L.luaL_openlibs();
+            L.luaL_dofile($"{basePath}{filename}.out");
         }
 
         /// <summary>
@@ -66,6 +68,14 @@ namespace ZoloLua
         public static void t01(string s)
         {
             //lua_State.lua_newstate().luaL_dostring(s);
+        }
+
+        /// <summary>
+        /// dofile
+        /// </summary>
+        /// <param name="v"></param>
+        internal static void t02(string s)
+        {
         }
     }
 }

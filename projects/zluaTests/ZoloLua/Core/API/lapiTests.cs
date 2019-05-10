@@ -12,9 +12,9 @@ namespace ZoloLua.Core.VirtualMachine.Tests
         public void simpleTest()
         {
             //库是在dofile外面打开的
-            lua_State L = lua_State.lua_open();
-            L.luaL_openlibs();
-            L.luaL_dofile(@"");
+            //lua_State L = lua_State.lua_open();
+            //L.luaL_openlibs();
+            //L.luaL_dofile(@"");
         }
     }
 }

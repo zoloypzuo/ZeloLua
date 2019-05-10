@@ -223,7 +223,7 @@ namespace ZoloLua.Core.VirtualMachine
         public void lua_call(int nargs, int nresults)
         {
             StkId func;
-            api_checknelems(nargs + 1);
+            //api_checknelems(nargs + 1);
             checkresults(nargs, nresults);
             func = top - (nargs + 1);
             luaD_call(func, nresults);
@@ -2153,7 +2153,7 @@ namespace ZoloLua.Core.VirtualMachine
                 api_check(idx <= ci.top - @base);
                 if (o >= top) {
                     isValid = false;
-                    return null;
+                    return newStkId(0);
                 }
                 return o;
             }
