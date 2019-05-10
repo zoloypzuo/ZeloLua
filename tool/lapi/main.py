@@ -56,7 +56,7 @@ code tag会把单词也变成行
 2019年5月9日20:21:19 使用完成，这个生成项目不应该再次生成了，因为不可以
 '''
 from tool.csharp import method_def
-from tool.test.util import tab, join, read_all, write_all
+from tool.util import join, read_all, write_all
 
 # region app
 from tool.xml import see, summary, xml_doc, remarks, para

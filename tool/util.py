@@ -26,3 +26,7 @@ def make_dirs(path):
     '''
     if not os.path.exists(os.path.dirname(path)):
         os.makedirs(os.path.dirname(path))
+
+
+def path2id(s: str):
+    return s.replace('/', '_').replace('-', '_')

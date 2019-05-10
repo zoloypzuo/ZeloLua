@@ -1,4 +1,4 @@
-from tool.test.util import tab
+from tool.util import tab
 
 
 def method_def(access, ret_type, method, parlist, code: list):
@@ -11,8 +11,6 @@ def method_def(access, ret_type, method, parlist, code: list):
            ['{\n'] + \
            tab(code) + \
            ['}\n']
-
-
 
 
 def method_call(o, func, arglist):
@@ -43,7 +41,7 @@ def namespace(namespace, code):
            ['}\n']
 
 
-def _class(_class, code, access='public'):
+def _class(access, _class, code):
     code = [access + ' class ' + _class + '\n',
             '{\n'] + \
            tab(code) + \

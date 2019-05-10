@@ -1,7 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="3cd1adb7-fda5-4b8e-8462-9bcc5578c8c3" name="Default" comment="" />
+    <list default="true" id="3cd1adb7-fda5-4b8e-8462-9bcc5578c8c3" name="Default" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tool/csharp.py" beforeDir="false" afterPath="$PROJECT_DIR$/tool/csharp.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tool/lapi/lapi.py" beforeDir="false" afterPath="$PROJECT_DIR$/tool/lapi/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tool/test/disassembler/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tool/test/disassembler/chunkspy.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/chunkspy.lua" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tool/test/disassembler/compile_lua.py" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tool/test/disassembler/exe_out_asm.txt" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/exe_out_asm.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tool/test/disassembler/learn.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/learn.lua" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tool/test/disassembler/lua.exe" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/lua.exe" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tool/test/disassembler/lua_asm.txt" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/lua_asm.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tool/test/disassembler/luac.exe" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/luac.exe" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tool/test/disassembler/luac.out" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/luac.out" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tool/test/util.py" beforeDir="false" afterPath="$PROJECT_DIR$/tool/util.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tool/xml.py" beforeDir="false" afterPath="$PROJECT_DIR$/tool/xml.py" afterDir="false" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -74,59 +89,73 @@
     <SUITE FILE_PATH="coverage/zlua_prototype$Unittests_for__test_main_Test_test_lib.coverage" NAME="Unittests for _test_main.Test.test_lib Coverage Results" MODIFIED="1534954802227" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />
     <SUITE FILE_PATH="coverage/zlua_prototype$Unittests_for_test_Test_test_exp.coverage" NAME="Unittests for test.Test.test_exp Coverage Results" MODIFIED="1534602549581" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/zlua_prototype$Unittests_for_tests_Test.coverage" NAME="Unittests for tests.Test Coverage Results" MODIFIED="1534912413136" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />
-    <SUITE FILE_PATH="coverage/zlua_prototype$main.coverage" NAME="main Coverage Results" MODIFIED="1533898164237" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/zlua_prototype$main.coverage" NAME="main Coverage Results" MODIFIED="1557505307261" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tool/test" />
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="600">
       <file pinned="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/tool/test/disassembler/compile_lua.py">
+        <entry file="file://$PROJECT_DIR$/tool/test/main.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="711">
-              <caret line="270" selection-start-line="270" selection-end-line="270" />
+            <state relative-caret-position="192">
+              <caret line="293" column="5" lean-forward="true" selection-start-line="295" selection-start-column="34" selection-end-line="296" selection-end-column="19" />
               <folding>
                 <element signature="e#660#669#0" expanded="true" />
+                <element signature="e#3242#3256#0" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/tool/csharp.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="595">
-              <caret line="35" column="4" selection-start-line="35" selection-start-column="4" selection-end-line="35" selection-end-column="4" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/tool/test/util.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="442">
-              <caret line="26" column="47" selection-start-line="26" selection-start-column="11" selection-end-line="26" selection-end-column="47" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/tool/lapi/lapi.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="935">
-              <caret line="55" column="43" selection-start-line="55" selection-start-column="43" selection-end-line="55" selection-end-column="43" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/tool/test/disassembler/__init__.py">
+        <entry file="file://$PROJECT_DIR$/tool/test/file/luago-book/ch02/foo_bar.lua">
           <provider selected="true" editor-type-id="text-editor" />
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python37/Lib/html/parser.py">
+        <entry file="file://$PROJECT_DIR$/tool/test/file/luago-book/ch02/hello_world.lua">
+          <provider selected="true" editor-type-id="text-editor" />
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/tool/xml.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2686">
-              <caret line="162" selection-start-line="162" selection-end-line="162" />
+            <state relative-caret-position="217">
+              <caret line="14" column="12" selection-start-line="14" selection-start-column="12" selection-end-line="14" selection-end-column="12" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/tool/test/chunkspy.lua">
+          <provider selected="true" editor-type-id="text-editor" />
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/tool/csharp.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="153">
+              <caret line="15" column="4" selection-start-line="15" selection-start-column="4" selection-end-line="15" selection-end-column="4" />
+              <folding>
+                <element signature="e#395#464#0" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/tool/util.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="342">
+              <caret line="31" column="46" selection-start-line="31" selection-start-column="46" selection-end-line="31" selection-end-column="46" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/tool/lapi/main.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="489">
+              <caret line="101" column="18" selection-start-line="101" selection-start-column="18" selection-end-line="101" selection-end-column="18" />
             </state>
           </provider>
         </entry>
@@ -134,17 +163,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/tool/lapi/lapi.cs">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="33218">
+            <state relative-caret-position="734">
               <caret line="1954" column="12" selection-end-line="1967" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/tool/lapi/lapi.txt">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="16796">
-              <caret line="988" column="12" selection-start-line="988" selection-start-column="12" selection-end-line="988" selection-end-column="12" />
             </state>
           </provider>
         </entry>
@@ -152,7 +172,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/tool/Lua 5.1 参考手册.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="64685">
+            <state relative-caret-position="427">
               <caret line="3805" selection-start-line="2029" selection-end-line="3805" />
             </state>
           </provider>
@@ -215,10 +235,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/lua5.1-tests/attrib.lua" />
-        <option value="$PROJECT_DIR$/type_model.py" />
-        <option value="$PROJECT_DIR$/lua5.1-tests/calls.lua" />
-        <option value="$PROJECT_DIR$/test.lua" />
         <option value="$PROJECT_DIR$/calls.lua" />
         <option value="$PROJECT_DIR$/compiler.py" />
         <option value="$PROJECT_DIR$/constructs.lua" />
@@ -262,10 +278,14 @@
         <option value="$PROJECT_DIR$/tool/lapi.py" />
         <option value="$PROJECT_DIR$/tool/lapi.txt" />
         <option value="$PROJECT_DIR$/tool/test/uitl.py" />
-        <option value="$PROJECT_DIR$/tool/csharp.py" />
-        <option value="$PROJECT_DIR$/tool/lapi/lapi.py" />
         <option value="$PROJECT_DIR$/tool/test/util.py" />
         <option value="$PROJECT_DIR$/tool/test/disassembler/compile_lua.py" />
+        <option value="$PROJECT_DIR$/tool/test/xml.py" />
+        <option value="$PROJECT_DIR$/tool/lapi/lapi.py" />
+        <option value="$PROJECT_DIR$/tool/csharp.py" />
+        <option value="$PROJECT_DIR$/tool/xml.py" />
+        <option value="$PROJECT_DIR$/tool/util.py" />
+        <option value="$PROJECT_DIR$/tool/test/main.py" />
       </list>
     </option>
   </component>
@@ -304,6 +324,70 @@
             <path>
               <item name="zlua_prototype" type="b2602c69:ProjectViewProjectNode" />
               <item name="zlua_prototype" type="462c0819:PsiDirectoryNode" />
+              <item name="tool" type="462c0819:PsiDirectoryNode" />
+              <item name="test" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="zlua_prototype" type="b2602c69:ProjectViewProjectNode" />
+              <item name="zlua_prototype" type="462c0819:PsiDirectoryNode" />
+              <item name="tool" type="462c0819:PsiDirectoryNode" />
+              <item name="test" type="462c0819:PsiDirectoryNode" />
+              <item name="compile_out" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="zlua_prototype" type="b2602c69:ProjectViewProjectNode" />
+              <item name="zlua_prototype" type="462c0819:PsiDirectoryNode" />
+              <item name="tool" type="462c0819:PsiDirectoryNode" />
+              <item name="test" type="462c0819:PsiDirectoryNode" />
+              <item name="compile_out" type="462c0819:PsiDirectoryNode" />
+              <item name="file" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="zlua_prototype" type="b2602c69:ProjectViewProjectNode" />
+              <item name="zlua_prototype" type="462c0819:PsiDirectoryNode" />
+              <item name="tool" type="462c0819:PsiDirectoryNode" />
+              <item name="test" type="462c0819:PsiDirectoryNode" />
+              <item name="compile_out" type="462c0819:PsiDirectoryNode" />
+              <item name="file" type="462c0819:PsiDirectoryNode" />
+              <item name="luago-book" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="zlua_prototype" type="b2602c69:ProjectViewProjectNode" />
+              <item name="zlua_prototype" type="462c0819:PsiDirectoryNode" />
+              <item name="tool" type="462c0819:PsiDirectoryNode" />
+              <item name="test" type="462c0819:PsiDirectoryNode" />
+              <item name="compile_out" type="462c0819:PsiDirectoryNode" />
+              <item name="file" type="462c0819:PsiDirectoryNode" />
+              <item name="luago-book" type="462c0819:PsiDirectoryNode" />
+              <item name="ch02" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="zlua_prototype" type="b2602c69:ProjectViewProjectNode" />
+              <item name="zlua_prototype" type="462c0819:PsiDirectoryNode" />
+              <item name="tool" type="462c0819:PsiDirectoryNode" />
+              <item name="test" type="462c0819:PsiDirectoryNode" />
+              <item name="file" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="zlua_prototype" type="b2602c69:ProjectViewProjectNode" />
+              <item name="zlua_prototype" type="462c0819:PsiDirectoryNode" />
+              <item name="tool" type="462c0819:PsiDirectoryNode" />
+              <item name="test" type="462c0819:PsiDirectoryNode" />
+              <item name="file" type="462c0819:PsiDirectoryNode" />
+              <item name="luago-book" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="zlua_prototype" type="b2602c69:ProjectViewProjectNode" />
+              <item name="zlua_prototype" type="462c0819:PsiDirectoryNode" />
+              <item name="tool" type="462c0819:PsiDirectoryNode" />
+              <item name="test" type="462c0819:PsiDirectoryNode" />
+              <item name="file" type="462c0819:PsiDirectoryNode" />
+              <item name="luago-book" type="462c0819:PsiDirectoryNode" />
+              <item name="ch02" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="zlua_prototype" type="b2602c69:ProjectViewProjectNode" />
+              <item name="zlua_prototype" type="462c0819:PsiDirectoryNode" />
               <item name="zlua" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
@@ -327,18 +411,19 @@
     <property name="last.edited.regexp" value=" :   " />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
+    <property name="restartRequiresConfirmation" value="false" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="RecentsManager">
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\Users\91018\Documents\GitHub\zlua_prototype\tool\lapi" />
-      <recent name="C:\Users\91018\Documents\GitHub\zlua_prototype\tool" />
-      <recent name="C:\Users\91018\Documents\GitHub\zlua_prototype\tests" />
-      <recent name="C:\Users\91018\Documents\GitHub\zlua_prototype\zlua" />
-      <recent name="C:\Users\91018\Documents\GitHub\zlua_prototype" />
-    </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\91018\Documents\GitHub\zlua_prototype\tool" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\91018\Documents\GitHub\zlua_prototype\tool" />
+      <recent name="C:\Users\91018\Documents\GitHub\zlua_prototype\tool\test" />
+      <recent name="C:\Users\91018\Documents\GitHub\zlua_prototype\tool\lapi" />
+      <recent name="C:\Users\91018\Documents\GitHub\zlua_prototype\tests" />
+      <recent name="C:\Users\91018\Documents\GitHub\zlua_prototype\zlua" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -353,7 +438,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.compile_lua (1)">
+  <component name="RunManager" selected="Python.main">
     <configuration name="compile_lua (1)" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="XASM_Assembler" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -367,7 +452,7 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/tool/test/disassembler/compile_lua.py" />
+      <option name="SCRIPT_NAME" value="C:\Users\91018\Documents\GitHub\zlua_prototype\tool\test\main.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -398,28 +483,6 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="gen_test_main" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <module name="XASM_Assembler" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/gen_test" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/gen_test/gen_test_main.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
     <configuration name="lapi" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="XASM_Assembler" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -433,7 +496,29 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="C:\Users\91018\Documents\GitHub\zlua_prototype\tool\lapi\lapi.py" />
+      <option name="SCRIPT_NAME" value="C:\Users\91018\Documents\GitHub\zlua_prototype\tool\lapi\main.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="main" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="XASM_Assembler" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tool/test" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/tool/test/main.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -470,19 +555,19 @@
     </configuration>
     <list>
       <item itemvalue="Lua Application.learn.lua" />
-      <item itemvalue="Python.gen_test_main" />
       <item itemvalue="Python.compile_lua" />
       <item itemvalue="Python.lapi" />
       <item itemvalue="Python.compile_lua (1)" />
       <item itemvalue="Python tests.Unittests for tests._test_main.Test" />
+      <item itemvalue="Python.main" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.main" />
         <item itemvalue="Python.compile_lua (1)" />
         <item itemvalue="Python.lapi" />
         <item itemvalue="Python.compile_lua" />
         <item itemvalue="Lua Application.learn.lua" />
-        <item itemvalue="Python.gen_test_main" />
       </list>
     </recent_temporary>
   </component>
@@ -496,7 +581,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1521445858029</updated>
-      <workItem from="1557502182295" duration="76000" />
+      <workItem from="1557502182295" duration="3023000" />
     </task>
     <servers />
   </component>
@@ -533,12 +618,13 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="76000" />
+    <option name="totallyTimeSpent" value="3023000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-6" y="-6" width="1309" height="925" extended-state="6" />
+    <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.18944845" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.2470024" />
       <window_info id="Structure" order="1" weight="0.5009914" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -555,14 +641,14 @@
       <window_info anchor="bottom" id="Docker" order="11" show_stripe_button="false" />
       <window_info anchor="bottom" id="Version Control" order="12" />
       <window_info anchor="bottom" id="Database Changes" order="13" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Debug" order="14" sideWeight="0.49865642" weight="0.35740513" />
+      <window_info anchor="bottom" id="Debug" order="14" sideWeight="0.49865642" visible="true" weight="0.35642317" />
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.2496142" />
       <window_info anchor="right" id="Coverage" order="3" side_tool="true" />
       <window_info anchor="right" id="Database" order="4" />
       <window_info anchor="right" id="SciView" order="5" weight="0.3298272" />
-      <window_info anchor="right" auto_hide="true" x="309" y="71" width="756" height="817" id="Run" order="6" weight="0.5597295" />
+      <window_info active="true" anchor="right" auto_hide="true" x="309" y="71" width="756" height="817" id="Run" order="6" visible="true" weight="0.5595524" />
     </layout>
     <layout-to-restore>
       <window_info content_ui="combo" id="Project" order="0" weight="0.55263156" />
@@ -604,11 +690,6 @@
           <url>file://$PROJECT_DIR$/zlua/vm.py</url>
           <line>146</line>
           <option name="timeStamp" value="349" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/tool/test/disassembler/compile_lua.py</url>
-          <line>279</line>
-          <option name="timeStamp" value="369" />
         </line-breakpoint>
       </breakpoints>
       <default-breakpoints>
@@ -774,16 +855,6 @@
     </expressions>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/lua5.1-tests/db.lua" />
-    <entry file="file://$PROJECT_DIR$/lua5.1-tests/closure.lua" />
-    <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python36/Lib/antlr4/ParserRuleContext.py" />
-    <entry file="file://$PROJECT_DIR$/gen/zlua/LuaVisitor.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="297">
-          <caret line="9" column="23" selection-start-line="9" selection-start-column="23" selection-end-line="9" selection-end-column="23" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python36/Lib/antlr4/tree/Tree.py" />
     <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python36/Lib/antlr4/Token.py" />
     <entry file="file://$APPLICATION_HOME_DIR$/helpers/python-skeletons/__builtin__.py" />
@@ -873,7 +944,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/tool/test/disassembler/lua_asm.txt">
+    <entry file="file://$PROJECT_DIR$/tool/test/lua_asm.txt">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
     <entry file="file://$PROJECT_DIR$/gen_test/lua_asm.txt" />
@@ -925,7 +996,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/tool/test/disassembler/learn.lua">
+    <entry file="file://$PROJECT_DIR$/tool/test/learn.lua">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
     <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python37/Lib/pathlib.py">
@@ -950,37 +1021,6 @@
       </provider>
     </entry>
     <entry file="file://$USER_HOME$/.PyCharm2018.2/system/python_stubs/1145210821/builtins.py" />
-    <entry file="file://$PROJECT_DIR$/tool/test/disassembler/compile_lua.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="711">
-          <caret line="270" selection-start-line="270" selection-end-line="270" />
-          <folding>
-            <element signature="e#660#669#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/tool/csharp.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="595">
-          <caret line="35" column="4" selection-start-line="35" selection-start-column="4" selection-end-line="35" selection-end-column="4" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/tool/test/util.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="442">
-          <caret line="26" column="47" selection-start-line="26" selection-start-column="11" selection-end-line="26" selection-end-column="47" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/tool/lapi/lapi.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="935">
-          <caret line="55" column="43" selection-start-line="55" selection-start-column="43" selection-end-line="55" selection-end-column="43" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/tool/test/disassembler/__init__.py">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
@@ -991,13 +1031,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/tool/lapi/lapi.cs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="33218">
-          <caret line="1954" column="12" selection-end-line="1967" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/tool/lapi/lapi.txt">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="16796">
@@ -1005,10 +1038,68 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/tool/lapi/lapi.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="734">
+          <caret line="1954" column="12" selection-end-line="1967" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tool/lapi/main.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="489">
+          <caret line="101" column="18" selection-start-line="101" selection-start-column="18" selection-end-line="101" selection-end-column="18" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tool/csharp.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="153">
+          <caret line="15" column="4" selection-start-line="15" selection-start-column="4" selection-end-line="15" selection-end-column="4" />
+          <folding>
+            <element signature="e#395#464#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tool/xml.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="217">
+          <caret line="14" column="12" selection-start-line="14" selection-start-column="12" selection-end-line="14" selection-end-column="12" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tool/test/chunkspy.lua">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tool/test/file/luago-book/ch02/foo_bar.lua">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tool/test/file/luago-book/ch02/hello_world.lua">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tool/util.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="342">
+          <caret line="31" column="46" selection-start-line="31" selection-start-column="46" selection-end-line="31" selection-end-column="46" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/tool/Lua 5.1 参考手册.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="64685">
+        <state relative-caret-position="427">
           <caret line="3805" selection-start-line="2029" selection-end-line="3805" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tool/test/main.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="192">
+          <caret line="293" column="5" lean-forward="true" selection-start-line="295" selection-start-column="34" selection-end-line="296" selection-end-column="19" />
+          <folding>
+            <element signature="e#660#669#0" expanded="true" />
+            <element signature="e#3242#3256#0" />
+          </folding>
         </state>
       </provider>
     </entry>

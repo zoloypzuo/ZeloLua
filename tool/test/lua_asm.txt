@@ -1,0 +1,29 @@
+success compiling learn.lua
+; source chunk: learn.lua
+; x86 standard (32-bit, little endian, doubles)
+
+; function [0] definition (level 1) 0
+; 0 upvalues, 0 params, is_vararg = 2, 2 stacks
+.function  0 0 2 2
+.const  "print"  ; 0
+.const  "Hello, World!"  ; 1
+[1] getglobal  0   0        ; R0 := print
+[2] loadk      1   1        ; R1 := "Hello, World!"
+[3] call       0   2   1    ;  := R0(R1)
+[4] return     0   1        ; return 
+; end of function 0
+
+; source chunk: luac.out
+; x86 standard (32-bit, little endian, doubles)
+
+; function [0] definition (level 1) 0
+; 0 upvalues, 0 params, is_vararg = 2, 2 stacks
+.function  0 0 2 2
+.const  "print"  ; 0
+.const  "Hello, World!"  ; 1
+[1] getglobal  0   0        ; R0 := print
+[2] loadk      1   1        ; R1 := "Hello, World!"
+[3] call       0   2   1    ;  := R0(R1)
+[4] return     0   1        ; return 
+; end of function 0
+

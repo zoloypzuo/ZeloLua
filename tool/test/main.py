@@ -38,12 +38,16 @@ import os
 from collections import namedtuple
 from shutil import copyfile
 from tool.csharp import attribute, method_def, r_comment, method_call, string, newline, csharp, using, namespace, _class
-from tool.test.util import join, write_all, make_dirs
+from tool.util import join, write_all, make_dirs, path2id
 
 # region app
 
+zlua_chunk_base_path = '../../../zlua/data/chunk/'
+output_base = 'compile_out/'
+zlua_test_code_path = r'..\..\..\zlua\projects\zluaTests\ZoloLua\Core\VirtualMachine\lua_StateTests.cs'
+
 # 代表一条string test
-TestS = namedtuple(
+TestString = namedtuple(
     'TestS',
     [
         'lua_code',
@@ -54,16 +58,13 @@ TestS = namedtuple(
 # 路径集合，用来避免重复
 path_set = set()
 
-# cs string test
-css = {}
+string_tests = {}
+
+file_tests = {}
 
 
 def test_method_attribute(code):
     return attribute('[TestMethod()]', code)
-
-
-zlua_chunk_base_path = '../../../../zlua/data/chunk/'
-output_base = r'../compile_out/'
 
 
 def compile(lua_code: str, path: str):
@@ -76,7 +77,8 @@ def compile(lua_code: str, path: str):
     os.system("luac learn.lua")
     os.system("lua chunkspy.lua luac.out learn.lua > exe_out_asm.txt")
     # 将luac.out复制到zlua输出路径
-    output_path = '{zlua_chunk_base_path}{path}.out'.format(zlua_chunk_base_path=zlua_chunk_base_path, path=path)
+    output_path = '{zlua_chunk_base_path}{path}.out'.format(
+        zlua_chunk_base_path=zlua_chunk_base_path, path=path)
     make_dirs(output_path)
     copyfile('luac.out', output_path)
 
@@ -93,7 +95,6 @@ def compile(lua_code: str, path: str):
                 out.write(i)
             out.write('\n' + '-' * 30 + '\n')
             for i in in1:
-                print(i, end='')
                 out.write(i)
             out.write('\n' + '-' * 30 + '\n')
             for i in in2:
@@ -103,24 +104,30 @@ def compile(lua_code: str, path: str):
 # 两个API函数，用于生成dostring和dofile测试
 def gs(lua_code: str, path: str, comment=''):
     string_path = 'string/' + path
-    assert string_path not in path_set, "base不应该重复，否则会被替换掉，必须使用setlist0，setlist1，避免重复"
+    assert string_path not in path_set, \
+        "base不应该重复，否则会被替换掉，必须使用setlist0，setlist1，避免重复"
     path_set.add(string_path)
     compile(lua_code, string_path)
     # 字符串的空串测试函数的空串测试语句
     _dir, base = os.path.split(path)
-    if _dir not in css:
-        css[_dir] = []
-    css[_dir].append(TestS(lua_code, string_path, comment))
+    if _dir not in string_tests:
+        string_tests[_dir] = []
+    string_tests[_dir].append(TestString(lua_code, string_path, comment))
 
 
 def gf(path: str):
+    _path = path.rstrip('.lua')
     with open(path, 'r') as f:
-        compile(f.read(), path)
+        compile(f.read(), _path)
+    _dir, base = os.path.split(_path)
+    if _dir not in file_tests:
+        file_tests[_dir] = []
+    file_tests[_dir].append(base)
 
 
 # endregion
 
-# region 测试
+# region 测试字符串
 
 '''空串和hello world'''
 
@@ -244,29 +251,58 @@ gs('local a = 0; for i = 1, 100, 5 do a = a + i end;', loop('foo'), 'SS p124')
 
 # endregion
 
+# region 测试文件
+
+gf(r'file/luago-book/ch02/hello_world.lua')
+
+# endregion
 # region main
 
-zlua_test_code_path = r'..\..\..\..\zlua\projects\zluaTests\ZoloLua\Core\VirtualMachine\lua_StateTests.cs'
-
 code = []
-for k, v in css.items():
-    code += test_method_attribute(method_def(
-        access='public',
-        ret_type='void',
-        method=k + 'ChunkTest',
-        parlist=[],
-        code=[r_comment(i.comment,
-                        method_call('TestTool', 't00', [string(i.path)])) for i in v]
-    ))
+for k, v in string_tests.items():
+    code += test_method_attribute(
+        method_def(
+            access='public',
+            ret_type='void',
+            method=k + 'ChunkTest',
+            parlist=[],
+            code=[r_comment(i.comment, method_call('TestTool', 't00', [string(i.path)]))
+                  for i in v]
+        ))
     newline(code)
-    code += test_method_attribute(method_def(
-        access='public',
-        ret_type='void',
-        method=k + 'Test',
-        parlist=[],
-        code=[r_comment(i.comment, method_call('TestTool', 't01', [string(i.lua_code)])) for i in v]
-    ))
+    code += test_method_attribute(
+        method_def(
+            access='public',
+            ret_type='void',
+            method=k + 'Test',
+            parlist=[],
+            code=[r_comment(i.comment, method_call('TestTool', 't01', [string(i.lua_code)]))
+                  for i in v]
+        ))
     newline(code)
+
+for k, v in file_tests.items():
+    code += test_method_attribute(
+        method_def(
+            access='public',
+            ret_type='void',
+            method=path2id(k) + 'ChunkTest',
+            parlist=[],
+            code=[method_call('TestTool', 't00', [string(k + '/' + i)])
+                  for i in v]
+        )
+    )
+    newline(code)
+    code += test_method_attribute(
+        method_def(
+            access='public',
+            ret_type='void',
+            method=path2id(k) + 'Test',
+            parlist=[],
+            code=[method_call('TestTool', 't02', [string(k + '/' + i)])
+                  for i in v]
+        )
+    )
 
 all_code = \
     csharp(
@@ -275,7 +311,7 @@ all_code = \
         ]) + \
         namespace('ZoloLua.Core.VirtualMachine.Tests',
                   attribute('[TestClass()]',
-                            _class('lvmTests', code, 'public'))))
+                            _class('public', 'lvmTests', code))))
 
 write_all(zlua_test_code_path, join(all_code))
 # endregion

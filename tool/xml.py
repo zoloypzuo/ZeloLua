@@ -1,3 +1,6 @@
+from tool.util import tab
+
+
 def xml_tag(tag, code):
     '''
     def para(code):
