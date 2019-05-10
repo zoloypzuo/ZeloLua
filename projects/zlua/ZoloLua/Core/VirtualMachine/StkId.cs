@@ -20,7 +20,7 @@ namespace ZoloLua.Core.VirtualMachine
         /// <summary>
         ///     模拟指针运算
         /// </summary>
-        private struct StkId : IEquatable<StkId>
+        private class StkId : IEquatable<StkId>
         {
             private readonly List<TValue> stack;
             public int index;

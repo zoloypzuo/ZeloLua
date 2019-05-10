@@ -2,8 +2,8 @@
 //
 // 变量和作用域的原理请先看p321的例子代码和右侧的示意图，然后就能看懂代码了
 // 相关代码在funcInfo的scope区域
-using Antlr4.Runtime.Misc;
-using Antlr4.Runtime.Tree;
+//using Antlr4.Runtime.Misc;
+//using Antlr4.Runtime.Tree;
 using ZoloLua.Core.TypeModel;
 
 namespace ZoloLua.Compiler.CodeGenerator

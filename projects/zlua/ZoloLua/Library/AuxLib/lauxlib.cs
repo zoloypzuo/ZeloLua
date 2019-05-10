@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
-using System.Text;
-using Antlr4.Runtime;
+//using Antlr4.Runtime;
 using ZoloLua.Core.ObjectModel;
 using ZoloLua.Core.TypeModel;
 using ZoloLua.Core.Undumper;
@@ -55,13 +54,13 @@ namespace ZoloLua.Core.VirtualMachine
                 LuaClosure cl = new LuaClosure(env, 1, p);
                 push(new TValue(cl));
             } else {
-                lua_load(new AntlrFileStream(path, Encoding.UTF8), $"@{path}");
+                //lua_load(new AntlrFileStream(path, Encoding.UTF8), $"@{path}");
             }
         }
 
         public void luaL_loadstring(string s)
         {
-            lua_load(new AntlrInputStream(s), s);
+            //lua_load(new AntlrInputStream(s), s);
         }
 
         /// <summary>

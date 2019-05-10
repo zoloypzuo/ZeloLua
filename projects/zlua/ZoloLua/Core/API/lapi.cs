@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Diagnostics;
-using Antlr4.Runtime;
-using ZoloLua.Compiler;
-using ZoloLua.Compiler.CodeGenerator;
+//using Antlr4.Runtime;
+//using ZoloLua.Compiler;
+//using ZoloLua.Compiler.CodeGenerator;
 using ZoloLua.Core.Configuration;
 using ZoloLua.Core.Lua;
 using ZoloLua.Core.ObjectModel;
@@ -142,6 +142,7 @@ namespace ZoloLua.Core.VirtualMachine
         /// 		
         /// 	</para>
         /// </remarks>
+        [Obsolete]
         public void lua_atpanic()
         {
         }
@@ -291,6 +292,7 @@ namespace ZoloLua.Core.VirtualMachine
         /// 		
         /// 	</para>
         /// </remarks>
+        [Obsolete]
         public void lua_cpcall()
         {
         }
@@ -339,6 +341,7 @@ namespace ZoloLua.Core.VirtualMachine
         /// 		
         /// 	</para>
         /// </remarks>
+        [Obsolete]
         public int lua_dump(out object data)
         {
             throw new Exception();
@@ -403,11 +406,13 @@ namespace ZoloLua.Core.VirtualMachine
         /// 		
         /// 	</para>
         /// </remarks>
+        [Obsolete]
         public void lua_error()
         {
         }
 
         /// <summary>
+        /// 注意这里是c函数，ud和thread有env表
         /// 	<see href="https://www.lua.org/manual/5.1/manual.html#lua_getfenv">lua_getfenv</see>
         /// </summary>
         /// <remarks>
@@ -419,8 +424,26 @@ namespace ZoloLua.Core.VirtualMachine
         /// 		
         /// 	</para>
         /// </remarks>
-        public void lua_getfenv()
+        public void lua_getfenv(int idx)
         {
+            TValue o;
+            o = index2adr(idx);
+            api_checkvalidindex(o);
+            switch (o.tt) {
+                case LuaType.LUA_TFUNCTION:
+                    top.Value.Table = (o.Cl as CSharpClosure).env;
+                    break;
+                case LuaType.LUA_TUSERDATA:
+                    top.Value.Table = o.Udata.env;
+                    break;
+                case LuaType.LUA_TTHREAD:
+                    top.Value.Value = o.Thread.gt;
+                    break;
+                default:
+                    top.SetNil();
+                    break;
+            }
+            api_incr_top();
         }
 
         /// <summary>
@@ -438,8 +461,15 @@ namespace ZoloLua.Core.VirtualMachine
         /// 		
         /// 	</para>
         /// </remarks>
-        public void lua_getfield()
+        public void lua_getfield(int idx, string k)
         {
+            TValue t;
+            TValue key;
+            t = index2adr(idx);
+            api_checkvalidindex(t);
+            key = new TValue(k);
+            luaV_gettable(t, key, top);
+            api_incr_top();
         }
 
         /// <summary>
@@ -475,8 +505,31 @@ namespace ZoloLua.Core.VirtualMachine
         /// 		
         /// 	</para>
         /// </remarks>
-        public void lua_getmetatable()
+        public bool lua_getmetatable(int objindex)
         {
+            TValue obj;
+            Table mt = null;
+            bool res;
+            obj = index2adr(objindex);
+            switch ((obj).tt) {
+                case LuaType.LUA_TTABLE:
+                    mt = obj.Table.metatable;
+                    break;
+                case LuaType.LUA_TUSERDATA:
+                    mt = obj.Udata.metatable;
+                    break;
+                default:
+                    mt = G.mt[(int)obj.tt];
+                    break;
+            }
+            if (mt == null)
+                res = false;
+            else {
+                top.Value.Table = mt;
+                api_incr_top();
+                res = true;
+            }
+            return res;
         }
 
         /// <summary>
@@ -497,8 +550,12 @@ namespace ZoloLua.Core.VirtualMachine
         /// 		
         /// 	</para>
         /// </remarks>
-        public void lua_gettable()
+        public void lua_gettable(int idx)
         {
+            TValue t;
+            t = index2adr(idx);
+            api_checkvalidindex(t);
+            luaV_gettable(t, top - 1, top - 1);
         }
 
         /// <summary>
@@ -515,8 +572,9 @@ namespace ZoloLua.Core.VirtualMachine
         /// 		
         /// 	</para>
         /// </remarks>
-        public void lua_gettop()
+        public int lua_gettop()
         {
+            return top - @base;
         }
 
         /// <summary>
@@ -534,27 +592,13 @@ namespace ZoloLua.Core.VirtualMachine
         /// 		
         /// 	</para>
         /// </remarks>
-        public void lua_insert()
+        public void lua_insert(int idx)
         {
-        }
-
-        /// <summary>
-        /// 	<see href="https://www.lua.org/manual/5.1/manual.html#lua_Integer">lua_Integer</see>
-        /// </summary>
-        /// <remarks>
-        /// 	<para>
-        /// 		lua_Integer
-        /// 		typedef ptrdiff_t lua_Integer;
-        /// 		
-        /// 		这个类型被用于 Lua API 接收整数值。
-        /// 		
-        /// 		缺省时这个被定义为 ptrdiff_t ，
-        /// 		这个东西通常是机器能处理的最大整数类型。
-        /// 		
-        /// 	</para>
-        /// </remarks>
-        public void lua_Integer()
-        {
+            bool isValid;
+            StkId p = realIndex2adr(idx, out isValid);
+            api_check(isValid);
+            for (StkId q = top; q > p; q--) q = q - 1;
+            p = top;
         }
 
         /// <summary>
@@ -778,7 +822,7 @@ namespace ZoloLua.Core.VirtualMachine
         /// 		
         /// 	</para>
         /// </remarks>
-        public void lua_load(ICharStream chunk, string chunkname)
+        public void lua_load(/*ICharStream chunk,*/ string chunkname)
         {
             throw new NotImplementedException();
             if (chunkname == null) {
@@ -2083,6 +2127,30 @@ namespace ZoloLua.Core.VirtualMachine
             return func.env;
         }
 
+        /// <summary>
+        /// 自己写的helper，lua_insert会用到，因为它需要指针算法，直接用index2adr伪索引部分会很糟糕
+        /// 事实上，这些函数必须使用真索引，所以写一个helper
+        /// </summary>
+        /// <param name="idx"></param>
+        private StkId realIndex2adr(int idx, out bool isValid)
+        {
+            isValid = true;
+            if (idx > 0) {
+                StkId o = @base + (idx - 1);
+                api_check(idx <= ci.top - @base);
+                if (o >= top) {
+                    isValid = false;
+                    return null;
+                }
+                return o;
+            }
+            if (idx > LUA_REGISTRYINDEX) {
+                api_check(idx != 0 && -idx <= top - @base);
+                return top + idx;
+            } else {
+                throw new Exception("dont use pseudo indice here");
+            }
+        }
 
         private TValue index2adr(int idx)
         {
