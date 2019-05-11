@@ -178,10 +178,10 @@ end''', fd('simplest'), 'SS p90')
 gs('''
 function f(a, b, c)
 end''', fd('parameter'), 'SS p93')
-# gs('''
-# local a,b,c
-# local function f() end
-# local g = function() end''', fd('closure'))
+gs('''
+local a,b,c
+local function f() end
+local g = function() end''', fd('closure'))
 
 '''函数调用'''
 
@@ -260,12 +260,14 @@ def gen(path):
         gf(f)
 
 
-gen('file/luago-book/ch02')
-gen('file/luago-book/ch04')
-gen('file/luago-book/ch05')
-gen('file/luago-book/ch06')
-gen('file/luago-book/ch07')
+# gen('file/luago-book/ch02')
+# gen('file/luago-book/ch04')
+# gen('file/luago-book/ch05')
+# gen('file/luago-book/ch06')
+# gen('file/luago-book/ch07')
+
 # endregion
+
 # region main
 
 code = []
@@ -313,12 +315,14 @@ for k, v in file_tests.items():
                   for i in v]
         )
     )
+    newline(code)
 
 all_code = \
     csharp(
         using([
             'Microsoft.VisualStudio.TestTools.UnitTesting',
         ]) + \
+        ['\n'] + \
         namespace('ZoloLua.Core.VirtualMachine.Tests',
                   attribute('[TestClass()]',
                             _class('public', 'lvmTests', code))))
