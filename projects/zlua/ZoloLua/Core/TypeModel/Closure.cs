@@ -18,22 +18,13 @@ namespace ZoloLua.Core.ObjectModel
     internal class LuaClosure : Closure
     {
         public Proto p;
-        public List<UpVal> upvals;
+        public UpVal[] upvals;
 
         // luaF_newLclosure
         public LuaClosure(Table env, int nUpvals, Proto p) : base(env)
         {
             this.p = p;
-            upvals = new List<UpVal>(nUpvals);
-            //for (int i = 0; i < p.Upvalues.Length; i++) {
-            //    p.Upvalues[i] = new UpVal();
-            //}
-        }
-
-        public int NumUpvals {
-            get {
-                return upvals.Count;
-            }
+            upvals = new UpVal[nUpvals];
         }
     }
 
@@ -46,8 +37,10 @@ namespace ZoloLua.Core.ObjectModel
         {
         }
 
-        public int nupvalues {
-            get {
+        public int nupvalues
+        {
+            get
+            {
                 return upvalue.Length;
             }
         }

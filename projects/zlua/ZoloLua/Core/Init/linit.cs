@@ -18,7 +18,7 @@ namespace ZoloLua.Core.VirtualMachine
 
         public static readonly luaL_Reg[] lualibs = new luaL_Reg[]
         {
-            //{"", luaopen_base},
+            //new luaL_Reg {name="", func=luaopen_base},
             //{LUA_LOADLIBNAME, luaopen_package},
             //{LUA_TABLIBNAME, luaopen_table},
             //{LUA_IOLIBNAME, luaopen_io},

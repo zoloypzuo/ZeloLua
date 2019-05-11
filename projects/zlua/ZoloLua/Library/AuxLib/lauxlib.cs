@@ -38,45 +38,28 @@ namespace ZoloLua.Core.VirtualMachine
             Proto p;
             if (IsBinaryChunk(path)) {
                 p = lundump.Undump(new FileStream(path, FileMode.Open));
-                Table env = new Table(1, 1);
-                env.luaH_set(new TValue("print")).Cl = new CSharpClosure
-                {
-                    // c print
-                    f = L =>
-                    {
-                        // pop arg
-                        TValue s = L.pop();
-                        Console.WriteLine(s.ToString());
-                        // return 0 result
-                        return 0;
-                    }
-                };
-                //static int luaB_setmetatable(lua_State* L)
-                env.luaH_set(new TValue("setmetatable")).Cl = new CSharpClosure
-                {
-                    f = L =>
-                    {
-                        LuaType t = lua_type(2);
-                        //luaL_checktype(L, 1, LUA_TTABLE);
-                        //luaL_argcheck(L, t == LUA_TNIL || t == LUA_TTABLE, 2,
-                        //                  "nil or table expected");
-                        if (luaL_getmetafield(1, "__metatable"))
-                            throw new Exception();
-                        //luaL_error(L, "cannot change a protected metatable");
-                        lua_settop(2);
-                        lua_setmetatable(1);
-                        return 1;
-                    }
-                };
-                env.luaH_set(new TValue("assert")).Cl = new CSharpClosure
-                {
-                    f = luaB_assert
-                };
-                LuaClosure cl = new LuaClosure(env, 1, p);
-                push(new TValue(cl));
+                register("assert", luaB_assert);
+                register("print", luaB_print);
+                register("setmetatable", luaB_setmetatable);
+                LuaClosure cl = new LuaClosure(gt.Table, p.nups, p);
+                top.Value.Cl = cl;
+                incr_top();
             } else {
+                throw new NotImplementedException();
                 //lua_load(new AntlrFileStream(path, Encoding.UTF8), $"@{path}");
             }
+        }
+
+        /// <summary>
+        /// 暂时使用这个
+        /// </summary>
+        /// <param name="s"></param>
+        /// <param name="f"></param>
+        [Obsolete]
+        private void register(string s, lua_CFunction f)
+        {
+            var env = gt;
+            env.Table.luaH_set(new TValue(s)).Cl = new CSharpClosure() { f = f };
         }
 
         private bool luaL_getmetafield(int obj, string @event)
@@ -120,6 +103,16 @@ namespace ZoloLua.Core.VirtualMachine
                 lua_pushstring(lib[i].name);
                 lua_call(1, 0);
             }
+        }
+
+        public void luaL_register(string libname, luaL_Reg l)
+        {
+            //luaI_openlib(libname, l, 0);
+        }
+
+        void luaI_openlib(string libname, luaL_Reg l, int nup)
+        {
+            //luaL_openlib(libname, l, nup);
         }
     }
 }

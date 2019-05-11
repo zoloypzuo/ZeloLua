@@ -1,4 +1,5 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+
 namespace ZoloLua.Core.VirtualMachine.Tests{
 	[TestClass()]
 	public class lvmTests
@@ -66,6 +67,7 @@ namespace ZoloLua.Core.VirtualMachine.Tests{
 		{
 			TestTool.t00("string/functionDef/simplest");  // SS p90
 			TestTool.t00("string/functionDef/parameter");  // SS p93
+			TestTool.t00("string/functionDef/closure");
 		}
 		
 		[TestMethod()]
@@ -73,6 +75,7 @@ namespace ZoloLua.Core.VirtualMachine.Tests{
 		{
 			TestTool.t01("\nfunction test()\nend");  // SS p90
 			TestTool.t01("\nfunction f(a, b, c)\nend");  // SS p93
+			TestTool.t01("\nlocal a,b,c\nlocal function f() end\nlocal g = function() end");
 		}
 		
 		[TestMethod()]
@@ -113,103 +116,5 @@ namespace ZoloLua.Core.VirtualMachine.Tests{
 			TestTool.t01("local a = 0; for i = 1, 100, 5 do a = a + i end;");  // SS p124
 		}
 		
-		[TestMethod()]
-		public void file_luago_book_ch02ChunkTest()
-		{
-			TestTool.t00("file/luago-book/ch02/foo_bar");
-			TestTool.t00("file/luago-book/ch02/hello_world");
-		}
-		
-		[TestMethod()]
-		public void file_luago_book_ch02Test()
-		{
-			TestTool.t02("file/luago-book/ch02/foo_bar");
-			TestTool.t02("file/luago-book/ch02/hello_world");
-		}
-		[TestMethod()]
-		public void file_luago_book_ch02_testChunkTest()
-		{
-			TestTool.t00("file/luago-book/ch02\\test/param_num");
-			TestTool.t00("file/luago-book/ch02\\test/vararg");
-		}
-		
-		[TestMethod()]
-		public void file_luago_book_ch02_testTest()
-		{
-			TestTool.t02("file/luago-book/ch02\\test/param_num");
-			TestTool.t02("file/luago-book/ch02\\test/vararg");
-		}
-		[TestMethod()]
-		public void file_luago_book_ch04ChunkTest()
-		{
-			TestTool.t00("file/luago-book/ch04/examples");
-		}
-		
-		[TestMethod()]
-		public void file_luago_book_ch04Test()
-		{
-			TestTool.t02("file/luago-book/ch04/examples");
-		}
-		[TestMethod()]
-		public void file_luago_book_ch05ChunkTest()
-		{
-			TestTool.t00("file/luago-book/ch05/examples");
-		}
-		
-		[TestMethod()]
-		public void file_luago_book_ch05Test()
-		{
-			TestTool.t02("file/luago-book/ch05/examples");
-		}
-		[TestMethod()]
-		public void file_luago_book_ch06ChunkTest()
-		{
-			TestTool.t00("file/luago-book/ch06/sum");
-		}
-		
-		[TestMethod()]
-		public void file_luago_book_ch06Test()
-		{
-			TestTool.t02("file/luago-book/ch06/sum");
-		}
-		[TestMethod()]
-		public void file_luago_book_ch06_testChunkTest()
-		{
-			TestTool.t00("file/luago-book/ch06\\test/max_regs");
-			TestTool.t00("file/luago-book/ch06\\test/max_regs2");
-		}
-		
-		[TestMethod()]
-		public void file_luago_book_ch06_testTest()
-		{
-			TestTool.t02("file/luago-book/ch06\\test/max_regs");
-			TestTool.t02("file/luago-book/ch06\\test/max_regs2");
-		}
-		[TestMethod()]
-		public void file_luago_book_ch07ChunkTest()
-		{
-			TestTool.t00("file/luago-book/ch07/examples");
-			TestTool.t00("file/luago-book/ch07/test");
-			TestTool.t00("file/luago-book/ch07/test_seq");
-		}
-		
-		[TestMethod()]
-		public void file_luago_book_ch07Test()
-		{
-			TestTool.t02("file/luago-book/ch07/examples");
-			TestTool.t02("file/luago-book/ch07/test");
-			TestTool.t02("file/luago-book/ch07/test_seq");
-		}
-		[TestMethod()]
-		public void file_luago_book_ch07_testChunkTest()
-		{
-			TestTool.t00("file/luago-book/ch07\\test/big_list");
-		}
-		
-		[TestMethod()]
-		public void file_luago_book_ch07_testTest()
-		{
-			TestTool.t02("file/luago-book/ch07\\test/big_list");
-		}
 	}
 }
