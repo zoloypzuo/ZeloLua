@@ -45,8 +45,7 @@ namespace ZoloLua.Core.VirtualMachine
                     {
                         // pop arg
                         TValue s = L.pop();
-                        Debug.Assert(s.IsString);
-                        Console.WriteLine(s.Str);
+                        Console.WriteLine(s.ToString());
                         // return 0 result
                         return 0;
                     }

@@ -114,15 +114,15 @@ namespace ZoloLua.Core.VirtualMachine.Tests{
 		}
 		
 		[TestMethod()]
-		public void file_luago_book_ch04ChunkTest()
+		public void file_luago_book_ch05ChunkTest()
 		{
-			TestTool.t00("file/luago-book/ch04/examples");
+			TestTool.t00("file/luago-book/ch05/examples");
 		}
 		
 		[TestMethod()]
-		public void file_luago_book_ch04Test()
+		public void file_luago_book_ch05Test()
 		{
-			TestTool.t02("file/luago-book/ch04/examples");
+			TestTool.t02("file/luago-book/ch05/examples");
 		}
 	}
 }

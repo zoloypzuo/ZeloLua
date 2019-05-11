@@ -224,7 +224,7 @@ namespace ZoloLua.Core.VirtualMachine
                 // 这里因为。。不改成StkId，除非不对
                 int top = @base.index + last + 1;
                 int n = 2; /* number of elements handled in this pass (at least 2) */
-                if (!stack[top - 2].IsString || stack[top - 2].IsNumber || !tostring(stack[top - 1])) {
+                if (!(stack[top - 2].IsString || stack[top - 2].IsNumber) || !tostring(stack[top - 1])) {
                     if (!call_binTM(stack[top - 2], stack[top - 1], stack[top - 2], TMS.TM_CONCAT))
                         //luaG_concaterror(L, top - 2, top - 1);
                     {
