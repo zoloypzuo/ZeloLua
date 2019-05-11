@@ -114,30 +114,15 @@ namespace ZoloLua.Core.VirtualMachine.Tests{
 		}
 		
 		[TestMethod()]
-		public void file_luago_book_ch02ChunkTest()
+		public void file_luago_book_ch04ChunkTest()
 		{
-			TestTool.t00("file/luago-book/ch02/foo_bar");
-			TestTool.t00("file/luago-book/ch02/hello_world");
+			TestTool.t00("file/luago-book/ch04/examples");
 		}
 		
 		[TestMethod()]
-		public void file_luago_book_ch02Test()
+		public void file_luago_book_ch04Test()
 		{
-			TestTool.t02("file/luago-book/ch02/foo_bar");
-			TestTool.t02("file/luago-book/ch02/hello_world");
-		}
-		[TestMethod()]
-		public void file_luago_book_ch02_testChunkTest()
-		{
-			TestTool.t00("file/luago-book/ch02\\test/param_num");
-			TestTool.t00("file/luago-book/ch02\\test/vararg");
-		}
-		
-		[TestMethod()]
-		public void file_luago_book_ch02_testTest()
-		{
-			TestTool.t02("file/luago-book/ch02\\test/param_num");
-			TestTool.t02("file/luago-book/ch02\\test/vararg");
+			TestTool.t02("file/luago-book/ch04/examples");
 		}
 	}
 }
