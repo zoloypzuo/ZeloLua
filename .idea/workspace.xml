@@ -3,33 +3,29 @@
   <component name="ChangeListManager">
     <list default="true" id="3cd1adb7-fda5-4b8e-8462-9bcc5578c8c3" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tool/csharp.py" beforeDir="false" afterPath="$PROJECT_DIR$/tool/csharp.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tool/test/compile_out/2018-07-10 13-33-21.109486.lua" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tool/test/compile_out/2018-07-10 13-34-06.395065.lua" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tool/test/compile_out/2018-07-10 13-34-25.121064.lua" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tool/test/compile_out/2018-07-10 17-02-44.749038.lua" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tool/test/compile_out/2018-07-10 23-45-53.021016.lua" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tool/test/compile_out/2018-07-20 16-40-13.156996.lua" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tool/test/compile_out/2018-07-28 16-05-54.484714.lua" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tool/test/compile_out/2018-07-31 13-05-37.928440.lua" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tool/test/compile_out/2018-08-01 10-46-45.467369.lua" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tool/test/compile_out/2018-08-01 16-17-38.880804.lua" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tool/test/compile_out/2018-08-01 23-34-51.350042.lua" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tool/test/compile_out/2018-08-02 17-10-05.759987.lua" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tool/test/compile_out/2018-08-04 20-05-32.809182.lua" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tool/test/compile_out/2018-08-05 22-15-41.971398.lua" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tool/test/compile_out/2018-08-06 14-45-48.378991.lua" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tool/test/compile_out/2018-08-07 17-24-09.185387.lua" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tool/test/compile_out/2018-08-08 17-22-03.216625.lua" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tool/test/compile_out/2019-04-26 00-19-08.230274-hello_world.lua" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tool/test/compile_out/2019-04-28 09-19-40.947648-for_num.lua" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tool/test/compile_out/2019-04-28 10-45-52.175971-empty.lua" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tool/test/compile_out/2019-04-28 13-45-09.049741-functionCall-call.lua" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/tool/test/exe_out_asm.txt" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/exe_out_asm.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tool/test/file/luago-book/ch02/luac.exe" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tool/test/file/luago-book/ch02/luac.out" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tool/test/file/luago-book/ch02/test/constants.lua" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tool/test/file/luago-book/ch02/test/long_string.lua" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tool/test/file/luago-book/ch04/examples.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/luago-book/ch04/examples.lua" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tool/test/file/luago-book/ch05/examples.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/luago-book/ch05/examples.lua" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tool/test/file/luago-book/ch06/sum.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/luago-book/ch06/sum.lua" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tool/test/file/luago-book/ch06/test/max_regs.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/luago-book/ch06/test/max_regs.lua" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tool/test/file/luago-book/ch06/test/max_regs2.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/luago-book/ch06/test/max_regs2.lua" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tool/test/file/luago-book/ch07/examples.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/luago-book/ch07/examples.lua" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tool/test/file/luago-book/ch07/test/big_list.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/luago-book/ch07/test/big_list.lua" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tool/test/file/luago-book/ch12/examples.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/luago-book/ch12/examples.lua" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tool/test/file/luago-book/ch12/range.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/luago-book/ch12/range.lua" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tool/test/file/luago-book/ch12/test.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/luago-book/ch12/test.lua" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tool/test/file/luago-book/ch12/values.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/luago-book/ch12/values.lua" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tool/test/file/luago-book/ch13/examples.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/luago-book/ch13/examples.lua" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tool/test/file/luago-book/ch13/test.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/luago-book/ch13/test.lua" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tool/test/file/luago-book/ch16/examples.lua" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tool/test/file/luago-book/ch18/examples.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/luago-book/ch18/examples.lua" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tool/test/file/luago-book/ch19/examples.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/luago-book/ch19/examples.lua" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tool/test/file/luago-book/ch20/examples.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/luago-book/ch20/examples.lua" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tool/test/file/luago-book/ch20/mymod.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/luago-book/ch20/mymod.lua" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tool/test/file/luago-book/ch20/test.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/luago-book/ch20/test.lua" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tool/test/file/luago-book/ch21/examples.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/luago-book/ch21/examples.lua" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tool/test/file/luago-book/ch21/test.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/luago-book/ch21/test.lua" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tool/test/file/luago-book/postface/examples.lua" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/tool/test/learn.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/learn.lua" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tool/test/lua_asm.txt" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/lua_asm.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tool/test/luac.out" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/luac.out" afterDir="false" />
@@ -108,15 +104,15 @@
     <SUITE FILE_PATH="coverage/zlua_prototype$Unittests_for__test_main_Test_test_lib.coverage" NAME="Unittests for _test_main.Test.test_lib Coverage Results" MODIFIED="1534954802227" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />
     <SUITE FILE_PATH="coverage/zlua_prototype$Unittests_for_test_Test_test_exp.coverage" NAME="Unittests for test.Test.test_exp Coverage Results" MODIFIED="1534602549581" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/zlua_prototype$Unittests_for_tests_Test.coverage" NAME="Unittests for tests.Test Coverage Results" MODIFIED="1534912413136" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />
-    <SUITE FILE_PATH="coverage/zlua_prototype$main.coverage" NAME="main Coverage Results" MODIFIED="1557575261858" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tool/test" />
+    <SUITE FILE_PATH="coverage/zlua_prototype$main.coverage" NAME="main Coverage Results" MODIFIED="1557579452115" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tool/test" />
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="600">
-      <file pinned="true" current-in-tab="false">
+      <file pinned="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/tool/test/main.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="175">
-              <caret line="310" column="52" selection-start-line="310" selection-start-column="52" selection-end-line="310" selection-end-column="52" />
+            <state relative-caret-position="158">
+              <caret line="277" column="9" lean-forward="true" selection-start-line="277" selection-start-column="9" selection-end-line="277" selection-end-column="9" />
               <folding>
                 <element signature="e#660#669#0" expanded="true" />
                 <element signature="e#3242#3256#0" />
@@ -125,59 +121,67 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/tool/csharp.py">
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/tool/test/file/luago-book/ch06/sum.lua">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="153">
-              <caret line="25" selection-start-line="25" selection-end-line="31" selection-end-column="14" />
+            <state>
+              <caret selection-start-column="2" selection-end-line="5" selection-end-column="5" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/tool/test/compile_out/file/luago-book/ch02/test/param_num.lua">
-          <provider selected="true" editor-type-id="text-editor" />
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/tool/test/compile_out/file/luago-book/ch02/test/vararg.lua">
-          <provider selected="true" editor-type-id="text-editor" />
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/tool/test/file/luago-book/ch02/test/param_num.lua">
-          <provider selected="true" editor-type-id="text-editor" />
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/tool/test/file/luago-book/ch02/test/vararg.lua">
-          <provider selected="true" editor-type-id="text-editor" />
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/tool/test/file/luago-book/ch02/foo_bar.lua">
-          <provider selected="true" editor-type-id="text-editor" />
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/tool/test/file/luago-book/ch02/hello_world.lua">
-          <provider selected="true" editor-type-id="text-editor" />
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/tool/util.py">
+        <entry file="file://$PROJECT_DIR$/tool/test/file/luago-book/ch07/test/big_list.lua">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="342">
-              <caret line="31" column="65" selection-start-line="31" selection-start-column="65" selection-end-line="31" selection-end-column="65" />
+            <state relative-caret-position="459">
+              <caret line="39" column="34" selection-start-line="39" selection-start-column="34" selection-end-line="39" selection-end-column="34" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/tool/Lua 5.1 参考手册.html">
+        <entry file="file://$PROJECT_DIR$/tool/test/file/luago-book/ch11/complex.lua">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="427">
-              <caret line="3805" selection-start-line="2029" selection-end-line="3805" />
+            <state relative-caret-position="170">
+              <caret line="28" column="14" selection-start-line="28" selection-start-column="2" selection-end-line="28" selection-end-column="14" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/tool/test/file/luago-book/ch10/examples.lua">
+          <provider selected="true" editor-type-id="text-editor" />
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/tool/test/file/luago-book/ch08/examples.lua">
+          <provider selected="true" editor-type-id="text-editor" />
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/tool/test/file/luago-book/ch07/examples.lua">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="187">
+              <caret line="11" column="23" selection-end-line="29" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/tool/test/file/luago-book/ch07/test.lua">
+          <provider selected="true" editor-type-id="text-editor" />
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/tool/test/file/luago-book/ch07/test_seq.lua">
+          <provider selected="true" editor-type-id="text-editor" />
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/tool/test/file/luago-book/ch08/test.lua">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="255">
+              <caret line="15" column="14" selection-start-line="15" selection-start-column="11" selection-end-line="15" selection-end-column="14" />
             </state>
           </provider>
         </entry>
@@ -239,26 +243,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/calls.lua" />
-        <option value="$PROJECT_DIR$/compiler.py" />
-        <option value="$PROJECT_DIR$/constructs.lua" />
-        <option value="$PROJECT_DIR$/lua.py" />
-        <option value="$PROJECT_DIR$/vm.py" />
-        <option value="$PROJECT_DIR$/test.py" />
-        <option value="$PROJECT_DIR$/tests/test_luaThread.py" />
-        <option value="$PROJECT_DIR$/tests/test_table.py" />
-        <option value="$PROJECT_DIR$/tests/tests.py" />
-        <option value="$PROJECT_DIR$/zlua/test_main.py" />
-        <option value="$PROJECT_DIR$/tests/test.py" />
-        <option value="$PROJECT_DIR$/lua5.1-tests/verybig.lua" />
-        <option value="$PROJECT_DIR$/tests/verybig.lua" />
-        <option value="$PROJECT_DIR$/tests/test_main.py" />
-        <option value="$PROJECT_DIR$/lua5.1-tests/vararg.lua" />
-        <option value="$PROJECT_DIR$/lua5.1-tests/pm.lua" />
-        <option value="$PROJECT_DIR$/lua5.1-tests/math.lua" />
-        <option value="$PROJECT_DIR$/lua5.1-tests/nextvar.lua" />
-        <option value="$PROJECT_DIR$/zlua/lua.py" />
-        <option value="$PROJECT_DIR$/lua5.1-tests/locals.lua" />
         <option value="$PROJECT_DIR$/zlua/type_model.py" />
         <option value="$PROJECT_DIR$/tests/locals.lua" />
         <option value="$PROJECT_DIR$/lua5.1-tests/events.lua" />
@@ -287,9 +271,29 @@
         <option value="$PROJECT_DIR$/tool/test/xml.py" />
         <option value="$PROJECT_DIR$/tool/lapi/lapi.py" />
         <option value="$PROJECT_DIR$/tool/xml.py" />
-        <option value="$PROJECT_DIR$/tool/util.py" />
-        <option value="$PROJECT_DIR$/tool/test/main.py" />
         <option value="$PROJECT_DIR$/tool/csharp.py" />
+        <option value="$PROJECT_DIR$/tool/util.py" />
+        <option value="$PROJECT_DIR$/tool/test/file/luago-book/ch04/examples.lua" />
+        <option value="$PROJECT_DIR$/tool/test/file/luago-book/ch05/examples.lua" />
+        <option value="$PROJECT_DIR$/tool/test/file/luago-book/ch06/test/max_regs2.lua" />
+        <option value="$PROJECT_DIR$/tool/test/file/luago-book/ch06/test/max_regs.lua" />
+        <option value="$PROJECT_DIR$/tool/test/file/luago-book/ch21/test.lua" />
+        <option value="$PROJECT_DIR$/tool/test/file/luago-book/ch21/examples.lua" />
+        <option value="$PROJECT_DIR$/tool/test/file/luago-book/ch20/test.lua" />
+        <option value="$PROJECT_DIR$/tool/test/file/luago-book/ch20/mymod.lua" />
+        <option value="$PROJECT_DIR$/tool/test/file/luago-book/ch20/examples.lua" />
+        <option value="$PROJECT_DIR$/tool/test/file/luago-book/ch19/examples.lua" />
+        <option value="$PROJECT_DIR$/tool/test/file/luago-book/ch18/examples.lua" />
+        <option value="$PROJECT_DIR$/tool/test/file/luago-book/ch13/test.lua" />
+        <option value="$PROJECT_DIR$/tool/test/file/luago-book/ch13/examples.lua" />
+        <option value="$PROJECT_DIR$/tool/test/file/luago-book/ch12/examples.lua" />
+        <option value="$PROJECT_DIR$/tool/test/file/luago-book/ch12/range.lua" />
+        <option value="$PROJECT_DIR$/tool/test/file/luago-book/ch12/test.lua" />
+        <option value="$PROJECT_DIR$/tool/test/file/luago-book/ch12/values.lua" />
+        <option value="$PROJECT_DIR$/tool/test/file/luago-book/ch07/test/big_list.lua" />
+        <option value="$PROJECT_DIR$/tool/test/file/luago-book/ch06/sum.lua" />
+        <option value="$PROJECT_DIR$/tool/test/file/luago-book/ch07/examples.lua" />
+        <option value="$PROJECT_DIR$/tool/test/main.py" />
       </list>
     </option>
   </component>
@@ -357,18 +361,7 @@
               <item name="compile_out" type="462c0819:PsiDirectoryNode" />
               <item name="file" type="462c0819:PsiDirectoryNode" />
               <item name="luago-book" type="462c0819:PsiDirectoryNode" />
-              <item name="ch02" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="zlua_prototype" type="b2602c69:ProjectViewProjectNode" />
-              <item name="zlua_prototype" type="462c0819:PsiDirectoryNode" />
-              <item name="tool" type="462c0819:PsiDirectoryNode" />
-              <item name="test" type="462c0819:PsiDirectoryNode" />
-              <item name="compile_out" type="462c0819:PsiDirectoryNode" />
-              <item name="file" type="462c0819:PsiDirectoryNode" />
-              <item name="luago-book" type="462c0819:PsiDirectoryNode" />
-              <item name="ch02" type="462c0819:PsiDirectoryNode" />
-              <item name="test" type="462c0819:PsiDirectoryNode" />
+              <item name="postface" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="zlua_prototype" type="b2602c69:ProjectViewProjectNode" />
@@ -392,7 +385,7 @@
               <item name="test" type="462c0819:PsiDirectoryNode" />
               <item name="file" type="462c0819:PsiDirectoryNode" />
               <item name="luago-book" type="462c0819:PsiDirectoryNode" />
-              <item name="ch02" type="462c0819:PsiDirectoryNode" />
+              <item name="ch06" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="zlua_prototype" type="b2602c69:ProjectViewProjectNode" />
@@ -401,7 +394,16 @@
               <item name="test" type="462c0819:PsiDirectoryNode" />
               <item name="file" type="462c0819:PsiDirectoryNode" />
               <item name="luago-book" type="462c0819:PsiDirectoryNode" />
-              <item name="ch02" type="462c0819:PsiDirectoryNode" />
+              <item name="ch07" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="zlua_prototype" type="b2602c69:ProjectViewProjectNode" />
+              <item name="zlua_prototype" type="462c0819:PsiDirectoryNode" />
+              <item name="tool" type="462c0819:PsiDirectoryNode" />
+              <item name="test" type="462c0819:PsiDirectoryNode" />
+              <item name="file" type="462c0819:PsiDirectoryNode" />
+              <item name="luago-book" type="462c0819:PsiDirectoryNode" />
+              <item name="ch07" type="462c0819:PsiDirectoryNode" />
               <item name="test" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -600,7 +602,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1521445858029</updated>
-      <workItem from="1557502182295" duration="5615000" />
+      <workItem from="1557502182295" duration="9943000" />
     </task>
     <servers />
   </component>
@@ -637,7 +639,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="5615000" />
+    <option name="totallyTimeSpent" value="9943000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-6" y="-6" width="1309" height="925" extended-state="6" />
@@ -667,7 +669,7 @@
       <window_info anchor="right" id="Coverage" order="3" side_tool="true" />
       <window_info anchor="right" id="Database" order="4" />
       <window_info anchor="right" id="SciView" order="5" weight="0.3298272" />
-      <window_info anchor="right" auto_hide="true" x="309" y="71" width="756" height="817" id="Run" order="6" weight="0.5595524" />
+      <window_info active="true" anchor="right" auto_hide="true" x="309" y="71" width="756" height="817" id="Run" order="6" visible="true" weight="0.5595524" />
     </layout>
     <layout-to-restore>
       <window_info content_ui="combo" id="Project" order="0" weight="0.55263156" />
@@ -712,7 +714,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/tool/test/main.py</url>
-          <line>264</line>
+          <line>259</line>
           <option name="timeStamp" value="371" />
         </line-breakpoint>
       </breakpoints>
@@ -879,166 +881,6 @@
     </expressions>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/tests/test_debugger.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="153">
-          <caret line="9" column="41" selection-start-line="9" selection-start-column="41" selection-end-line="9" selection-end-column="41" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/tests/test.lua" />
-    <entry file="file://$PROJECT_DIR$/zlua/vm.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1972">
-          <caret line="119" column="43" selection-start-line="119" selection-start-column="43" selection-end-line="119" selection-end-column="43" />
-          <folding>
-            <element signature="e#41#61#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/tests/_test_main.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="85">
-          <caret line="10" selection-start-line="10" selection-end-line="10" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/zlua/type_model.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="51">
-          <caret line="3" column="51" selection-start-line="3" selection-start-column="51" selection-end-line="3" selection-end-column="51" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/zlua/debugger.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="578">
-          <caret line="36" column="28" selection-start-line="36" selection-start-column="28" selection-end-line="36" selection-end-column="28" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/README.md">
-      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
-        <state split_layout="SPLIT">
-          <first_editor relative-caret-position="51">
-            <caret line="3" selection-start-line="3" selection-end-line="3" />
-          </first_editor>
-          <second_editor />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/gen/zlua/LuaLexer.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="5712">
-          <caret line="339" selection-start-line="339" selection-end-line="339" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/gen/zlua/LuaParser.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="12121">
-          <caret line="716" selection-start-line="716" selection-end-line="716" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/zlua/compiler.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1207">
-          <caret line="76" selection-start-line="73" selection-end-line="76" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/gen/LuaVisitor.py" />
-    <entry file="file://$PROJECT_DIR$/gen/LuaParser.py" />
-    <entry file="file://$PROJECT_DIR$/gen_test/gen_test" />
-    <entry file="file://$PROJECT_DIR$/tool/test/__init__.py">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python37/Lib/shutil.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="119" selection-start-line="119" selection-end-line="119" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/tool/test/lua_asm.txt">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/gen_test/lua_asm.txt" />
-    <entry file="file://$PROJECT_DIR$/gen_test/gen_test_main.py" />
-    <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python37/Lib/codecs.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="226">
-          <caret line="324" selection-start-line="324" selection-end-line="324" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python37/Lib/os.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="263">
-          <caret line="220" selection-start-line="220" selection-end-line="220" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/compile_out/string/empty/empty.lua">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="17">
-          <caret line="5" selection-start-line="5" selection-end-line="5" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/compile_out/string/functionCall/closure.lua">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/gen_test/disassembler/test.cs" />
-    <entry file="file://$PROJECT_DIR$/compile_out/string/self.lua" />
-    <entry file="file://$PROJECT_DIR$/zlua/lua.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="68">
-          <caret line="11" selection-start-line="11" selection-end-line="11" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/compile_out/string/table/gettable.lua">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="15" selection-start-line="15" selection-end-line="15" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Lua.g4">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="510">
-          <caret line="42" column="6" selection-start-line="42" selection-start-column="6" selection-end-line="42" selection-end-column="6" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/tool/test/learn.lua">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python37/Lib/pathlib.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="158">
-          <caret line="965" column="6" selection-start-line="965" selection-start-column="6" selection-end-line="965" selection-end-column="6" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/tool/vmloop.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1224">
-          <caret line="72" selection-start-line="72" selection-end-line="72" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/tool/Protected.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="289">
-          <caret line="17" selection-start-line="17" selection-end-line="17" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/.PyCharm2018.2/system/python_stubs/1145210821/builtins.py" />
     <entry file="file://$PROJECT_DIR$/tool/test/disassembler/__init__.py">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
@@ -1086,13 +928,6 @@
     <entry file="file://$PROJECT_DIR$/tool/test/file/luago-book/ch02/test/long_string.lua">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/tool/util.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="342">
-          <caret line="31" column="65" selection-start-line="31" selection-start-column="65" selection-end-line="31" selection-end-column="65" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/tool/test/file/luago-book/ch02/hello_world.lua">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
@@ -1118,21 +953,218 @@
     <entry file="file://$PROJECT_DIR$/tool/test/compile_out/file/luago-book/ch02/test/vararg.lua">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
+    <entry file="file://$PROJECT_DIR$/tool/csharp.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="238">
+          <caret line="30" column="36" selection-start-line="30" selection-start-column="36" selection-end-line="30" selection-end-column="36" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tool/util.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="427">
+          <caret line="36" column="32" selection-start-line="36" selection-start-column="32" selection-end-line="36" selection-end-column="32" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tool/test/file/luago-book/ch04/examples.lua">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="119">
+          <caret line="7" selection-start-line="7" selection-start-column="2" selection-end-line="14" selection-end-column="51" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tool/test/compile_out/file/luago-book/ch05/examples.lua">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-357" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tool/test/file/luago-book/ch05/examples.lua">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="342">
+          <caret line="24" selection-start-line="24" selection-end-line="24" selection-end-column="32" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tool/test/file/luago-book/ch06/test/max_regs2.lua">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="170">
+          <caret line="10" column="35" selection-start-line="10" selection-start-column="35" selection-end-line="10" selection-end-column="35" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tool/test/file/luago-book/ch06/test/max_regs.lua">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret selection-start-column="2" selection-end-line="8" selection-end-column="80" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tool/test/learn.lua">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tool/test/compile_out/file/luago-book/postface/examples.lua">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tool/test/file/luago-book/ch21/test.lua">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="306">
+          <caret line="18" column="33" lean-forward="true" selection-end-line="27" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tool/test/file/luago-book/ch21/examples.lua">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="272">
+          <caret line="16" column="22" lean-forward="true" selection-end-line="42" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tool/test/file/luago-book/ch20/test.lua">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret selection-end-line="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tool/test/file/luago-book/ch20/mymod.lua">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="68">
+          <caret line="4" lean-forward="true" selection-end-line="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tool/test/file/luago-book/ch20/examples.lua">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="221">
+          <caret line="13" column="26" selection-end-line="55" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tool/test/file/luago-book/ch19/examples.lua">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="170">
+          <caret line="28" column="28" selection-end-line="58" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tool/test/file/luago-book/ch18/examples.lua">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="136">
+          <caret line="8" column="28" selection-end-line="12" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tool/test/file/luago-book/ch16/examples.lua">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tool/test/file/luago-book/ch17/examples.lua">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="170">
+          <caret line="10" column="3" lean-forward="true" selection-start-line="10" selection-start-column="3" selection-end-line="10" selection-end-column="3" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tool/test/file/luago-book/ch14/examples.lua">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tool/test/file/luago-book/ch13/test.lua">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="204">
+          <caret line="12" column="48" lean-forward="true" selection-start-column="2" selection-end-line="13" selection-end-column="48" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tool/test/file/luago-book/ch13/examples.lua">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-83">
+          <caret line="27" column="12" lean-forward="true" selection-end-line="53" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tool/test/file/luago-book/ch12/examples.lua">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret selection-end-line="86" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tool/test/file/luago-book/ch12/range.lua">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="187">
+          <caret line="11" column="23" lean-forward="true" selection-end-line="19" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tool/test/file/luago-book/ch12/test.lua">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="153">
+          <caret line="9" selection-end-line="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tool/test/file/luago-book/ch12/values.lua">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="153">
+          <caret line="9" column="23" selection-end-line="12" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tool/test/file/luago-book/ch11/complex.lua">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="170">
+          <caret line="28" column="14" selection-start-line="28" selection-start-column="2" selection-end-line="28" selection-end-column="14" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tool/test/file/luago-book/ch10/examples.lua">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tool/test/file/luago-book/ch07/test_seq.lua">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tool/test/file/luago-book/ch07/test.lua">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tool/test/file/luago-book/ch08/examples.lua">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tool/test/file/luago-book/ch08/test.lua">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="255">
+          <caret line="15" column="14" selection-start-line="15" selection-start-column="11" selection-end-line="15" selection-end-column="14" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tool/test/file/luago-book/ch07/test/big_list.lua">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="459">
+          <caret line="39" column="34" selection-start-line="39" selection-start-column="34" selection-end-line="39" selection-end-column="34" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tool/test/file/luago-book/ch06/sum.lua">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret selection-start-column="2" selection-end-line="5" selection-end-column="5" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tool/test/file/luago-book/ch07/examples.lua">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="187">
+          <caret line="11" column="23" selection-end-line="29" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/tool/test/main.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="175">
-          <caret line="310" column="52" selection-start-line="310" selection-start-column="52" selection-end-line="310" selection-end-column="52" />
+        <state relative-caret-position="158">
+          <caret line="277" column="9" lean-forward="true" selection-start-line="277" selection-start-column="9" selection-end-line="277" selection-end-column="9" />
           <folding>
             <element signature="e#660#669#0" expanded="true" />
             <element signature="e#3242#3256#0" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/tool/csharp.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="153">
-          <caret line="25" selection-start-line="25" selection-end-line="31" selection-end-column="14" />
         </state>
       </provider>
     </entry>

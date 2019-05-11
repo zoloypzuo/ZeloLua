@@ -38,7 +38,7 @@ import os
 from collections import namedtuple
 from shutil import copyfile
 from tool.csharp import attribute, method_def, r_comment, method_call, string, newline, csharp, using, namespace, _class
-from tool.util import join, write_all, make_dirs, path2id
+from tool.util import join, write_all, make_dirs, path2id, list_files
 
 # region app
 
@@ -255,15 +255,16 @@ gs('local a = 0; for i = 1, 100, 5 do a = a + i end;', loop('foo'), 'SS p124')
 
 # region 测试文件
 
-def list_files(startpath):
-    for root, dirs, files in os.walk(startpath):
-        for f in files:
-            yield root + '/' + f
+def gen(path):
+    for f in list_files(path):
+        gf(f)
 
 
-for f in list_files('file/luago-book/ch02'):
-    gf(f)
-
+gen('file/luago-book/ch02')
+gen('file/luago-book/ch04')
+gen('file/luago-book/ch05')
+gen('file/luago-book/ch06')
+gen('file/luago-book/ch07')
 # endregion
 # region main
 

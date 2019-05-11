@@ -30,3 +30,8 @@ def make_dirs(path):
 
 def path2id(s: str):
     return s.replace('/', '_').replace('-', '_').replace('\\', '_')
+
+def list_files(startpath):
+    for root, dirs, files in os.walk(startpath):
+        for f in files:
+            yield root + '/' + f
