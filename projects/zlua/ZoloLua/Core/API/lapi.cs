@@ -1869,8 +1869,10 @@ namespace ZoloLua.Core.VirtualMachine
         /// 		
         /// 	</para>
         /// </remarks>
-        public void lua_toboolean()
+        public bool lua_toboolean(int idx)
         {
+            TValue o = index2adr(idx);
+            return o.IsFalse;
         }
 
         /// <summary>

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
+using ZoloLua.Core.Lua;
 //using Antlr4.Runtime;
 using ZoloLua.Core.ObjectModel;
 using ZoloLua.Core.TypeModel;
@@ -50,10 +51,46 @@ namespace ZoloLua.Core.VirtualMachine
                         return 0;
                     }
                 };
+                //static int luaB_setmetatable(lua_State* L)
+                env.luaH_set(new TValue("setmetatable")).Cl = new CSharpClosure
+                {
+                    f = L =>
+                    {
+                        LuaType t = lua_type(2);
+                        //luaL_checktype(L, 1, LUA_TTABLE);
+                        //luaL_argcheck(L, t == LUA_TNIL || t == LUA_TTABLE, 2,
+                        //                  "nil or table expected");
+                        if (luaL_getmetafield(1, "__metatable"))
+                            throw new Exception();
+                        //luaL_error(L, "cannot change a protected metatable");
+                        lua_settop(2);
+                        lua_setmetatable(1);
+                        return 1;
+                    }
+                };
+                env.luaH_set(new TValue("assert")).Cl = new CSharpClosure
+                {
+                    f = luaB_assert
+                };
                 LuaClosure cl = new LuaClosure(env, 1, p);
                 push(new TValue(cl));
             } else {
                 //lua_load(new AntlrFileStream(path, Encoding.UTF8), $"@{path}");
+            }
+        }
+
+        private bool luaL_getmetafield(int obj, string @event)
+        {
+            if (!lua_getmetatable(obj))  /* no metatable? */
+                return false;
+            lua_pushstring(@event);
+            lua_rawget(-2);
+            if (lua_isnil(-1)) {
+                lua_pop(2);  /* remove metatable and metafield */
+                return false;
+            } else {
+                lua_remove(-2);  /* remove only metatable */
+                return true;
             }
         }
 

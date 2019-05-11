@@ -88,6 +88,7 @@
     <Compile Include="ZoloLua\Core\VirtualMachine\StkId.cs" />
     <Compile Include="ZoloLua\Library\AuxLib\lauxlib.cs" />
     <Compile Include="ZoloLua\Library\AuxLib\luaL_Reg.cs" />
+    <Compile Include="ZoloLua\Library\BaseLib\lbaselib.cs" />
     <Compile Include="ZoloLua\Library\StdLib\lstdlib.cs" />
   </ItemGroup>
   <ItemGroup>

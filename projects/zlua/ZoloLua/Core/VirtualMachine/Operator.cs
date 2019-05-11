@@ -167,15 +167,6 @@ namespace ZoloLua.Core.VirtualMachine
             throw new Exception();
         }
 
-        private void Relation(Bytecode i, Func<TValue, TValue, bool> predicate)
-        {
-            TValue rb = RKB(i);
-            TValue rc = RKC(i);
-            if (predicate(rb, rc) != (i.A != 0)) {
-                savedpc++;
-            } else {
-                savedpc += code[savedpc].SignedBx;
-            }
-        }
+
     }
 }
