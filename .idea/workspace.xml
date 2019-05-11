@@ -3,34 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="3cd1adb7-fda5-4b8e-8462-9bcc5578c8c3" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tool/test/exe_out_asm.txt" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/exe_out_asm.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tool/test/file/luago-book/ch04/examples.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/luago-book/ch04/examples.lua" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tool/test/file/luago-book/ch05/examples.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/luago-book/ch05/examples.lua" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tool/test/file/luago-book/ch06/sum.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/luago-book/ch06/sum.lua" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tool/test/file/luago-book/ch06/test/max_regs.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/luago-book/ch06/test/max_regs.lua" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tool/test/file/luago-book/ch06/test/max_regs2.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/luago-book/ch06/test/max_regs2.lua" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tool/test/file/luago-book/ch07/examples.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/luago-book/ch07/examples.lua" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tool/test/file/luago-book/ch07/test/big_list.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/luago-book/ch07/test/big_list.lua" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tool/test/file/luago-book/ch12/examples.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/luago-book/ch12/examples.lua" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tool/test/file/luago-book/ch12/range.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/luago-book/ch12/range.lua" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tool/test/file/luago-book/ch12/test.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/luago-book/ch12/test.lua" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tool/test/file/luago-book/ch12/values.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/luago-book/ch12/values.lua" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tool/test/file/luago-book/ch13/examples.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/luago-book/ch13/examples.lua" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tool/test/file/luago-book/ch13/test.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/luago-book/ch13/test.lua" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tool/test/file/luago-book/ch16/examples.lua" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tool/test/file/luago-book/ch18/examples.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/luago-book/ch18/examples.lua" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tool/test/file/luago-book/ch19/examples.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/luago-book/ch19/examples.lua" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tool/test/file/luago-book/ch20/examples.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/luago-book/ch20/examples.lua" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tool/test/file/luago-book/ch20/mymod.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/luago-book/ch20/mymod.lua" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tool/test/file/luago-book/ch20/test.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/luago-book/ch20/test.lua" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tool/test/file/luago-book/ch21/examples.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/luago-book/ch21/examples.lua" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tool/test/file/luago-book/ch21/test.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/file/luago-book/ch21/test.lua" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tool/test/file/luago-book/postface/examples.lua" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tool/test/learn.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/learn.lua" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tool/test/lua_asm.txt" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/lua_asm.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tool/test/luac.out" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/luac.out" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tool/test/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tool/util.py" beforeDir="false" afterPath="$PROJECT_DIR$/tool/util.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -579,8 +551,8 @@
       <item itemvalue="Python.compile_lua" />
       <item itemvalue="Python.lapi" />
       <item itemvalue="Python.compile_lua (1)" />
-      <item itemvalue="Python tests.Unittests for tests._test_main.Test" />
       <item itemvalue="Python.main" />
+      <item itemvalue="Python tests.Unittests for tests._test_main.Test" />
     </list>
     <recent_temporary>
       <list>
@@ -602,7 +574,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1521445858029</updated>
-      <workItem from="1557502182295" duration="9943000" />
+      <workItem from="1557502182295" duration="10542000" />
     </task>
     <servers />
   </component>
@@ -639,7 +611,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="9943000" />
+    <option name="totallyTimeSpent" value="10542000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-6" y="-6" width="1309" height="925" extended-state="6" />
@@ -662,14 +634,14 @@
       <window_info anchor="bottom" id="Docker" order="11" show_stripe_button="false" />
       <window_info anchor="bottom" id="Version Control" order="12" />
       <window_info anchor="bottom" id="Database Changes" order="13" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Debug" order="14" sideWeight="0.49865642" visible="true" weight="0.35642317" />
+      <window_info anchor="bottom" id="Debug" order="14" sideWeight="0.49865642" weight="0.35642317" />
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.2496142" />
       <window_info anchor="right" id="Coverage" order="3" side_tool="true" />
       <window_info anchor="right" id="Database" order="4" />
       <window_info anchor="right" id="SciView" order="5" weight="0.3298272" />
-      <window_info active="true" anchor="right" auto_hide="true" x="309" y="71" width="756" height="817" id="Run" order="6" visible="true" weight="0.5595524" />
+      <window_info anchor="right" auto_hide="true" x="309" y="71" width="756" height="817" id="Run" order="6" weight="0.5595524" />
     </layout>
     <layout-to-restore>
       <window_info content_ui="combo" id="Project" order="0" weight="0.55263156" />
