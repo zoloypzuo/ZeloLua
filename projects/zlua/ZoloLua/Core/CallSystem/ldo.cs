@@ -9,14 +9,6 @@ namespace ZoloLua.Core.VirtualMachine
 {
     public partial class lua_State
     {
-        //#define saveci(L,p)		((char *)(p) - (char *)L->base_ci)
-        //#define restoreci(L,n)		((CallInfo *)((char *)L->base_ci + (n)))
-
-        ///* results from luaD_precall */
-        //internal const int PCRLUA = 0;   /* 说明precall初始化了一个lua函数：initiated a call to a Lua function */
-        //internal const int PCRC = 1;    /* 说明precall调用了一个c函数：did a call to a C function */
-        //const int PCRYIELD = 2;
-        /* results from luaD_precall */
         private const int PCRLUA = 0; /* initiated a call to a Lua function */
         private const int PCRC = 1; /* did a call to a C function */
         private const int PCRYIELD = 2; /* C funtion yielded */
@@ -97,23 +89,6 @@ namespace ZoloLua.Core.VirtualMachine
             }
             //else condhardstacktests(luaD_reallocstack(L, L->stacksize - EXTRA_STACK - 1));
         }
-
-        // header public api
-        // int luaD_protectedparser (lua_State *L, ZIO *z, const char *name);
-        // void luaD_callhook (lua_State *L, int event, int line);
-        // int luaD_precall (lua_State *L, StkId func, int nresults);
-        // void luaD_call (lua_State *L, StkId func, int nResults);
-        // int luaD_pcall (lua_State *L, Pfunc func, void *u,
-        //                                        ptrdiff_t oldtop, ptrdiff_t ef);
-        // int luaD_poscall (lua_State *L, StkId firstResult);
-        // void luaD_reallocCI (lua_State *L, int newsize);
-        // void luaD_reallocstack (lua_State *L, int newsize);
-        // void luaD_growstack (lua_State *L, int n);
-
-        // void luaD_throw (lua_State *L, int errcode);
-        // int luaD_rawrunprotected (lua_State *L, Pfunc f, void *ud);
-
-        // void luaD_seterrorobj (lua_State *L, int errcode, StkId oldtop);
 
         private void luaD_growstack(int n)
         {

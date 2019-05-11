@@ -24,11 +24,6 @@ namespace ZoloLua.Core.TypeModel
         public const int LUA_TUPVAL = LAST_TAG + 2;
         public const int LUA_TDEADKEY = LAST_TAG + 3;
 
-        // 类型模型中各个类型的结构体定义
-        // 我单独拉出来定义
-
-        // 一些测试tt的宏
-        // 宏名以tt开头
         /*
         ** basic types
         */
@@ -44,15 +39,12 @@ namespace ZoloLua.Core.TypeModel
         public const int LUA_TUSERDATA = 7;
         public const int LUA_TTHREAD = 8;
 
-        // 一些访问TValue各个类型的值的宏
 
         /// <summary>
         ///     单例
         /// </summary>
         public static TValue luaO_nilobject { get; } = new TValue();
 
-
-        // 其他功能
 
         public static bool luaO_rawequalObj(TValue t1, TValue t2)
         {
@@ -82,27 +74,6 @@ namespace ZoloLua.Core.TypeModel
         {
             return lua_Number.TryParse(s, out n);
         }
-
-        public static bool ttisboolean(TValue o) { return ttype(o) == LUA_TBOOLEAN; }
-
-        public static bool ttisfunction(TValue o) { return ttype(o) == LUA_TFUNCTION; }
-
-        public static bool ttislightuserdata(TValue o) { return ttype(o) == LUA_TLIGHTUSERDATA; }
-
-        public static bool ttisnil(TValue o) { return ttype(o) == LUA_TNIL; }
-
-        public static bool ttisnumber(TValue o) { return ttype(o) == LUA_TNUMBER; }
-
-        public static bool ttisstring(TValue o) { return ttype(o) == LUA_TSTRING; }
-
-        public static bool ttistable(TValue o) { return ttype(o) == LUA_TTABLE; }
-
-        public static bool ttisthread(TValue o) { return ttype(o) == LUA_TTHREAD; }
-
-        public static bool ttisuserdata(TValue o) { return ttype(o) == LUA_TUSERDATA; }
-
-        /* Macros to test type */
-        public static int ttype(TValue o) { return (int)o.tt; }
     }
 
     internal class LocVar
