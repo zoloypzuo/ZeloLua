@@ -247,13 +247,22 @@ def loop(s):
 
 
 gs('local a = 0; for i = 1, 100, 5 do a = a + i end;', loop('foo'), 'SS p124')
+
+
 # gs('for k,v in pairs(t) do print(k,v) end')  TODO 在zlua导入pairs函数
 
 # endregion
 
 # region 测试文件
 
-gf(r'file/luago-book/ch02/hello_world.lua')
+def list_files(startpath):
+    for root, dirs, files in os.walk(startpath):
+        for f in files:
+            yield root + '/' + f
+
+
+for f in list_files('file/luago-book/ch02'):
+    gf(f)
 
 # endregion
 # region main

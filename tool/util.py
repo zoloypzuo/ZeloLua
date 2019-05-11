@@ -29,4 +29,4 @@ def make_dirs(path):
 
 
 def path2id(s: str):
-    return s.replace('/', '_').replace('-', '_')
+    return s.replace('/', '_').replace('-', '_').replace('\\', '_')

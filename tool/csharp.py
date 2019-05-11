@@ -23,7 +23,13 @@ def attribute(attribute, code):
            code
 
 
-def string(s): return '"' + s.replace('\n', '\\n').replace('"', '\\"') + '"'
+def string(s):
+    return '"' + \
+           s. \
+               replace('\\', '\\\\'). \
+               replace('\n', '\\n'). \
+               replace('"', '\\"') + \
+           '"'
 
 
 def r_comment(comment, s):

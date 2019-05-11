@@ -1,3 +1,102 @@
+------------------------------
+function f1() end
+function f2(...) end
+function f3(...) print(...) end
+
+------------------------------
+success compiling learn.lua
+; source chunk: learn.lua
+; x86 standard (32-bit, little endian, doubles)
+
+; function [0] definition (level 1) 0
+; 0 upvalues, 0 params, is_vararg = 2, 2 stacks
+.function  0 0 2 2
+.const  "f1"  ; 0
+.const  "f2"  ; 1
+.const  "f3"  ; 2
+[1] closure    0   0        ; R0 := closure(function[0]) 0 upvalues
+[2] setglobal  0   0        ; f1 := R0
+[3] closure    0   1        ; R0 := closure(function[1]) 0 upvalues
+[4] setglobal  0   1        ; f2 := R0
+[5] closure    0   2        ; R0 := closure(function[2]) 0 upvalues
+[6] setglobal  0   2        ; f3 := R0
+[7] return     0   1        ; return 
+
+; function [0] definition (level 2) 0_0
+; 0 upvalues, 0 params, is_vararg = 0, 2 stacks
+.function  0 0 0 2
+[1] return     0   1        ; return 
+; end of function 0_0
+
+
+; function [1] definition (level 2) 0_1
+; 0 upvalues, 0 params, is_vararg = 7, 2 stacks
+.function  0 0 7 2
+.local  "arg"  ; 0
+[1] return     0   1        ; return 
+; end of function 0_1
+
+
+; function [2] definition (level 2) 0_2
+; 0 upvalues, 0 params, is_vararg = 3, 3 stacks
+.function  0 0 3 3
+.local  "arg"  ; 0
+.const  "print"  ; 0
+[1] getglobal  1   0        ; R1 := print
+[2] vararg     2   0        ; R2 to top := ...
+[3] call       1   0   1    ;  := R1(R2 to top)
+[4] return     0   1        ; return 
+; end of function 0_2
+
+; end of function 0
+
+; source chunk: luac.out
+; x86 standard (32-bit, little endian, doubles)
+
+; function [0] definition (level 1) 0
+; 0 upvalues, 0 params, is_vararg = 2, 2 stacks
+.function  0 0 2 2
+.const  "f1"  ; 0
+.const  "f2"  ; 1
+.const  "f3"  ; 2
+[1] closure    0   0        ; R0 := closure(function[0]) 0 upvalues
+[2] setglobal  0   0        ; f1 := R0
+[3] closure    0   1        ; R0 := closure(function[1]) 0 upvalues
+[4] setglobal  0   1        ; f2 := R0
+[5] closure    0   2        ; R0 := closure(function[2]) 0 upvalues
+[6] setglobal  0   2        ; f3 := R0
+[7] return     0   1        ; return 
+
+; function [0] definition (level 2) 0_0
+; 0 upvalues, 0 params, is_vararg = 0, 2 stacks
+.function  0 0 0 2
+[1] return     0   1        ; return 
+; end of function 0_0
+
+
+; function [1] definition (level 2) 0_1
+; 0 upvalues, 0 params, is_vararg = 7, 2 stacks
+.function  0 0 7 2
+.local  "arg"  ; 0
+[1] return     0   1        ; return 
+; end of function 0_1
+
+
+; function [2] definition (level 2) 0_2
+; 0 upvalues, 0 params, is_vararg = 3, 3 stacks
+.function  0 0 3 3
+.local  "arg"  ; 0
+.const  "print"  ; 0
+[1] getglobal  1   0        ; R1 := print
+[2] vararg     2   0        ; R2 to top := ...
+[3] call       1   0   1    ;  := R1(R2 to top)
+[4] return     0   1        ; return 
+; end of function 0_2
+
+; end of function 0
+
+
+------------------------------
 success compiling learn.lua
 Pos   Hex Data           Description or Code
 ------------------------------------------------------------------------
