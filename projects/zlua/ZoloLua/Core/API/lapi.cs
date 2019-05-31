@@ -3,7 +3,6 @@ using System.Diagnostics;
 //using Antlr4.Runtime;
 //using ZoloLua.Compiler;
 //using ZoloLua.Compiler.CodeGenerator;
-using ZoloLua.Core.Configuration;
 using ZoloLua.Core.Lua;
 using ZoloLua.Core.ObjectModel;
 using ZoloLua.Core.TypeModel;
@@ -253,7 +252,7 @@ namespace ZoloLua.Core.VirtualMachine
         {
             bool res = true;
 
-            if (size > luaconf.LUAI_MAXCSTACK || top - @base + size > luaconf.LUAI_MAXCSTACK) {
+            if (size > LUAI_MAXCSTACK || top - @base + size > LUAI_MAXCSTACK) {
                 res = false; /* stack overflow */
             } else if (size > 0) {
                 luaD_checkstack(size);

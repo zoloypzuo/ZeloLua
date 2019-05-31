@@ -1,10 +1,10 @@
-﻿namespace ZoloLua.Core.Configuration
+﻿namespace ZoloLua.Core.VirtualMachine
 {
     /// <summary>
     ///     lua配置
     /// </summary>
     /// <remarks>clua这里太繁琐了，所以只能其他代码用到再到这里来添加</remarks>
-    internal static class luaconf
+    public partial class lua_State
     {
         /// <summary>
         ///     LUAI_MAXCALLS limits the number of nested calls.

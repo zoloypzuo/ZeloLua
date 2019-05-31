@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Diagnostics;
-using ZoloLua.Core.Configuration;
 using ZoloLua.Core.MetaMethod;
 using ZoloLua.Core.ObjectModel;
 using ZoloLua.Core.TypeModel;
@@ -72,7 +71,7 @@ namespace ZoloLua.Core.VirtualMachine
             //        luaD_throw(L, LUA_ERRERR);  /* error while handing stack error */
             //}
             ++nCcalls;
-            if (nCcalls >= luaconf.LUAI_MAXCCALLS) {
+            if (nCcalls >= LUAI_MAXCCALLS) {
                 throw new Exception("C stack overflow");
             }
             // 因为Closure实例cl和实参已经被压栈，可以执行这个cl
