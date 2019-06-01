@@ -30,8 +30,6 @@ zlua不是：
 
 ## 项目目录结构
 
-* Compiler
-  * CodeGenerator：代码生成
 * Core
   * API：lua API
   * CallSystem：调用系统
@@ -46,7 +44,6 @@ zlua不是：
 * Library
   * AuxLib：辅助库
   * StdLib：标准库
-
 
 ## 开发进度
 
@@ -122,3 +119,12 @@ zlua不是：
 实现大部分lapi和lauxlib | 2019年5月10日
 调整，发布第三版 | 2019年5月12日
 结束 | 2019年5月12日
+
+### v0.4
+
+* 完全删除compiler，zlua只研究虚拟机
+
+事件 | 时间戳
+--- | -----
+开始 | 2019年6月1日
+完全删除compiler | 2019年6月1日
