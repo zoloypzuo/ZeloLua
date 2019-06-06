@@ -1,4 +1,4 @@
-from tool.util import tab
+from tool.tool.util import tab
 
 
 def method_def(access, ret_type, method, parlist, code: list):

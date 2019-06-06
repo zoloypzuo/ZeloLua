@@ -1,4 +1,4 @@
-from tool.util import tab
+from tool.tool.util import tab
 
 
 def xml_tag(tag, code):

@@ -55,11 +55,11 @@ code tag会把单词也变成行
 
 2019年5月9日20:21:19 使用完成，这个生成项目不应该再次生成了，因为不可以
 '''
-from tool.csharp import method_def
-from tool.util import join, read_all, write_all
+from tool.tool.csharp import method_def
+from tool.tool.util import join, read_all, write_all
 
 # region app
-from tool.xml import see, summary, xml_doc, remarks, para
+from tool.tool.xml import see, summary, xml_doc, remarks, para
 
 
 def my_method_def(method):

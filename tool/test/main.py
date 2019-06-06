@@ -37,8 +37,9 @@ compile函数使用以下文件
 import os
 from collections import namedtuple
 from shutil import copyfile
-from tool.csharp import attribute, method_def, r_comment, method_call, string, newline, csharp, using, namespace, _class
-from tool.util import join, write_all, make_dirs, path2id, list_files
+from tool.tool.csharp import attribute, method_def, r_comment, method_call, string, newline, csharp, using, namespace, \
+    _class
+from tool.tool.util import join, write_all, make_dirs, path2id, list_files
 
 # region app
 
