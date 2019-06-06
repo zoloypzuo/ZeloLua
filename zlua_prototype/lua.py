@@ -2,13 +2,13 @@
 from antlr4 import *
 from functools import partial
 
-from gen.zlua.LuaLexer import LuaLexer
-from gen.zlua.LuaParser import LuaParser
-from zlua.compiler import LuaCompiler
-from zlua.type_model import Table
-from zlua.vm import LuaThread, LuaClosure, CallInfo
+from zlua_prototype.gen.zlua.LuaLexer import LuaLexer
+from zlua_prototype.gen.zlua.LuaParser import LuaParser
+from zlua_prototype.compiler import LuaCompiler
+from zlua_prototype.type_model import Table
+from zlua_prototype.vm import LuaThread, LuaClosure, CallInfo
 
-__version__ = 'zlua based on file 5.1.4'
+__version__ = 'zlua_prototype based on file 5.1.4'
 
 
 def new_thread(*libs):

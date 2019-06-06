@@ -1,7 +1,7 @@
 from unittest import TestCase
 import unittest
-from zlua.lua import do_string, do_file, new_thread
-from zlua.vm import LuaValueError
+from zlua_prototype.lua import do_string, do_file, new_thread
+from zlua_prototype.vm import LuaValueError
 
 from functools import partial
 

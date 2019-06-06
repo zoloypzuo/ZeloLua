@@ -6,5 +6,5 @@ class TestDebugger(TestCase):
         # self.fail()
         pass
     def test_parse_instr(self):
-        from zlua.debugger import _parse_instr
+        from zlua_prototype.debugger import _parse_instr
         assert _parse_instr('f ')==('f','')

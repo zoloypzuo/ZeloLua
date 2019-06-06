@@ -1,6 +1,6 @@
 from typing import AnyStr, Tuple
 
-from zlua.vm import LuaThread
+from zlua_prototype.vm import LuaThread
 
 no_instr = ('', ('',))
 
@@ -58,7 +58,7 @@ def _parse_instr(instr: str) -> Tuple[str, Tuple[str]]:
     return op, operands
 
 
-from zlua.lua import new_thread, do_file
+from zlua_prototype.lua import new_thread, do_file
 
 if __name__ == '__main__':
     t = new_thread()

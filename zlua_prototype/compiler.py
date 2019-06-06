@@ -1,11 +1,11 @@
 '''
-the compile stage part of zlua
+the compile stage part of zlua_prototype
 '''
 from functools import partial
 
-from gen.zlua.LuaParser import LuaParser
-from gen.zlua.LuaVisitor import LuaVisitor
-from gen.zlua.LuaLexer import LuaLexer
+from zlua_prototype.gen.zlua.LuaParser import LuaParser
+from zlua_prototype.gen.zlua.LuaVisitor import LuaVisitor
+from zlua_prototype.gen.zlua.LuaLexer import LuaLexer
 from typing import *
 
 

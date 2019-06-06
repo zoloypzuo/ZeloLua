@@ -2,67 +2,39 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="3cd1adb7-fda5-4b8e-8462-9bcc5578c8c3" name="Default" comment="">
+      <change afterPath="$PROJECT_DIR$/zlua_prototype/gen/zlua/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/zlua_prototype/tests/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/XASM_Assembler.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/XASM_Assembler.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tool/test/compile_out/file/luago-book/ch02/foo_bar.lua" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tool/test/compile_out/file/luago-book/ch02/hello_world.lua" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tool/test/compile_out/file/luago-book/ch02/test/param_num.lua" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tool/test/compile_out/file/luago-book/ch02/test/vararg.lua" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tool/test/compile_out/file/luago-book/ch04/examples.lua" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tool/test/compile_out/file/luago-book/ch05/examples.lua" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tool/test/compile_out/file/luago-book/ch06/sum.lua" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tool/test/compile_out/file/luago-book/ch06/test/max_regs.lua" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tool/test/compile_out/file/luago-book/ch06/test/max_regs2.lua" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tool/test/compile_out/file/luago-book/ch07/examples.lua" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tool/test/compile_out/file/luago-book/ch07/test.lua" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tool/test/compile_out/file/luago-book/ch07/test/big_list.lua" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tool/test/compile_out/file/luago-book/ch07/test_seq.lua" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tool/test/compile_out/file/luago-book/ch08/examples.lua" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tool/test/compile_out/file/luago-book/ch08/test.lua" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tool/test/compile_out/file/luago-book/ch10/examples.lua" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tool/test/compile_out/file/luago-book/ch10/factori.lua" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tool/test/compile_out/file/luago-book/ch10/fibonacci.lua" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tool/test/compile_out/file/luago-book/ch10/test.lua" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tool/test/compile_out/file/luago-book/ch10/test_env.lua" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tool/test/compile_out/file/luago-book/ch11/complex.lua" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tool/test/compile_out/file/luago-book/ch11/examples.lua" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tool/test/compile_out/file/luago-book/ch11/vector2.lua" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tool/test/compile_out/file/luago-book/ch12/examples.lua" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tool/test/compile_out/file/luago-book/ch12/range.lua" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tool/test/compile_out/file/luago-book/ch12/test.lua" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tool/test/compile_out/file/luago-book/ch12/values.lua" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tool/test/compile_out/file/luago-book/ch13/examples.lua" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tool/test/compile_out/file/luago-book/ch13/test.lua" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tool/test/compile_out/file/luago-book/ch14/examples.lua" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tool/test/compile_out/file/luago-book/ch16/examples.lua" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tool/test/compile_out/file/luago-book/ch17/examples.lua" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tool/test/compile_out/file/luago-book/ch18/examples.lua" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tool/test/compile_out/file/luago-book/ch19/examples.lua" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tool/test/compile_out/file/luago-book/ch20/examples.lua" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tool/test/compile_out/file/luago-book/ch20/mymod.lua" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tool/test/compile_out/file/luago-book/ch20/test.lua" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tool/test/compile_out/file/luago-book/ch21/examples.lua" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tool/test/compile_out/file/luago-book/ch21/test.lua" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tool/test/compile_out/file/luago-book/postface/examples.lua" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tool/test/compile_out/string/assign/global.lua" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tool/test/compile_out/string/assign/localAssign.lua" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tool/test/compile_out/string/empty/empty.lua" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tool/test/compile_out/string/functionCall/simplest.lua" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tool/test/compile_out/string/functionDef/parameter.lua" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tool/test/compile_out/string/functionDef/simplest.lua" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tool/test/compile_out/string/helloWorld/helloWorld.lua" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tool/test/compile_out/string/loop/foo.lua" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tool/test/compile_out/string/relationOp/and.lua" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tool/test/compile_out/string/relationOp/foo.lua" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tool/test/compile_out/string/table/gettable.lua" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tool/test/compile_out/string/table/newtable.lua" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tool/test/compile_out/string/table/setlist.lua" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tool/test/compile_out/string/table/settable.lua" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tool/test/compile_out/string/table/settable1.lua" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tool/test/exe_out_asm.txt" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/exe_out_asm.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tool/test/learn.lua" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/learn.lua" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tool/test/lua_asm.txt" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/lua_asm.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tool/test/luac.out" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/luac.out" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Lua.g4" beforeDir="false" afterPath="$PROJECT_DIR$/zlua_prototype/Lua.g4" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gen/Lua.interp" beforeDir="false" afterPath="$PROJECT_DIR$/zlua_prototype/gen/Lua.interp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gen/Lua.tokens" beforeDir="false" afterPath="$PROJECT_DIR$/zlua_prototype/gen/Lua.tokens" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gen/LuaLexer.interp" beforeDir="false" afterPath="$PROJECT_DIR$/zlua_prototype/gen/LuaLexer.interp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gen/LuaLexer.py" beforeDir="false" afterPath="$PROJECT_DIR$/zlua_prototype/gen/LuaLexer.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gen/LuaLexer.tokens" beforeDir="false" afterPath="$PROJECT_DIR$/zlua_prototype/gen/LuaLexer.tokens" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gen/LuaParser.py" beforeDir="false" afterPath="$PROJECT_DIR$/zlua_prototype/gen/LuaParser.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gen/LuaVisitor.py" beforeDir="false" afterPath="$PROJECT_DIR$/zlua_prototype/gen/LuaVisitor.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gen/zlua/Lua.tokens" beforeDir="false" afterPath="$PROJECT_DIR$/zlua_prototype/gen/zlua/Lua.tokens" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gen/zlua/LuaLexer.py" beforeDir="false" afterPath="$PROJECT_DIR$/zlua_prototype/gen/zlua/LuaLexer.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gen/zlua/LuaLexer.tokens" beforeDir="false" afterPath="$PROJECT_DIR$/zlua_prototype/gen/zlua/LuaLexer.tokens" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gen/zlua/LuaParser.py" beforeDir="false" afterPath="$PROJECT_DIR$/zlua_prototype/gen/zlua/LuaParser.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gen/zlua/LuaVisitor.py" beforeDir="false" afterPath="$PROJECT_DIR$/zlua_prototype/gen/zlua/LuaVisitor.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/zlua_prototype/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/_test_main.py" beforeDir="false" afterPath="$PROJECT_DIR$/zlua_prototype/tests/_test_main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/lua_tests/calls.lua" beforeDir="false" afterPath="$PROJECT_DIR$/zlua_prototype/tests/lua_tests/calls.lua" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/lua_tests/constructs.lua" beforeDir="false" afterPath="$PROJECT_DIR$/zlua_prototype/tests/lua_tests/constructs.lua" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/lua_tests/locals.lua" beforeDir="false" afterPath="$PROJECT_DIR$/zlua_prototype/tests/lua_tests/locals.lua" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/lua_tests/test.lua" beforeDir="false" afterPath="$PROJECT_DIR$/zlua_prototype/tests/lua_tests/test.lua" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/lua_tests/verybig.lua" beforeDir="false" afterPath="$PROJECT_DIR$/zlua_prototype/tests/lua_tests/verybig.lua" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_debugger.py" beforeDir="false" afterPath="$PROJECT_DIR$/zlua_prototype/tests/test_debugger.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tool/test/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/zlua/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/zlua_prototype/gen/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/zlua/compiler.py" beforeDir="false" afterPath="$PROJECT_DIR$/zlua_prototype/compiler.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/zlua/debugger.py" beforeDir="false" afterPath="$PROJECT_DIR$/zlua_prototype/debugger.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/zlua/lua.py" beforeDir="false" afterPath="$PROJECT_DIR$/zlua_prototype/lua.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/zlua/type_model.py" beforeDir="false" afterPath="$PROJECT_DIR$/zlua_prototype/type_model.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/zlua/vm.py" beforeDir="false" afterPath="$PROJECT_DIR$/zlua_prototype/vm.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -71,79 +43,90 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="CoverageDataManager">
-    <SUITE FILE_PATH="coverage/zlua_prototype$Unittests_for_test_Test_test_ctrl_flow.coverage" NAME="Unittests for test.Test.test_ctrl_flow Coverage Results" MODIFIED="1534829977989" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/zlua_prototype$debugger.coverage" NAME="debugger Coverage Results" MODIFIED="1535096781759" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/zlua" />
-    <SUITE FILE_PATH="coverage/zlua_prototype$Unittests_for__test_main_Test_test_ctrl_flow.coverage" NAME="Unittests for _test_main.Test.test_ctrl_flow Coverage Results" MODIFIED="1534953166645" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />
-    <SUITE FILE_PATH="coverage/zlua_prototype$Unittests_for_test_Test_test_upval.coverage" NAME="Unittests for test.Test.test_upval Coverage Results" MODIFIED="1534601302633" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/XASM_Assembler$Unittests_in_test_py.coverage" NAME="Unittests in test.py Coverage Results" MODIFIED="1521445978577" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/zlua_prototype$Unittests_for_tests_Tests.coverage" NAME="Unittests for tests.Tests Coverage Results" MODIFIED="1534912427098" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />
-    <SUITE FILE_PATH="coverage/zlua_prototype$Unittests_for__test_main_Test_test_exp.coverage" NAME="Unittests for _test_main.Test.test_exp Coverage Results" MODIFIED="1535016689793" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />
-    <SUITE FILE_PATH="coverage/zlua_prototype$Unittests_for_test_main_Test_test_exp.coverage" NAME="Unittests for test_main.Test.test_exp Coverage Results" MODIFIED="1534920003150" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />
-    <SUITE FILE_PATH="coverage/zlua_prototype$type_model.coverage" NAME="type_model Coverage Results" MODIFIED="1533953205764" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/XASM_Assembler$Unittests_in_test_assembler_py.coverage" NAME="Unittests in test_assembler.py Coverage Results" MODIFIED="1522471939429" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/XASM_Assembler$LuaListener.coverage" NAME="LuaListener Coverage Results" MODIFIED="1525784542592" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/_gen" />
-    <SUITE FILE_PATH="coverage/zlua_prototype$Unittests_for_test_Tests.coverage" NAME="Unittests for test.Tests Coverage Results" MODIFIED="1534912555297" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />
-    <SUITE FILE_PATH="coverage/zlua_prototype$Unittests_for_test_Test_test_func_call.coverage" NAME="Unittests for test.Test.test_func_call Coverage Results" MODIFIED="1534870964343" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/zlua_prototype$Unittests_for_test_Test_test_do_string.coverage" NAME="Unittests for test.Test.test_do_string Coverage Results" MODIFIED="1533980987316" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/zlua_prototype$Unittests_for_test_Test_test_func_def.coverage" NAME="Unittests for test.Test.test_func_def Coverage Results" MODIFIED="1534144164113" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/zlua_prototype$vmloop.coverage" NAME="vmloop Coverage Results" MODIFIED="1556107757575" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tool" />
-    <SUITE FILE_PATH="coverage/zlua_prototype$compiler.coverage" NAME="compiler Coverage Results" MODIFIED="1534954632204" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/zlua" />
-    <SUITE FILE_PATH="coverage/zlua_prototype$Unittests_for__test_main_Test.coverage" NAME="Unittests for _test_main.Test Coverage Results" MODIFIED="1535029689945" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />
-    <SUITE FILE_PATH="coverage/XASM_Assembler$Unittests_for_test_assembler_TestAssembler_test_split_punc.coverage" NAME="Unittests for test_assembler.TestAssembler.test_split_punc Coverage Results" MODIFIED="1522549214329" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/zlua_prototype$Unittests_for_test_Test_test_table_ctor.coverage" NAME="Unittests for test.Test.test_table_ctor Coverage Results" MODIFIED="1534142971254" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/zlua_prototype$Unittests_for_tests_Tests.coverage" NAME="Unittests for tests.Tests Coverage Results" MODIFIED="1534912427098" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />
+    <SUITE FILE_PATH="coverage/XASM_Assembler$main.coverage" NAME="main Coverage Results" MODIFIED="1526022547456" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/zlua_prototype$compile_lua__1_.coverage" NAME="compile_lua (1) Coverage Results" MODIFIED="1557405892950" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tool/test/disassembler" />
+    <SUITE FILE_PATH="coverage/zlua_prototype$lua.coverage" NAME="lua Coverage Results" MODIFIED="1534249050061" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/zlua_prototype$Unittests_for_test_Test_test_error.coverage" NAME="Unittests for test.Test.test_error Coverage Results" MODIFIED="1534601362076" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/XASM_Assembler$tree.coverage" NAME="tree Coverage Results" MODIFIED="1524940216455" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/zlua_prototype$vm.coverage" NAME="vm Coverage Results" MODIFIED="1534935643076" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/zlua" />
-    <SUITE FILE_PATH="coverage/zlua_prototype$compile_lua__1_.coverage" NAME="compile_lua (1) Coverage Results" MODIFIED="1557405892950" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tool/test/disassembler" />
-    <SUITE FILE_PATH="coverage/zlua_prototype$gen_test_main.coverage" NAME="gen_test_main Coverage Results" MODIFIED="1556603969766" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/gen_test" />
-    <SUITE FILE_PATH="coverage/zlua_prototype$Unittests_for__test_main_Test_test_local_declare.coverage" NAME="Unittests for _test_main.Test.test_local_declare Coverage Results" MODIFIED="1534938105581" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />
+    <SUITE FILE_PATH="coverage/zlua_prototype$Unittests_for_test_Tests.coverage" NAME="Unittests for test.Tests Coverage Results" MODIFIED="1534912555297" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />
     <SUITE FILE_PATH="coverage/zlua_prototype$compile_lua.coverage" NAME="compile_lua Coverage Results" MODIFIED="1557064667501" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/gen_test/disassembler" />
-    <SUITE FILE_PATH="coverage/XASM_Assembler$codecs.coverage" NAME="codecs Coverage Results" MODIFIED="1522129375702" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/venv/Lib" />
-    <SUITE FILE_PATH="coverage/XASM_Assembler$visitor_pattern_learn.coverage" NAME="visitor_pattern_learn Coverage Results" MODIFIED="1524904208354" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/zlua_prototype$Unittests_for_test_Test_test_error.coverage" NAME="Unittests for test.Test.test_error Coverage Results" MODIFIED="1534601362076" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/zlua_prototype$Unittests_in_test_py.coverage" NAME="Unittests in test.py Coverage Results" MODIFIED="1534912546650" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />
+    <SUITE FILE_PATH="coverage/zlua_prototype$gen_test.coverage" NAME="gen_test Coverage Results" MODIFIED="1556603273532" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/gen_test" />
     <SUITE FILE_PATH="coverage/zlua_prototype$Unittests_for__test_main_Test_test_formal.coverage" NAME="Unittests for _test_main.Test.test_formal Coverage Results" MODIFIED="1534954890950" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />
-    <SUITE FILE_PATH="coverage/XASM_Assembler$Unittests_for_test_assembler_TestAssembler.coverage" NAME="Unittests for test_assembler.TestAssembler Coverage Results" MODIFIED="1524906938452" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/zlua_prototype$Unittests_for_test_Test_test_local_assign.coverage" NAME="Unittests for test.Test.test_local_assign Coverage Results" MODIFIED="1534140728617" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/XASM_Assembler$Unittests_for_test_zvm_TestVM_test_process.coverage" NAME="Unittests for test_zvm.TestVM.test_process Coverage Results" MODIFIED="1524797463297" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/zlua_prototype$Unittests_for__test_main_Test_test_mt.coverage" NAME="Unittests for _test_main.Test.test_mt Coverage Results" MODIFIED="1534938110480" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />
     <SUITE FILE_PATH="coverage/XASM_Assembler$Unittests_in_test_process_py.coverage" NAME="Unittests in test_process.py Coverage Results" MODIFIED="1524796798703" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/zlua_prototype$Unittests_for_test_main_Test_test_formal.coverage" NAME="Unittests for test_main.Test.test_formal Coverage Results" MODIFIED="1534920025654" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />
-    <SUITE FILE_PATH="coverage/zlua_prototype$Unittests_for_test_Test_test_relation_op.coverage" NAME="Unittests for test.Test.test_relation_op Coverage Results" MODIFIED="1534700909250" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/zlua_prototype$Unittests_for_test_table_Test.coverage" NAME="Unittests for test_table.Test Coverage Results" MODIFIED="1534912372687" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />
-    <SUITE FILE_PATH="coverage/XASM_Assembler$Unittests_for_test_assembler_TestAssembler_test_handle_func.coverage" NAME="Unittests for test_assembler.TestAssembler.test_handle_func Coverage Results" MODIFIED="1522549236171" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/XASM_Assembler$ISA.coverage" NAME="ISA Coverage Results" MODIFIED="1524881772352" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/XASM_Assembler$zvm.coverage" NAME="zvm Coverage Results" MODIFIED="1524909424285" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/zlua_prototype$Unittests_for_test_debugger_TestDebugger_test_parse_instr.coverage" NAME="Unittests for test_debugger.TestDebugger.test_parse_instr Coverage Results" MODIFIED="1535031127895" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />
+    <SUITE FILE_PATH="coverage/zlua_prototype$Unittests_for_test_main_Test_test_exp.coverage" NAME="Unittests for test_main.Test.test_exp Coverage Results" MODIFIED="1534920003150" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />
+    <SUITE FILE_PATH="coverage/zlua_prototype$vmloop.coverage" NAME="vmloop Coverage Results" MODIFIED="1556107757575" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tool" />
+    <SUITE FILE_PATH="coverage/zlua_prototype$main.coverage" NAME="main Coverage Results" MODIFIED="1557593212506" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tool/test" />
+    <SUITE FILE_PATH="coverage/XASM_Assembler$Unittests_for_test_assembler_TestAssembler_test_lex.coverage" NAME="Unittests for test_assembler.TestAssembler.test_lex Coverage Results" MODIFIED="1522472107030" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/zlua_prototype$debugger.coverage" NAME="debugger Coverage Results" MODIFIED="1535096781759" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/zlua" />
+    <SUITE FILE_PATH="coverage/zlua_prototype$Unittests_for__test_main_Test_test_ctrl_flow.coverage" NAME="Unittests for _test_main.Test.test_ctrl_flow Coverage Results" MODIFIED="1534953166645" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />
+    <SUITE FILE_PATH="coverage/zlua_prototype$Unittests_for_test_Test.coverage" NAME="Unittests for test.Test Coverage Results" MODIFIED="1534912563123" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />
+    <SUITE FILE_PATH="coverage/XASM_Assembler$Unittests_for_test_assembler_TestAssembler.coverage" NAME="Unittests for test_assembler.TestAssembler Coverage Results" MODIFIED="1524906938452" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/zlua_prototype$lapi.coverage" NAME="lapi Coverage Results" MODIFIED="1557381803527" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tool" />
+    <SUITE FILE_PATH="coverage/XASM_Assembler$Unittests_in_test_py.coverage" NAME="Unittests in test.py Coverage Results" MODIFIED="1521445978577" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/zlua_prototype$Unittests_for__test_main_Test_test_local_declare.coverage" NAME="Unittests for _test_main.Test.test_local_declare Coverage Results" MODIFIED="1534938105581" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />
+    <SUITE FILE_PATH="coverage/XASM_Assembler$Unittests_for_test_zvm_TestVM_test_process.coverage" NAME="Unittests for test_zvm.TestVM.test_process Coverage Results" MODIFIED="1524797463297" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/zlua_prototype$Unittests_for_tests_Test.coverage" NAME="Unittests for tests.Test Coverage Results" MODIFIED="1534912413136" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />
+    <SUITE FILE_PATH="coverage/zlua_prototype$Unittests_for_test_Test_test_table_ctor.coverage" NAME="Unittests for test.Test.test_table_ctor Coverage Results" MODIFIED="1534142971254" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/zlua_prototype$Unittests_for_test_Test_test_formal.coverage" NAME="Unittests for tests.test.Test.test_formal Coverage Results" MODIFIED="1534911530804" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/zlua_prototype$Unittests_for_test_main_Test_test_lib.coverage" NAME="Unittests for test_main.Test.test_lib Coverage Results" MODIFIED="1534918799009" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />
-    <SUITE FILE_PATH="coverage/XASM_Assembler$Unittests_for_test_process_TestProcess.coverage" NAME="Unittests for test_process.TestProcess Coverage Results" MODIFIED="1524796425548" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/XASM_Assembler$main.coverage" NAME="main Coverage Results" MODIFIED="1526022547456" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/zlua_prototype$Unittests_for_test_Test.coverage" NAME="Unittests for test.Test Coverage Results" MODIFIED="1534912563123" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />
-    <SUITE FILE_PATH="coverage/XASM_Assembler$zasm.coverage" NAME="zasm Coverage Results" MODIFIED="1525837227005" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/zlua_prototype$lua.coverage" NAME="lua Coverage Results" MODIFIED="1534249050061" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/zlua_prototype$Unittests_for_test_luaThread_Test.coverage" NAME="Unittests for tests.test.Test Coverage Results" MODIFIED="1534912279399" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />
-    <SUITE FILE_PATH="coverage/XASM_Assembler$Unittests_for_test_process_TestProcess_test_run.coverage" NAME="Unittests for test_process.TestProcess.test_run Coverage Results" MODIFIED="1524796347745" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/zlua_prototype$Unittests_for__test_main_Test.coverage" NAME="Unittests for _test_main.Test Coverage Results" MODIFIED="1535029689945" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />
     <SUITE FILE_PATH="coverage/XASM_Assembler$test_zvm.coverage" NAME="test_zvm Coverage Results" MODIFIED="1524909190732" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/XASM_Assembler$Unittests_for_test_assembler_TestAssembler_test_lex.coverage" NAME="Unittests for test_assembler.TestAssembler.test_lex Coverage Results" MODIFIED="1522472107030" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/zlua_prototype$lapi.coverage" NAME="lapi Coverage Results" MODIFIED="1557381803527" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tool" />
-    <SUITE FILE_PATH="coverage/zlua_prototype$Unittests_for_test_Test_test_func_def_stat.coverage" NAME="Unittests for test.Test.test_func_def_stat Coverage Results" MODIFIED="1534136780775" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/zlua_prototype$Unittests_for_test_debugger_TestDebugger_test_parse_instr.coverage" NAME="Unittests for test_debugger.TestDebugger.test_parse_instr Coverage Results" MODIFIED="1535031127895" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />
-    <SUITE FILE_PATH="coverage/XASM_Assembler$xasm.coverage" NAME="xasm Coverage Results" MODIFIED="1521643190950" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/zlua_prototype$Unittests_for_test_Test_test_basic_stat.coverage" NAME="Unittests for test.Test.test_basic_stat Coverage Results" MODIFIED="1534642465018" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/XASM_Assembler$zvm.coverage" NAME="zvm Coverage Results" MODIFIED="1524909424285" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/zlua_prototype$Unittests_for_test_main_Test.coverage" NAME="Unittests for test_main.Test Coverage Results" MODIFIED="1534920007003" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />
-    <SUITE FILE_PATH="coverage/zlua_prototype$Unittests_for_test_Test_test_scope.coverage" NAME="Unittests for test.Test.test_scope Coverage Results" MODIFIED="1534909606529" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/zlua_prototype$Unittests_for_test_Test_test_local_assign.coverage" NAME="Unittests for test.Test.test_local_assign Coverage Results" MODIFIED="1534140728617" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/zlua_prototype$Unittests_for_test_Test_test_ctrl_flow.coverage" NAME="Unittests for test.Test.test_ctrl_flow Coverage Results" MODIFIED="1534829977989" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/XASM_Assembler$Unittests_in_test_assembler_py.coverage" NAME="Unittests in test_assembler.py Coverage Results" MODIFIED="1522471939429" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/zlua_prototype$Unittests_in__test_main_py.coverage" NAME="Unittests in _test_main.py Coverage Results" MODIFIED="1534940021698" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />
-    <SUITE FILE_PATH="coverage/zlua_prototype$gen_test.coverage" NAME="gen_test Coverage Results" MODIFIED="1556603273532" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/gen_test" />
+    <SUITE FILE_PATH="coverage/XASM_Assembler$Unittests_for_test_process_TestProcess.coverage" NAME="Unittests for test_process.TestProcess Coverage Results" MODIFIED="1524796425548" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/zlua_prototype$Unittests_for_test_Test_test_func_def_stat.coverage" NAME="Unittests for test.Test.test_func_def_stat Coverage Results" MODIFIED="1534136780775" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/zlua_prototype$gen_test_main.coverage" NAME="gen_test_main Coverage Results" MODIFIED="1556603969766" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/gen_test" />
+    <SUITE FILE_PATH="coverage/zlua_prototype$Unittests_for_test_Test_test_upval.coverage" NAME="Unittests for test.Test.test_upval Coverage Results" MODIFIED="1534601302633" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/zlua_prototype$Unittests_in_test_py.coverage" NAME="Unittests in test.py Coverage Results" MODIFIED="1534912546650" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />
+    <SUITE FILE_PATH="coverage/zlua_prototype$Unittests_for__test_main_Test_test_mt.coverage" NAME="Unittests for _test_main.Test.test_mt Coverage Results" MODIFIED="1534938110480" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />
+    <SUITE FILE_PATH="coverage/zlua_prototype$Unittests_for_test_luaThread_Test.coverage" NAME="Unittests for tests.test.Test Coverage Results" MODIFIED="1534912279399" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />
+    <SUITE FILE_PATH="coverage/XASM_Assembler$Unittests_for_test_assembler_TestAssembler_test_split_punc.coverage" NAME="Unittests for test_assembler.TestAssembler.test_split_punc Coverage Results" MODIFIED="1522549214329" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/XASM_Assembler$codecs.coverage" NAME="codecs Coverage Results" MODIFIED="1522129375702" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/venv/Lib" />
     <SUITE FILE_PATH="coverage/zlua_prototype$Unittests_for__test_main_Test_test_lib.coverage" NAME="Unittests for _test_main.Test.test_lib Coverage Results" MODIFIED="1534954802227" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />
+    <SUITE FILE_PATH="coverage/XASM_Assembler$LuaListener.coverage" NAME="LuaListener Coverage Results" MODIFIED="1525784542592" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/_gen" />
+    <SUITE FILE_PATH="coverage/zlua_prototype$Unittests_for_test_main_Test_test_formal.coverage" NAME="Unittests for test_main.Test.test_formal Coverage Results" MODIFIED="1534920025654" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />
     <SUITE FILE_PATH="coverage/zlua_prototype$Unittests_for_test_Test_test_exp.coverage" NAME="Unittests for test.Test.test_exp Coverage Results" MODIFIED="1534602549581" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/zlua_prototype$Unittests_for_tests_Test.coverage" NAME="Unittests for tests.Test Coverage Results" MODIFIED="1534912413136" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />
-    <SUITE FILE_PATH="coverage/zlua_prototype$main.coverage" NAME="main Coverage Results" MODIFIED="1557593212506" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tool/test" />
+    <SUITE FILE_PATH="coverage/zlua_prototype$Unittests_for__test_main_Test_test_exp.coverage" NAME="Unittests for _test_main.Test.test_exp Coverage Results" MODIFIED="1535016689793" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />
+    <SUITE FILE_PATH="coverage/zlua_prototype$Unittests_for_test_Test_test_func_call.coverage" NAME="Unittests for test.Test.test_func_call Coverage Results" MODIFIED="1534870964343" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/zlua_prototype$Unittests_for_test_Test_test_basic_stat.coverage" NAME="Unittests for test.Test.test_basic_stat Coverage Results" MODIFIED="1534642465018" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/zlua_prototype$Unittests_for_test_Test_test_scope.coverage" NAME="Unittests for test.Test.test_scope Coverage Results" MODIFIED="1534909606529" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/XASM_Assembler$visitor_pattern_learn.coverage" NAME="visitor_pattern_learn Coverage Results" MODIFIED="1524904208354" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/XASM_Assembler$Unittests_for_test_process_TestProcess_test_run.coverage" NAME="Unittests for test_process.TestProcess.test_run Coverage Results" MODIFIED="1524796347745" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/zlua_prototype$Unittests_for_test_main_Test.coverage" NAME="Unittests for test_main.Test Coverage Results" MODIFIED="1534920007003" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />
+    <SUITE FILE_PATH="coverage/XASM_Assembler$xasm.coverage" NAME="xasm Coverage Results" MODIFIED="1521643190950" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/XASM_Assembler$ISA.coverage" NAME="ISA Coverage Results" MODIFIED="1524881772352" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/zlua_prototype$type_model.coverage" NAME="type_model Coverage Results" MODIFIED="1533953205764" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/zlua_prototype$compiler.coverage" NAME="compiler Coverage Results" MODIFIED="1534954632204" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/zlua" />
+    <SUITE FILE_PATH="coverage/XASM_Assembler$zasm.coverage" NAME="zasm Coverage Results" MODIFIED="1525837227005" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/zlua_prototype$Unittests_for_test_Test_test_func_def.coverage" NAME="Unittests for test.Test.test_func_def Coverage Results" MODIFIED="1534144164113" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/XASM_Assembler$Unittests_for_test_assembler_TestAssembler_test_handle_func.coverage" NAME="Unittests for test_assembler.TestAssembler.test_handle_func Coverage Results" MODIFIED="1522549236171" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/zlua_prototype$Unittests_for_test_table_Test.coverage" NAME="Unittests for test_table.Test Coverage Results" MODIFIED="1534912372687" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />
+    <SUITE FILE_PATH="coverage/zlua_prototype$Unittests_for_test_Test_test_relation_op.coverage" NAME="Unittests for test.Test.test_relation_op Coverage Results" MODIFIED="1534700909250" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+  </component>
+  <component name="FUSProjectUsageTrigger">
+    <session id="-584922372">
+      <usages-collector id="statistics.lifecycle.project">
+        <counts>
+          <entry key="project.closed" value="1" />
+          <entry key="project.open.time.6" value="1" />
+          <entry key="project.opened" value="1" />
+        </counts>
+      </usages-collector>
+    </session>
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="600">
       <file pinned="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/tool/test/main.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="135">
+            <state relative-caret-position="142">
               <caret line="301" column="23" selection-start-line="301" selection-start-column="23" selection-end-line="301" selection-end-column="23" />
               <folding>
                 <element signature="e#660#669#0" expanded="true" />
@@ -328,10 +311,16 @@
       </list>
     </option>
   </component>
+  <component name="JsBuildToolGruntFileManager" detection-done="true" sorting="DEFINITION_ORDER" />
+  <component name="JsBuildToolPackageJson" detection-done="true" sorting="DEFINITION_ORDER" />
+  <component name="JsGulpfileManager">
+    <detection-done>true</detection-done>
+    <sorting>DEFINITION_ORDER</sorting>
+  </component>
   <component name="ProjectFrameBounds" extendedState="6">
     <option name="x" value="1530" />
-    <option name="width" value="1576" />
-    <option name="height" value="2176" />
+    <option name="width" value="1578" />
+    <option name="height" value="2178" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <ConfirmationsSetting value="2" id="Add" />
@@ -341,6 +330,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -348,34 +338,10 @@
               <item name="zlua_prototype" type="b2602c69:ProjectViewProjectNode" />
               <item name="zlua_prototype" type="462c0819:PsiDirectoryNode" />
             </path>
-            <path>
-              <item name="zlua_prototype" type="b2602c69:ProjectViewProjectNode" />
-              <item name="zlua_prototype" type="462c0819:PsiDirectoryNode" />
-              <item name="tool" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="zlua_prototype" type="b2602c69:ProjectViewProjectNode" />
-              <item name="zlua_prototype" type="462c0819:PsiDirectoryNode" />
-              <item name="tool" type="462c0819:PsiDirectoryNode" />
-              <item name="test" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="zlua_prototype" type="b2602c69:ProjectViewProjectNode" />
-              <item name="zlua_prototype" type="462c0819:PsiDirectoryNode" />
-              <item name="tool" type="462c0819:PsiDirectoryNode" />
-              <item name="test" type="462c0819:PsiDirectoryNode" />
-              <item name="compile_out" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="zlua_prototype" type="b2602c69:ProjectViewProjectNode" />
-              <item name="zlua_prototype" type="462c0819:PsiDirectoryNode" />
-              <item name="zlua" type="462c0819:PsiDirectoryNode" />
-            </path>
           </expand>
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -397,15 +363,15 @@
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="RecentsManager">
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="C:\Users\91018\Documents\GitHub\zlua_prototype\tool" />
-    </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\91018\Documents\GitHub\Lua\zlua_prototype\zlua_prototype" />
+      <recent name="C:\Users\91018\Documents\GitHub\Lua\zlua_prototype\zlua" />
       <recent name="C:\Users\91018\Documents\GitHub\zlua_prototype\tool" />
       <recent name="C:\Users\91018\Documents\GitHub\zlua_prototype\tool\test" />
       <recent name="C:\Users\91018\Documents\GitHub\zlua_prototype\tool\lapi" />
-      <recent name="C:\Users\91018\Documents\GitHub\zlua_prototype\tests" />
-      <recent name="C:\Users\91018\Documents\GitHub\zlua_prototype\zlua" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\91018\Documents\GitHub\zlua_prototype\tool" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -519,29 +485,29 @@
       <option name="showConsole" value="true" />
       <method v="2" />
     </configuration>
-    <configuration name="Unittests for tests._test_main.Test" type="tests" factoryName="Unittests" nameIsGenerated="true">
+    <configuration name="Unittests for zlua_prototype.tests._test_main.Test" type="tests" factoryName="Unittests" nameIsGenerated="true">
       <module name="XASM_Assembler" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/zlua_prototype/tests" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
       <option name="_new_pattern" value="&quot;&quot;" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;tests._test_main.Test&quot;" />
+      <option name="_new_target" value="&quot;zlua_prototype.tests._test_main.Test&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
     <list>
+      <item itemvalue="Python tests.Unittests for zlua_prototype.tests._test_main.Test" />
       <item itemvalue="Lua Application.learn.lua" />
       <item itemvalue="Python.compile_lua" />
       <item itemvalue="Python.lapi" />
       <item itemvalue="Python.compile_lua (1)" />
       <item itemvalue="Python.main" />
-      <item itemvalue="Python tests.Unittests for tests._test_main.Test" />
     </list>
     <recent_temporary>
       <list>
@@ -604,14 +570,13 @@
     <option name="totallyTimeSpent" value="12408000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-6" y="-6" width="1309" height="925" extended-state="6" />
-    <editor active="true" />
+    <frame x="-6" y="-6" width="1372" height="972" extended-state="6" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.2509992" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.25455928" />
       <window_info id="Structure" order="1" weight="0.5009914" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Find" order="1" weight="0.3274559" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.32680538" />
       <window_info anchor="bottom" id="Cvs" order="2" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="3" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="4" />
@@ -666,11 +631,14 @@
   <component name="UnknownFeatures">
     <option featureType="com.intellij.fileTypeFactory" implementationName="*.cs" />
   </component>
+  <component name="VcsContentAnnotationSettings">
+    <option name="myLimit" value="2678400000" />
+  </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/zlua/vm.py</url>
+          <url>file://$PROJECT_DIR$/zlua_prototype/vm.py</url>
           <line>146</line>
           <option name="timeStamp" value="349" />
         </line-breakpoint>
@@ -903,12 +871,8 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/tool/test/compile_out/file/luago-book/ch02/test/param_num.lua">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/tool/test/compile_out/file/luago-book/ch02/test/vararg.lua">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
+    <entry file="file://$PROJECT_DIR$/tool/test/compile_out/file/luago-book/ch02/test/param_num.lua" />
+    <entry file="file://$PROJECT_DIR$/tool/test/compile_out/file/luago-book/ch02/test/vararg.lua" />
     <entry file="file://$PROJECT_DIR$/tool/csharp.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="238">
@@ -930,11 +894,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/tool/test/compile_out/file/luago-book/ch05/examples.lua">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-357" />
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/tool/test/compile_out/file/luago-book/ch05/examples.lua" />
     <entry file="file://$PROJECT_DIR$/tool/test/file/luago-book/ch05/examples.lua">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="342">
@@ -959,9 +919,7 @@
     <entry file="file://$PROJECT_DIR$/tool/test/learn.lua">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/tool/test/compile_out/file/luago-book/postface/examples.lua">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
+    <entry file="file://$PROJECT_DIR$/tool/test/compile_out/file/luago-book/postface/examples.lua" />
     <entry file="file://$PROJECT_DIR$/tool/test/file/luago-book/ch21/test.lua">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="306">
@@ -1066,7 +1024,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/tool/test/main.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="135">
+        <state relative-caret-position="142">
           <caret line="301" column="23" selection-start-line="301" selection-start-column="23" selection-end-line="301" selection-end-column="23" />
           <folding>
             <element signature="e#660#669#0" expanded="true" />

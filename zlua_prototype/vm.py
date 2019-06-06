@@ -1,12 +1,12 @@
 '''
-the runtime stage part of zlua
+the runtime stage part of zlua_prototype
 
 '''
 
 from typing import *
 
-from zlua.compiler import Proto, Function, Chunk
-from zlua.type_model import Table, lua_not, lua_cond_true_false, get_metamethod
+from zlua_prototype.compiler import Proto, Function, Chunk
+from zlua_prototype.type_model import Table, lua_not, lua_cond_true_false, get_metamethod
 
 
 class LuaRuntimeError(RuntimeError):

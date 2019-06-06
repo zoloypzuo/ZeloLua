@@ -42,7 +42,7 @@ from tool.util import join, write_all, make_dirs, path2id, list_files
 
 # region app
 
-zlua_chunk_base_path = '../../../zlua/data/chunk/'
+zlua_chunk_base_path = '../../../zlua_prototype/data/chunk/'
 output_base = 'compile_out/'
 zlua_test_code_path = r'..\..\..\zlua\projects\zluaTests\ZoloLua\Core\VirtualMachine\lua_StateTests.cs'
 
