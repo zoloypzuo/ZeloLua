@@ -103,7 +103,7 @@ def compile(lua_code: str, path: str):
 
 
 # 两个API函数，用于生成dostring和dofile测试
-def gs(lua_code: str, path: str, comment=''):
+def gs(lua_code: object, path: object, comment: object = '') -> object:
     string_path = 'string/' + path
     assert string_path not in path_set, \
         "base不应该重复，否则会被替换掉，必须使用setlist0，setlist1，避免重复"
@@ -260,12 +260,6 @@ def gen(path):
     for f in list_files(path):
         gf(f)
 
-
-# gen('file/luago-book/ch02')
-# gen('file/luago-book/ch04')
-# gen('file/luago-book/ch05')
-# gen('file/luago-book/ch06')
-# gen('file/luago-book/ch07')
 
 # endregion
 
