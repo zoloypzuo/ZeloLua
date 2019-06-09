@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27004.2006
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "zlua", "projects\zlua\zlua.csproj", "{FE00E8B4-594A-46F0-957B-A3AF643243B9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZoloLua", "projects\zlua\ZoloLua.csproj", "{FE00E8B4-594A-46F0-957B-A3AF643243B9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "zluaTests", "projects\zluaTests\zluaTests.csproj", "{B97D2F2E-7339-481A-AE0D-6F9D9A305E27}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZoloLuaTests", "projects\zluaTests\ZoloLuaTests.csproj", "{B97D2F2E-7339-481A-AE0D-6F9D9A305E27}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

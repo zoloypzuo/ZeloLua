@@ -68,9 +68,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\zlua\zlua.csproj">
+    <ProjectReference Include="..\zlua\ZoloLua.csproj">
       <Project>{FE00E8B4-594A-46F0-957B-A3AF643243B9}</Project>
-      <Name>zlua</Name>
+      <Name>ZoloLua</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />
