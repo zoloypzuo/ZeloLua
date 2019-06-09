@@ -1,8 +1,8 @@
-# zlua
+# ZoloLua
 
 ## 简介
 
-zlua是一个C#实现的lua，以lua5.1.4（下面简称为clua）为参考而开发。
+zololua是一个C#实现的lua（下面简称为zlua），以lua5.1.4（下面简称为clua）为参考而开发。
 
 zlua是：
 
