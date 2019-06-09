@@ -56,8 +56,6 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="TestTool.cs" />
-    <Compile Include="ZoloLua\Compiler\CodeGenerator\lcode.cs" />
-    <Compile Include="ZoloLua\Compiler\CodeGenerator\LuaCodeGenerator.cs" />
     <Compile Include="ZoloLua\Core\API\lapi.cs" />
     <Compile Include="ZoloLua\Core\CallSystem\ldo.cs" />
     <Compile Include="ZoloLua\Core\Configuration\luaconf.cs" />
@@ -94,10 +92,6 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
-    <Antlr4 Include="ZoloLua\Compiler\Lua.g4">
-      <Generator>MSBuild:Compile</Generator>
-      <CustomToolNamespace>zlua.ZoloLua.Compiler</CustomToolNamespace>
-    </Antlr4>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
