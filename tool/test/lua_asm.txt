@@ -1,0 +1,51 @@
+success compiling learn.lua
+; source chunk: learn.lua
+; x86 standard (32-bit, little endian, doubles)
+
+; function [0] definition (level 1) 0
+; 0 upvalues, 0 params, is_vararg = 2, 5 stacks
+.function  0 0 2 5
+.local  "a"  ; 0
+.local  "(for index)"  ; 1
+.local  "(for limit)"  ; 2
+.local  "(for step)"  ; 3
+.local  "i"  ; 4
+.const  0  ; 0
+.const  1  ; 1
+.const  100  ; 2
+.const  5  ; 3
+[1] loadk      0   0        ; R0 := 0
+[2] loadk      1   1        ; R1 := 1
+[3] loadk      2   2        ; R2 := 100
+[4] loadk      3   3        ; R3 := 5
+[5] forprep    1   1        ; R1 -= R3; PC := 7
+[6] add        0   0   4    ; R0 := R0 + R4
+[7] forloop    1   -2       ; R1 += R3; if R1 <= R2 then begin PC := 6; R4 := R1 end
+[8] return     0   1        ; return 
+; end of function 0
+
+; source chunk: luac.out
+; x86 standard (32-bit, little endian, doubles)
+
+; function [0] definition (level 1) 0
+; 0 upvalues, 0 params, is_vararg = 2, 5 stacks
+.function  0 0 2 5
+.local  "a"  ; 0
+.local  "(for index)"  ; 1
+.local  "(for limit)"  ; 2
+.local  "(for step)"  ; 3
+.local  "i"  ; 4
+.const  0  ; 0
+.const  1  ; 1
+.const  100  ; 2
+.const  5  ; 3
+[1] loadk      0   0        ; R0 := 0
+[2] loadk      1   1        ; R1 := 1
+[3] loadk      2   2        ; R2 := 100
+[4] loadk      3   3        ; R3 := 5
+[5] forprep    1   1        ; R1 -= R3; PC := 7
+[6] add        0   0   4    ; R0 := R0 + R4
+[7] forloop    1   -2       ; R1 += R3; if R1 <= R2 then begin PC := 6; R4 := R1 end
+[8] return     0   1        ; return 
+; end of function 0
+

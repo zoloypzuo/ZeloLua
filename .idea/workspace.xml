@@ -1,0 +1,1078 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="3cd1adb7-fda5-4b8e-8462-9bcc5578c8c3" name="Default" comment="">
+      <change beforePath="$PROJECT_DIR$/tool/test/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/tool/test/main.py" afterDir="false" />
+    </list>
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="CoverageDataManager">
+    <SUITE FILE_PATH="coverage/zlua_prototype$Unittests_for_test_Test_test_do_string.coverage" NAME="Unittests for test.Test.test_do_string Coverage Results" MODIFIED="1533980987316" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/zlua_prototype$Unittests_for_tests_Tests.coverage" NAME="Unittests for tests.Tests Coverage Results" MODIFIED="1534912427098" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />
+    <SUITE FILE_PATH="coverage/XASM_Assembler$main.coverage" NAME="main Coverage Results" MODIFIED="1526022547456" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/zlua_prototype$compile_lua__1_.coverage" NAME="compile_lua (1) Coverage Results" MODIFIED="1557405892950" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tool/test/disassembler" />
+    <SUITE FILE_PATH="coverage/zlua_prototype$lua.coverage" NAME="lua Coverage Results" MODIFIED="1534249050061" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/zlua_prototype$Unittests_for_test_Test_test_error.coverage" NAME="Unittests for test.Test.test_error Coverage Results" MODIFIED="1534601362076" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/XASM_Assembler$tree.coverage" NAME="tree Coverage Results" MODIFIED="1524940216455" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/zlua_prototype$vm.coverage" NAME="vm Coverage Results" MODIFIED="1534935643076" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/zlua" />
+    <SUITE FILE_PATH="coverage/zlua_prototype$Unittests_for_test_Tests.coverage" NAME="Unittests for test.Tests Coverage Results" MODIFIED="1534912555297" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />
+    <SUITE FILE_PATH="coverage/zlua_prototype$compile_lua.coverage" NAME="compile_lua Coverage Results" MODIFIED="1557064667501" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/gen_test/disassembler" />
+    <SUITE FILE_PATH="coverage/zlua_prototype$gen_test.coverage" NAME="gen_test Coverage Results" MODIFIED="1556603273532" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/gen_test" />
+    <SUITE FILE_PATH="coverage/zlua_prototype$Unittests_for__test_main_Test_test_formal.coverage" NAME="Unittests for _test_main.Test.test_formal Coverage Results" MODIFIED="1534954890950" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />
+    <SUITE FILE_PATH="coverage/XASM_Assembler$Unittests_in_test_process_py.coverage" NAME="Unittests in test_process.py Coverage Results" MODIFIED="1524796798703" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/XASM_Assembler$zvm.coverage" NAME="zvm Coverage Results" MODIFIED="1524909424285" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/zlua_prototype$Unittests_for_test_debugger_TestDebugger_test_parse_instr.coverage" NAME="Unittests for test_debugger.TestDebugger.test_parse_instr Coverage Results" MODIFIED="1535031127895" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />
+    <SUITE FILE_PATH="coverage/zlua_prototype$Unittests_for_test_main_Test_test_exp.coverage" NAME="Unittests for test_main.Test.test_exp Coverage Results" MODIFIED="1534920003150" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />
+    <SUITE FILE_PATH="coverage/zlua_prototype$vmloop.coverage" NAME="vmloop Coverage Results" MODIFIED="1556107757575" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tool" />
+    <SUITE FILE_PATH="coverage/zlua_prototype$main.coverage" NAME="main Coverage Results" MODIFIED="1557593212506" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tool/test" />
+    <SUITE FILE_PATH="coverage/XASM_Assembler$Unittests_for_test_assembler_TestAssembler_test_lex.coverage" NAME="Unittests for test_assembler.TestAssembler.test_lex Coverage Results" MODIFIED="1522472107030" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/zlua_prototype$debugger.coverage" NAME="debugger Coverage Results" MODIFIED="1535096781759" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/zlua" />
+    <SUITE FILE_PATH="coverage/zlua_prototype$Unittests_for__test_main_Test_test_ctrl_flow.coverage" NAME="Unittests for _test_main.Test.test_ctrl_flow Coverage Results" MODIFIED="1534953166645" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />
+    <SUITE FILE_PATH="coverage/zlua_prototype$Unittests_for_test_Test.coverage" NAME="Unittests for test.Test Coverage Results" MODIFIED="1534912563123" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />
+    <SUITE FILE_PATH="coverage/XASM_Assembler$Unittests_for_test_assembler_TestAssembler.coverage" NAME="Unittests for test_assembler.TestAssembler Coverage Results" MODIFIED="1524906938452" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/zlua_prototype$lapi.coverage" NAME="lapi Coverage Results" MODIFIED="1557381803527" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tool" />
+    <SUITE FILE_PATH="coverage/XASM_Assembler$Unittests_in_test_py.coverage" NAME="Unittests in test.py Coverage Results" MODIFIED="1521445978577" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/zlua_prototype$Unittests_for__test_main_Test_test_local_declare.coverage" NAME="Unittests for _test_main.Test.test_local_declare Coverage Results" MODIFIED="1534938105581" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />
+    <SUITE FILE_PATH="coverage/XASM_Assembler$Unittests_for_test_zvm_TestVM_test_process.coverage" NAME="Unittests for test_zvm.TestVM.test_process Coverage Results" MODIFIED="1524797463297" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/zlua_prototype$Unittests_for_tests_Test.coverage" NAME="Unittests for tests.Test Coverage Results" MODIFIED="1534912413136" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />
+    <SUITE FILE_PATH="coverage/zlua_prototype$Unittests_for_test_Test_test_table_ctor.coverage" NAME="Unittests for test.Test.test_table_ctor Coverage Results" MODIFIED="1534142971254" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/zlua_prototype$Unittests_for_test_Test_test_formal.coverage" NAME="Unittests for tests.test.Test.test_formal Coverage Results" MODIFIED="1534911530804" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/zlua_prototype$Unittests_for_test_main_Test_test_lib.coverage" NAME="Unittests for test_main.Test.test_lib Coverage Results" MODIFIED="1534918799009" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />
+    <SUITE FILE_PATH="coverage/zlua_prototype$Unittests_for__test_main_Test.coverage" NAME="Unittests for _test_main.Test Coverage Results" MODIFIED="1535029689945" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />
+    <SUITE FILE_PATH="coverage/XASM_Assembler$test_zvm.coverage" NAME="test_zvm Coverage Results" MODIFIED="1524909190732" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/zlua_prototype$Unittests_for_test_Test_test_local_assign.coverage" NAME="Unittests for test.Test.test_local_assign Coverage Results" MODIFIED="1534140728617" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/zlua_prototype$Unittests_for_test_Test_test_ctrl_flow.coverage" NAME="Unittests for test.Test.test_ctrl_flow Coverage Results" MODIFIED="1534829977989" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/XASM_Assembler$Unittests_in_test_assembler_py.coverage" NAME="Unittests in test_assembler.py Coverage Results" MODIFIED="1522471939429" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/zlua_prototype$Unittests_in__test_main_py.coverage" NAME="Unittests in _test_main.py Coverage Results" MODIFIED="1534940021698" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />
+    <SUITE FILE_PATH="coverage/XASM_Assembler$Unittests_for_test_process_TestProcess.coverage" NAME="Unittests for test_process.TestProcess Coverage Results" MODIFIED="1524796425548" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/zlua_prototype$Unittests_for_test_Test_test_func_def_stat.coverage" NAME="Unittests for test.Test.test_func_def_stat Coverage Results" MODIFIED="1534136780775" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/zlua_prototype$gen_test_main.coverage" NAME="gen_test_main Coverage Results" MODIFIED="1556603969766" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/gen_test" />
+    <SUITE FILE_PATH="coverage/zlua_prototype$Unittests_for_test_Test_test_upval.coverage" NAME="Unittests for test.Test.test_upval Coverage Results" MODIFIED="1534601302633" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/zlua_prototype$Unittests_in_test_py.coverage" NAME="Unittests in test.py Coverage Results" MODIFIED="1534912546650" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />
+    <SUITE FILE_PATH="coverage/zlua_prototype$Unittests_for__test_main_Test_test_mt.coverage" NAME="Unittests for _test_main.Test.test_mt Coverage Results" MODIFIED="1534938110480" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />
+    <SUITE FILE_PATH="coverage/zlua_prototype$Unittests_for_test_luaThread_Test.coverage" NAME="Unittests for tests.test.Test Coverage Results" MODIFIED="1534912279399" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />
+    <SUITE FILE_PATH="coverage/XASM_Assembler$Unittests_for_test_assembler_TestAssembler_test_split_punc.coverage" NAME="Unittests for test_assembler.TestAssembler.test_split_punc Coverage Results" MODIFIED="1522549214329" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/XASM_Assembler$codecs.coverage" NAME="codecs Coverage Results" MODIFIED="1522129375702" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/venv/Lib" />
+    <SUITE FILE_PATH="coverage/zlua_prototype$Unittests_for__test_main_Test_test_lib.coverage" NAME="Unittests for _test_main.Test.test_lib Coverage Results" MODIFIED="1534954802227" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />
+    <SUITE FILE_PATH="coverage/XASM_Assembler$LuaListener.coverage" NAME="LuaListener Coverage Results" MODIFIED="1525784542592" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/_gen" />
+    <SUITE FILE_PATH="coverage/zlua_prototype$Unittests_for_test_main_Test_test_formal.coverage" NAME="Unittests for test_main.Test.test_formal Coverage Results" MODIFIED="1534920025654" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />
+    <SUITE FILE_PATH="coverage/zlua_prototype$Unittests_for_test_Test_test_exp.coverage" NAME="Unittests for test.Test.test_exp Coverage Results" MODIFIED="1534602549581" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/zlua_prototype$Unittests_for__test_main_Test_test_exp.coverage" NAME="Unittests for _test_main.Test.test_exp Coverage Results" MODIFIED="1535016689793" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />
+    <SUITE FILE_PATH="coverage/zlua_prototype$Unittests_for_test_Test_test_func_call.coverage" NAME="Unittests for test.Test.test_func_call Coverage Results" MODIFIED="1534870964343" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/zlua_prototype$Unittests_for_test_Test_test_basic_stat.coverage" NAME="Unittests for test.Test.test_basic_stat Coverage Results" MODIFIED="1534642465018" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/zlua_prototype$Unittests_for_test_Test_test_scope.coverage" NAME="Unittests for test.Test.test_scope Coverage Results" MODIFIED="1534909606529" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/XASM_Assembler$visitor_pattern_learn.coverage" NAME="visitor_pattern_learn Coverage Results" MODIFIED="1524904208354" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/XASM_Assembler$Unittests_for_test_process_TestProcess_test_run.coverage" NAME="Unittests for test_process.TestProcess.test_run Coverage Results" MODIFIED="1524796347745" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/zlua_prototype$Unittests_for_test_main_Test.coverage" NAME="Unittests for test_main.Test Coverage Results" MODIFIED="1534920007003" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />
+    <SUITE FILE_PATH="coverage/XASM_Assembler$xasm.coverage" NAME="xasm Coverage Results" MODIFIED="1521643190950" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/XASM_Assembler$ISA.coverage" NAME="ISA Coverage Results" MODIFIED="1524881772352" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/zlua_prototype$type_model.coverage" NAME="type_model Coverage Results" MODIFIED="1533953205764" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/zlua_prototype$compiler.coverage" NAME="compiler Coverage Results" MODIFIED="1534954632204" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/zlua" />
+    <SUITE FILE_PATH="coverage/XASM_Assembler$zasm.coverage" NAME="zasm Coverage Results" MODIFIED="1525837227005" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/zlua_prototype$Unittests_for_test_Test_test_func_def.coverage" NAME="Unittests for test.Test.test_func_def Coverage Results" MODIFIED="1534144164113" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/XASM_Assembler$Unittests_for_test_assembler_TestAssembler_test_handle_func.coverage" NAME="Unittests for test_assembler.TestAssembler.test_handle_func Coverage Results" MODIFIED="1522549236171" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/zlua_prototype$Unittests_for_test_table_Test.coverage" NAME="Unittests for test_table.Test Coverage Results" MODIFIED="1534912372687" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />
+    <SUITE FILE_PATH="coverage/zlua_prototype$Unittests_for_test_Test_test_relation_op.coverage" NAME="Unittests for test.Test.test_relation_op Coverage Results" MODIFIED="1534700909250" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+  </component>
+  <component name="FUSProjectUsageTrigger">
+    <session id="-584922372">
+      <usages-collector id="statistics.lifecycle.project">
+        <counts>
+          <entry key="project.closed" value="2" />
+          <entry key="project.open.time.6" value="1" />
+          <entry key="project.open.time.7" value="1" />
+          <entry key="project.opened" value="2" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.extensions.open">
+        <counts>
+          <entry key="html" value="1" />
+          <entry key="py" value="6" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.types.open">
+        <counts>
+          <entry key="HTML" value="1" />
+          <entry key="Python" value="6" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.extensions.edit">
+        <counts>
+          <entry key="py" value="8" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.types.edit">
+        <counts>
+          <entry key="Python" value="8" />
+        </counts>
+      </usages-collector>
+    </session>
+  </component>
+  <component name="FileEditorManager">
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="600">
+      <file pinned="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/tool/test/main.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-199">
+              <caret line="190" lean-forward="true" selection-start-line="190" selection-end-line="190" />
+              <folding>
+                <element signature="e#660#669#0" expanded="true" />
+                <element signature="e#4452#4460#0" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/tool/Protected.py">
+          <provider selected="true" editor-type-id="text-editor" />
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/tool/tool/csharp.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="238">
+              <caret line="30" column="36" selection-start-line="30" selection-start-column="36" selection-end-line="30" selection-end-column="36" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/tool/lapi/Lua 5.1 参考手册.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="427">
+              <caret line="3805" selection-start-line="2029" selection-end-line="3805" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/tool/lapi/main.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1717">
+              <caret line="101" column="18" selection-start-line="101" selection-start-column="18" selection-end-line="101" selection-end-column="18" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/tool/tool/util.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="612">
+              <caret line="36" column="32" selection-start-line="36" selection-start-column="32" selection-end-line="36" selection-end-column="32" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/tool/vmloop.py">
+          <provider selected="true" editor-type-id="text-editor" />
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/tool/tool/xml.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="217">
+              <caret line="14" column="12" selection-start-line="14" selection-start-column="12" selection-end-line="14" selection-end-column="12" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="NewLua" />
+        <option value="Python Script" />
+      </list>
+    </option>
+  </component>
+  <component name="FindInProjectRecents">
+    <findStrings>
+      <find>concat</find>
+      <find>set_new_table</find>
+      <find>emit</find>
+      <find>set_table</find>
+      <find>get_table</find>
+      <find>,ctx=ctx</find>
+      <find>raise</find>
+      <find>string</find>
+      <find>print(&quot;testing functions and calls&quot;)</find>
+      <find>ocal</find>
+      <find>ctx.NAME().getText()</find>
+      <find>closure</find>
+      <find>local</find>
+      <find>lt</find>
+      <find>binar</find>
+      <find>visit</find>
+      <find>visit(</find>
+      <find>_emit</find>
+      <find>enter</find>
+      <find>enter_block</find>
+      <find>_currp.exit</find>
+      <find>self.exit_block()</find>
+      <find>self\.exit_block\(\)</find>
+      <find>self._emit</find>
+      <find>prefixexp</find>
+      <find>_comment</find>
+      <find>3.7</find>
+      <find>&lt;.*?&gt;</find>
+      <find>h3</find>
+      <find>&lt;hr&gt;</find>
+    </findStrings>
+    <replaceStrings>
+      <replace />
+      <replace>(\1)</replace>
+      <replace>exit</replace>
+      <replace>self.exit_block(ctx)</replace>
+      <replace>^</replace>
+    </replaceStrings>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="CHANGED_PATHS">
+      <list>
+        <option value="$PROJECT_DIR$/tests/locals.lua" />
+        <option value="$PROJECT_DIR$/lua5.1-tests/events.lua" />
+        <option value="$PROJECT_DIR$/lua5.1-tests/db.lua" />
+        <option value="$PROJECT_DIR$/tests/test.lua" />
+        <option value="$PROJECT_DIR$/zlua/compiler.py" />
+        <option value="$PROJECT_DIR$/tests/_test_main.py" />
+        <option value="$PROJECT_DIR$/tests/test_debugger.py" />
+        <option value="$PROJECT_DIR$/zlua/vm.py" />
+        <option value="$PROJECT_DIR$/zlua/debugger.py" />
+        <option value="$PROJECT_DIR$/README.md" />
+        <option value="$PROJECT_DIR$/tool/vmloop.py" />
+        <option value="$PROJECT_DIR$/Lua.g4" />
+        <option value="$PROJECT_DIR$/gen_test/__init__.py" />
+        <option value="$PROJECT_DIR$/gen_test/gen_test.py" />
+        <option value="$PROJECT_DIR$/gen_test/gen_test_main.py" />
+        <option value="$PROJECT_DIR$/gen_test/disassembler/test.cs" />
+        <option value="$PROJECT_DIR$/gen_test/disassembler/learn.lua" />
+        <option value="$PROJECT_DIR$/tool/Protected.py" />
+        <option value="$PROJECT_DIR$/gen_test/disassembler/compile_lua.py" />
+        <option value="$PROJECT_DIR$/tool/lapi.py" />
+        <option value="$PROJECT_DIR$/tool/lapi.txt" />
+        <option value="$PROJECT_DIR$/tool/test/uitl.py" />
+        <option value="$PROJECT_DIR$/tool/test/util.py" />
+        <option value="$PROJECT_DIR$/tool/test/disassembler/compile_lua.py" />
+        <option value="$PROJECT_DIR$/tool/test/xml.py" />
+        <option value="$PROJECT_DIR$/tool/lapi/lapi.py" />
+        <option value="$PROJECT_DIR$/tool/xml.py" />
+        <option value="$PROJECT_DIR$/tool/csharp.py" />
+        <option value="$PROJECT_DIR$/tool/util.py" />
+        <option value="$PROJECT_DIR$/tool/test/file/luago-book/ch04/examples.lua" />
+        <option value="$PROJECT_DIR$/tool/test/file/luago-book/ch05/examples.lua" />
+        <option value="$PROJECT_DIR$/tool/test/file/luago-book/ch06/test/max_regs2.lua" />
+        <option value="$PROJECT_DIR$/tool/test/file/luago-book/ch06/test/max_regs.lua" />
+        <option value="$PROJECT_DIR$/tool/test/file/luago-book/ch21/test.lua" />
+        <option value="$PROJECT_DIR$/tool/test/file/luago-book/ch21/examples.lua" />
+        <option value="$PROJECT_DIR$/tool/test/file/luago-book/ch20/test.lua" />
+        <option value="$PROJECT_DIR$/tool/test/file/luago-book/ch20/mymod.lua" />
+        <option value="$PROJECT_DIR$/tool/test/file/luago-book/ch20/examples.lua" />
+        <option value="$PROJECT_DIR$/tool/test/file/luago-book/ch19/examples.lua" />
+        <option value="$PROJECT_DIR$/tool/test/file/luago-book/ch18/examples.lua" />
+        <option value="$PROJECT_DIR$/tool/test/file/luago-book/ch13/test.lua" />
+        <option value="$PROJECT_DIR$/tool/test/file/luago-book/ch13/examples.lua" />
+        <option value="$PROJECT_DIR$/tool/test/file/luago-book/ch12/examples.lua" />
+        <option value="$PROJECT_DIR$/tool/test/file/luago-book/ch12/range.lua" />
+        <option value="$PROJECT_DIR$/tool/test/file/luago-book/ch12/test.lua" />
+        <option value="$PROJECT_DIR$/tool/test/file/luago-book/ch12/values.lua" />
+        <option value="$PROJECT_DIR$/tool/test/file/luago-book/ch07/test/big_list.lua" />
+        <option value="$PROJECT_DIR$/tool/test/file/luago-book/ch06/sum.lua" />
+        <option value="$PROJECT_DIR$/tool/test/file/luago-book/ch07/examples.lua" />
+        <option value="$PROJECT_DIR$/tool/lapi/main.py" />
+        <option value="$PROJECT_DIR$/tool/test/main.py" />
+      </list>
+    </option>
+  </component>
+  <component name="JsBuildToolGruntFileManager" detection-done="true" sorting="DEFINITION_ORDER" />
+  <component name="JsBuildToolPackageJson" detection-done="true" sorting="DEFINITION_ORDER" />
+  <component name="JsGulpfileManager">
+    <detection-done>true</detection-done>
+    <sorting>DEFINITION_ORDER</sorting>
+  </component>
+  <component name="ProjectFrameBounds" extendedState="6">
+    <option name="x" value="1530" />
+    <option name="width" value="1580" />
+    <option name="height" value="2178" />
+  </component>
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
+  <component name="ProjectView">
+    <navigator proportions="" version="1">
+      <foldersAlwaysOnTop value="true" />
+    </navigator>
+    <panes>
+      <pane id="ProjectPane">
+        <subPane>
+          <expand>
+            <path>
+              <item name="zlua_prototype" type="b2602c69:ProjectViewProjectNode" />
+              <item name="zlua_prototype" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="zlua_prototype" type="b2602c69:ProjectViewProjectNode" />
+              <item name="zlua_prototype" type="462c0819:PsiDirectoryNode" />
+              <item name="tool" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="zlua_prototype" type="b2602c69:ProjectViewProjectNode" />
+              <item name="zlua_prototype" type="462c0819:PsiDirectoryNode" />
+              <item name="tool" type="462c0819:PsiDirectoryNode" />
+              <item name="test" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="zlua_prototype" type="b2602c69:ProjectViewProjectNode" />
+              <item name="zlua_prototype" type="462c0819:PsiDirectoryNode" />
+              <item name="tool" type="462c0819:PsiDirectoryNode" />
+              <item name="test" type="462c0819:PsiDirectoryNode" />
+              <item name="file" type="462c0819:PsiDirectoryNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
+      <pane id="Scope" />
+    </panes>
+  </component>
+  <component name="PropertiesComponent">
+    <property name="$PROJECT_DIR$/Lua.g4::/auto-gen" value="false" />
+    <property name="$PROJECT_DIR$/Lua.g4::/gen-listener" value="false" />
+    <property name="$PROJECT_DIR$/Lua.g4::/gen-visitor" value="true" />
+    <property name="$PROJECT_DIR$/Lua.g4::/language" value="Python3" />
+    <property name="$PROJECT_DIR$/_gen/Lua.g4::/auto-gen" value="false" />
+    <property name="$PROJECT_DIR$/_gen/Lua.g4::/gen-listener" value="false" />
+    <property name="$PROJECT_DIR$/_gen/Lua.g4::/gen-visitor" value="true" />
+    <property name="$PROJECT_DIR$/_gen/Lua.g4::/language" value="Python3" />
+    <property name="$PROJECT_DIR$/_gen/Lua.g4::/package" value="zlua" />
+    <property name="SearchEverywhereHistoryKey" value="namedtu&#9;null&#9;null&#10;jsonpickle&#9;FILE&#9;file://C:/Users/91018/AppData/Local/Programs/Python/Python36/Lib/jsonpickle" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last.edited.regexp" value=" :   " />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
+    <property name="restartRequiresConfirmation" value="false" />
+    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\91018\Documents\GitHub\zlua_prototype\tool" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\91018\Documents\GitHub\Lua\zlua_prototype\tool\tool" />
+      <recent name="C:\Users\91018\Documents\GitHub\Lua\zlua_prototype\tool\lapi" />
+      <recent name="C:\Users\91018\Documents\GitHub\Lua\zlua_prototype\zlua_prototype" />
+      <recent name="C:\Users\91018\Documents\GitHub\Lua\zlua_prototype\zlua" />
+      <recent name="C:\Users\91018\Documents\GitHub\zlua_prototype\tool" />
+    </key>
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
+  <component name="RunManager" selected="Python.main">
+    <configuration name="compile_lua (1)" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="XASM_Assembler" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tool/test/disassembler" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="C:\Users\91018\Documents\GitHub\zlua_prototype\tool\test\main.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="compile_lua" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="XASM_Assembler" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/gen_test/disassembler" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/gen_test/disassembler/compile_lua.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="lapi" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="XASM_Assembler" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tool" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="C:\Users\91018\Documents\GitHub\zlua_prototype\tool\lapi\main.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="main" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="XASM_Assembler" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tool/test" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/tool/test/main.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="learn.lua" type="lua.app" factoryName="Lua Application" temporary="true">
+      <option name="program" value="lua.exe" />
+      <option name="file" value="gen_test/disassembler/learn.lua" />
+      <option name="workingDir" value="$PROJECT_DIR$" />
+      <option name="debuggerType" value="1" />
+      <option name="params" value="" />
+      <option name="charset" value="UTF-8" />
+      <option name="showConsole" value="true" />
+      <method v="2" />
+    </configuration>
+    <configuration name="Unittests for zlua_prototype.tests._test_main.Test" type="tests" factoryName="Unittests" nameIsGenerated="true">
+      <module name="XASM_Assembler" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/zlua_prototype/tests" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="_new_pattern" value="&quot;&quot;" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;zlua_prototype.tests._test_main.Test&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+      <method v="2" />
+    </configuration>
+    <list>
+      <item itemvalue="Python tests.Unittests for zlua_prototype.tests._test_main.Test" />
+      <item itemvalue="Lua Application.learn.lua" />
+      <item itemvalue="Python.compile_lua" />
+      <item itemvalue="Python.lapi" />
+      <item itemvalue="Python.compile_lua (1)" />
+      <item itemvalue="Python.main" />
+    </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Python.main" />
+        <item itemvalue="Python.compile_lua (1)" />
+        <item itemvalue="Python.lapi" />
+        <item itemvalue="Python.compile_lua" />
+        <item itemvalue="Lua Application.learn.lua" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="3cd1adb7-fda5-4b8e-8462-9bcc5578c8c3" name="Default" comment="" />
+      <created>1521445858029</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1521445858029</updated>
+      <workItem from="1557502182295" duration="10542000" />
+      <workItem from="1557590168591" duration="1866000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TestHistory">
+    <history-entry file="Unittests_for__test_main_Test - 2018.08.23 at 13h 02m 45s.xml">
+      <configuration name="Unittests for _test_main.Test" configurationId="tests" />
+    </history-entry>
+    <history-entry file="Unittests_for__test_main_Test - 2018.08.23 at 17h 19m 38s.xml">
+      <configuration name="Unittests for _test_main.Test" configurationId="tests" />
+    </history-entry>
+    <history-entry file="Unittests_for__test_main_Test - 2018.08.23 at 17h 23m 13s.xml">
+      <configuration name="Unittests for _test_main.Test" configurationId="tests" />
+    </history-entry>
+    <history-entry file="Unittests_for__test_main_Test - 2018.08.23 at 17h 29m 16s.xml">
+      <configuration name="Unittests for _test_main.Test" configurationId="tests" />
+    </history-entry>
+    <history-entry file="Unittests_for__test_main_Test - 2018.08.23 at 17h 29m 18s.xml">
+      <configuration name="Unittests for _test_main.Test" configurationId="tests" />
+    </history-entry>
+    <history-entry file="Unittests_for__test_main_Test_test_exp - 2018.08.23 at 17h 29m 56s.xml">
+      <configuration name="Unittests for _test_main.Test.test_exp" configurationId="tests" />
+    </history-entry>
+    <history-entry file="Unittests_for__test_main_Test_test_exp - 2018.08.23 at 17h 31m 30s.xml">
+      <configuration name="Unittests for _test_main.Test.test_exp" configurationId="tests" />
+    </history-entry>
+    <history-entry file="Unittests_for__test_main_Test - 2018.08.23 at 17h 31m 47s.xml">
+      <configuration name="Unittests for _test_main.Test" configurationId="tests" />
+    </history-entry>
+    <history-entry file="Unittests_for__test_main_Test - 2018.08.23 at 21h 08m 13s.xml">
+      <configuration name="Unittests for _test_main.Test" configurationId="tests" />
+    </history-entry>
+    <history-entry file="Unittests_for_test_debugger_TestDebugger_test_parse_instr - 2018.08.23 at 21h 32m 08s.xml">
+      <configuration name="Unittests for test_debugger.TestDebugger.test_parse_instr" configurationId="tests" />
+    </history-entry>
+  </component>
+  <component name="TimeTrackingManager">
+    <option name="totallyTimeSpent" value="12408000" />
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="-6" y="-6" width="1372" height="972" extended-state="6" />
+    <editor active="true" />
+    <layout>
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.25835866" />
+      <window_info id="Structure" order="1" weight="0.5009914" />
+      <window_info id="Favorites" order="2" side_tool="true" />
+      <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.32680538" />
+      <window_info anchor="bottom" id="Cvs" order="2" weight="0.25" />
+      <window_info anchor="bottom" id="Inspection" order="3" weight="0.4" />
+      <window_info anchor="bottom" id="TODO" order="4" />
+      <window_info anchor="bottom" id="Tool Output" order="5" weight="0.32925338" />
+      <window_info anchor="bottom" id="ANTLR Preview" order="6" weight="0.47037038" />
+      <window_info anchor="bottom" id="Event Log" order="7" sideWeight="0.50134355" side_tool="true" weight="0.41212493" />
+      <window_info anchor="bottom" id="LuaCheck" order="8" />
+      <window_info anchor="bottom" id="Python Console" order="9" />
+      <window_info anchor="bottom" id="Terminal" order="10" />
+      <window_info anchor="bottom" id="Docker" order="11" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Version Control" order="12" />
+      <window_info anchor="bottom" id="Database Changes" order="13" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Debug" order="14" sideWeight="0.49865642" weight="0.35642317" />
+      <window_info anchor="right" id="Commander" order="0" weight="0.4" />
+      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.2496142" />
+      <window_info anchor="right" id="Coverage" order="3" side_tool="true" />
+      <window_info anchor="right" id="Database" order="4" />
+      <window_info anchor="right" id="SciView" order="5" weight="0.3298272" />
+      <window_info active="true" anchor="right" auto_hide="true" x="309" y="71" width="756" height="817" id="Run" order="6" visible="true" weight="0.5595524" />
+    </layout>
+    <layout-to-restore>
+      <window_info content_ui="combo" id="Project" order="0" weight="0.55263156" />
+      <window_info id="Structure" order="1" weight="0.5011565" />
+      <window_info id="Favorites" order="2" side_tool="true" />
+      <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.32823026" />
+      <window_info anchor="bottom" id="Cvs" order="2" weight="0.25" />
+      <window_info anchor="bottom" id="Inspection" order="3" weight="0.4" />
+      <window_info anchor="bottom" id="TODO" order="4" />
+      <window_info anchor="bottom" id="Tool Output" order="5" weight="0.329455" />
+      <window_info anchor="bottom" id="ANTLR Preview" order="6" weight="0.329455" />
+      <window_info anchor="bottom" id="Event Log" order="7" sideWeight="0.50134355" side_tool="true" weight="0.41212493" />
+      <window_info anchor="bottom" id="LuaCheck" order="8" />
+      <window_info anchor="bottom" id="Python Console" order="9" />
+      <window_info anchor="bottom" id="Terminal" order="10" />
+      <window_info anchor="bottom" id="Docker" order="11" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Version Control" order="12" />
+      <window_info anchor="right" id="Commander" order="0" weight="0.4" />
+      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.2496142" />
+      <window_info anchor="right" id="Coverage" order="3" side_tool="true" />
+      <window_info anchor="right" id="Database" order="4" />
+      <window_info anchor="right" id="SciView" order="5" />
+      <window_info anchor="right" id="Debug" order="6" sideWeight="0.49865642" weight="0.2546154" />
+      <window_info anchor="right" id="Run" order="7" visible="true" weight="0.38807693" />
+    </layout-to-restore>
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="UnknownFeatures">
+    <option featureType="com.intellij.fileTypeFactory" implementationName="*.cs" />
+  </component>
+  <component name="VcsContentAnnotationSettings">
+    <option name="myLimit" value="2678400000" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/zlua_prototype/vm.py</url>
+          <line>146</line>
+          <option name="timeStamp" value="349" />
+        </line-breakpoint>
+      </breakpoints>
+      <default-breakpoints>
+        <breakpoint enabled="true" type="python-exception">
+          <properties notifyOnlyOnFirst="true" notifyOnTerminate="true" ignoreLibraries="true" exception="BaseException">
+            <option name="ignoreLibraries" value="true" />
+            <option name="notifyOnTerminate" value="true" />
+            <option name="notifyOnlyOnFirst" value="true" />
+          </properties>
+        </breakpoint>
+      </default-breakpoints>
+    </breakpoint-manager>
+    <watches-manager>
+      <configuration name="PythonConfigurationType">
+        <watch expression="code[0]" language="Python" />
+        <watch expression="os.path.dirname(path)" language="Python" />
+        <watch expression="os.path.exists(os.path.dirname(path)" language="Python" />
+        <watch expression="os.path.exists(os.path.dirname(path))" language="Python" />
+      </configuration>
+    </watches-manager>
+  </component>
+  <component name="debuggerHistoryManager">
+    <expressions id="breakpointCondition">
+      <expression>
+        <expression-string>op_name=='new_locals'</expression-string>
+        <language-id>Python</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>op_name=='lt'</expression-string>
+        <language-id>Python</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>self.curr_instr.op='lt'</expression-string>
+        <language-id>Python</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>b==False</expression-string>
+        <language-id>Python</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>b=False</expression-string>
+        <language-id>Python</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>not self.curr_cl.exp_stack</expression-string>
+        <language-id>Python</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>self.pc==15</expression-string>
+        <language-id>Python</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>self.pc&gt;=25</expression-string>
+        <language-id>Python</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+    </expressions>
+    <expressions id="watch">
+      <expression>
+        <expression-string>os.path.exists(os.path.dirname(path))</expression-string>
+        <language-id>Python</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>os.path.exists(os.path.dirname(path)</expression-string>
+        <language-id>Python</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>os.path.dirname(path)</expression-string>
+        <language-id>Python</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>code[0]</expression-string>
+        <language-id>Python</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>os.path.split(path)</expression-string>
+        <language-id>Python</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>os.path.abspath(output_path)</expression-string>
+        <language-id>Python</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>os.path.abspath('disassembler/learn.lua')</expression-string>
+        <language-id>Python</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>os.path.basename(output_path)</expression-string>
+        <language-id>Python</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>os.path.dirname(output_path)</expression-string>
+        <language-id>Python</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>clua.splitlines()</expression-string>
+        <language-id>Python</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+    </expressions>
+    <expressions id="evaluateExpression">
+      <expression>
+        <expression-string>set1-set('execute')</expression-string>
+        <language-id>Python</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>func.py_func</expression-string>
+        <language-id>Python</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>func.func</expression-string>
+        <language-id>Python</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>nt.globals['print'].py_func</expression-string>
+        <language-id>Python</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>nt.globals['print'].func</expression-string>
+        <language-id>Python</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>nt.globals['print']</expression-string>
+        <language-id>Python</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>self.curr_cl.p.upvals[name].val</expression-string>
+        <language-id>Python</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>ctx.NAME().getText()</expression-string>
+        <language-id>Python</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>table.V_get_table(key)</expression-string>
+        <language-id>Python</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+    </expressions>
+  </component>
+  <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/tool/lapi/lapi.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="16796">
+          <caret line="988" column="12" selection-start-line="988" selection-start-column="12" selection-end-line="988" selection-end-column="12" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tool/lapi/lapi.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="734">
+          <caret line="1954" column="12" selection-end-line="1967" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tool/test/chunkspy.lua">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tool/test/file/luago-book/ch02/test/constants.lua" />
+    <entry file="file://$PROJECT_DIR$/tool/test/file/luago-book/ch02/test/long_string.lua" />
+    <entry file="file://$PROJECT_DIR$/tool/test/file/luago-book/ch02/hello_world.lua">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tool/test/file/luago-book/ch02/foo_bar.lua">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tool/test/file/luago-book/ch02/test/vararg.lua">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tool/test/file/luago-book/ch02/test/param_num.lua">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tool/test/compile_out/file/luago-book/ch02/test/param_num.lua" />
+    <entry file="file://$PROJECT_DIR$/tool/test/compile_out/file/luago-book/ch02/test/vararg.lua" />
+    <entry file="file://$PROJECT_DIR$/tool/test/file/luago-book/ch04/examples.lua">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="119">
+          <caret line="7" selection-start-line="7" selection-start-column="2" selection-end-line="14" selection-end-column="51" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tool/test/compile_out/file/luago-book/ch05/examples.lua" />
+    <entry file="file://$PROJECT_DIR$/tool/test/file/luago-book/ch05/examples.lua">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="342">
+          <caret line="24" selection-start-line="24" selection-end-line="24" selection-end-column="32" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tool/test/file/luago-book/ch06/test/max_regs2.lua">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="170">
+          <caret line="10" column="35" selection-start-line="10" selection-start-column="35" selection-end-line="10" selection-end-column="35" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tool/test/file/luago-book/ch06/test/max_regs.lua">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret selection-start-column="2" selection-end-line="8" selection-end-column="80" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tool/test/learn.lua">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tool/test/compile_out/file/luago-book/postface/examples.lua" />
+    <entry file="file://$PROJECT_DIR$/tool/test/file/luago-book/ch21/test.lua">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="306">
+          <caret line="18" column="33" lean-forward="true" selection-end-line="27" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tool/test/file/luago-book/ch21/examples.lua">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="272">
+          <caret line="16" column="22" lean-forward="true" selection-end-line="42" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tool/test/file/luago-book/ch20/test.lua">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret selection-end-line="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tool/test/file/luago-book/ch20/mymod.lua">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="68">
+          <caret line="4" lean-forward="true" selection-end-line="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tool/test/file/luago-book/ch20/examples.lua">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="221">
+          <caret line="13" column="26" selection-end-line="55" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tool/test/file/luago-book/ch19/examples.lua">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="170">
+          <caret line="28" column="28" selection-end-line="58" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tool/test/file/luago-book/ch18/examples.lua">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="136">
+          <caret line="8" column="28" selection-end-line="12" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tool/test/file/luago-book/ch16/examples.lua" />
+    <entry file="file://$PROJECT_DIR$/tool/test/file/luago-book/ch17/examples.lua">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="170">
+          <caret line="10" column="3" lean-forward="true" selection-start-line="10" selection-start-column="3" selection-end-line="10" selection-end-column="3" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tool/test/file/luago-book/ch14/examples.lua">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tool/test/file/luago-book/ch13/test.lua">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="204">
+          <caret line="12" column="48" lean-forward="true" selection-start-column="2" selection-end-line="13" selection-end-column="48" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tool/test/file/luago-book/ch13/examples.lua">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-83">
+          <caret line="27" column="12" lean-forward="true" selection-end-line="53" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tool/test/file/luago-book/ch12/examples.lua">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret selection-end-line="86" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tool/test/file/luago-book/ch12/range.lua">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="187">
+          <caret line="11" column="23" lean-forward="true" selection-end-line="19" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tool/test/file/luago-book/ch12/test.lua">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="153">
+          <caret line="9" selection-end-line="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tool/test/file/luago-book/ch12/values.lua">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="153">
+          <caret line="9" column="23" selection-end-line="12" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tool/test/file/luago-book/ch06/sum.lua">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret selection-start-line="5" selection-end-line="5" selection-end-column="3" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tool/test/file/luago-book/ch07/test/big_list.lua">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="663">
+          <caret line="39" column="34" selection-start-line="39" selection-start-column="34" selection-end-line="39" selection-end-column="34" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tool/test/file/luago-book/ch11/complex.lua">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="476">
+          <caret line="28" column="14" selection-start-line="28" selection-start-column="2" selection-end-line="28" selection-end-column="14" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tool/test/file/luago-book/ch10/examples.lua">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tool/test/file/luago-book/ch08/examples.lua">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tool/test/file/luago-book/ch07/examples.lua">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="187">
+          <caret line="11" column="21" selection-end-line="29" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tool/test/file/luago-book/ch07/test.lua">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tool/test/file/luago-book/ch07/test_seq.lua">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tool/test/file/luago-book/ch08/test.lua">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="255">
+          <caret line="15" column="14" selection-start-line="15" selection-start-column="11" selection-end-line="15" selection-end-column="14" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tool/tool/xml.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="217">
+          <caret line="14" column="12" selection-start-line="14" selection-start-column="12" selection-end-line="14" selection-end-column="12" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tool/vmloop.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tool/tool/util.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="612">
+          <caret line="36" column="32" selection-start-line="36" selection-start-column="32" selection-end-line="36" selection-end-column="32" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tool/Protected.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tool/tool/csharp.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="238">
+          <caret line="30" column="36" selection-start-line="30" selection-start-column="36" selection-end-line="30" selection-end-column="36" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tool/lapi/Lua 5.1 参考手册.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="427">
+          <caret line="3805" selection-start-line="2029" selection-end-line="3805" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tool/lapi/main.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1717">
+          <caret line="101" column="18" selection-start-line="101" selection-start-column="18" selection-end-line="101" selection-end-column="18" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tool/test/main.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-199">
+          <caret line="190" lean-forward="true" selection-start-line="190" selection-end-line="190" />
+          <folding>
+            <element signature="e#660#669#0" expanded="true" />
+            <element signature="e#4452#4460#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+  </component>
+</project>
